@@ -112,8 +112,12 @@ class FoundationServiceProvider extends ServiceProvider
     {
         // Set default string length for MariaDB compatibility
         Schema::defaultStringLength(191);
-        // The admin UI is Bootstrap 5; useBootstrap() renders the Bootstrap 3 views.
-        Paginator::useBootstrapFive();
+
+        // The package ships its own Bootstrap 5 paginator rather than pointing at
+        // one of Laravel's, whose view names change between majors. A project
+        // overrides it with resources/views/pagination/links.blade.php.
+        Paginator::defaultView('pagination.links');
+        Paginator::defaultSimpleView('pagination.simple');
 
         if (config('foundation.umask') !== null) {
             umask((int) config('foundation.umask'));

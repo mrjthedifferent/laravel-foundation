@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Mrj\Foundation\Exceptions\Handler;
@@ -58,13 +59,22 @@ class BootstrapTest extends TestCase
     }
 
     /**
-     * The admin UI is Bootstrap 5. Laravel's useBootstrap() renders the
-     * Bootstrap 3 views, which is a different markup contract.
+     * The package owns its paginator markup. It previously asked for Laravel's
+     * `useBootstrap()` views, which are Bootstrap 3 — wrong for this UI — and
+     * Laravel renames those views between majors.
      */
-    public function test_pagination_renders_the_bootstrap_five_views(): void
+    public function test_pagination_uses_the_packages_own_bootstrap_five_view(): void
     {
-        $this->assertSame('pagination::bootstrap-5', Paginator::$defaultView);
-        $this->assertSame('pagination::simple-bootstrap-5', Paginator::$defaultSimpleView);
+        $this->assertSame('pagination.links', Paginator::$defaultView);
+        $this->assertSame('pagination.simple', Paginator::$defaultSimpleView);
+
+        $html = (new LengthAwarePaginator(range(1, 10), 26, 10, 1, ['path' => '/users']))->links()->toHtml();
+
+        $this->assertStringContainsString('aria-current="page"', $html);
+        $this->assertStringContainsString('page-link', $html);
+        $this->assertStringContainsString('/users?page=2', $html);
+        // The table component renders its own count beside the links.
+        $this->assertStringNotContainsString('results', $html);
     }
 
     /**

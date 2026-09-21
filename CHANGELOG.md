@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.11.2
+
+- The package ships its own Bootstrap 5 paginator (`pagination/links.blade.php`) instead of
+  pointing at one of Laravel's, whose view names change between majors. It drops the duplicate
+  "Showing x to y of z results" line that Laravel's view printed next to the table's own count.
+  Override it with `resources/views/pagination/links.blade.php`.
+
 ## 0.11.1
 
 - Fixed: upgrading with a warm cache broke on boot. The `app_settings` key still held `Setting`
