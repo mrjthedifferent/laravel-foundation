@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | RolePermission Module Permissions
@@ -10,7 +12,6 @@
 |   - name: The unique permission name
 |
 */
-
 return [
     ['module_name' => 'Role Management', 'name' => 'View Role'],
     ['module_name' => 'Role Management', 'name' => 'Create Role'],

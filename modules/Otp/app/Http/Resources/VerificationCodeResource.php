@@ -4,12 +4,14 @@ namespace Modules\Otp\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 class VerificationCodeResource extends JsonResource
 {
     /**
      * @return array<string, mixed>
      */
+    #[Override]
     public function toArray(Request $request): array
     {
         // Never expose the raw OTP by default, even in debug. Exposing the code

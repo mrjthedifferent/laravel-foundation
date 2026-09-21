@@ -10,6 +10,7 @@ use Modules\BackupCleanup\Jobs\RunBackupJob;
 use Modules\BackupCleanup\Jobs\RunCleanupJob;
 use Modules\BackupCleanup\Models\Backup;
 use Mrj\Foundation\Http\Controllers\Controller;
+use RuntimeException;
 
 class BackupController extends Controller
 {
@@ -75,7 +76,7 @@ class BackupController extends Controller
 
             return redirect()->route('admin.backups.index')
                 ->with('success', 'Backup file deleted successfully.');
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             return redirect()->route('admin.backups.index')
                 ->with('error', $e->getMessage());
         }

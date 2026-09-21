@@ -1,0 +1,1303 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Relation ''user'' is not found in OwenIt\\Auditing\\Models\\Audit model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: modules/ActivityLog/app/Actions/GetActivityLogAction.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:map\(\) expects callable\(mixed, int\|string\)\: \(int\|null\), Closure\(OwenIt\\Auditing\\Models\\Audit\)\: \(int\|null\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/ActivityLog/app/Actions/GetActivityLogsAction.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 3
+			path: modules/ActivityLog/app/Http/Controllers/ActivityLogController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: modules/ActivityLog/app/Http/Controllers/EmailLogController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/ActivityLog/app/Http/Controllers/SmsLogController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/ActivityLog/app/Jobs/ActivityLogExportJob.php
+
+		-
+			message: '#^Instanceof between Symfony\\Component\\Mime\\Email and Symfony\\Component\\Mime\\Email will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: modules/ActivityLog/app/Listeners/LogEmailSending.php
+
+		-
+			message: '#^Call to an undefined method Symfony\\Component\\Mime\\RawMessage\:\:getHeaders\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: modules/ActivityLog/app/Listeners/LogEmailSent.php
+
+		-
+			message: '#^Relation ''user'' is not found in OwenIt\\Auditing\\Models\\Audit model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: modules/ActivityLog/app/Queries/ActivityLogQuery.php
+
+		-
+			message: '#^Trait Modules\\ActivityLog\\Traits\\IPTracker is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: modules/ActivityLog/app/Traits/IPTracker.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: modules/ActivityLog/tests/Feature/ActivityLogTest.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/BackupCleanup/app/Http/Controllers/BackupController.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/BackupCleanup/tests/Feature/BackupTest.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: modules/ErrorReport/app/Http/Controllers/ErrorReportController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/ErrorReport/app/Http/Controllers/ErrorReportSettingsController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ErrorReport\\Models\\ErrorReport\:\:\$last_notified_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ErrorReport/app/Jobs/NotifyErrorJob.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ErrorReport\\Models\\ErrorReport\:\:\$resolved_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ErrorReport/app/Models/ErrorReport.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ErrorReport\\Models\\ErrorReport\:\:\$exception_class\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/ErrorReport/app/Notifications/ErrorReportNotification.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ErrorReport\\Models\\ErrorReport\:\:\$file\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/ErrorReport/app/Notifications/ErrorReportNotification.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ErrorReport\\Models\\ErrorReport\:\:\$first_seen_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ErrorReport/app/Notifications/ErrorReportNotification.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ErrorReport\\Models\\ErrorReport\:\:\$last_seen_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ErrorReport/app/Notifications/ErrorReportNotification.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ErrorReport\\Models\\ErrorReport\:\:\$line\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/ErrorReport/app/Notifications/ErrorReportNotification.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ErrorReport\\Models\\ErrorReport\:\:\$message\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/ErrorReport/app/Notifications/ErrorReportNotification.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ErrorReport\\Models\\ErrorReport\:\:\$occurrences\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/ErrorReport/app/Notifications/ErrorReportNotification.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ErrorReport\\Models\\ErrorReport\:\:\$request_url\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/ErrorReport/app/Notifications/ErrorReportNotification.php
+
+		-
+			message: '#^Offset ''function'' on array\{function\: string, line\?\: int, file\?\: string, class\?\: class\-string, type\?\: ''\-\>''\|''\:\:'', args\?\: list\<mixed\>, object\?\: object\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: modules/ErrorReport/app/Services/ErrorReporterService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/ErrorReport/tests/Feature/ErrorReportSettingsTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ImportDownloadManager/app/Actions/DeleteImportFileAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$remarks\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ImportDownloadManager/app/Actions/UpdateImportRecordAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/ImportDownloadManager/app/Actions/UpdateImportRecordAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/ImportDownloadManager/app/Actions/UpdateImportRecordAction.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ImportDownloadManager/app/Http/Controllers/DownloadImportManagerController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$remarks\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ImportDownloadManager/app/Http/Controllers/DownloadImportManagerController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ImportDownloadManager/app/Http/Controllers/DownloadImportManagerController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ImportDownloadManager/app/Http/Controllers/DownloadImportManagerController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ImportDownloadManager/app/Http/Controllers/DownloadImportManagerController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ImportDownloadManager/app/Http/Controllers/DownloadImportManagerController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: modules/ImportDownloadManager/app/Http/Controllers/DownloadImportManagerController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/ImportDownloadManager/app/Http/Controllers/DownloadImportManagerController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ImportDownloadManager/app/Support/ImportFileDisk.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Schema\\ForeignKeyDefinition\:\:index\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: modules/ImportDownloadManager/database/migrations/2024_09_08_225858_create_download_import_managers_table.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/ImportDownloadManager/tests/Feature/DownloadImportManagerTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$body\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Actions/SendPushNotificationAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Actions/SendPushNotificationAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$recipient_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Actions/SendPushNotificationAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Actions/SendPushNotificationAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Actions/SendPushNotificationAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$user_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Actions/SendPushNotificationAction.php
+
+		-
+			message: '#^Offset ''data'' on array\{title\: string, body\: string, data\: array\<string, mixed\>\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: modules/Notification/app/Concerns/SendsFirebasePush.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: modules/Notification/app/Http/Controllers/NotificationController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: modules/Notification/app/Http/Controllers/PushNotificationController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Http\\Resources\\NotificationResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Http/Resources/NotificationResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Http\\Resources\\NotificationResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Http/Resources/NotificationResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Http\\Resources\\NotificationResource\:\:\$notifiable_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Http/Resources/NotificationResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Http\\Resources\\NotificationResource\:\:\$notifiable_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Http/Resources/NotificationResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Http\\Resources\\NotificationResource\:\:\$read_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Http/Resources/NotificationResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Http\\Resources\\NotificationResource\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Http/Resources/NotificationResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Http\\Resources\\NotificationResource\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/app/Http/Resources/NotificationResource.php
+
+		-
+			message: '#^Call to an undefined method Modules\\Notification\\Http\\Resources\\NotificationResource\:\:read\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: modules/Notification/app/Http/Resources/NotificationResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\Notification\:\:\$data\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/Notification/app/Models/Notification.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\Notification\:\:\$read_at\.$#'
+			identifier: property.notFound
+			count: 4
+			path: modules/Notification/app/Models/Notification.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Modules\\Notification\\Models\\Notification\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: modules/Notification/app/Models/Notification.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\Notification\:\:\$notifiable_id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: modules/Notification/app/Policies/NotificationPolicy.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\Notification\:\:\$notifiable_type\.$#'
+			identifier: property.notFound
+			count: 4
+			path: modules/Notification/app/Policies/NotificationPolicy.php
+
+		-
+			message: '#^Call to an undefined method Symfony\\Component\\Mailer\\Transport\\TransportInterface\:\:messages\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: modules/Notification/tests/Feature/NotificationChannelGatingTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\Notification\:\:\$read_at\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/Notification/tests/Feature/NotificationControllerTest.php
+
+		-
+			message: '#^Method Modules\\Notification\\Tests\\Feature\\NotificationControllerTest\:\:notificationFor\(\) should return Modules\\Notification\\Models\\Notification but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: modules/Notification/tests/Feature/NotificationControllerTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Notification/tests/Feature/NotificationControllerTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\Notification\:\:\$data\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/Notification/tests/Unit/Channels/DatabaseChannelTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\Notification\:\:\$notifiable_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/tests/Unit/Channels/DatabaseChannelTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Notification\\Models\\Notification\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Notification/tests/Unit/Channels/DatabaseChannelTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Models\\OtpWhitelist\:\:\$fixed_otp\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/app/Actions/GenerateOtpAction.php
+
+		-
+			message: '#^Parameter \#1 \$string of function str_pad expects string, int\<1, max\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Otp/app/Actions/GenerateOtpAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Models\\OtpWhitelist\:\:\$recipient\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/app/Actions/UpdateOtpWhitelistAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Models\\OtpWhitelist\:\:\$recipient_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/app/Actions/UpdateOtpWhitelistAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$code\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/app/Actions/VerifyOtpAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/app/Http/Controllers/OtpVerificationController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 4
+			path: modules/Otp/app/Http/Controllers/OtpWhitelistController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Otp/app/Http/Controllers/VerificationCodeHistoryController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Models\\OtpWhitelist\:\:\$recipient_type\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/Otp/app/Http/Requests/UpdateOtpWhitelistRequest.php
+
+		-
+			message: '#^Using nullsafe property access on non\-nullable type Modules\\Otp\\Models\\OtpWhitelist\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: modules/Otp/app/Http/Requests/UpdateOtpWhitelistRequest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Http\\Resources\\VerificationCodeResource\:\:\$code\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/app/Http/Resources/VerificationCodeResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Http\\Resources\\VerificationCodeResource\:\:\$contact\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/app/Http/Resources/VerificationCodeResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Http\\Resources\\VerificationCodeResource\:\:\$contact_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/app/Http/Resources/VerificationCodeResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Http\\Resources\\VerificationCodeResource\:\:\$expires_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/app/Http/Resources/VerificationCodeResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$attempts\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/Otp/app/Models/VerificationCode.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$contact\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/app/Models/VerificationCode.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$expires_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/app/Models/VerificationCode.php
+
+		-
+			message: '#^Parameter \#1 \$view of method Illuminate\\Notifications\\Messages\\MailMessage\:\:view\(\) expects array\<view\-string\>\|view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Otp/app/Notifications/SendVerificationCode.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/Otp/tests/Feature/OtpWhitelistTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$recipient_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/tests/Feature/OtpWhitelistTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Otp/tests/Feature/OtpWhitelistTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Otp/tests/Feature/VerificationCodeHistoryTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$fixed_otp\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/tests/Unit/Actions/OtpActionsTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$is_verified\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/tests/Unit/Actions/OtpActionsTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$recipient\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/tests/Unit/Actions/OtpActionsTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$code\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/Otp/tests/Unit/Actions/OtpActionsTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$expires_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Otp/tests/Unit/Actions/OtpActionsTest.php
+
+		-
+			message: '#^Parameter \#1 \$whitelist of method Modules\\Otp\\Actions\\UpdateOtpWhitelistAction\:\:execute\(\) expects Modules\\Otp\\Models\\OtpWhitelist, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 2
+			path: modules/Otp/tests/Unit/Actions/OtpActionsTest.php
+
+		-
+			message: '#^Method Modules\\RolePermission\\Actions\\CloneRoleAction\:\:execute\(\) should return Spatie\\Permission\\Models\\Role but returns Spatie\\Permission\\Contracts\\Role\.$#'
+			identifier: return.type
+			count: 1
+			path: modules/RolePermission/app/Actions/CloneRoleAction.php
+
+		-
+			message: '#^Method Modules\\RolePermission\\Actions\\StorePermissionAction\:\:execute\(\) should return Spatie\\Permission\\Models\\Permission but returns Spatie\\Permission\\Contracts\\Permission\.$#'
+			identifier: return.type
+			count: 1
+			path: modules/RolePermission/app/Actions/StorePermissionAction.php
+
+		-
+			message: '#^Method Modules\\RolePermission\\Actions\\StoreRoleAction\:\:execute\(\) should return Spatie\\Permission\\Models\\Role but returns Spatie\\Permission\\Contracts\\Role\.$#'
+			identifier: return.type
+			count: 1
+			path: modules/RolePermission/app/Actions/StoreRoleAction.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 3
+			path: modules/RolePermission/app/Http/Controllers/RolePermissionController.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: modules/RolePermission/tests/Feature/RolePermissionTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Actions/SaveSettingAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$group\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Actions/SaveSettingAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$is_required\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Actions/SaveSettingAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$is_visible\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Actions/SaveSettingAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 11
+			path: modules/Settings/app/Actions/SaveSettingAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/Settings/app/Actions/SaveSettingAction.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Http/Controllers/Api/ApiSettingsController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/Settings/app/Http/Controllers/Api/ApiSettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Settings/app/Http/Controllers/NotificationSettingsController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$group\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Http/Controllers/SettingsController.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$is_visible\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Http/Controllers/SettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 5
+			path: modules/Settings/app/Http/Controllers/SettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 6
+			path: modules/Settings/app/Http/Controllers/SpecialSettingsController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Settings/app/Http/Controllers/ThemeSettingsController.php
+
+		-
+			message: '#^Parameter \#2 \$response of class Symfony\\Component\\Mailer\\Exception\\HttpTransportException constructor expects Symfony\\Contracts\\HttpClient\\ResponseInterface, Psr\\Http\\Message\\ResponseInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Settings/app/Mail/Transport/MicrosoftGraphTransport.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 5
+			path: modules/Settings/app/Models/Setting.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 3
+			path: modules/Settings/app/Models/Setting.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Providers/SettingsServiceProvider.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$group\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Providers/SettingsServiceProvider.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Providers/SettingsServiceProvider.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Providers/SettingsServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Modules\\Settings\\Models\\Setting\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: modules/Settings/app/Providers/SettingsServiceProvider.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/Settings/app/Services/SettingsImportExportService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$group\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/Settings/app/Services/SettingsImportExportService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$is_disabled\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/Settings/app/Services/SettingsImportExportService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$is_required\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/Settings/app/Services/SettingsImportExportService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$is_visible\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/Settings/app/Services/SettingsImportExportService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Services/SettingsImportExportService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/Settings/app/Services/SettingsImportExportService.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: modules/Settings/app/Services/SettingsImportExportService.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Settings/tests/Feature/EmailMailersTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/tests/Feature/FirebaseTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Settings/tests/Feature/FirebaseTest.php
+
+		-
+			message: '#^Property Modules\\Settings\\Tests\\Feature\\FirebaseTest\:\:\$adminRole \(Spatie\\Permission\\Models\\Role\) does not accept Spatie\\Permission\\Contracts\\Role\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: modules/Settings/tests/Feature/FirebaseTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Settings/tests/Feature/NotificationSettingsTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Settings/tests/Feature/PrivacyPolicyTest.php
+
+		-
+			message: '#^Property Modules\\Settings\\Tests\\Feature\\PrivacyPolicyTest\:\:\$adminRole \(Spatie\\Permission\\Models\\Role\) does not accept Spatie\\Permission\\Contracts\\Role\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: modules/Settings/tests/Feature/PrivacyPolicyTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/tests/Feature/SettingsApiTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertIsArray\(\) with list\<array\{key\: string, value\: mixed, group\: string\|null, type\: string\|null, description\: string\|null\}\> will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: modules/Settings/tests/Feature/SettingsCrudTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 3
+			path: modules/Settings/tests/Feature/SettingsCrudTest.php
+
+		-
+			message: '#^Property Modules\\Settings\\Tests\\Feature\\SettingsCrudTest\:\:\$developerRole \(Spatie\\Permission\\Models\\Role\) does not accept Spatie\\Permission\\Contracts\\Role\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: modules/Settings/tests/Feature/SettingsCrudTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Settings/tests/Feature/SmsGatewaysTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/tests/Feature/SocialAuthTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Settings/tests/Feature/SocialAuthTest.php
+
+		-
+			message: '#^Property Modules\\Settings\\Tests\\Feature\\SocialAuthTest\:\:\$adminRole \(Spatie\\Permission\\Models\\Role\) does not accept Spatie\\Permission\\Contracts\\Role\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: modules/Settings/tests/Feature/SocialAuthTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/Settings/tests/Feature/TermsConditionsTest.php
+
+		-
+			message: '#^Property Modules\\Settings\\Tests\\Feature\\TermsConditionsTest\:\:\$adminRole \(Spatie\\Permission\\Models\\Role\) does not accept Spatie\\Permission\\Contracts\\Role\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: modules/Settings/tests/Feature/TermsConditionsTest.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between Modules\\User\\Enum\\AccountAction\:\:Delete and Modules\\User\\Enum\\AccountAction\:\:Delete will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: modules/User/app/Actions/ManageUserAccountAction.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: modules/User/app/Actions/ManageUserAccountAction.php
+
+		-
+			message: '#^Property Modules\\User\\Data\\UserData\:\:\$is_active \(bool\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: modules/User/app/Actions/UpdateUserAction.php
+
+		-
+			message: '#^Call to an undefined method Laravel\\Socialite\\Contracts\\Provider\:\:stateless\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: modules/User/app/Http/Controllers/Api/UserController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/User/app/Http/Controllers/Auth/AuthenticatedSessionController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/User/app/Http/Controllers/Auth/ConfirmablePasswordController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/User/app/Http/Controllers/Auth/EmailVerificationPromptController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/User/app/Http/Controllers/Auth/NewPasswordController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/User/app/Http/Controllers/Auth/PasswordResetLinkController.php
+
+		-
+			message: '#^Call to an undefined method Laravel\\Socialite\\Contracts\\Provider\:\:stateless\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: modules/User/app/Http/Controllers/Auth/SocialAuthController.php
+
+		-
+			message: '#^Method Modules\\User\\Http\\Controllers\\Auth\\SocialAuthController\:\:redirect\(\) should return Illuminate\\Http\\RedirectResponse but returns Symfony\\Component\\HttpFoundation\\RedirectResponse\.$#'
+			identifier: return.type
+			count: 1
+			path: modules/User/app/Http/Controllers/Auth/SocialAuthController.php
+
+		-
+			message: '#^Instanceof between string\|null and Modules\\User\\Enum\\Gender will always evaluate to false\.$#'
+			identifier: instanceof.alwaysFalse
+			count: 1
+			path: modules/User/app/Http/Controllers/ProfileController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/User/app/Http/Controllers/ProfileController.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 5
+			path: modules/User/app/Http/Controllers/UserController.php
+
+		-
+			message: '#^PHPDoc tag @return with type array\<string, string\> is incompatible with native type void\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: modules/User/app/Http/Requests/LoginRequest.php
+
+		-
+			message: '#^PHPDoc tag @return with type array\<string, string\> is incompatible with native type void\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: modules/User/app/Http/Requests/RegisterRequest.php
+
+		-
+			message: '#^PHPDoc tag @return with type array\<string, string\> is incompatible with native type void\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: modules/User/app/Http/Requests/ResetPasswordRequest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Jobs/UserBulkUploadJob.php
+
+		-
+			message: '#^Cannot access property \$value on string\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: modules/User/app/Jobs/UserExportJob.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: array\{SL\: int\<1, max\>, Name\: string, Email\: string, Phone\: string, Gender\: string, Role\: string, ''Account Status''\: ''Active''\|''Inactive'', ''Registration Date''\: non\-falsy\-string\}, Closure\(App\\Models\\User\)\: array\{SL\: int\<1, max\>, Name\: string, Email\: string, Phone\: string, Gender\: string, Role\: string, ''Account Status''\: ''Active''\|''Inactive'', ''Registration Date''\: non\-falsy\-string\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/User/app/Jobs/UserExportJob.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/User/app/Jobs/UserExportJob.php
+
+		-
+			message: '#^Call to function property_exists\(\) with \$this\(Modules\\User\\Models\\UserDocument\) and ''imageDefaults'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: modules/User/app/Models/UserDocument.php
+
+		-
+			message: '#^Call to function property_exists\(\) with \$this\(Modules\\User\\Models\\UserDocument\) and ''imageDirectories'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: modules/User/app/Models/UserDocument.php
+
+		-
+			message: '#^Call to function property_exists\(\) with \$this\(Modules\\User\\Models\\UserDocument\) and ''imageFields'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: modules/User/app/Models/UserDocument.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Modules\\User\\Models\\UserDocument\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: modules/User/app/Models/UserDocument.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\ConnectionInterface\:\:getDriverName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: modules/User/app/Queries/UserQuery.php
+
+		-
+			message: '#^Method Modules\\User\\Queries\\UserQuery\:\:first\(\) should return App\\Models\\User\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: modules/User/app/Queries/UserQuery.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Sanctum\\PersonalAccessToken\:\:\$abilities\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Services/ImpersonationService.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Models\\User and ''currentAccessToken'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: modules/User/app/Services/ImpersonationService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserDocumentResource\:\:\$back_file_path\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserDocumentResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserDocumentResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserDocumentResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserDocumentResource\:\:\$document_number\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserDocumentResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserDocumentResource\:\:\$document_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserDocumentResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserDocumentResource\:\:\$expiry_date\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserDocumentResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserDocumentResource\:\:\$file_path\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserDocumentResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserDocumentResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserDocumentResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserDocumentResource\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserDocumentResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserDocumentResource\:\:\$user_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserDocumentResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$email_verified_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$image\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$is_active\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$phone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$phone_verified_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$provider\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$provider_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$roles\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Modules\\User\\Transformers\\UserResource\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Method Modules\\User\\Transformers\\UserResource\:\:toArray\(\) should return array\<string, mixed\> but returns array\<int\|string, mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: modules/User/app/Transformers/UserResource.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 5
+			path: modules/User/tests/Feature/DocumentControllerTest.php
+
+		-
+			message: '#^Instanceof between App\\Models\\User and Mrj\\Foundation\\Models\\User will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Http/Middleware/CheckUserIsActive.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Sanctum\\PersonalAccessToken\:\:\$expires_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Http/Middleware/SlideSanctumTokenExpiry.php
+
+		-
+			message: '#^Call to an undefined method DateTimeInterface\:\:lt\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Http/Middleware/SlideSanctumTokenExpiry.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Pagination\\LengthAwarePaginator\:\:through\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Http/Responses/JsonResponseFactory.php
+
+		-
+			message: '#^Call to function property_exists\(\) with \$this\(Mrj\\Foundation\\Models\\User\) and ''imageDefaults'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Models/User.php
+
+		-
+			message: '#^Call to function property_exists\(\) with \$this\(Mrj\\Foundation\\Models\\User\) and ''imageDirectories'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Models/User.php
+
+		-
+			message: '#^Call to function property_exists\(\) with \$this\(Mrj\\Foundation\\Models\\User\) and ''imageFields'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Models/User.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Mrj\\Foundation\\Models\\User\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: src/Models/User.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property Mrj\\Foundation\\Models\\User\:\:\$hidden is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$hidden\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: src/Models/User.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Traits/HasImageAttribute.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/View/Components/AppLayout.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/View/Components/GuestLayout.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/View/Components/StatusBadge.php

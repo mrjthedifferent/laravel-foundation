@@ -20,6 +20,7 @@
     <source>
         <include>
             <directory>src</directory>
+            <directory>modules/*/app</directory>
         </include>
     </source>
     <php>

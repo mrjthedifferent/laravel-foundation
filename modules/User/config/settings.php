@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | User Module Settings
@@ -13,5 +15,4 @@
 | config/user-settings.php and are not part of the global settings table.
 |
 */
-
 return [];

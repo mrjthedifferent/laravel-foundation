@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | ErrorReport Module Permissions
@@ -10,7 +12,6 @@
 |   - name: The unique permission name
 |
 */
-
 return [
     ['module_name' => 'Error Report', 'name' => 'View Error Report'],
     ['module_name' => 'Error Report', 'name' => 'Resolve Error Report'],

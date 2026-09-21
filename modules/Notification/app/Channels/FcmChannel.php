@@ -2,20 +2,22 @@
 
 namespace Modules\Notification\Channels;
 
+use Exception;
 use Google_Client;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class FcmChannel
 {
     /** FCM v1 send endpoint template */
-    private const FCM_URL = 'https://fcm.googleapis.com/v1/projects/%s/messages:send';
+    private const string FCM_URL = 'https://fcm.googleapis.com/v1/projects/%s/messages:send';
 
     /** Maximum tokens per FCM send call */
-    private const TOKEN_BATCH_SIZE = 500;
+    private const int TOKEN_BATCH_SIZE = 500;
 
-    private const REQUEST_TIMEOUT = 30;
+    private const int REQUEST_TIMEOUT = 30;
 
     public function send(object $notifiable, object $notification): bool
     {
@@ -73,7 +75,7 @@ class FcmChannel
                     }
 
                     $responses[] = $response->json();
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     $errors[] = $e->getMessage();
                 }
             }
@@ -135,7 +137,7 @@ class FcmChannel
             }
 
             return $accessToken;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::channel('daily_notification')->error('Failed to get FCM access token: '.$e->getMessage());
 
             return null;

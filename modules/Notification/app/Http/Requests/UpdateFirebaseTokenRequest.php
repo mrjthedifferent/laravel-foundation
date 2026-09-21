@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Notification\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class UpdateFirebaseTokenRequest extends FormRequest
 {
@@ -19,6 +22,7 @@ class UpdateFirebaseTokenRequest extends FormRequest
         ];
     }
 
+    #[Override]
     public function messages(): array
     {
         return [

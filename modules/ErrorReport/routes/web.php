@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\ErrorReport\Http\Controllers\ErrorReportController;
 use Modules\ErrorReport\Http\Controllers\ErrorReportSettingsController;
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function (): void {
     Route::get('error-reports/settings', [ErrorReportSettingsController::class, 'index'])
         ->name('error-reports.settings.index');
     Route::post('error-reports/settings', [ErrorReportSettingsController::class, 'update'])

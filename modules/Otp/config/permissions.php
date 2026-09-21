@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | Otp Module Permissions
@@ -10,7 +12,6 @@
 |   - name: The unique permission name
 |
 */
-
 return [
     ['module_name' => 'Otp', 'name' => 'View OTP Whitelist'],
     ['module_name' => 'Otp', 'name' => 'Create OTP Whitelist'],

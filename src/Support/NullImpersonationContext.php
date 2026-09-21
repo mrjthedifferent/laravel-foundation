@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mrj\Foundation\Support;
 
 use Illuminate\Contracts\Auth\Authenticatable;

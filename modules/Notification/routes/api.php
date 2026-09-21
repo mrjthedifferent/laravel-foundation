@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\Notification\Http\Controllers\Api\ApiPushNotificationController;
 use Modules\Notification\Http\Controllers\NotificationController;
 
-Route::middleware(['auth:sanctum', 'throttle:api'])->prefix('v1')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api'])->prefix('v1')->group(function (): void {
     // Notification Counts
     Route::get('notification/counts', [NotificationController::class, 'counts']);
 

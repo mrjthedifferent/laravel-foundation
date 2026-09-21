@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Sidebar pages this module contributes. `group` names the parent (see config/sidebar.php);
  * SidebarMenu shows a page only when its route exists and the user holds one of its permissions.
  */
-
 return [
     [
         'group' => 'imports',

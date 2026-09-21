@@ -16,7 +16,7 @@ final class Email
      * Invisible characters seen in imported data: NBSP, zero-width spaces and
      * joiners, word-joiner, BOM — plus all control characters.
      */
-    private const INVISIBLE_CHARS = '/[\x{00A0}\x{200B}-\x{200D}\x{2060}\x{FEFF}\p{Cc}]/u';
+    private const string INVISIBLE_CHARS = '/[\x{00A0}\x{200B}-\x{200D}\x{2060}\x{FEFF}\p{Cc}]/u';
 
     public static function normalize(?string $value): ?string
     {

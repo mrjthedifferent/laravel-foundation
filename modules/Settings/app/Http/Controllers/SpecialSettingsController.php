@@ -2,6 +2,7 @@
 
 namespace Modules\Settings\Http\Controllers;
 
+use Exception;
 use Google_Client;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
@@ -140,7 +141,7 @@ class SpecialSettingsController extends Controller
             );
 
             return redirect()->back()->with('success', 'SMS Gateways updated successfully');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error updating SMS Gateways: '.$e->getMessage());
 
             return redirect()->back()->with('error', 'Error updating SMS Gateways: '.$e->getMessage());
@@ -238,7 +239,7 @@ class SpecialSettingsController extends Controller
             );
 
             return redirect()->back()->with('success', 'Email Mailers updated successfully');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error updating Email Mailers: '.$e->getMessage());
 
             return redirect()->back()->with('error', 'Error updating Email Mailers: '.$e->getMessage());
@@ -310,10 +311,10 @@ class SpecialSettingsController extends Controller
             $email = $request->validated('email');
             $subject = 'This is a test email from '.config('app.name');
             $message = 'This is a test message from '.config('app.name');
-            Mail::raw($message, static function ($message) use ($email, $subject) {
+            Mail::raw($message, static function ($message) use ($email, $subject): void {
                 $message->to($email)->subject($subject);
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return JsonResponseFactory::error(
                 'Email Job failed '.$e->getMessage(),
                 null,
@@ -365,7 +366,7 @@ class SpecialSettingsController extends Controller
             }
 
             return redirect()->back()->with('success', 'Firebase settings updated successfully');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error updating Firebase settings: '.$e->getMessage());
 
             return redirect()->back()->with('error', 'Error updating Firebase settings: '.$e->getMessage());
@@ -418,7 +419,7 @@ class SpecialSettingsController extends Controller
                 'Firebase connection successful. Credentials are valid and access token was obtained.',
                 null
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::warning('Firebase connection test failed: '.$e->getMessage());
 
             return JsonResponseFactory::error(
@@ -510,7 +511,7 @@ class SpecialSettingsController extends Controller
             Cache::forget('app_settings');
 
             return redirect()->back()->with('success', 'Social Auth settings updated successfully');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error updating Social Auth settings: '.$e->getMessage());
 
             return redirect()->back()->with('error', 'Error updating Social Auth settings: '.$e->getMessage());
@@ -602,7 +603,7 @@ class SpecialSettingsController extends Controller
                 "Redirect URL was generated. Try signing in with {$label} to verify your credentials.",
                 null
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::warning("Social Auth test failed for {$provider}: ".$e->getMessage());
 
             return JsonResponseFactory::error(

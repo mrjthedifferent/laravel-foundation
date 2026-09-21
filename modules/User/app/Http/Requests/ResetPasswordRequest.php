@@ -5,6 +5,7 @@ namespace Modules\User\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Mrj\Foundation\Rules\PhoneNumber;
+use Override;
 
 class ResetPasswordRequest extends FormRequest
 {
@@ -44,6 +45,7 @@ class ResetPasswordRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     protected function prepareForValidation(): void
     {
         if ($this->input('contact_type') === 'phone' && $this->filled('contact')) {
@@ -51,6 +53,7 @@ class ResetPasswordRequest extends FormRequest
         }
     }
 
+    #[Override]
     public function messages(): array
     {
         return [

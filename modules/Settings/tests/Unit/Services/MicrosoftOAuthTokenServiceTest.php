@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class MicrosoftOAuthTokenServiceTest extends TestCase
 {
-    private const TOKEN_URL = 'https://login.microsoftonline.com/*';
+    private const string TOKEN_URL = 'https://login.microsoftonline.com/*';
 
     private MicrosoftOAuthTokenService $service;
 

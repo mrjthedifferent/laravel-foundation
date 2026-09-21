@@ -3,6 +3,7 @@
 namespace Mrj\Foundation\Models;
 
 use Mrj\Foundation\Contracts\ImpersonationContext;
+use Override;
 use OwenIt\Auditing\Models\Audit as BaseAudit;
 
 /**
@@ -14,6 +15,7 @@ class Audit extends BaseAudit
 {
     public const IMPERSONATION_TAG_PREFIX = 'impersonating:';
 
+    #[Override]
     protected static function booted(): void
     {
         static::creating(function (self $audit): void {

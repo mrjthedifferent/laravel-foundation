@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\User\Enum\Gender;
+use Override;
 use Spatie\Permission\Models\Role;
 
 class RegisterRequest extends FormRequest
@@ -45,6 +46,7 @@ class RegisterRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     protected function prepareForValidation(): void
     {
         if ($this->filled('phone')) {
@@ -52,6 +54,7 @@ class RegisterRequest extends FormRequest
         }
     }
 
+    #[Override]
     public function messages(): array
     {
         $otpLength = (int) config('settings.otp_digit_length.value', 6);

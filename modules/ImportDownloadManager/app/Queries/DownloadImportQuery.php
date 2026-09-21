@@ -51,7 +51,7 @@ final readonly class DownloadImportQuery
         $like = '%'.escapeLike($term).'%';
 
         return new self(
-            $this->query->where(function (Builder $q) use ($like) {
+            $this->query->where(function (Builder $q) use ($like): void {
                 $q->whereRaw('title LIKE ? ESCAPE ?', [$like, '\\'])
                     ->orWhereRaw('type LIKE ? ESCAPE ?', [$like, '\\']);
             })

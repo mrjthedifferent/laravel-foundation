@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Notification\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class StorePushNotificationRequest extends FormRequest
 {
@@ -23,6 +26,7 @@ class StorePushNotificationRequest extends FormRequest
         ];
     }
 
+    #[Override]
     public function messages(): array
     {
         return [

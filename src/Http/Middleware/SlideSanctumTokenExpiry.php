@@ -3,6 +3,7 @@
 namespace Mrj\Foundation\Http\Middleware;
 
 use Closure;
+use DateTimeInterface;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +32,7 @@ class SlideSanctumTokenExpiry
             $expiresAt = $token->expires_at;
 
             if ($window > 0 &&
-                (! $expiresAt instanceof \DateTimeInterface || $expiresAt->lt(now()->addMinutes($window - $throttle)))) {
+                (! $expiresAt instanceof DateTimeInterface || $expiresAt->lt(now()->addMinutes($window - $throttle)))) {
                 $token->forceFill(['expires_at' => now()->addMinutes($window)])->saveQuietly();
             }
         }

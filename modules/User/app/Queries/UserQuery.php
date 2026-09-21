@@ -96,7 +96,7 @@ final readonly class UserQuery
         $digitsLike = '%'.escapeLike($digits).'%';
 
         return new self(
-            $this->query->where(function ($q) use ($like, $operator, $digits, $digitsLike) {
+            $this->query->where(function ($q) use ($like, $operator, $digits, $digitsLike): void {
                 $q->whereRaw("name {$operator} ? ESCAPE ?", [$like, '\\'])
                     ->orWhereRaw("email {$operator} ? ESCAPE ?", [$like, '\\'])
                     ->when(strlen($digits) >= 3, fn ($q) => $q->orWhereRaw('phone LIKE ? ESCAPE ?', [$digitsLike, '\\']));

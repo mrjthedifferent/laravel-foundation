@@ -3,6 +3,7 @@
 namespace Modules\User\Services;
 
 use App\Models\User;
+use Exception;
 use Modules\User\Actions\CreateUserAction;
 use Modules\User\Data\UserData;
 use Mrj\Foundation\Support\PhoneNumber;
@@ -77,7 +78,7 @@ final readonly class BulkUserRowProcessor
             $existingEmails[] = $email;
 
             return null;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage()." at row: {$rowNo}";
         }
     }

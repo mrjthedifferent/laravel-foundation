@@ -21,7 +21,7 @@ class EnsurePasswordIsChanged
      *
      * @var list<string>
      */
-    private const ALLOWED_ROUTES = ['admin.profile.edit', 'password.update', 'logout'];
+    private const array ALLOWED_ROUTES = ['admin.profile.edit', 'password.update', 'logout'];
 
     /**
      * @param  Closure(Request): (Response)  $next

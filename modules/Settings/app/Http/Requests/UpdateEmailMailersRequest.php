@@ -5,6 +5,7 @@ namespace Modules\Settings\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\Settings\Data\MailerData;
+use Override;
 
 class UpdateEmailMailersRequest extends FormRequest
 {
@@ -41,6 +42,7 @@ class UpdateEmailMailersRequest extends FormRequest
         return $rules;
     }
 
+    #[Override]
     public function messages(): array
     {
         return [

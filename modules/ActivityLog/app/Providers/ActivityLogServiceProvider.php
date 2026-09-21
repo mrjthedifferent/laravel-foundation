@@ -13,6 +13,7 @@ use Modules\ActivityLog\Policies\SmsLogPolicy;
 use Modules\ActivityLog\View\Composers\ActivityLogWidgetComposer;
 use Mrj\Foundation\Support\ModuleServiceProvider;
 use Opcodes\LogViewer\Facades\LogViewer;
+use Override;
 
 class ActivityLogServiceProvider extends ModuleServiceProvider
 {
@@ -35,6 +36,7 @@ class ActivityLogServiceProvider extends ModuleServiceProvider
         'api' => [LogRequestResponse::class],
     ];
 
+    #[Override]
     public function boot(): void
     {
         parent::boot();

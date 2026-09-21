@@ -25,7 +25,7 @@ use Symfony\Component\Mailer\Transport\AbstractTransport;
  */
 final class MicrosoftGraphTransport extends AbstractTransport
 {
-    private const SEND_MAIL_URL = 'https://graph.microsoft.com/v1.0/users/%s/sendMail';
+    private const string SEND_MAIL_URL = 'https://graph.microsoft.com/v1.0/users/%s/sendMail';
 
     private readonly string $tenantId;
 

@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use Modules\User\Enum\Gender;
 use Modules\User\Rules\UniquePhone;
 use Mrj\Foundation\Rules\PhoneNumber;
+use Override;
 
 class StoreUserRequest extends FormRequest
 {
@@ -45,6 +46,7 @@ class StoreUserRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array
     {
         return [
@@ -57,6 +59,7 @@ class StoreUserRequest extends FormRequest
     /**
      * Prepare the data for validation.
      */
+    #[Override]
     protected function prepareForValidation(): void
     {
         if ($this->filled('phone')) {

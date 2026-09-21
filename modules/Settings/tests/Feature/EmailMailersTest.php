@@ -441,7 +441,7 @@ class EmailMailersTest extends TestCase
             ],
         ]);
 
-        Mail::raw('Hello body', function ($message) {
+        Mail::raw('Hello body', function ($message): void {
             $message->to('someone@example.com')->subject('Graph Hello')->from('mail@company.com', 'Company');
         });
 

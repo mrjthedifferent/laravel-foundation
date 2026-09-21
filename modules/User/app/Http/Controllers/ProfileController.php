@@ -2,6 +2,7 @@
 
 namespace Modules\User\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -50,7 +51,7 @@ class ProfileController extends Controller
             $action->execute($user->id, $userData);
 
             return Redirect::route('admin.profile.edit')->with('success', 'Your profile updated successfully');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return Redirect::route('admin.profile.edit')->with('error', 'Failed to update profile: '.$e->getMessage());
         }
     }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('email_logs', function (Blueprint $table) {
+        Schema::create('email_logs', function (Blueprint $table): void {
             $table->id();
             $table->string('uuid')->nullable();
             $table->string('to_email');

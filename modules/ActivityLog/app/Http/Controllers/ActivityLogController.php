@@ -2,6 +2,7 @@
 
 namespace Modules\ActivityLog\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Modules\ActivityLog\Actions\DeleteActivityLogAction;
 use Modules\ActivityLog\Actions\ExportActivityLogsAction;
@@ -52,7 +53,7 @@ class ActivityLogController extends Controller
 
             return redirect()->route('admin.activity-logs.index')
                 ->with('success', 'Activity log deleted successfully.');
-        } catch (\Exception) {
+        } catch (Exception) {
             return redirect()->route('admin.activity-logs.index')
                 ->with('error', 'Failed to delete activity log.');
         }

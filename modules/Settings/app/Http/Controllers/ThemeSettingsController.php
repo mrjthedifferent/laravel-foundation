@@ -14,7 +14,7 @@ class ThemeSettingsController extends Controller
     /**
      * All theme setting keys managed by this controller.
      */
-    private const THEME_KEYS = [
+    private const array THEME_KEYS = [
         'theme_layout',
         'theme_color_mode',
         'theme_direction',

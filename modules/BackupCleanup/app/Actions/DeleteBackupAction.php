@@ -4,6 +4,7 @@ namespace Modules\BackupCleanup\Actions;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use RuntimeException;
 
 /**
  * Delete a backup file from the configured storage disk.
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 final readonly class DeleteBackupAction
 {
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function execute(string $filename): void
     {
@@ -24,7 +25,7 @@ final readonly class DeleteBackupAction
         $filePath = $backupName.'/'.$filename;
 
         if (! $storageDisk->exists($filePath)) {
-            throw new \RuntimeException('Backup file not found: '.$filePath);
+            throw new RuntimeException('Backup file not found: '.$filePath);
         }
 
         $storageDisk->delete($filePath);

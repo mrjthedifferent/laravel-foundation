@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\RolePermission\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class StorePermissionRequest extends FormRequest
 {
@@ -21,6 +24,7 @@ class StorePermissionRequest extends FormRequest
         ];
     }
 
+    #[Override]
     public function messages(): array
     {
         return [

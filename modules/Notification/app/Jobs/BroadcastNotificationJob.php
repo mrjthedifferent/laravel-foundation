@@ -3,6 +3,7 @@
 namespace Modules\Notification\Jobs;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +20,7 @@ class BroadcastNotificationJob implements ShouldQueue
     use Queueable;
 
     /** How many users are processed in a single chunk job. */
-    private const CHUNK_SIZE = 100;
+    private const int CHUNK_SIZE = 100;
 
     public int $tries = 3;
 
@@ -55,7 +56,7 @@ class BroadcastNotificationJob implements ShouldQueue
     {
         User::query()
             ->select('id')
-            ->chunk(self::CHUNK_SIZE, function ($users) {
+            ->chunk(self::CHUNK_SIZE, function ($users): void {
                 ChunkBroadcastNotificationJob::dispatch(
                     title: $this->title,
                     body: $this->body,
@@ -83,7 +84,7 @@ class BroadcastNotificationJob implements ShouldQueue
                 data: $this->data ?? [],
                 channels: $this->channels,
             ));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Notification failed for user '.$user->id.': '.$e->getMessage());
         }
     }

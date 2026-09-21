@@ -5,6 +5,7 @@ namespace Modules\Settings\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\Settings\Data\SmsGatewayData;
+use Override;
 
 class UpdateSmsGatewaysRequest extends FormRequest
 {
@@ -29,6 +30,7 @@ class UpdateSmsGatewaysRequest extends FormRequest
         return $rules;
     }
 
+    #[Override]
     public function messages(): array
     {
         return [

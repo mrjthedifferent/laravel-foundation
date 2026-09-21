@@ -2,6 +2,7 @@
 
 namespace Modules\Settings\Services;
 
+use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Modules\Settings\Models\Setting;
@@ -216,7 +217,7 @@ final class SettingsImportExportService
             }
 
             return json_encode($value);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::warning("Setting {$key} failed to decode JSON value: ".$e->getMessage());
 
             return is_string($value) ? $value : json_encode([]);
@@ -241,7 +242,7 @@ final class SettingsImportExportService
             }
 
             return (string) $value;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::warning("Setting {$key} failed to process array value: ".$e->getMessage());
 
             return is_string($value) ? $value : '';
@@ -262,7 +263,7 @@ final class SettingsImportExportService
             }
 
             return json_encode($options);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::warning("Setting {$key} options couldn't be processed: ".$e->getMessage());
 
             return json_encode(['error' => 'Invalid options data']);

@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\User\Enum\Gender;
+use Override;
 
 class UpdateProfileRequest extends FormRequest
 {
@@ -40,6 +43,7 @@ class UpdateProfileRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array
     {
         return [

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\User\Enum\AccountAction;
+use Override;
 
 class ManageUserAccountRequest extends FormRequest
 {
@@ -37,6 +38,7 @@ class ManageUserAccountRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array
     {
         return [

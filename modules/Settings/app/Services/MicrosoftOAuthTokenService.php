@@ -22,20 +22,20 @@ final readonly class MicrosoftOAuthTokenService
     /**
      * Scope for SMTP AUTH (XOAUTH2) against Exchange Online.
      */
-    public const SMTP_SCOPE = 'https://outlook.office365.com/.default';
+    public const string SMTP_SCOPE = 'https://outlook.office365.com/.default';
 
     /**
      * Scope for the Microsoft Graph sendMail API.
      */
-    public const GRAPH_SCOPE = 'https://graph.microsoft.com/.default';
+    public const string GRAPH_SCOPE = 'https://graph.microsoft.com/.default';
 
-    private const CACHE_PREFIX = 'microsoft_smtp_token:';
+    private const string CACHE_PREFIX = 'microsoft_smtp_token:';
 
     /**
      * Seconds shaved off the reported lifetime so a token never expires
      * mid-send, which would otherwise fail a whole queued batch.
      */
-    private const EXPIRY_SKEW = 300;
+    private const int EXPIRY_SKEW = 300;
 
     /**
      * Resolve a bearer token for the given app registration and scope, using the

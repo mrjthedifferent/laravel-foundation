@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\Settings\Http\Controllers\Api\ApiSettingsController;
 
@@ -14,7 +16,7 @@ use Modules\Settings\Http\Controllers\Api\ApiSettingsController;
  *
 */
 
-Route::prefix('v1/settings')->group(function () {
+Route::prefix('v1/settings')->group(function (): void {
     Route::get('app', [ApiSettingsController::class, 'appSettings']);
     Route::get('privacy-policy', [ApiSettingsController::class, 'privacyPolicy']);
     Route::get('terms-conditions', [ApiSettingsController::class, 'termsConditions']);

@@ -5,6 +5,8 @@ namespace Mrj\Foundation\Services;
 use Illuminate\Support\Facades\File;
 use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
+use RuntimeException;
+use Throwable;
 
 class PDFService
 {
@@ -27,12 +29,12 @@ class PDFService
                 if (is_writable($path)) {
                     return $path;
                 }
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 continue;
             }
         }
 
-        throw new \RuntimeException(
+        throw new RuntimeException(
             'PDF temp directory could not be created. On Ubuntu, ensure storage is writable by the web server: '
                 .'sudo chown -R www-data:www-data storage && sudo chmod -R 775 storage'
         );

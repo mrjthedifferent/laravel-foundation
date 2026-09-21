@@ -3,6 +3,7 @@
 namespace Modules\Notification\Tests\Feature;
 
 use App\Models\User;
+use DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Modules\Notification\Enum\NotificationType;
@@ -56,7 +57,7 @@ class NotificationChannelGatingTest extends TestCase
         $this->notifyPasswordReset($user);
 
         $this->assertSame(0, $this->sentEmailCount(), 'No email should be sent when the toggle is off');
-        $this->assertSame(1, \DB::table('notifications')->count(), 'In-app (database) notification must still be recorded');
+        $this->assertSame(1, DB::table('notifications')->count(), 'In-app (database) notification must still be recorded');
     }
 
     public function test_mail_is_sent_when_toggle_on(): void
@@ -67,7 +68,7 @@ class NotificationChannelGatingTest extends TestCase
         $this->notifyPasswordReset($user);
 
         $this->assertSame(1, $this->sentEmailCount(), 'Email should be sent when the toggle is on');
-        $this->assertSame(1, \DB::table('notifications')->count());
+        $this->assertSame(1, DB::table('notifications')->count());
     }
 
     public function test_in_app_is_suppressed_when_inapp_toggle_off_but_mail_still_sent(): void
@@ -78,6 +79,6 @@ class NotificationChannelGatingTest extends TestCase
         $this->notifyPasswordReset($user);
 
         $this->assertSame(1, $this->sentEmailCount(), 'Email must be unaffected by the in-app toggle');
-        $this->assertSame(0, \DB::table('notifications')->count(), 'No in-app notification should be recorded when the in-app toggle is off');
+        $this->assertSame(0, DB::table('notifications')->count(), 'No in-app notification should be recorded when the in-app toggle is off');
     }
 }

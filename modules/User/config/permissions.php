@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | User Module Permissions
@@ -10,7 +12,6 @@
 |   - name: The unique permission name
 |
 */
-
 return [
     ['module_name' => 'User', 'name' => 'View User'],
     ['module_name' => 'User', 'name' => 'Create User'],

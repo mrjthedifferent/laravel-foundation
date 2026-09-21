@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\User\Enum\DocumentType;
+use Override;
 
 class UploadDocumentRequest extends FormRequest
 {
@@ -39,6 +42,7 @@ class UploadDocumentRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array
     {
         return [

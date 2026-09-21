@@ -15,11 +15,11 @@ class InstallCommand extends Command
     /**
      * Always on. Otp and ErrorReport are optional: php artisan module:enable Otp
      */
-    private const CORE_MODULES = ['RolePermission', 'Settings', 'Notification', 'ActivityLog', 'ImportDownloadManager', 'BackupCleanup', 'User'];
+    private const array CORE_MODULES = ['RolePermission', 'Settings', 'Notification', 'ActivityLog', 'ImportDownloadManager', 'BackupCleanup', 'User'];
 
-    private const SCAN_DEFAULT = "'scan' => [\n        'enabled' => false,\n        'paths' => [\n            base_path('vendor/*/*'),\n        ],\n    ],";
+    private const string SCAN_DEFAULT = "'scan' => [\n        'enabled' => false,\n        'paths' => [\n            base_path('vendor/*/*'),\n        ],\n    ],";
 
-    private const SCAN_FOUNDATION = "'scan' => [\n        'enabled' => true,\n        'paths' => [\n            \\Mrj\\Foundation\\Foundation::modulesPath(),\n        ],\n    ],";
+    private const string SCAN_FOUNDATION = "'scan' => [\n        'enabled' => true,\n        'paths' => [\n            \\Mrj\\Foundation\\Foundation::modulesPath(),\n        ],\n    ],";
 
     public function handle(Filesystem $files): int
     {

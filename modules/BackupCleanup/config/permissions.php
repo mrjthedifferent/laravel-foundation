@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | BackupCleanup Module Permissions
@@ -10,7 +12,6 @@
 |   - name: The unique permission name
 |
 */
-
 return [
     ['module_name' => 'Backup Management', 'name' => 'View Backup'],
     ['module_name' => 'Backup Management', 'name' => 'Create Backup'],

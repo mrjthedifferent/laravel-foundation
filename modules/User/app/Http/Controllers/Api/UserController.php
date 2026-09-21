@@ -3,6 +3,7 @@
 namespace Modules\User\Http\Controllers\Api;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -297,7 +298,7 @@ class UserController extends Controller
             $socialUser = Socialite::driver($data['provider'])
                 ->stateless()
                 ->userFromToken($data['access_token']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Social auth failed', [
                 'provider' => $data['provider'],
                 'error' => $e->getMessage(),

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Settings\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class UpdateSettingRequest extends FormRequest
 {
@@ -15,6 +18,7 @@ class UpdateSettingRequest extends FormRequest
         return true;
     }
 
+    #[Override]
     protected function prepareForValidation(): void
     {
         $this->merge([

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Notification\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Override;
 
 class SendNotificationRequest extends FormRequest
 {
@@ -26,6 +29,7 @@ class SendNotificationRequest extends FormRequest
         ];
     }
 
+    #[Override]
     public function messages(): array
     {
         return [

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sms_logs', function (Blueprint $table) {
+        Schema::create('sms_logs', function (Blueprint $table): void {
             $table->id();
             $table->string('phone');
             $table->text('message');

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('otp_whitelists', function (Blueprint $table) {
+        Schema::create('otp_whitelists', function (Blueprint $table): void {
             $table->id();
             $table->enum('recipient_type', ['email', 'phone'])->comment('Type of recipient');
             $table->string('recipient')->comment('Email or phone number');

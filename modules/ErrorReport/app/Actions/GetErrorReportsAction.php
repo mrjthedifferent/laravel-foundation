@@ -11,16 +11,16 @@ final readonly class GetErrorReportsAction
     public function execute(Request $request): LengthAwarePaginator
     {
         return ErrorReport::query()
-            ->when($request->filled('search'), function ($q) use ($request) {
+            ->when($request->filled('search'), function ($q) use ($request): void {
                 $search = '%'.escapeLike($request->search).'%';
 
-                $q->where(function ($query) use ($search) {
+                $q->where(function ($query) use ($search): void {
                     $query->whereRaw('message LIKE ? ESCAPE ?', [$search, '\\'])
                         ->orWhereRaw('exception_class LIKE ? ESCAPE ?', [$search, '\\'])
                         ->orWhereRaw('file LIKE ? ESCAPE ?', [$search, '\\']);
                 });
             })
-            ->when($request->filled('resolved'), function ($q) use ($request) {
+            ->when($request->filled('resolved'), function ($q) use ($request): void {
                 if ($request->resolved === '1') {
                     $q->whereNotNull('resolved_at');
                 } else {

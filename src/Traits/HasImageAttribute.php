@@ -12,7 +12,7 @@ trait HasImageAttribute
      */
     protected static function bootHasImageAttribute(): void
     {
-        static::deleting(function ($model) {
+        static::deleting(function ($model): void {
             // Skip image deletion if model is being soft deleted
             if (method_exists($model, 'isForceDeleting') && ! $model->isForceDeleting()) {
                 return;

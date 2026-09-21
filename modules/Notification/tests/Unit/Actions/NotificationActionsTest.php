@@ -12,6 +12,7 @@ use Modules\Notification\Actions\NotifyAction;
 use Modules\Notification\Enum\NotificationType;
 use Modules\Notification\Jobs\BroadcastNotificationJob;
 use Modules\Notification\Notifications\AppNotification;
+use stdClass;
 use Tests\TestCase;
 
 class NotificationActionsTest extends TestCase
@@ -132,7 +133,7 @@ class NotificationActionsTest extends TestCase
             mailTemplate: $mailable,
         );
 
-        $result = $notification->toMail(new \stdClass);
+        $result = $notification->toMail(new stdClass);
 
         $this->assertSame($mailable, $result);
     }
@@ -141,7 +142,7 @@ class NotificationActionsTest extends TestCase
     {
         $notification = new AppNotification(title: 'Hello', body: 'World');
 
-        $result = $notification->toMail(new \stdClass);
+        $result = $notification->toMail(new stdClass);
 
         $this->assertInstanceOf(MailMessage::class, $result);
     }

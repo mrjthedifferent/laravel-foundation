@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Providers;
 
 use App\Models\User;
@@ -10,6 +12,7 @@ use Modules\User\Services\ImpersonationService;
 use Modules\User\View\Composers\UserWidgetComposer;
 use Mrj\Foundation\Contracts\ImpersonationContext;
 use Mrj\Foundation\Support\ModuleServiceProvider;
+use Override;
 
 class UserServiceProvider extends ModuleServiceProvider
 {
@@ -30,6 +33,7 @@ class UserServiceProvider extends ModuleServiceProvider
         'user::partials.dashboard-widget' => UserWidgetComposer::class,
     ];
 
+    #[Override]
     public function register(): void
     {
         parent::register();

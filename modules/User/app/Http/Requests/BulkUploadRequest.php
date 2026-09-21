@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\User\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 /**
  * Form Request for the bulk user upload endpoint.
@@ -38,6 +41,7 @@ class BulkUploadRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array
     {
         return [

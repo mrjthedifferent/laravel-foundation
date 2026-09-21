@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | Settings Module Permissions
@@ -10,7 +12,6 @@
 |   - name: The unique permission name
 |
 */
-
 return [
     ['module_name' => 'Settings', 'name' => 'Edit System Setting'],
     ['module_name' => 'Settings', 'name' => 'Edit Special Setting'],

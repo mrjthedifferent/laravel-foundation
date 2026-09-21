@@ -17,7 +17,7 @@ namespace Mrj\Foundation\Support;
  */
 final class PhoneNumber
 {
-    private const FALLBACK_DIAL_CODE = '+880';
+    private const string FALLBACK_DIAL_CODE = '+880';
 
     /**
      * The default dial code — first entry of the `phone_country_codes` setting,

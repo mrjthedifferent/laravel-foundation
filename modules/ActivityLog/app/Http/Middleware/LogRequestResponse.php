@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Modules\User\Services\ImpersonationService;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class LogRequestResponse
 {
@@ -29,7 +30,7 @@ class LogRequestResponse
                     if (is_array($responseLog)) {
                         $responseLog = $this->sanitizePayload($responseLog);
                     }
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     $responseLog = $response->getContent();
                 }
                 Log::channel('daily_api')->info($request->method().' ::: '.$request->fullUrl(), [
@@ -46,7 +47,7 @@ class LogRequestResponse
                     'headers' => $this->filterHeaders($request->headers->all(), ['authorization', 'cookie', 'x-xsrf-token']),
                     'response' => $responseLog,
                 ]);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 Log::channel('daily_api')->error('Could not log API request', [
                     'error' => $e,
                     'request' => $request_params,
@@ -76,7 +77,7 @@ class LogRequestResponse
                 'status_code' => $response->getStatusCode(),
                 'response' => $this->sanitizeResponseForAdminLog($this->handleResponse($response, $request)),
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::channel('daily_admin')->error('Could not log Admin request', [
                 'error' => $e->getMessage(),
                 'request' => $request_params,
@@ -179,13 +180,13 @@ class LogRequestResponse
             if ($response->getStatusCode() >= 400) {
                 try {
                     return json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     return ['error' => $response->getContent()];
                 }
             }
 
             return $response->getContent();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return ['error' => $e->getMessage()];
         }
     }

@@ -13,7 +13,7 @@ use Modules\ImportDownloadManager\Models\DownloadImportManager;
 final readonly class ImportFileDisk
 {
     /** @var list<string> */
-    public const DISKS = ['local', 'public'];
+    public const array DISKS = ['local', 'public'];
 
     public static function forRecord(DownloadImportManager $record): ?string
     {

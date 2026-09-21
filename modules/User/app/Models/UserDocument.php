@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Modules\User\Database\Factories\UserDocumentFactory;
 use Modules\User\Enum\DocumentType;
 use Mrj\Foundation\Traits\HasImageAttribute;
+use Override;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
@@ -31,9 +32,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property-read string $file_path_url Accessor for full URL of file_path
  * @property-read string|null $back_file_path_url Accessor for full URL of back_file_path
  *
- * @method static \Illuminate\Database\Eloquent\Builder|UserDocument byType(string $type)
- * @method static \Illuminate\Database\Eloquent\Builder|UserDocument notExpired()
- * @method static \Illuminate\Database\Eloquent\Builder|UserDocument expired()
+ * @method static Builder|UserDocument byType(string $type)
+ * @method static Builder|UserDocument notExpired()
+ * @method static Builder|UserDocument expired()
  */
 class UserDocument extends Model implements Auditable
 {
@@ -80,6 +81,7 @@ class UserDocument extends Model implements Auditable
      *
      * @return array<string, string>
      */
+    #[Override]
     protected function casts(): array
     {
         return [
@@ -116,7 +118,7 @@ class UserDocument extends Model implements Auditable
      */
     public function scopeNotExpired($query)
     {
-        return $query->where(function ($q) {
+        return $query->where(function ($q): void {
             $q->whereNull('expiry_date')
                 ->orWhere('expiry_date', '>=', now());
         });

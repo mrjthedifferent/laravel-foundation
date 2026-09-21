@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_login_history', function (Blueprint $table) {
+        Schema::create('user_login_history', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('ip_address', 45);

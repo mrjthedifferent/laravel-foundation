@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | ErrorReport Module Settings
@@ -9,7 +11,6 @@
 | These control error capture, notification channels, and throttling.
 |
 */
-
 /*
 |--------------------------------------------------------------------------
 | All Error Report settings are invisible in the general settings page.

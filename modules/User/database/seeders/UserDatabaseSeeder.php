@@ -15,7 +15,7 @@ class UserDatabaseSeeder extends Seeder
      * Local/testing-only fallback so a fresh clone can seed without any .env
      * setup. Never used outside those environments; see the guard below.
      */
-    private const LOCAL_DEV_PASSWORD = '12345678';
+    private const string LOCAL_DEV_PASSWORD = '12345678';
 
     /**
      * Run the database seeds.

@@ -4,6 +4,7 @@ namespace Modules\User\Transformers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 class UserDocumentResource extends JsonResource
 {
@@ -12,6 +13,7 @@ class UserDocumentResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

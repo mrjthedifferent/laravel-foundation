@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\Otp\Enum\ContactType;
 use Mrj\Foundation\Rules\PhoneNumber;
+use Override;
 
 class StoreOtpWhitelistRequest extends FormRequest
 {
@@ -28,6 +29,7 @@ class StoreOtpWhitelistRequest extends FormRequest
         ];
     }
 
+    #[Override]
     public function messages(): array
     {
         $digits = (int) config('settings.otp_digit_length.value', 6);
@@ -43,6 +45,7 @@ class StoreOtpWhitelistRequest extends FormRequest
         ];
     }
 
+    #[Override]
     protected function prepareForValidation(): void
     {
         if ($this->input('recipient_type') === ContactType::Phone->value && $this->filled('recipient')) {

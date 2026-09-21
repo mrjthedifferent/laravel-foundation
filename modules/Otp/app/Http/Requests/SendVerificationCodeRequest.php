@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\Otp\Enum\ContactType;
 use Mrj\Foundation\Rules\PhoneNumber;
+use Override;
 
 class SendVerificationCodeRequest extends FormRequest
 {
@@ -25,6 +26,7 @@ class SendVerificationCodeRequest extends FormRequest
         ];
     }
 
+    #[Override]
     protected function prepareForValidation(): void
     {
         // Strip a leading '+' so the digits-only PhoneNumber rule passes; the
@@ -34,6 +36,7 @@ class SendVerificationCodeRequest extends FormRequest
         }
     }
 
+    #[Override]
     public function messages(): array
     {
         return [

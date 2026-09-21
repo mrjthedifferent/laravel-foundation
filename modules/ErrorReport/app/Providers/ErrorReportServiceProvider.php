@@ -7,6 +7,7 @@ use Modules\ErrorReport\Models\ErrorReport;
 use Modules\ErrorReport\Policies\ErrorReportPolicy;
 use Modules\ErrorReport\Services\ErrorReporterService;
 use Mrj\Foundation\Support\ModuleServiceProvider;
+use Override;
 
 class ErrorReportServiceProvider extends ModuleServiceProvider
 {
@@ -18,6 +19,7 @@ class ErrorReportServiceProvider extends ModuleServiceProvider
         ErrorReport::class => ErrorReportPolicy::class,
     ];
 
+    #[Override]
     public function boot(): void
     {
         parent::boot();
@@ -25,6 +27,7 @@ class ErrorReportServiceProvider extends ModuleServiceProvider
         Gate::define('editErrorReportSettings', fn ($user) => $user->can('Edit Error Report Settings'));
     }
 
+    #[Override]
     public function register(): void
     {
         parent::register();

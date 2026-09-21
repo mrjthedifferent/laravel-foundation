@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Otp\Database\Factories\OtpWhitelistFactory;
 use Modules\Otp\Enum\ContactType;
 use Mrj\Foundation\Support\PhoneNumber;
+use Override;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class OtpWhitelist extends Model implements Auditable
@@ -23,6 +24,7 @@ class OtpWhitelist extends Model implements Auditable
         'description',
     ];
 
+    #[Override]
     protected function casts(): array
     {
         return [

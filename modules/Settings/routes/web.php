@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\Settings\Http\Controllers\NotificationSettingsController;
 use Modules\Settings\Http\Controllers\SettingsController;
@@ -17,7 +19,7 @@ use Modules\Settings\Http\Controllers\ThemeSettingsController;
 |
 */
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function (): void {
     // Regular settings routes
     Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingsController::class, 'store'])->name('settings.store');
@@ -43,7 +45,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::delete('settings/{setting}', [SettingsController::class, 'destroy'])->name('settings.destroy');
 
     // Special settings routes
-    Route::prefix('settings/special')->name('settings.special.')->group(function () {
+    Route::prefix('settings/special')->name('settings.special.')->group(function (): void {
         // Privacy Policy routes
         Route::get('privacy-policy', [SpecialSettingsController::class, 'privacyPolicy'])->name('privacy_policy');
         Route::post('privacy-policy', [SpecialSettingsController::class, 'updatePrivacyPolicy'])->name('update_privacy_policy');

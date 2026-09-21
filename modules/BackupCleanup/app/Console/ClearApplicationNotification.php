@@ -3,6 +3,7 @@
 namespace Modules\BackupCleanup\Console;
 
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Modules\Notification\Models\Notification;
@@ -50,7 +51,7 @@ class ClearApplicationNotification extends Command
             Notification::where('created_at', '<', $date)->delete();
             echo $count." notifications has been Cleaned. \n";
             Log::info('Notification cleaned. Total: '.$count);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Notification Delete command: '.$e->getMessage());
         }
 

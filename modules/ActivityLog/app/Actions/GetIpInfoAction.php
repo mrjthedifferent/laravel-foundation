@@ -2,6 +2,7 @@
 
 namespace Modules\ActivityLog\Actions;
 
+use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -51,7 +52,7 @@ final readonly class GetIpInfoAction
                     ];
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('IP tracking error: '.$e->getMessage());
         }
 

@@ -27,9 +27,11 @@ use Mrj\Foundation\View\Components\AppLayout;
 use Mrj\Foundation\View\Components\GuestLayout;
 use Mrj\Foundation\View\Components\StatusBadge;
 use Mrj\Foundation\View\Composers\ThemeComposer;
+use Override;
 
 class FoundationServiceProvider extends ServiceProvider
 {
+    #[Override]
     public function register(): void
     {
         $this->mergeConfigFrom(Foundation::path('config/foundation.php'), 'foundation');

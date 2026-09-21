@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | ImportDownloadManager Module Settings
@@ -10,5 +12,4 @@
 | requires no application settings.
 |
 */
-
 return [];

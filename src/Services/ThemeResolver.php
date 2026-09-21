@@ -4,16 +4,16 @@ namespace Mrj\Foundation\Services;
 
 final readonly class ThemeResolver
 {
-    private const HEX_PATTERN = '/^#[0-9a-fA-F]{6}$/';
+    private const string HEX_PATTERN = '/^#[0-9a-fA-F]{6}$/';
 
-    private const FONT_STACKS = [
+    private const array FONT_STACKS = [
         'inter' => "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif",
         'roboto' => "'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif",
         'poppins' => "'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif",
         'system' => "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
     ];
 
-    private const GOOGLE_FONT_URLS = [
+    private const array GOOGLE_FONT_URLS = [
         'roboto' => 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap',
         'poppins' => 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap',
     ];

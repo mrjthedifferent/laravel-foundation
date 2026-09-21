@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | Notification Module Permissions
@@ -10,7 +12,6 @@
 |   - name: The unique permission name
 |
 */
-
 return [
     ['module_name' => 'Notification', 'name' => 'View Push Notification'],
     ['module_name' => 'Notification', 'name' => 'Create Push Notification'],

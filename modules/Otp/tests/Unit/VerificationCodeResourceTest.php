@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Otp\Tests\Unit;
 
 use Illuminate\Http\Request;

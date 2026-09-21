@@ -2,6 +2,7 @@
 
 namespace Modules\Settings\Http\Controllers;
 
+use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class NotificationSettingsController extends Controller
      *
      * @var array<string, string>
      */
-    private const UI_CHANNELS = [
+    private const array UI_CHANNELS = [
         'mail' => 'Email',
         'database' => 'In-App',
         'fcm' => 'Push',
@@ -38,7 +39,7 @@ class NotificationSettingsController extends Controller
      *
      * @var array<string, string>
      */
-    private const DESCRIPTIONS = [
+    private const array DESCRIPTIONS = [
         'mail' => 'Send the "%s" email automatically',
         'database' => 'Deliver the "%s" in-app notification',
         'fcm' => 'Send the "%s" push notification',
@@ -111,7 +112,7 @@ class NotificationSettingsController extends Controller
 
             return redirect()->route('admin.settings.special.notifications')
                 ->with('success', 'Notification settings updated successfully');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Notification settings update failed', ['error' => $e->getMessage()]);
 
             return back()->with('error', 'Failed to update notification settings');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mrj\Foundation\View\Composers;
 
 use Illuminate\View\View;

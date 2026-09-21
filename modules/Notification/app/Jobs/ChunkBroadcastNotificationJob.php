@@ -3,6 +3,7 @@
 namespace Modules\Notification\Jobs;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -50,10 +51,10 @@ class ChunkBroadcastNotificationJob implements ShouldQueue
             ->select(['id'])
             ->with('firebaseTokens:id,user_id,token')
             ->get()
-            ->each(function (User $user) use ($notification) {
+            ->each(function (User $user) use ($notification): void {
                 try {
                     $user->notify($notification);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Log::error('Chunk broadcast failed for user '.$user->id.': '.$e->getMessage());
                 }
             });

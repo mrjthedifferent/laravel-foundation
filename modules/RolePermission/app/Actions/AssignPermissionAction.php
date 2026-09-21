@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\RolePermission\Actions;
 
 use Spatie\Permission\Models\Role;

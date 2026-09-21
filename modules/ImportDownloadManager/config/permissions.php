@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | ImportDownloadManager Module Permissions
@@ -10,7 +12,6 @@
 |   - name: The unique permission name
 |
 */
-
 return [
     ['module_name' => 'Import & Download Manager', 'name' => 'Download Import Manager Management'],
     ['module_name' => 'Import & Download Manager', 'name' => 'Import Manager Data Download'],

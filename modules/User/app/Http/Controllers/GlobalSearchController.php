@@ -33,7 +33,7 @@ class GlobalSearchController extends Controller
             $like = '%'.escapeLike($query).'%';
 
             $users = User::query()
-                ->where(function ($q) use ($like) {
+                ->where(function ($q) use ($like): void {
                     $q->whereRaw('name LIKE ? ESCAPE ?', [$like, '\\'])
                         ->orWhereRaw('email LIKE ? ESCAPE ?', [$like, '\\'])
                         ->orWhereRaw('phone LIKE ? ESCAPE ?', [$like, '\\']);

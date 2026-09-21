@@ -21,13 +21,13 @@ use OwenIt\Auditing\Events\AuditCustom;
  */
 final readonly class ImpersonationService implements ImpersonationContext
 {
-    public const SESSION_KEY = 'impersonator_id';
+    public const string SESSION_KEY = 'impersonator_id';
 
-    public const STARTED_EVENT = 'impersonation_started';
+    public const string STARTED_EVENT = 'impersonation_started';
 
-    public const ENDED_EVENT = 'impersonation_ended';
+    public const string ENDED_EVENT = 'impersonation_ended';
 
-    private const TOKEN_ABILITY_PREFIX = 'impersonator:';
+    private const string TOKEN_ABILITY_PREFIX = 'impersonator:';
 
     /**
      * The Sanctum token ability that marks a token as issued to an impersonator.

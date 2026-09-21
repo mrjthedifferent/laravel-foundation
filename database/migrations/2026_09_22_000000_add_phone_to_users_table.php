@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table): void {
             if (! Schema::hasColumn('users', 'phone')) {
                 $table->string('phone', 20)->nullable()->unique()->after('email_verified_at');
             }
@@ -24,7 +24,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table): void {
             $table->dropUnique(['phone']);
             $table->dropColumn(['phone', 'phone_verified_at']);
         });

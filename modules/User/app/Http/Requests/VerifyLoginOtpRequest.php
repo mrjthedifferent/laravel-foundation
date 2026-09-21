@@ -4,6 +4,7 @@ namespace Modules\User\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Mrj\Foundation\Rules\EmailOrPhone;
+use Override;
 
 class VerifyLoginOtpRequest extends FormRequest
 {
@@ -23,6 +24,7 @@ class VerifyLoginOtpRequest extends FormRequest
         ];
     }
 
+    #[Override]
     protected function prepareForValidation(): void
     {
         if ($this->filled('id') && ! filter_var($this->input('id'), FILTER_VALIDATE_EMAIL)) {
@@ -30,6 +32,7 @@ class VerifyLoginOtpRequest extends FormRequest
         }
     }
 
+    #[Override]
     public function messages(): array
     {
         $digits = (int) config('settings.otp_digit_length.value', 6);

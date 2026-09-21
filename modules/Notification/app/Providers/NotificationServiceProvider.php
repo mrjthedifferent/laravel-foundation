@@ -12,6 +12,7 @@ use Modules\Notification\Policies\NotificationPolicy;
 use Modules\Notification\Policies\PushNotificationPolicy;
 use Modules\Notification\View\Composers\NotificationWidgetComposer;
 use Mrj\Foundation\Support\ModuleServiceProvider;
+use Override;
 
 class NotificationServiceProvider extends ModuleServiceProvider
 {
@@ -33,6 +34,7 @@ class NotificationServiceProvider extends ModuleServiceProvider
         'notification::partials.dashboard-widget' => NotificationWidgetComposer::class,
     ];
 
+    #[Override]
     public function boot(): void
     {
         parent::boot();

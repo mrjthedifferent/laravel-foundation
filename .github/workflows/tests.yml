@@ -39,5 +39,13 @@ jobs:
         if: matrix.php == '8.4' && matrix.dependencies == 'highest'
         run: vendor/bin/pint --test
 
+      - name: Static analysis
+        if: matrix.php == '8.4' && matrix.dependencies == 'highest'
+        run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress
+
+      - name: Refactoring rules (dry-run)
+        if: matrix.php == '8.4' && matrix.dependencies == 'highest'
+        run: vendor/bin/rector process --dry-run --no-progress-bar
+
       - name: Tests
         run: vendor/bin/phpunit

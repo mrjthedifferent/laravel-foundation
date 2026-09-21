@@ -3,5 +3,13 @@
     "exclude": [
         "bootstrap/cache",
         "storage"
-    ]
+    ],
+    "rules": {
+        "global_namespace_import": {
+            "import_classes": true
+        },
+        "fully_qualified_strict_types": {
+            "import_symbols": true
+        }
+    }
 }

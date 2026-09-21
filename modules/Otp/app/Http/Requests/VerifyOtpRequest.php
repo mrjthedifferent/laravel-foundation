@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Otp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class VerifyOtpRequest extends FormRequest
 {
@@ -21,6 +24,7 @@ class VerifyOtpRequest extends FormRequest
         ];
     }
 
+    #[Override]
     public function messages(): array
     {
         $digits = (int) config('settings.otp_digit_length.value', 6);

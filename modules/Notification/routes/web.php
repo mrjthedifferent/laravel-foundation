@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\Notification\Http\Controllers\NotificationController;
 use Modules\Notification\Http\Controllers\PushNotificationController;
 
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function (): void {
     // Notification web views
     Route::resource('notification', NotificationController::class)
         ->only(['index', 'show', 'destroy'])

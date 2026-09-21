@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\BackupCleanup\Console;
 
+use Exception;
 use Illuminate\Console\Command;
 use Modules\BackupCleanup\Actions\RunBackupAction;
 use Modules\BackupCleanup\Actions\RunCleanupAction;
@@ -47,7 +50,7 @@ class SystemBackupAndCleanup extends Command
             $cleanOutput = $this->runCleanupAction->execute();
             $this->info($cleanOutput);
             $this->comment('Clean up complete.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error('Operation failed: '.$e->getMessage());
 
             return self::FAILURE;

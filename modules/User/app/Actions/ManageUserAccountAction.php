@@ -3,6 +3,7 @@
 namespace Modules\User\Actions;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\User\Enum\AccountAction;
@@ -44,7 +45,7 @@ final readonly class ManageUserAccountAction
 
                 return false;
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Error {$action->value} user account: ".$e->getMessage());
 
             return false;

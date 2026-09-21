@@ -2,6 +2,7 @@
 
 namespace Modules\Notification\Jobs;
 
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
@@ -10,14 +11,15 @@ use Illuminate\Support\Str;
 use Modules\ActivityLog\Actions\CreateSmsLogAction;
 use Modules\Settings\Data\SmsGatewayData;
 use Modules\Settings\Services\MailerSecretCipher;
+use RuntimeException;
 
 class SendSmsJob implements ShouldQueue
 {
     use Queueable;
 
-    private const REQUEST_TIMEOUT = 60;
+    private const int REQUEST_TIMEOUT = 60;
 
-    private const CONNECT_TIMEOUT = 30;
+    private const int CONNECT_TIMEOUT = 30;
 
     public int $tries = 3;
 
@@ -37,7 +39,7 @@ class SendSmsJob implements ShouldQueue
         $smsGateways = getSystemSetting('sms_gateways');
 
         if (! is_array($smsGateways)) {
-            throw new \RuntimeException('SMS Gateways are not configured.');
+            throw new RuntimeException('SMS Gateways are not configured.');
         }
 
         $selectedType = getSystemSetting('sms_gateway');
@@ -123,7 +125,7 @@ class SendSmsJob implements ShouldQueue
                     'message' => $this->message,
                 ]);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::channel('daily_sms')->error('Error sending SMS', [
                 'error' => $e->getMessage(),
                 'phone' => $this->phone,

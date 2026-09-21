@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Modules\Otp\Database\Factories\VerificationCodeFactory;
 use Modules\Otp\Enum\ContactType;
+use Override;
 
 class VerificationCode extends Model
 {
@@ -27,6 +28,7 @@ class VerificationCode extends Model
         'attempts',
     ];
 
+    #[Override]
     protected function casts(): array
     {
         return [

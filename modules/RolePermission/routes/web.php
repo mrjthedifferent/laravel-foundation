@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\RolePermission\Http\Controllers\RolePermissionController;
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function (): void {
     // Role CRUD
     Route::resource('role', RolePermissionController::class)->except(['create', 'show', 'edit']);
     Route::get('role/{role}/clone', [RolePermissionController::class, 'clone'])->name('role.clone');

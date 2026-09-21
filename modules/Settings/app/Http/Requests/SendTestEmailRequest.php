@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Settings\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class SendTestEmailRequest extends FormRequest
 {
@@ -18,6 +21,7 @@ class SendTestEmailRequest extends FormRequest
         ];
     }
 
+    #[Override]
     public function messages(): array
     {
         return [

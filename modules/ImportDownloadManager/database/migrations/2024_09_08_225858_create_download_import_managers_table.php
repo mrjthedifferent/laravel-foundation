@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('download_import_managers', function (Blueprint $table) {
+        Schema::create('download_import_managers', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('user_id')->comment('Requested User ID')->constrained()->index();
             $table->string('title');

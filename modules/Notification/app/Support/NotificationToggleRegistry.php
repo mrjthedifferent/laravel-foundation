@@ -23,7 +23,7 @@ final readonly class NotificationToggleRegistry
      *
      * @var array<string, string>
      */
-    public const CHANNEL_PREFIXES = [
+    public const array CHANNEL_PREFIXES = [
         'mail' => 'mail',
         'database' => 'inapp',
         'fcm' => 'push',

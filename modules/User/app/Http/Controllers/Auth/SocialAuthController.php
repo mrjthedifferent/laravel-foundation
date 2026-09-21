@@ -2,13 +2,12 @@
 
 namespace Modules\User\Http\Controllers\Auth;
 
-use App\Models\User;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\User\Actions\HandleSocialUserAction;
 use Mrj\Foundation\Http\Controllers\Controller;
-use Spatie\Permission\Models\Role;
 
 class SocialAuthController extends Controller
 {
@@ -37,7 +36,7 @@ class SocialAuthController extends Controller
             } else {
                 $socialUser = Socialite::driver($provider)->user();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->route('login')->with('error', 'Authentication failed. Please try again.');
         }
 

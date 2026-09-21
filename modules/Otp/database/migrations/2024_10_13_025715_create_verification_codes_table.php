@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('verification_codes', function (Blueprint $table) {
+        Schema::create('verification_codes', function (Blueprint $table): void {
             $table->id();
             $table->string('code', 6);
             $table->enum('contact_type', ['email', 'phone']);

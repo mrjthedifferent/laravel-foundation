@@ -5,6 +5,7 @@ namespace Modules\User\Models;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Override;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class UserLoginHistory extends Model implements Auditable
@@ -24,6 +25,7 @@ class UserLoginHistory extends Model implements Auditable
         'logged_out_at',
     ];
 
+    #[Override]
     protected function casts(): array
     {
         return [

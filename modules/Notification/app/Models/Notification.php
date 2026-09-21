@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Notification\Database\Factories\NotificationFactory;
+use Override;
 
 class Notification extends Model
 {
@@ -23,6 +24,7 @@ class Notification extends Model
         'read_at',
     ];
 
+    #[Override]
     protected function casts(): array
     {
         return [

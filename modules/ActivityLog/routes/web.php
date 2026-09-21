@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\ActivityLog\Http\Controllers\ActivityLogController;
 use Modules\ActivityLog\Http\Controllers\EmailLogController;
@@ -16,7 +18,7 @@ use Modules\ActivityLog\Http\Controllers\SmsLogController;
 |
 */
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(static function () {
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(static function (): void {
     // Activity Log routes
     Route::get('activity-logs/track-ip', [ActivityLogController::class, 'trackIpInfo'])->name('track-ip');
     Route::get('activity-logs/export', [ActivityLogController::class, 'export'])->name('activity-logs.export');

@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use Modules\Otp\Enum\ContactType;
 use Modules\Otp\Models\OtpWhitelist;
 use Mrj\Foundation\Rules\PhoneNumber;
+use Override;
 
 class UpdateOtpWhitelistRequest extends FormRequest
 {
@@ -35,6 +36,7 @@ class UpdateOtpWhitelistRequest extends FormRequest
         ];
     }
 
+    #[Override]
     public function messages(): array
     {
         $digits = (int) config('settings.otp_digit_length.value', 6);

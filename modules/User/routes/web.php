@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\User\Http\Controllers\DocumentController;
 use Modules\User\Http\Controllers\GlobalSearchController;
@@ -19,7 +21,7 @@ use Modules\User\Http\Middleware\RequireRecentPasswordConfirmation;
 |
 */
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function (): void {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -4,6 +4,7 @@ namespace Modules\BackupCleanup\Actions;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use RuntimeException;
 
 /**
  * Run the backup cleanup command via Artisan.
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Log;
 final readonly class RunCleanupAction
 {
     /**
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function execute(): string
     {

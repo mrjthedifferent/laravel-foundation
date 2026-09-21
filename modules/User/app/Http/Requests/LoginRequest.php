@@ -5,6 +5,7 @@ namespace Modules\User\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Mrj\Foundation\Rules\EmailOrPhone;
+use Override;
 
 class LoginRequest extends FormRequest
 {
@@ -34,6 +35,7 @@ class LoginRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     protected function prepareForValidation(): void
     {
         if ($this->filled('id') && ! filter_var($this->id, FILTER_VALIDATE_EMAIL)) {
@@ -41,6 +43,7 @@ class LoginRequest extends FormRequest
         }
     }
 
+    #[Override]
     public function messages(): array
     {
         return [

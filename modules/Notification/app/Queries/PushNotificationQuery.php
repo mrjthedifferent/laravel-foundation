@@ -22,7 +22,7 @@ final readonly class PushNotificationQuery
             $like = '%'.escapeLike($search).'%';
 
             return new self(
-                $this->query->where(function (Builder $q) use ($like) {
+                $this->query->where(function (Builder $q) use ($like): void {
                     $q->whereRaw('title LIKE ? ESCAPE ?', [$like, '\\'])
                         ->orWhereRaw('body LIKE ? ESCAPE ?', [$like, '\\']);
                 })

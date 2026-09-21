@@ -16,7 +16,7 @@ final readonly class DashboardCache
      * Counter used to invalidate every dashboard entry at once. The `database`
      * cache store does not support tags, so there is no Cache::tags()->flush().
      */
-    private const VERSION_KEY = 'dashboard:cache:version';
+    private const string VERSION_KEY = 'dashboard:cache:version';
 
     /**
      * Caches the callback under a dashboard-scoped key, or runs it directly when

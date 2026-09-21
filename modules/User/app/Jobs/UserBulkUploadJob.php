@@ -3,6 +3,7 @@
 namespace Modules\User\Jobs;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,6 +16,7 @@ use Modules\ImportDownloadManager\Enum\ImportStatus;
 use Modules\ImportDownloadManager\Models\DownloadImportManager;
 use Modules\User\Services\BulkUserRowProcessor;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Throwable;
 
 class UserBulkUploadJob implements ShouldQueue
 {
@@ -65,13 +67,13 @@ class UserBulkUploadJob implements ShouldQueue
             // HTML may be built here, only line breaks the view converts safely.
             $remarks = count($errors) > 0 ? implode("\n", $errors) : 'Completed successfully';
             app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Completed, $remarks);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('User bulk upload failed', ['error' => $e->getMessage()]);
             app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Failed, $e->getMessage());
         }
     }
 
-    public function failed(\Throwable $exception): void
+    public function failed(Throwable $exception): void
     {
         app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Failed, 'Job failed: '.$exception->getMessage());
         Log::error('User bulk upload job failed', ['error' => $exception->getMessage()]);

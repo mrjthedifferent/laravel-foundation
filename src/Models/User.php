@@ -21,6 +21,7 @@ use Modules\User\Models\UserLoginHistory;
 use Mrj\Foundation\Support\Email;
 use Mrj\Foundation\Support\PhoneNumber;
 use Mrj\Foundation\Traits\HasImageAttribute;
+use Override;
 use OwenIt\Auditing\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -110,9 +111,10 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
         return Attribute::set(fn ($value) => PhoneNumber::toE164($value === null ? null : (string) $value));
     }
 
+    #[Override]
     protected static function booted(): void
     {
-        static::creating(function (User $user) {
+        static::creating(function (User $user): void {
             $user->uuid = (string) Str::uuid();
         });
     }
@@ -122,6 +124,7 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
      *
      * @return array<string, string>
      */
+    #[Override]
     protected function casts(): array
     {
         return [
@@ -139,7 +142,7 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
      */
     public function scopeNotUser(Builder $query): Builder
     {
-        return $query->whereHas('roles', static function (Builder $query) {
+        return $query->whereHas('roles', static function (Builder $query): void {
             $query->where('name', '!=', 'user');
         });
     }

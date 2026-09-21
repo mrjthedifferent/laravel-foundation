@@ -2,6 +2,7 @@
 
 namespace Modules\Settings\Providers;
 
+use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -16,6 +17,7 @@ use Modules\Settings\Services\MailerSecretCipher;
 use Modules\Settings\Services\MicrosoftOAuthTokenService;
 use Modules\Settings\View\Composers\SettingsWidgetComposer;
 use Mrj\Foundation\Support\ModuleServiceProvider;
+use Override;
 
 class SettingsServiceProvider extends ModuleServiceProvider
 {
@@ -23,6 +25,7 @@ class SettingsServiceProvider extends ModuleServiceProvider
 
     protected string $nameLower = 'settings';
 
+    #[Override]
     public function register(): void
     {
         parent::register();
@@ -58,6 +61,7 @@ class SettingsServiceProvider extends ModuleServiceProvider
         'error_report_slack_webhook' => 'logging.channels.slack.url',
     ];
 
+    #[Override]
     public function boot(): void
     {
         parent::boot();
@@ -130,7 +134,7 @@ class SettingsServiceProvider extends ModuleServiceProvider
                     ]);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error updating configs from settings: '.$e->getMessage());
         }
     }
@@ -203,7 +207,7 @@ class SettingsServiceProvider extends ModuleServiceProvider
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error updating configs from settings: '.$e->getMessage());
         }
     }

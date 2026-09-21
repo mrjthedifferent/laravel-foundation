@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Settings\Data;
 
 use Spatie\LaravelData\Data;

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Mrj\Foundation\Http\Responses\JsonResponseFactory;
+use Override;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -52,9 +53,10 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      */
+    #[Override]
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
+        $this->reportable(function (Throwable $e): void {
             //
         });
     }
@@ -64,6 +66,7 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
+    #[Override]
     public function render($request, Throwable $e): Response
     {
         if ($request->is('api/*')) {

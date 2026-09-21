@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\ImportDownloadManager\Providers;
 
 use Modules\ImportDownloadManager\Models\DownloadImportManager;

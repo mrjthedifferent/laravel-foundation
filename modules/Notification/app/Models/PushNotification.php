@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Notification\Database\Factories\PushNotificationFactory;
 use Mrj\Foundation\Services\FileManagerService;
+use Override;
 
 class PushNotification extends Model
 {
@@ -30,6 +31,7 @@ class PushNotification extends Model
         'user_id',
     ];
 
+    #[Override]
     protected function casts(): array
     {
         return [

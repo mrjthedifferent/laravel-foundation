@@ -4,6 +4,7 @@ namespace Modules\Notification\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 class NotificationResource extends JsonResource
 {
@@ -12,6 +13,7 @@ class NotificationResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function toArray(Request $request): array
     {
         $data = $this->data ?? [];

@@ -11,7 +11,7 @@ use Mrj\Foundation\Http\Controllers\Controller;
 
 class ErrorReportSettingsController extends Controller
 {
-    private const KEYS = [
+    private const array KEYS = [
         'error_report_enabled',
         'error_report_channels',
         'error_report_email_recipients',

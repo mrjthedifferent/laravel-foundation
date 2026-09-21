@@ -6,21 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use JsonException;
 use Modules\Settings\Contracts\SecretCipher;
 use Mrj\Foundation\Services\FileManagerService;
+use Override;
 use OwenIt\Auditing\Auditable;
+use Throwable;
 
 class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
     use Auditable;
 
+    #[Override]
     protected static function booted()
     {
-        static::saved(function () {
+        static::saved(function (): void {
             self::flush();
         });
 
-        static::deleted(function () {
+        static::deleted(function (): void {
             self::flush();
         });
     }
@@ -51,7 +55,7 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
 
         try {
             Artisan::call('queue:restart');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::warning('Settings saved but queue:restart failed; workers may serve stale settings.', [
                 'error' => $e->getMessage(),
             ]);
@@ -81,6 +85,7 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
     /**
      * @return array<string, string>
      */
+    #[Override]
     public function casts(): array
     {
         return [
@@ -154,7 +159,7 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
         // Handle JSON decoding safely
         try {
             return json_decode($options, true, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
+        } catch (JsonException $e) {
             Log::warning("Failed to decode options JSON for setting '{$this->key}': ".$e->getMessage());
 
             return is_string($options) ? $options : [];
@@ -175,7 +180,7 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
                 'encrypted' => app(SecretCipher::class)->decrypt($value),
                 default => $value,
             };
-        } catch (\JsonException $e) {
+        } catch (JsonException $e) {
             Log::warning("Failed to decode JSON value for setting '{$this->key}': ".$e->getMessage());
 
             return $value; // Return the raw value if JSON decoding fails
@@ -203,7 +208,7 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
                 $decoded = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
 
                 return $decoded;
-            } catch (\JsonException $e) {
+            } catch (JsonException $e) {
                 Log::warning("Invalid JSON value for setting '{$this->key}': ".$e->getMessage());
 
                 return [];
@@ -214,7 +219,7 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
         return [];
     }
 
-    public function setValueAttribute($value)
+    public function setValueAttribute($value): void
     {
         try {
             $this->attributes['value'] = match ((string) $this->type) {
@@ -223,7 +228,7 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
                 'encrypted' => app(SecretCipher::class)->encrypt($value),
                 default => $value,
             };
-        } catch (\JsonException $e) {
+        } catch (JsonException $e) {
             Log::warning("Failed to encode JSON value for setting '{$this->key}': ".$e->getMessage());
             $this->attributes['value'] = is_string($value) ? $value : json_encode([]);
         }

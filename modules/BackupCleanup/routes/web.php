@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\BackupCleanup\Http\Controllers\BackupController;
 
@@ -14,7 +16,7 @@ use Modules\BackupCleanup\Http\Controllers\BackupController;
 |
 */
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function (): void {
     Route::get('backups', [BackupController::class, 'index'])->name('backups.index');
     Route::post('backups', [BackupController::class, 'store'])->name('backups.store');
     Route::post('backups/cleanup', [BackupController::class, 'cleanup'])->name('backups.cleanup');

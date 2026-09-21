@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Mrj\Foundation\Support\Email;
 use Mrj\Foundation\Support\PhoneNumber;
+use Override;
 
 class LoginRequest extends FormRequest
 {
@@ -30,6 +31,7 @@ class LoginRequest extends FormRequest
      * FILTER_VALIDATE_EMAIL check — an email with a stray invisible character
      * fails that check and would be mistaken for a phone number.
      */
+    #[Override]
     protected function prepareForValidation(): void
     {
         if ($this->has('login')) {

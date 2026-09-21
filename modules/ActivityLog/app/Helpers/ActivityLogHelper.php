@@ -2,6 +2,7 @@
 
 namespace Modules\ActivityLog\Helpers;
 
+use Exception;
 use Modules\User\Services\ImpersonationService;
 use Mrj\Foundation\Models\Audit;
 
@@ -122,7 +123,7 @@ class ActivityLogHelper
                     'timezone' => $data['timezone'] ?? 'Unknown',
                 ];
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Silent fail
         }
 

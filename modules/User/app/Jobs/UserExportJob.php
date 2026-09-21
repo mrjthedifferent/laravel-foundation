@@ -16,6 +16,7 @@ use Modules\User\Queries\UserQuery;
 use Mpdf\Mpdf;
 use Mrj\Foundation\Services\PDFService;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Throwable;
 
 class UserExportJob implements ShouldQueue
 {
@@ -98,13 +99,13 @@ class UserExportJob implements ShouldQueue
             }
 
             app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Completed, 'completed', $filePath);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Failed, $e->getMessage());
             Log::error('User export failed', ['error' => $e->getMessage()]);
         }
     }
 
-    public function failed(\Throwable $exception): void
+    public function failed(Throwable $exception): void
     {
         app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Failed, $exception->getMessage());
         Log::error('User export job failed', ['error' => $exception->getMessage()]);

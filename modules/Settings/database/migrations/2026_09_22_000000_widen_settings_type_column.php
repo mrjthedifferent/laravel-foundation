@@ -14,14 +14,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('settings', function (Blueprint $table) {
+        Schema::table('settings', function (Blueprint $table): void {
             $table->string('type')->default('text')->change();
         });
     }
 
     public function down(): void
     {
-        Schema::table('settings', function (Blueprint $table) {
+        Schema::table('settings', function (Blueprint $table): void {
             $table->enum('type', ['text', 'textarea', 'file', 'image', 'integer', 'float', 'boolean', 'select', 'multi-select', 'array', 'disabled', 'json'])->default('text')->change();
         });
     }

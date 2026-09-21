@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\ActivityLog\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * @property int $id
@@ -25,9 +29,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EmailLog newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EmailLog newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|EmailLog query()
+ * @method static Builder<static>|EmailLog newModelQuery()
+ * @method static Builder<static>|EmailLog newQuery()
+ * @method static Builder<static>|EmailLog query()
  *
  * @mixin \Eloquent
  */
@@ -51,6 +55,7 @@ class EmailLog extends Model
         'sent_at',
     ];
 
+    #[Override]
     protected function casts(): array
     {
         return [

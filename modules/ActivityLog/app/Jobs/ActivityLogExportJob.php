@@ -2,6 +2,7 @@
 
 namespace Modules\ActivityLog\Jobs;
 
+use BackedEnum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,6 +18,7 @@ use Mpdf\Mpdf;
 use Mrj\Foundation\Services\PDFService;
 use OwenIt\Auditing\Models\Audit;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Throwable;
 
 class ActivityLogExportJob implements ShouldQueue
 {
@@ -48,7 +50,7 @@ class ActivityLogExportJob implements ShouldQueue
                 ->filterByDateFrom($filters['date_from'] ?? null)
                 ->filterByDateTo($filters['date_to'] ?? null)
                 ->get()
-                ->each(function (Audit $audit) use (&$exportData, &$sl) {
+                ->each(function (Audit $audit) use (&$exportData, &$sl): void {
                     $metaData = $audit->getMetadata();
                     $modifiedData = $audit->getModified();
                     $changes = [];
@@ -118,13 +120,13 @@ class ActivityLogExportJob implements ShouldQueue
             }
 
             app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Completed, 'completed', $filePath);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Failed, $e->getMessage());
             Log::error('Activity log export error: '.$e->getMessage());
         }
     }
 
-    public function failed(\Throwable $exception): void
+    public function failed(Throwable $exception): void
     {
         app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Failed, 'Job failed: '.$exception->getMessage());
         Log::error('Activity log export job failed: '.$exception->getMessage());
@@ -141,7 +143,7 @@ class ActivityLogExportJob implements ShouldQueue
         }
 
         // Backed enum (e.g. ImportStatus, ImportType, Gender, etc.)
-        if ($value instanceof \BackedEnum) {
+        if ($value instanceof BackedEnum) {
             return (string) $value->value;
         }
 

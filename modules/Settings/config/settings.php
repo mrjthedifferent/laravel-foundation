@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | Settings Module - Application Settings
@@ -13,7 +15,6 @@
 | module's own configuration below.
 |
 */
-
 return [
     /*
     |--------------------------------------------------------------------------

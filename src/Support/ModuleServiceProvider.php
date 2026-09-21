@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
+use Override;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -56,6 +57,7 @@ abstract class ModuleServiceProvider extends ServiceProvider
     /** @var array<string, list<class-string>> group => middleware */
     protected array $appendToGroups = [];
 
+    #[Override]
     public function register(): void
     {
         $namespace = substr(static::class, 0, (int) strrpos(static::class, '\\'));

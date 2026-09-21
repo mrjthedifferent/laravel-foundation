@@ -10,6 +10,7 @@ use Modules\Notification\Listeners\GateNotificationChannels;
 use Modules\Notification\Notifications\AppNotification;
 use Modules\Otp\Notifications\SendVerificationCode;
 use Modules\Settings\Models\Setting;
+use stdClass;
 use Tests\TestCase;
 
 class GateNotificationChannelsTest extends TestCase
@@ -38,7 +39,7 @@ class GateNotificationChannelsTest extends TestCase
 
     private function event(object $notification, string $channel): NotificationSending
     {
-        return new NotificationSending(notifiable: new \stdClass, notification: $notification, channel: $channel);
+        return new NotificationSending(notifiable: new stdClass, notification: $notification, channel: $channel);
     }
 
     private function passwordReset(): AppNotification

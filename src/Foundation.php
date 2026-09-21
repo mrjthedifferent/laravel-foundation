@@ -22,7 +22,7 @@ use Throwable;
  */
 final class Foundation
 {
-    public const PACKAGE = 'mrjthedifferent/laravel-foundation';
+    public const string PACKAGE = 'mrjthedifferent/laravel-foundation';
 
     /** @var (Closure(array<string, mixed>, User): ?bool)|null */
     private static ?Closure $sidebarVisibility = null;

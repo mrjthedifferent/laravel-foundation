@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | ActivityLog Module Permissions
@@ -10,7 +12,6 @@
 |   - name: The unique permission name
 |
 */
-
 return [
     ['module_name' => 'Activity Log', 'name' => 'View Activity Log'],
     ['module_name' => 'Activity Log', 'name' => 'Delete Activity Log'],

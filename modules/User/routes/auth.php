@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Modules\User\Http\Controllers\Auth\AuthenticatedSessionController;
 use Modules\User\Http\Controllers\Auth\ConfirmablePasswordController;
@@ -15,7 +17,7 @@ use Modules\User\Http\Controllers\Auth\VerifyEmailController;
  * Registration is closed: accounts are created by an administrator.
  */
 
-Route::middleware('guest')->group(function () {
+Route::middleware('guest')->group(function (): void {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'store'])->middleware('throttle:auth');
 
@@ -33,7 +35,7 @@ Route::middleware('guest')->group(function () {
     Route::get('auth/{provider}/callback', [SocialAuthController::class, 'callback'])->name('social.callback');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function (): void {
     Route::get('verify-email', EmailVerificationPromptController::class)->name('verification.notice');
     Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])

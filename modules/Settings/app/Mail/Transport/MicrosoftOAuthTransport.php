@@ -3,6 +3,7 @@
 namespace Modules\Settings\Mail\Transport;
 
 use Modules\Settings\Services\MicrosoftOAuthTokenService;
+use Override;
 use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\Smtp\Auth\XOAuth2Authenticator;
@@ -45,6 +46,7 @@ final class MicrosoftOAuthTransport extends EsmtpTransport
         $this->setUsername((string) ($config['mailbox'] ?? $config['username'] ?? ''));
     }
 
+    #[Override]
     public function send(RawMessage $message, ?Envelope $envelope = null): ?SentMessage
     {
         $token = $this->tokens->accessToken($this->tenantId, $this->clientId, $this->clientSecret);
@@ -64,6 +66,7 @@ final class MicrosoftOAuthTransport extends EsmtpTransport
      * Overridden so the bearer token never reaches logs or exception messages —
      * the parent renders the password into its DSN string.
      */
+    #[Override]
     public function __toString(): string
     {
         return 'microsoft-oauth://'.$this->getUsername();

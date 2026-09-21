@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('verification_codes', function (Blueprint $table) {
+        Schema::table('verification_codes', function (Blueprint $table): void {
             $table->unsignedTinyInteger('attempts')->default(0)->after('is_verified');
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('verification_codes', function (Blueprint $table) {
+        Schema::table('verification_codes', function (Blueprint $table): void {
             $table->dropColumn('attempts');
         });
     }

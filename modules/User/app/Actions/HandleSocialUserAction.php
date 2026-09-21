@@ -22,7 +22,7 @@ final readonly class HandleSocialUserAction
         // Match strictly on a previously-linked provider identity first, then
         // fall back to a matching email of an existing account.
         $user = User::query()
-            ->where(function ($query) use ($provider, $socialUser) {
+            ->where(function ($query) use ($provider, $socialUser): void {
                 $query->where('provider', $provider)
                     ->where('provider_id', $socialUser->getId());
             })
