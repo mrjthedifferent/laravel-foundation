@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -222,18 +223,31 @@ class UserController extends Controller
     }
 
     /**
-     * Manage account (reset/delete)
+     * Manage account (reset/delete). With no user_id this is self-service
+     * (a user resetting/deleting their own account); a user_id targeting
+     * someone else is the admin path and requires the same 'Delete User'
+     * permission and production guard the web equivalent enforces — without
+     * this check, any authenticated user could delete another user's account
+     * by supplying their own password and an arbitrary user_id.
      */
     public function manageAccount(
         ManageUserAccountRequest $request,
         ManageUserAccountAction $action
     ): JsonResponse {
+        $userId = $request->validated('user_id') ?? $request->user()->id;
+        $user = User::findOrFail($userId);
+
+        if ((int) $userId !== $request->user()->id) {
+            Gate::authorize('manageAccount', $user);
+
+            if (app()->environment('production')) {
+                return JsonResponseFactory::forbidden('Account management unavailable in production');
+            }
+        }
+
         if (! Hash::check($request->validated('password'), $request->user()->password)) {
             return JsonResponseFactory::unauthorized('Invalid password');
         }
-
-        $userId = $request->validated('user_id') ?? $request->user()->id;
-        $user = User::findOrFail($userId);
 
         $accountAction = AccountAction::from($request->validated('action'));
         $result = $action->execute($user, $accountAction);
