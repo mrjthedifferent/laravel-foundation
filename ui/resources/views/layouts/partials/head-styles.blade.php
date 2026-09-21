@@ -22,6 +22,9 @@
         --custom-sidebar-bg: {{ !empty($theme['sidebarColorCustom']) ? $theme['sidebarColorCustom'] : 'transparent' }};
     }
     :root {
+        {{-- fontStack is one of ThemeResolver::FONT_STACKS's fixed, developer-written
+             strings; a setting only selects which one, never supplies the value. Escaping
+             it would turn the quotes CSS font-family needs into &quot; and break the rule. --}}
         --body-font-family: {!! $theme['fontStack'] !!};
     }
 </style>

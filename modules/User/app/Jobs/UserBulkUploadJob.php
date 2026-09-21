@@ -61,7 +61,9 @@ class UserBulkUploadJob implements ShouldQueue
                 }
             }
 
-            $remarks = count($errors) > 0 ? implode('<br/>', $errors) : 'Completed successfully';
+            // Plain text: the record's remarks are rendered with a raw echo, so no
+            // HTML may be built here, only line breaks the view converts safely.
+            $remarks = count($errors) > 0 ? implode("\n", $errors) : 'Completed successfully';
             app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Completed, $remarks);
         } catch (\Exception $e) {
             Log::error('User bulk upload failed', ['error' => $e->getMessage()]);

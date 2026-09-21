@@ -55,6 +55,24 @@ class DownloadImportManagerTest extends TestCase
             ->assertViewIs('importdownloadmanager::index');
     }
 
+    /**
+     * remarks carries an export/import job's own status message, including a
+     * caught exception's message verbatim. An admin's request is not the same
+     * as an attacker's, but an exception can still echo attacker-influenced
+     * input (a bad filename, a malformed row), so it must never render as HTML.
+     */
+    public function test_remarks_are_escaped_and_newlines_become_line_breaks(): void
+    {
+        $this->record(['remarks' => "<script>alert(1)</script>\nSecond line"]);
+
+        $response = $this->actingAs($this->user)->get(route('admin.download.import.manager.index'));
+
+        $response->assertDontSee('<script>alert(1)</script>', false);
+        $response->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false);
+        // nl2br() inserts <br /> but keeps the original newline character.
+        $response->assertSee("&lt;script&gt;alert(1)&lt;/script&gt;<br />\nSecond line", false);
+    }
+
     public function test_index_only_shows_current_users_records(): void
     {
         $other = User::factory()->create(['is_active' => true]);

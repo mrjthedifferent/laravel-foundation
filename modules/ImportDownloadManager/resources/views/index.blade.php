@@ -74,7 +74,9 @@ use Modules\ImportDownloadManager\Enum\ImportType;
                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle">{{ $item->type->value }}</span>
             </td>
             <td>
-                <div id="remarks{{ $item->id }}">{!! $item->remarks !!}</div>
+                {{-- remarks may hold an exception message or another job's output; it is
+                     never trusted HTML, so it is escaped before the newline breaks are added. --}}
+                <div id="remarks{{ $item->id }}">{!! nl2br(e($item->remarks)) !!}</div>
             </td>
             @canany(['Import Manager Data Download', 'Import Manager Data Delete'])
             <td class="text-end">
