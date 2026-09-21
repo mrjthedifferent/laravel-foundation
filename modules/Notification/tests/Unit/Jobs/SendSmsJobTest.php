@@ -3,7 +3,7 @@
 namespace Modules\Notification\Tests\Unit\Jobs;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mockery;
+use Illuminate\Support\Facades\Http;
 use Modules\Notification\Jobs\SendSmsJob;
 use Modules\Settings\Models\Setting;
 use Modules\Settings\Services\MailerSecretCipher;
@@ -36,22 +36,19 @@ class SendSmsJobTest extends TestCase
             ['type' => 'select', 'group' => 'General', 'is_visible' => false, 'value' => 'Provider']
         );
 
-        $captured = ['headers' => null, 'params' => null];
+        Http::fake(['api.provider.com/*' => Http::response([], 200)]);
 
-        $job = Mockery::mock(SendSmsJob::class, ['Hello there', '+8801711111111'])->makePartial();
-        $job->shouldReceive('guzzle_post_call_json')
-            ->once()
-            ->andReturnUsing(function ($post, $url, $headers, $query) use (&$captured) {
-                $captured['headers'] = $headers;
-                $captured['params'] = $query;
+        (new SendSmsJob('Hello there', '+8801711111111'))->handle();
 
-                return [];
-            });
-
-        $job->handle();
-
-        // The gateway must receive decrypted, not encrypted, values.
-        $this->assertSame('Bearer tok', $captured['headers']['Authorization']);
-        $this->assertSame('secret-key', $captured['params']['api_key']);
+        Http::assertSent(function ($request) {
+            // The gateway must receive decrypted, not encrypted, values. The job
+            // strips the leading '+' before building params (gateways expect the
+            // country code with no plus sign).
+            return $request->url() === 'https://api.provider.com/send'
+                && $request->hasHeader('Authorization', 'Bearer tok')
+                && $request['api_key'] === 'secret-key'
+                && $request['mobile'] === '8801711111111'
+                && $request['text'] === 'Hello there';
+        });
     }
 }

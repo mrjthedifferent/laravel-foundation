@@ -4,16 +4,20 @@ namespace Modules\Notification\Jobs;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Modules\ActivityLog\Actions\CreateSmsLogAction;
 use Modules\Settings\Data\SmsGatewayData;
 use Modules\Settings\Services\MailerSecretCipher;
-use Mrj\Foundation\Traits\MyGuzzleClient;
 
 class SendSmsJob implements ShouldQueue
 {
-    use MyGuzzleClient, Queueable;
+    use Queueable;
+
+    private const REQUEST_TIMEOUT = 60;
+
+    private const CONNECT_TIMEOUT = 30;
 
     public int $tries = 3;
 
@@ -93,9 +97,22 @@ class SendSmsJob implements ShouldQueue
         }
 
         try {
-            $result = $method === 'POST'
-                ? $this->guzzle_post_call_json($params, $url, $headers, $params)
-                : $this->guzzle_get_call($url, $headers, $params);
+            $request = Http::withHeaders($headers)
+                ->timeout(self::REQUEST_TIMEOUT)
+                ->connectTimeout(self::CONNECT_TIMEOUT);
+
+            $response = $method === 'POST'
+                ? $request->post($url, $params)
+                : $request->get($url, $params);
+
+            $result = $response->json() ?? $response->body();
+
+            if ($response->failed()) {
+                Log::channel('daily_sms')->error('SMS gateway returned an error', [
+                    'status' => $response->status(),
+                    'phone' => $this->phone,
+                ]);
+            }
 
             if (module('ActivityLog')) {
                 $smsLog = app(CreateSmsLogAction::class)->execute($this->phone, $this->message, $result);

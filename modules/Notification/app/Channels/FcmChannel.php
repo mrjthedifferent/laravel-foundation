@@ -3,20 +3,19 @@
 namespace Modules\Notification\Channels;
 
 use Google_Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Mrj\Foundation\Traits\MyGuzzleClient;
 
 class FcmChannel
 {
-    use MyGuzzleClient;
-
     /** FCM v1 send endpoint template */
     private const FCM_URL = 'https://fcm.googleapis.com/v1/projects/%s/messages:send';
 
     /** Maximum tokens per FCM send call */
     private const TOKEN_BATCH_SIZE = 500;
+
+    private const REQUEST_TIMEOUT = 30;
 
     public function send(object $notifiable, object $notification): bool
     {
@@ -63,8 +62,18 @@ class FcmChannel
                 ];
 
                 try {
-                    $responses[] = $this->guzzle_post_call_json($body, $url, $headers);
-                } catch (GuzzleException|\Exception $e) {
+                    $response = Http::withHeaders($headers)
+                        ->timeout(self::REQUEST_TIMEOUT)
+                        ->post($url, $body);
+
+                    if ($response->failed()) {
+                        $errors[] = 'HTTP '.$response->status().': '.$response->body();
+
+                        continue;
+                    }
+
+                    $responses[] = $response->json();
+                } catch (\Throwable $e) {
                     $errors[] = $e->getMessage();
                 }
             }
