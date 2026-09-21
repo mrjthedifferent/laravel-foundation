@@ -145,6 +145,12 @@
                         ['class' => 'form-control form-control-sm', 'rows' => 4],
                     ) !!}
                 </div>
+                <div id="value_encrypted_container" class="{{ $setting->type === 'encrypted' ? '' : 'd-none' }}">
+                    {!! Form::password('value_encrypted', [
+                        'class' => 'form-control form-control-sm',
+                        'placeholder' => $setting->type === 'encrypted' ? 'Leave blank to keep the current secret' : 'Secret value — stored encrypted',
+                    ]) !!}
+                </div>
                 <div id="value_integer_container" class="{{ $setting->type === 'integer' ? '' : 'd-none' }}">
                     {!! Form::number('value_integer', old('value_integer', $setting->type === 'integer' ? $setting->value : ''), [
                         'class' => 'form-control form-control-sm',

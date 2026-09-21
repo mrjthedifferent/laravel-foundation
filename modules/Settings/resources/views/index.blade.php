@@ -252,6 +252,16 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                                 rows="5"
                                                 style="font-size:.78rem;">{{ is_array($setting->value) ? json_encode($setting->value, JSON_PRETTY_PRINT) : $setting->value }}</textarea>
 
+                                            {{-- ── Encrypted ── --}}
+                                            @elseif ($setting->type === 'encrypted')
+                                            <input type="password"
+                                                name="{{ $setting->key }}"
+                                                id="{{ $setting->key }}"
+                                                class="form-control form-control-sm settings-input"
+                                                autocomplete="new-password"
+                                                placeholder="Leave blank to keep the current secret"
+                                                {{ $setting->required ? 'data-required' : '' }}>
+
                                             {{-- ── Text (default) ── --}}
                                             @else
                                             <input type="text"

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Settings\Models\Setting;
+use Modules\Settings\Services\MailerSecretCipher;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -72,10 +73,13 @@ class FirebaseTest extends TestCase
         $response->assertRedirect();
         $response->assertSessionHas('success', 'Firebase settings updated successfully');
 
-        $this->assertDatabaseHas('settings', [
-            'key' => 'firebase_credentials_json',
-            'value' => '{"type":"service_account"}',
-        ]);
+        // The service-account JSON is a secret; it must be encrypted at rest
+        // and only readable back through the model's decrypting accessor.
+        $stored = Setting::where('key', 'firebase_credentials_json')->first();
+        $this->assertSame('encrypted', $stored->type);
+        $this->assertTrue(app(MailerSecretCipher::class)->isEncrypted($stored->getRawOriginal('value')));
+        $this->assertSame('{"type":"service_account"}', $stored->value);
+
         $this->assertDatabaseHas('settings', [
             'key' => 'firebase_project_id',
             'value' => 'my-firebase-project',

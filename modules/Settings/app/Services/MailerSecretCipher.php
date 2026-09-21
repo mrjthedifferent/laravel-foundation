@@ -4,19 +4,20 @@ namespace Modules\Settings\Services;
 
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
+use Modules\Settings\Contracts\SecretCipher;
 
 /**
- * Encrypts and decrypts the secret leaf values stored inside the email_mailers
- * and sms_gateways JSON settings (mailbox passwords, client secrets, SMS API
- * keys) so they are not held in plaintext in the settings table, its audit
- * trail, or backups.
+ * Encrypts and decrypts secret values held in the settings table: the leaf
+ * values inside the email_mailers and sms_gateways JSON settings (mailbox
+ * passwords, client secrets, SMS API keys), and any setting stored with
+ * type "encrypted" (webhook URLs, bot tokens, service-account JSON).
  *
  * Every method tolerates legacy plaintext and is idempotent, so a value can be
  * passed through repeatedly (mixed plaintext/ciphertext during the migration)
  * without corruption. Ciphertext is Laravel's standard {@see Crypt} payload and
  * is therefore bound to APP_KEY.
  */
-final readonly class MailerSecretCipher
+final readonly class MailerSecretCipher implements SecretCipher
 {
     /**
      * Encrypt a plaintext secret. Null/empty values pass through untouched (a

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Settings\Models\Setting;
+use Modules\Settings\Services\MailerSecretCipher;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -73,10 +74,12 @@ class SocialAuthTest extends TestCase
             'key' => 'google_client_id',
             'value' => 'google-id',
         ]);
-        $this->assertDatabaseHas('settings', [
-            'key' => 'google_client_secret',
-            'value' => 'google-secret',
-        ]);
+
+        // OAuth client secrets are stored encrypted at rest, not in plaintext.
+        $stored = Setting::where('key', 'google_client_secret')->first();
+        $this->assertSame('encrypted', $stored->type);
+        $this->assertTrue(app(MailerSecretCipher::class)->isEncrypted($stored->getRawOriginal('value')));
+        $this->assertSame('google-secret', $stored->value);
     }
 
     public function test_test_google_auth_returns_400_when_not_configured(): void

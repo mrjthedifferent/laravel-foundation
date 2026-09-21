@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
+use Modules\Settings\Contracts\SecretCipher;
 use Modules\Settings\Data\MailerData;
 use Modules\Settings\Mail\Transport\MicrosoftGraphTransport;
 use Modules\Settings\Mail\Transport\MicrosoftOAuthTransport;
@@ -21,6 +22,13 @@ class SettingsServiceProvider extends ModuleServiceProvider
     protected string $name = 'Settings';
 
     protected string $nameLower = 'settings';
+
+    public function register(): void
+    {
+        parent::register();
+
+        $this->app->bind(SecretCipher::class, MailerSecretCipher::class);
+    }
 
     protected array $morphMap = [
         'setting' => Setting::class,

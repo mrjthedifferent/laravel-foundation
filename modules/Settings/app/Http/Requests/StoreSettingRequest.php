@@ -31,7 +31,7 @@ class StoreSettingRequest extends FormRequest
         return [
             'key' => 'required|string|max:255|unique:settings,key',
             'group' => 'required|string|max:255',
-            'type' => 'required|string|in:text,textarea,file,image,integer,float,boolean,select,multi-select,array,json',
+            'type' => 'required|string|in:text,textarea,encrypted,file,image,integer,float,boolean,select,multi-select,array,json',
             'description' => 'nullable|string',
             'is_visible' => 'boolean',
             'is_required' => 'boolean',

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Modules\Settings\Contracts\SecretCipher;
 use Mrj\Foundation\Services\FileManagerService;
 use OwenIt\Auditing\Auditable;
 
@@ -171,6 +172,7 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
                 'json' => $this->getJsonValue($value),
                 'image' => FileManagerService::getImage($value),
                 'file' => FileManagerService::getFile($value),
+                'encrypted' => app(SecretCipher::class)->decrypt($value),
                 default => $value,
             };
         } catch (\JsonException $e) {
@@ -218,6 +220,7 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
             $this->attributes['value'] = match ((string) $this->type) {
                 'array', 'multi-select' => is_array($value) ? implode(',', $value) : $value,
                 'json' => $this->setJsonValue($value),
+                'encrypted' => app(SecretCipher::class)->encrypt($value),
                 default => $value,
             };
         } catch (\JsonException $e) {
@@ -253,5 +256,31 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
     public function scopeEnabled($query)
     {
         return $query->where('is_visible', true);
+    }
+
+    /**
+     * Redact encrypted settings out of the audit trail. The raw `value`
+     * column already holds ciphertext for these rows, but auditing also
+     * records the mutated attribute through the accessor in some code paths,
+     * so both old and new values are replaced rather than left to chance.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    public function transformAudit(array $data): array
+    {
+        if ($this->type !== 'encrypted') {
+            return $data;
+        }
+
+        if (array_key_exists('value', $data['old_values'] ?? [])) {
+            $data['old_values']['value'] = '[REDACTED]';
+        }
+
+        if (array_key_exists('value', $data['new_values'] ?? [])) {
+            $data['new_values']['value'] = '[REDACTED]';
+        }
+
+        return $data;
     }
 }

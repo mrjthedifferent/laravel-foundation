@@ -350,11 +350,13 @@ class SpecialSettingsController extends Controller
             ];
 
             foreach ($keys as $key => $meta) {
+                // 'type' must be filled before 'value': Setting::setValueAttribute()
+                // reads the sibling 'type' attribute to decide whether to encrypt.
                 Setting::updateOrCreate(
                     ['key' => $key],
                     [
+                        'type' => $key === 'firebase_credentials_json' ? 'encrypted' : 'text',
                         'value' => $request->validated($key, ''),
-                        'type' => $key === 'firebase_credentials_json' ? 'textarea' : 'text',
                         'group' => 'Firebase',
                         'description' => $meta['description'],
                         'is_visible' => false,
@@ -483,14 +485,25 @@ class SpecialSettingsController extends Controller
                 'apple_key_file' => 'services.apple.key_file',
             ];
 
+            // OAuth client secrets are stored encrypted. apple_key_file is a filesystem
+            // path to the .p8 key, not the key material itself, so it stays plain text.
+            $secretKeys = ['google_client_secret', 'github_client_secret', 'apple_client_secret'];
+
             foreach ($keys as $key) {
                 $value = $request->validated($key, '');
                 if (isset($configMap[$key])) {
                     config([$configMap[$key] => $value]);
                 }
+                // 'type' must be filled before 'value': Setting::setValueAttribute()
+                // reads the sibling 'type' attribute to decide whether to encrypt.
                 Setting::updateOrCreate(
                     ['key' => $key],
-                    ['value' => $value, 'type' => 'text', 'group' => 'Social Auth', 'is_visible' => false]
+                    [
+                        'type' => in_array($key, $secretKeys, true) ? 'encrypted' : 'text',
+                        'value' => $value,
+                        'group' => 'Social Auth',
+                        'is_visible' => false,
+                    ]
                 );
             }
 

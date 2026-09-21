@@ -123,7 +123,7 @@ class NotifyErrorJob implements ShouldQueue
 
     private function sendSlack(AnonymousNotifiable $notifiable, ErrorReportNotification $notification): void
     {
-        $webhook = config('settings.error_report_slack_webhook.value') ?: env('LOG_SLACK_WEBHOOK_URL');
+        $webhook = config('settings.error_report_slack_webhook.value') ?: config('logging.channels.slack.url');
 
         if (empty($webhook)) {
             return;

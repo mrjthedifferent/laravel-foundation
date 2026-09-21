@@ -272,4 +272,50 @@ class SettingsCrudTest extends TestCase
         $this->assertSame('Rebuilt', collect($settings)->firstWhere('key', 'app_name')['value']);
         $this->assertIsArray(Cache::get(SettingsServiceProvider::CACHE_KEY));
     }
+
+    // --- encrypted type ---
+
+    public function test_an_encrypted_setting_is_stored_as_ciphertext_and_read_back_decrypted(): void
+    {
+        $setting = Setting::create(['key' => 'api_secret', 'group' => 'General', 'type' => 'encrypted', 'value' => 'sk_live_12345']);
+
+        $this->assertNotSame('sk_live_12345', $setting->getRawOriginal('value'));
+        $this->assertSame('sk_live_12345', $setting->fresh()->value);
+    }
+
+    /**
+     * SaveSettingAction re-assigns the raw stored ciphertext when a password
+     * field is submitted blank ("keep the current secret"). That must not
+     * encrypt an already-encrypted value a second time.
+     */
+    public function test_reassigning_the_raw_ciphertext_does_not_double_encrypt(): void
+    {
+        $setting = Setting::create(['key' => 'api_secret', 'group' => 'General', 'type' => 'encrypted', 'value' => 'sk_live_12345']);
+        $ciphertext = $setting->getRawOriginal('value');
+
+        $setting->value = $ciphertext;
+        $setting->save();
+
+        $this->assertSame($ciphertext, $setting->getRawOriginal('value'));
+        $this->assertSame('sk_live_12345', $setting->fresh()->value);
+    }
+
+    public function test_encrypted_setting_values_never_reach_the_audit_trail_in_plaintext(): void
+    {
+        config(['audit.console' => true]);
+
+        $setting = Setting::create(['key' => 'api_secret', 'group' => 'General', 'type' => 'encrypted', 'value' => 'sk_live_12345']);
+
+        $setting->value = 'sk_live_67890';
+        $setting->save();
+
+        $audits = $setting->audits;
+
+        $this->assertNotEmpty($audits);
+
+        foreach ($audits as $audit) {
+            $this->assertStringNotContainsString('sk_live_12345', json_encode($audit->old_values));
+            $this->assertStringNotContainsString('sk_live_67890', json_encode($audit->new_values));
+        }
+    }
 }

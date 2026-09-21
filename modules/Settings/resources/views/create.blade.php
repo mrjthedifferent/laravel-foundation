@@ -123,6 +123,13 @@
                         'placeholder' => 'Textarea value',
                     ]) !!}
                 </div>
+                <div id="value_encrypted_container" class="d-none">
+                    {!! Form::password('value_encrypted', [
+                        'id' => 'value_encrypted',
+                        'class' => 'form-control form-control-sm',
+                        'placeholder' => 'Secret value — stored encrypted',
+                    ]) !!}
+                </div>
                 <div id="value_integer_container" class="d-none">
                     {!! Form::number('value_integer', old('value_integer', 0), [
                         'id' => 'value_integer',

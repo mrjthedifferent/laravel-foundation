@@ -81,7 +81,7 @@ class SettingsController extends Controller
         $this->authorize('developer', Setting::class);
 
         $groups = Setting::distinct('group')->pluck('group')->toArray();
-        $types = ['text', 'textarea', 'file', 'image', 'integer', 'float', 'boolean', 'select', 'multi-select', 'array', 'json'];
+        $types = ['text', 'textarea', 'encrypted', 'file', 'image', 'integer', 'float', 'boolean', 'select', 'multi-select', 'array', 'json'];
 
         return view('settings::create', compact('groups', 'types'));
     }
@@ -117,7 +117,7 @@ class SettingsController extends Controller
         $this->authorize('developer', Setting::class);
 
         $groups = Setting::distinct('group')->pluck('group')->toArray();
-        $types = ['text', 'textarea', 'file', 'image', 'integer', 'float', 'boolean', 'select', 'multi-select', 'array', 'json'];
+        $types = ['text', 'textarea', 'encrypted', 'file', 'image', 'integer', 'float', 'boolean', 'select', 'multi-select', 'array', 'json'];
 
         return view('settings::edit', compact('setting', 'groups', 'types'));
     }

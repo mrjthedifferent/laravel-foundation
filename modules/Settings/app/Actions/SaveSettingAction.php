@@ -104,6 +104,11 @@ final readonly class SaveSettingAction
             in_array($type, ['json', 'array']) => $setting->value = $request->filled("value_{$type}")
                 ? $request->input("value_{$type}")
                 : ($setting->exists ? $setting->getRawOriginal('value') : '[]'),
+            // A blank password field means "keep the current secret", not "erase it";
+            // browsers never prefill password inputs, so blank is the common case on edit.
+            $type === 'encrypted' => $setting->value = $request->filled('value_encrypted')
+                ? $request->input('value_encrypted')
+                : ($setting->exists ? $setting->getRawOriginal('value') : ''),
             default => $setting->value = $request->input("value_{$type}", $validated["value_{$type}"] ?? ''),
         };
     }
@@ -150,6 +155,12 @@ final readonly class SaveSettingAction
     private function saveScalarByKey(Setting $setting, Request $request): void
     {
         if (! $request->has($setting->key) || is_null($request->input($setting->key))) {
+            return;
+        }
+
+        // A blank password field means "keep the current secret", not "erase it";
+        // browsers never prefill password inputs, so blank is the common case.
+        if ($setting->type === 'encrypted' && $request->input($setting->key) === '') {
             return;
         }
 

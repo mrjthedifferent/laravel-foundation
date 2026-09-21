@@ -40,8 +40,8 @@ class ErrorReportSettingsController extends Controller
         $this->saveSetting('error_report_enabled', $validated['error_report_enabled'] ? '1' : '0');
         $this->saveSetting('error_report_channels', json_encode($validated['error_report_channels'] ?? []));
         $this->saveSetting('error_report_email_recipients', $validated['error_report_email_recipients'] ?? '');
-        $this->saveSetting('error_report_slack_webhook', $validated['error_report_slack_webhook'] ?? '');
-        $this->saveSetting('error_report_telegram_bot_token', $validated['error_report_telegram_bot_token'] ?? '');
+        $this->saveSetting('error_report_slack_webhook', $validated['error_report_slack_webhook'] ?? '', 'encrypted');
+        $this->saveSetting('error_report_telegram_bot_token', $validated['error_report_telegram_bot_token'] ?? '', 'encrypted');
         $this->saveSetting('error_report_telegram_chat_id', $validated['error_report_telegram_chat_id'] ?? '');
         $this->saveSetting('error_report_throttle_minutes', (string) ($validated['error_report_throttle_minutes'] ?? 60));
         $dontReport = $validated['error_report_dont_report'] ?? '';
@@ -53,11 +53,15 @@ class ErrorReportSettingsController extends Controller
         return redirect()->back()->with('success', 'Error Report settings updated successfully');
     }
 
-    private function saveSetting(string $key, string $value): void
+    private function saveSetting(string $key, string $value, string $type = 'text'): void
     {
+        // 'type' must be filled before 'value': Setting::setValueAttribute()
+        // reads the sibling 'type' attribute to decide whether to encrypt, and
+        // Eloquent's fill() assigns attributes in array order.
         Setting::updateOrCreate(
             ['key' => $key],
             [
+                'type' => $type,
                 'value' => $value,
                 'group' => 'Error Report',
                 'is_visible' => false,
