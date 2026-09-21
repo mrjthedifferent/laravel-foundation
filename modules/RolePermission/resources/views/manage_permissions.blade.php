@@ -20,7 +20,7 @@
     <x-slot name="actions">
         <x-table-action id="bulk-delete-btn" class="btn-danger btn-sm d-none" icon="ph-trash" title="Delete Selected" />
         <x-table-action class="btn-primary btn-sm me-2" icon="ph-plus" title="Create Permission" data-bs-toggle="modal" data-bs-target="#createPermissionModal" />
-        <x-table-action :href="route('admin.permission.sync')" class="btn-success btn-sm me-2 swal-post" icon="ph-eject" title="Sync Permissions" data-text="Sync permissions? This will run the PermissionSeeder." />
+        <x-table-action :href="route('admin.permission.sync')" class="btn-success btn-sm me-2 swal-post" icon="ph-eject" title="Sync Permissions" data-text="Sync permissions? This adds any new permissions from the modules' config files." />
     </x-slot>
 
     <thead>

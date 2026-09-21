@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.10.1
+
+- Fixed: "Sync Permissions" failed with `Target class [Database\Seeders\PermissionSeeder] does
+  not exist`. It now runs the RolePermission module's own seeder, and gives the Super Admin
+  role any permissions that were added.
+- Fixed: creating or cleaning a backup queued a job that failed, because nothing provided the
+  `backup:run` and `backup:clean` commands. The package now requires `spatie/laravel-backup`.
+  To change where and what is backed up, publish that package's `config/backup.php`.
+- Removed the BackupCleanup module's unused copy of the backup config.
+
 ## 0.10.0
 
 - Users have a phone number: new `phone` and `phone_verified_at` columns, added by a new

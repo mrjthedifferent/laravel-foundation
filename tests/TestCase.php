@@ -19,6 +19,7 @@ use Nwidart\Modules\LaravelModulesServiceProvider;
 use Opcodes\LogViewer\LogViewerServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use OwenIt\Auditing\AuditingServiceProvider;
+use Spatie\Backup\BackupServiceProvider;
 use Spatie\LaravelData\LaravelDataServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
 
@@ -39,6 +40,7 @@ abstract class TestCase extends Orchestra
         return [
             LaravelModulesServiceProvider::class,
             PermissionServiceProvider::class,
+            BackupServiceProvider::class,
             SanctumServiceProvider::class,
             AuditingServiceProvider::class,
             HtmlServiceProvider::class,
