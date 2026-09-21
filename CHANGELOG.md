@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.11.1
+
+- Fixed: upgrading with a warm cache broke on boot. The `app_settings` key still held `Setting`
+  models, which Laravel 13 returns as `__PHP_Incomplete_Class` rather than unserializing, so
+  `artisan package:discover` failed during `composer update`. The cache is now rebuilt when it
+  does not hold the expected array.
+
 ## 0.11.0
 
 Laravel 13. **Requires Laravel `^13.0` and PHP `^8.3`**; Laravel 12 and PHP 8.2 are no longer

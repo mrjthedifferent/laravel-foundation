@@ -5,7 +5,9 @@ namespace Modules\Settings\Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Modules\Settings\Models\Setting;
+use Modules\Settings\Providers\SettingsServiceProvider;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -250,5 +252,24 @@ class SettingsCrudTest extends TestCase
 
         $this->assertDatabaseMissing('settings', ['id' => $s1->id]);
         $this->assertDatabaseMissing('settings', ['id' => $s2->id]);
+    }
+
+    /**
+     * An app upgrading from before 0.11 has a warm cache holding Setting models.
+     * Laravel 13 will not unserialize them, so the reader must rebuild instead of
+     * handing back whatever the cache produced.
+     */
+    public function test_a_stale_object_cache_is_discarded_and_rebuilt(): void
+    {
+        Setting::updateOrCreate(['key' => 'app_name'], ['value' => 'Rebuilt', 'group' => 'General', 'type' => 'text']);
+
+        // Stands in for the pre-0.11 payload: anything that is not an array.
+        Cache::forever(SettingsServiceProvider::CACHE_KEY, Setting::all());
+
+        $settings = SettingsServiceProvider::cached();
+
+        $this->assertIsArray($settings);
+        $this->assertSame('Rebuilt', collect($settings)->firstWhere('key', 'app_name')['value']);
+        $this->assertIsArray(Cache::get(SettingsServiceProvider::CACHE_KEY));
     }
 }
