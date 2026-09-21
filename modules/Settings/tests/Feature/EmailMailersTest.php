@@ -3,7 +3,7 @@
 namespace Modules\Settings\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -28,7 +28,7 @@ class EmailMailersTest extends TestCase
         parent::setUp();
 
         $this->withoutMiddleware([
-            ValidateCsrfToken::class,
+            PreventRequestForgery::class,
         ]);
 
         $role = Role::create(['name' => 'admin', 'guard_name' => 'web']);
@@ -397,6 +397,30 @@ class EmailMailersTest extends TestCase
         $this->assertInstanceOf(MicrosoftGraphTransport::class, $transport);
         $this->assertSame('microsoft-graph://mail@company.com', (string) $transport);
         $this->assertStringNotContainsString('super-secret', (string) $transport);
+    }
+
+    /**
+     * The custom transports are registered through Mail::extend closures, which
+     * resolve a service out of the container. Nothing else builds them, so
+     * without this they only fail when someone actually sends mail.
+     */
+    public function test_the_oauth_transport_is_built_from_the_stored_mailer_config(): void
+    {
+        config([
+            'mail.default' => 'microsoft_oauth',
+            'mail.mailers.microsoft_oauth' => [
+                'transport' => 'microsoft_oauth',
+                'tenant_id' => 'tenant-uuid',
+                'client_id' => 'client-uuid',
+                'client_secret' => 'super-secret',
+                'mailbox' => 'mail@company.com',
+            ],
+        ]);
+
+        $transport = Mail::mailer('microsoft_oauth')->getSymfonyTransport();
+
+        $this->assertInstanceOf(MicrosoftOAuthTransport::class, $transport);
+        $this->assertSame('mail@company.com', $transport->getUsername());
     }
 
     public function test_the_graph_transport_posts_the_mime_message_to_graph_with_a_bearer_token(): void

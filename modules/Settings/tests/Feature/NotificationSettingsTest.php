@@ -3,7 +3,7 @@
 namespace Modules\Settings\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Modules\Settings\Models\Setting;
@@ -22,7 +22,7 @@ class NotificationSettingsTest extends TestCase
         parent::setUp();
 
         $this->withoutMiddleware([
-            ValidateCsrfToken::class,
+            PreventRequestForgery::class,
         ]);
 
         $role = Role::create(['name' => 'admin', 'guard_name' => 'web']);

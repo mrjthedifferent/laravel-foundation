@@ -3,7 +3,7 @@
 namespace Modules\Settings\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Settings\Models\Setting;
 use Spatie\Permission\Models\Permission;
@@ -23,7 +23,7 @@ class FirebaseTest extends TestCase
         parent::setUp();
 
         $this->withoutMiddleware([
-            ValidateCsrfToken::class,
+            PreventRequestForgery::class,
         ]);
 
         $this->adminRole = Role::create(['name' => 'admin', 'guard_name' => 'web']);

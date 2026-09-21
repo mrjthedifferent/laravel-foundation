@@ -3,7 +3,7 @@
 namespace Modules\RolePermission\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -19,7 +19,7 @@ class RolePermissionTest extends TestCase
     {
         parent::setUp();
 
-        $this->withoutMiddleware([ValidateCsrfToken::class]);
+        $this->withoutMiddleware([PreventRequestForgery::class]);
 
         foreach (['View Role', 'Create Role', 'Edit Role', 'Delete Role', 'Assign Permission'] as $perm) {
             Permission::updateOrCreate(['name' => $perm, 'guard_name' => 'web'], ['module_name' => 'Role Management']);

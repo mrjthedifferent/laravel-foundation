@@ -4,7 +4,7 @@ namespace Mrj\Foundation\Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +16,7 @@ class AuthTest extends TestCase
     {
         parent::setUp();
 
-        $this->withoutMiddleware([ValidateCsrfToken::class, ThrottleRequests::class]);
+        $this->withoutMiddleware([PreventRequestForgery::class, ThrottleRequests::class]);
         User::$lockedOut = [];
     }
 

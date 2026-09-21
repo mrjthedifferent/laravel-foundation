@@ -54,7 +54,7 @@ class FoundationServiceProvider extends ServiceProvider
                 'driver' => 'daily',
                 'path' => storage_path("logs/$channel/$channel.log"),
                 'level' => config('logging.channels.daily.level', 'debug'),
-                'days' => $days,
+                'max_files' => $days,
                 'replace_placeholders' => true,
             ]]);
         }
@@ -112,7 +112,8 @@ class FoundationServiceProvider extends ServiceProvider
     {
         // Set default string length for MariaDB compatibility
         Schema::defaultStringLength(191);
-        Paginator::useBootstrap();
+        // The admin UI is Bootstrap 5; useBootstrap() renders the Bootstrap 3 views.
+        Paginator::useBootstrapFive();
 
         if (config('foundation.umask') !== null) {
             umask((int) config('foundation.umask'));

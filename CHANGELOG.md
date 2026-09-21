@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.11.0
+
+Laravel 13. **Requires Laravel `^13.0` and PHP `^8.3`**; Laravel 12 and PHP 8.2 are no longer
+supported. Laravel 12 stopped receiving bug fixes on 2026-08-13.
+
+- Dependencies moved up with it: `nwidart/laravel-modules` 13, `spatie/laravel-permission` 8,
+  `laravel-notification-channels/telegram` 8, `orchestra/testbench` 11, `konekt/html` 6.8,
+  `spatie/laravel-backup` 10.3 (the `^9.2` alternative is gone).
+- Settings are cached as plain arrays rather than an Eloquent collection. Laravel 13 refuses to
+  unserialize cached objects unless they are allow-listed in `cache.serializable_classes`, whose
+  new default is `false`. `SettingsServiceProvider::cached()` is the single reader.
+- Pagination renders the Bootstrap 5 views. It called `Paginator::useBootstrap()`, which renders
+  Bootstrap **3** markup — wrong for this UI since the theme was rewritten.
+- Module log channels register `max_files`, renamed from `days` in Laravel 13.
+- The custom mail transports capture the container explicitly instead of relying on `$this`
+  inside the `Mail::extend` closure, and the SMTP OAuth transport now has a test.
+- CI runs PHP 8.3, 8.4 and 8.5, caches dependencies, and adds a `--prefer-lowest` leg so the
+  declared minimums are actually exercised.
+
 ## 0.10.1
 
 - Fixed: "Sync Permissions" failed with `Target class [Database\Seeders\PermissionSeeder] does

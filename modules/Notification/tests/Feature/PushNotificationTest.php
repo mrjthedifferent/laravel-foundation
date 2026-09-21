@@ -3,7 +3,7 @@
 namespace Modules\Notification\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Modules\Notification\Jobs\BroadcastNotificationJob;
@@ -23,7 +23,7 @@ class PushNotificationTest extends TestCase
         parent::setUp();
 
         $this->withoutMiddleware([
-            ValidateCsrfToken::class,
+            PreventRequestForgery::class,
         ]);
 
         $role = Role::create(['name' => 'admin', 'guard_name' => 'web']);

@@ -3,7 +3,7 @@
 namespace Modules\Settings\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Settings\Models\Setting;
 use Spatie\Permission\Models\Permission;
@@ -24,7 +24,7 @@ class TermsConditionsTest extends TestCase
 
         // Disable CSRF for testing
         $this->withoutMiddleware([
-            ValidateCsrfToken::class,
+            PreventRequestForgery::class,
         ]);
 
         // Create role

@@ -3,7 +3,7 @@
 namespace Mrj\Foundation\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Support\Facades\Artisan;
 use Mrj\Foundation\Database\Seeders\FoundationSeeder;
 use Mrj\Foundation\Tests\TestCase;
@@ -20,7 +20,7 @@ class AdminActionsTest extends TestCase
     {
         parent::setUp();
 
-        $this->withoutMiddleware([ValidateCsrfToken::class]);
+        $this->withoutMiddleware([PreventRequestForgery::class]);
         $this->seed(FoundationSeeder::class);
     }
 

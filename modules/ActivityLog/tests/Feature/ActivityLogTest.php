@@ -3,7 +3,7 @@
 namespace Modules\ActivityLog\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\ActivityLog\Models\SmsLog;
 use OwenIt\Auditing\Models\Audit;
@@ -20,7 +20,7 @@ class ActivityLogTest extends TestCase
     {
         parent::setUp();
 
-        $this->withoutMiddleware([ValidateCsrfToken::class]);
+        $this->withoutMiddleware([PreventRequestForgery::class]);
 
         foreach (['View Activity Log', 'Delete Activity Log', 'Export Activity Log', 'View SMS Log', 'Delete SMS Log'] as $perm) {
             Permission::updateOrCreate(['name' => $perm, 'guard_name' => 'web'], ['module_name' => 'ActivityLog']);

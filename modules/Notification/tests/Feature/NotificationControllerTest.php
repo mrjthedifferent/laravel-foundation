@@ -3,7 +3,7 @@
 namespace Modules\Notification\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Notification\Enum\NotificationType;
 use Modules\Notification\Models\Notification;
@@ -19,7 +19,7 @@ class NotificationControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->withoutMiddleware([ValidateCsrfToken::class]);
+        $this->withoutMiddleware([PreventRequestForgery::class]);
 
         $this->user = User::factory()->create(['is_active' => true]);
     }

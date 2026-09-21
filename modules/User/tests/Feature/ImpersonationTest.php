@@ -3,7 +3,7 @@
 namespace Modules\User\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Testing\TestResponse;
@@ -27,7 +27,7 @@ class ImpersonationTest extends TestCase
 
         config(['audit.console' => true]);
         User::$lockedOut = [];
-        $this->withoutMiddleware([ValidateCsrfToken::class, ThrottleRequests::class]);
+        $this->withoutMiddleware([PreventRequestForgery::class, ThrottleRequests::class]);
     }
 
     /**

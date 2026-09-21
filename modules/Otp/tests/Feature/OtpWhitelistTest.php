@@ -3,7 +3,7 @@
 namespace Modules\Otp\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Otp\Enum\ContactType;
 use Modules\Otp\Models\OtpWhitelist;
@@ -20,7 +20,7 @@ class OtpWhitelistTest extends TestCase
     {
         parent::setUp();
 
-        $this->withoutMiddleware([ValidateCsrfToken::class]);
+        $this->withoutMiddleware([PreventRequestForgery::class]);
 
         foreach (['View OTP Whitelist', 'Create OTP Whitelist', 'Edit OTP Whitelist', 'Delete OTP Whitelist'] as $perm) {
             Permission::updateOrCreate(

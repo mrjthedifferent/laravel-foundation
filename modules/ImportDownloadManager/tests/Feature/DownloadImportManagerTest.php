@@ -3,7 +3,7 @@
 namespace Modules\ImportDownloadManager\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Modules\ImportDownloadManager\Enum\ImportStatus;
@@ -22,7 +22,7 @@ class DownloadImportManagerTest extends TestCase
     {
         parent::setUp();
 
-        $this->withoutMiddleware([ValidateCsrfToken::class]);
+        $this->withoutMiddleware([PreventRequestForgery::class]);
 
         foreach (['Download Import Manager Management', 'Import Manager Data Download', 'Import Manager Data Delete'] as $perm) {
             Permission::updateOrCreate(['name' => $perm, 'guard_name' => 'web'], ['module_name' => 'ImportDownloadManager']);

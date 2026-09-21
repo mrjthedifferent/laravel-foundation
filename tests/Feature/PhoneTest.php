@@ -3,7 +3,7 @@
 namespace Mrj\Foundation\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\Schema;
 use Mrj\Foundation\Tests\TestCase;
@@ -16,7 +16,7 @@ class PhoneTest extends TestCase
     {
         parent::setUp();
 
-        $this->withoutMiddleware([ValidateCsrfToken::class, ThrottleRequests::class]);
+        $this->withoutMiddleware([PreventRequestForgery::class, ThrottleRequests::class]);
         config(['settings.phone_country_codes.value' => ['+880']]);
         User::$lockedOut = [];
     }

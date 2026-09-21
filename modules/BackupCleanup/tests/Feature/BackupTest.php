@@ -3,7 +3,7 @@
 namespace Modules\BackupCleanup\Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +22,7 @@ class BackupTest extends TestCase
     {
         parent::setUp();
 
-        $this->withoutMiddleware([ValidateCsrfToken::class]);
+        $this->withoutMiddleware([PreventRequestForgery::class]);
 
         foreach (['View Backup', 'Create Backup', 'Download Backup', 'Delete Backup', 'Cleanup Backup'] as $perm) {
             Permission::updateOrCreate(['name' => $perm, 'guard_name' => 'web'], ['module_name' => 'BackupCleanup']);

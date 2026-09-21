@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Mrj\Foundation\Exceptions\Handler;
 use Mrj\Foundation\Foundation;
@@ -54,5 +55,28 @@ class BootstrapTest extends TestCase
         }
 
         $this->assertTrue(Schema::hasColumns('users', ['uuid', 'name', 'is_active', 'phone', 'phone_verified_at']));
+    }
+
+    /**
+     * The admin UI is Bootstrap 5. Laravel's useBootstrap() renders the
+     * Bootstrap 3 views, which is a different markup contract.
+     */
+    public function test_pagination_renders_the_bootstrap_five_views(): void
+    {
+        $this->assertSame('pagination::bootstrap-5', Paginator::$defaultView);
+        $this->assertSame('pagination::simple-bootstrap-5', Paginator::$defaultSimpleView);
+    }
+
+    /**
+     * The daily channels the modules log to. Laravel 13 renamed the retention
+     * key from `days` to `max_files`.
+     */
+    public function test_module_log_channels_are_registered_with_a_retention_limit(): void
+    {
+        $channel = config('logging.channels.daily_api');
+
+        $this->assertSame('daily', $channel['driver']);
+        $this->assertSame(config('foundation.log_channels.api'), $channel['max_files']);
+        $this->assertArrayNotHasKey('days', $channel);
     }
 }

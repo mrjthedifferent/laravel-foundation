@@ -94,4 +94,4 @@ class ThingControllerTest extends TestCase
 - Prefer `assertSessionHas('success')` and `assertSessionHas('error')` over asserting exact flash messages.
 - Use `assertDatabaseHas()` / `assertDatabaseMissing()` to verify persistence.
 - Use `Event::fake([SpecificEvent::class])` to prevent real event side-effects in unit tests.
-- Use `\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class` (not `VerifyCsrfToken`) in `$this->withoutMiddleware()` for web form tests.
+- Use `\Illuminate\Foundation\Http\Middleware\PreventRequestForgery::class` (renamed from `ValidateCsrfToken` in Laravel 13) in `$this->withoutMiddleware()` for web form tests.

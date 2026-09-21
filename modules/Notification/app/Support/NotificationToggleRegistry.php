@@ -2,10 +2,8 @@
 
 namespace Modules\Notification\Support;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 use Modules\Notification\Notifications\AppNotification;
-use Modules\Settings\Models\Setting;
+use Modules\Settings\Providers\SettingsServiceProvider;
 use Nwidart\Modules\Facades\Module;
 
 /**
@@ -120,21 +118,14 @@ final readonly class NotificationToggleRegistry
      * long-lived workers, so a worker that started before a toggle was changed keeps the old
      * value in memory for the life of the process — switching a notification off in the UI had
      * no effect on it until the next deploy restarted the queue. The `app_settings` cache is
-     * the same source the provider reads and is forgotten on every save
-     * ({@see Setting}), so reading it here picks the change up on the
-     * next send with no restart.
+     * the same source the provider reads and is forgotten on every save, so reading it here
+     * picks the change up on the next send with no restart.
      *
      * @return bool|null null when the setting does not exist (callers treat that as default-on)
      */
     public static function isEnabled(string $settingKey): ?bool
     {
-        $settings = Cache::rememberForever('app_settings', fn () => Setting::all());
-
-        $setting = $settings instanceof Collection
-            ? $settings->firstWhere('key', $settingKey)
-            : collect($settings)->firstWhere('key', $settingKey);
-
-        $value = is_array($setting) ? ($setting['value'] ?? null) : ($setting?->value ?? null);
+        $value = collect(SettingsServiceProvider::cached())->firstWhere('key', $settingKey)['value'] ?? null;
 
         return $value === null ? null : (bool) $value;
     }

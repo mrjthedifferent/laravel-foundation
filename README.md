@@ -20,7 +20,7 @@ It ships as one Composer package. A project requires it and never copies its fil
 made here reaches every project with `composer update`. That is the point: copied starter
 kits drift apart; a package does not.
 
-- Laravel 12, PHP 8.2+, built on [nwidart/laravel-modules](https://github.com/nWidart/laravel-modules)
+- Laravel 13, PHP 8.3+, built on [nwidart/laravel-modules](https://github.com/nWidart/laravel-modules)
 - Server-rendered Blade, Bootstrap 5.3, no build step required for the admin theme
 - Light and dark mode, RTL, 11 colour palettes, collapsible sidebar
 - Everything a project needs to change is overridable without forking
@@ -60,7 +60,7 @@ php artisan serve
 Sign in at `/login` with the `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` from `.env`, then
 change the password.
 
-## Install in an existing Laravel 12 app
+## Install in an existing Laravel 13 app
 
 1. Require the package. Until it is listed on Packagist, add the repository first:
 

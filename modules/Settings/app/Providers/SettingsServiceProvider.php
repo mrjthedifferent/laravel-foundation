@@ -68,12 +68,14 @@ class SettingsServiceProvider extends ModuleServiceProvider
      */
     private function registerMicrosoftOAuthMailer(): void
     {
-        Mail::extend('microsoft_oauth', function (array $config) {
-            return new MicrosoftOAuthTransport(
-                $this->app->make(MicrosoftOAuthTokenService::class),
-                $config,
-            );
-        });
+        // Laravel 13 binds driver closures to the mail manager, so $this is not
+        // this provider here; the container is captured explicitly.
+        $app = $this->app;
+
+        Mail::extend('microsoft_oauth', fn (array $config) => new MicrosoftOAuthTransport(
+            $app->make(MicrosoftOAuthTokenService::class),
+            $config,
+        ));
     }
 
     /**
@@ -83,43 +85,39 @@ class SettingsServiceProvider extends ModuleServiceProvider
      */
     private function registerMicrosoftGraphMailer(): void
     {
-        Mail::extend('microsoft_graph', function (array $config) {
-            return new MicrosoftGraphTransport(
-                $this->app->make(MicrosoftOAuthTokenService::class),
-                $config,
-            );
-        });
+        $app = $this->app;
+
+        Mail::extend('microsoft_graph', fn (array $config) => new MicrosoftGraphTransport(
+            $app->make(MicrosoftOAuthTokenService::class),
+            $config,
+        ));
     }
 
     private function updateConfigsFromSettings(): void
     {
         try {
             if (Schema::hasTable('settings')) {
-                $settings = Cache::rememberForever('app_settings', function () {
-                    return Setting::all();
-                });
+                $settings = self::cached();
 
-                // Get active mailer from the loaded collection
-                $activeMailerSetting = $settings->firstWhere('key', 'email_mailer');
-                $activeMailer = $activeMailerSetting ? $activeMailerSetting->value : null;
+                $activeMailer = collect($settings)->firstWhere('key', 'email_mailer')['value'] ?? null;
 
                 foreach ($settings as $setting) {
-                    if ($setting->key === 'email_mailers') {
+                    if ($setting['key'] === 'email_mailers') {
                         $this->updateMailers($setting, $activeMailer);
 
                         continue;
                     }
 
-                    if (isset($this->configMap[$setting->key])) {
-                        config([$this->configMap[$setting->key] => $setting->value]);
+                    if (isset($this->configMap[$setting['key']])) {
+                        config([$this->configMap[$setting['key']] => $setting['value']]);
                     }
 
                     config([
-                        'settings.'.$setting->key => [
-                            'group' => $setting->group,
-                            'type' => $setting->type,
-                            'value' => $setting->value,
-                            'description' => $setting->description,
+                        'settings.'.$setting['key'] => [
+                            'group' => $setting['group'],
+                            'type' => $setting['type'],
+                            'value' => $setting['value'],
+                            'description' => $setting['description'],
                         ],
                     ]);
                 }
@@ -129,14 +127,38 @@ class SettingsServiceProvider extends ModuleServiceProvider
         }
     }
 
-    private function updateMailers($setting, $activeMailer): void
+    /**
+     * Every setting as a plain array, cached.
+     *
+     * Deliberately not an Eloquent collection: Laravel 13 refuses to unserialize
+     * cached PHP objects unless they are allow-listed in cache.serializable_classes.
+     *
+     * @return list<array{key: string, value: mixed, group: ?string, type: ?string, description: ?string}>
+     */
+    public static function cached(): array
+    {
+        return Cache::rememberForever('app_settings', fn (): array => Setting::all()
+            ->map(fn (Setting $setting): array => [
+                'key' => $setting->key,
+                'value' => $setting->value,
+                'group' => $setting->group,
+                'type' => $setting->type,
+                'description' => $setting->description,
+            ])
+            ->all());
+    }
+
+    /**
+     * @param  array{key: string, value: mixed}  $setting
+     */
+    private function updateMailers(array $setting, ?string $activeMailer): void
     {
         try {
             if (! $activeMailer) {
                 return;
             }
 
-            foreach ($setting->value as $mailer) {
+            foreach ((array) $setting['value'] as $mailer) {
                 if ($mailer['TYPE'] === $activeMailer) {
                     $transport = $mailer['VALUE']['transport'];
                     config(['mail.default' => $transport]);
