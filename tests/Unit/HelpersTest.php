@@ -34,4 +34,21 @@ class HelpersTest extends TestCase
     {
         $this->assertSame('someone@example.com', Email::normalize('  Someone@Example.COM '));
     }
+
+    public function test_escape_like_neutralizes_wildcard_characters(): void
+    {
+        $this->assertSame('100\%', escapeLike('100%'));
+        $this->assertSame('a\_b', escapeLike('a_b'));
+        $this->assertSame('a\\\\b', escapeLike('a\\b'));
+        $this->assertSame('plain', escapeLike('plain'));
+    }
+
+    public function test_capped_per_page_clamps_to_the_maximum_and_never_goes_below_one(): void
+    {
+        $this->assertSame(15, cappedPerPage(15));
+        $this->assertSame(100, cappedPerPage(999999999));
+        $this->assertSame(1, cappedPerPage(0));
+        $this->assertSame(1, cappedPerPage(-50));
+        $this->assertSame(200, cappedPerPage(999999, max: 200));
+    }
 }

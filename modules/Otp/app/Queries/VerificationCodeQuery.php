@@ -102,7 +102,7 @@ final readonly class VerificationCodeQuery
         }
 
         return new self(
-            $this->query->where('contact', 'like', "%{$search}%")
+            $this->query->whereRaw('contact LIKE ? ESCAPE ?', ['%'.escapeLike($search).'%', '\\'])
         );
     }
 

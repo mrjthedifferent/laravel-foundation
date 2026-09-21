@@ -23,9 +23,11 @@ final readonly class SmsLogQuery
     public function search(?string $term): static
     {
         if (filled($term)) {
-            $this->query->where(function ($q) use ($term) {
-                $q->where('phone', 'like', "%{$term}%")
-                    ->orWhere('message', 'like', "%{$term}%");
+            $like = '%'.escapeLike($term).'%';
+
+            $this->query->where(function ($q) use ($like) {
+                $q->whereRaw('phone LIKE ? ESCAPE ?', [$like, '\\'])
+                    ->orWhereRaw('message LIKE ? ESCAPE ?', [$like, '\\']);
             });
         }
 

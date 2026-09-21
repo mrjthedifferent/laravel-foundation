@@ -92,6 +92,35 @@ if (! function_exists('perPage')) {
     }
 }
 
+if (! function_exists('escapeLike')) {
+
+    /**
+     * Escape a user-supplied search term for safe use inside a LIKE pattern.
+     * Without this, a term containing % or _ changes what the wildcard match
+     * does rather than being searched for literally — '%' matches everything,
+     * turning a "search" box into a way to dump a whole table's rows, and a
+     * pattern built from many wildcards can force a full table scan.
+     */
+    function escapeLike(string $value): string
+    {
+        return addcslashes($value, '%_\\');
+    }
+}
+
+if (! function_exists('cappedPerPage')) {
+
+    /**
+     * Clamp a requested per-page count for endpoints that accept an arbitrary
+     * value rather than picking from perPage()'s fixed list. Without a ceiling,
+     * ?per_page=999999999 turns a paginated log/report listing into an
+     * unbounded query.
+     */
+    function cappedPerPage(int $value, int $max = 100): int
+    {
+        return max(1, min($max, $value));
+    }
+}
+
 if (! function_exists('getIntegerMonth')) {
 
     function getIntegerMonth()

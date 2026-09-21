@@ -21,7 +21,7 @@ final readonly class GetActivityLogAction
             ->where('auditable_type', $audit->auditable_type)
             ->with('user.roles')
             ->latest()
-            ->paginate($request->integer('per_page', 20))
+            ->paginate(cappedPerPage($request->integer('per_page', 20)))
             ->withQueryString();
 
         return compact('audit', 'audits');

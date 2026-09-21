@@ -88,16 +88,18 @@ final readonly class UserQuery
             return $this;
         }
 
-        $like = $this->query->getConnection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+        $operator = $this->query->getConnection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+        $like = '%'.escapeLike($search).'%';
 
         // A phone is stored as +{country}{number}; a typed local form starts with 0.
         $digits = ltrim((string) preg_replace('/\D/', '', $search), '0');
+        $digitsLike = '%'.escapeLike($digits).'%';
 
         return new self(
-            $this->query->where(function ($q) use ($search, $like, $digits) {
-                $q->where('name', $like, "%{$search}%")
-                    ->orWhere('email', $like, "%{$search}%")
-                    ->when(strlen($digits) >= 3, fn ($q) => $q->orWhere('phone', 'like', "%{$digits}%"));
+            $this->query->where(function ($q) use ($like, $operator, $digits, $digitsLike) {
+                $q->whereRaw("name {$operator} ? ESCAPE ?", [$like, '\\'])
+                    ->orWhereRaw("email {$operator} ? ESCAPE ?", [$like, '\\'])
+                    ->when(strlen($digits) >= 3, fn ($q) => $q->orWhereRaw('phone LIKE ? ESCAPE ?', [$digitsLike, '\\']));
             })
         );
     }

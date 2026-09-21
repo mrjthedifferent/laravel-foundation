@@ -22,7 +22,7 @@ class PushNotificationController extends Controller
         $notifications = PushNotificationQuery::make()
             ->search($request->input('search'))
             ->orderByLatest()
-            ->paginate($request->input('per_page', PaginationEnum::DEFAULT_PAGINATE));
+            ->paginate(cappedPerPage((int) $request->input('per_page', PaginationEnum::DEFAULT_PAGINATE)));
 
         return view('notification::push-notification.index', [
             'notifications' => $notifications,

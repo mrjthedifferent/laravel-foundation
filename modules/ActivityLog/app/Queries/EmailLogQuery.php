@@ -23,10 +23,12 @@ final readonly class EmailLogQuery
     public function search(?string $term): static
     {
         if (filled($term)) {
-            $this->query->where(function ($q) use ($term) {
-                $q->where('to_email', 'like', "%{$term}%")
-                    ->orWhere('subject', 'like', "%{$term}%")
-                    ->orWhere('notification', 'like', "%{$term}%");
+            $like = '%'.escapeLike($term).'%';
+
+            $this->query->where(function ($q) use ($like) {
+                $q->whereRaw('to_email LIKE ? ESCAPE ?', [$like, '\\'])
+                    ->orWhereRaw('subject LIKE ? ESCAPE ?', [$like, '\\'])
+                    ->orWhereRaw('notification LIKE ? ESCAPE ?', [$like, '\\']);
             });
         }
 

@@ -30,11 +30,13 @@ class GlobalSearchController extends Controller
         // only surface individual users they are authorized to view. This
         // prevents leaking names and emails to any authenticated account.
         if (in_array($category, ['all', 'users'], true) && $actor->can('viewAny', User::class)) {
-            $like = '%'.addcslashes($query, '%_\\').'%';
+            $like = '%'.escapeLike($query).'%';
 
             $users = User::query()
                 ->where(function ($q) use ($like) {
-                    $q->where('name', 'like', $like)->orWhere('email', 'like', $like)->orWhere('phone', 'like', $like);
+                    $q->whereRaw('name LIKE ? ESCAPE ?', [$like, '\\'])
+                        ->orWhereRaw('email LIKE ? ESCAPE ?', [$like, '\\'])
+                        ->orWhereRaw('phone LIKE ? ESCAPE ?', [$like, '\\']);
                 })
                 ->latest()
                 ->limit(20)

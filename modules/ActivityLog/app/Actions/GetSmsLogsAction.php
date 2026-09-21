@@ -16,6 +16,6 @@ final readonly class GetSmsLogsAction
             ->filterByDateFrom($request->input('date_from'))
             ->filterByDateTo($request->input('date_to'))
             ->orderByLatest()
-            ->paginate((int) $request->input('per_page', 15));
+            ->paginate(cappedPerPage((int) $request->input('per_page', 15)));
     }
 }

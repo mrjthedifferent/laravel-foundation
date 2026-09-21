@@ -24,12 +24,14 @@ final readonly class ActivityLogQuery
     public function search(?string $term): static
     {
         if (filled($term)) {
-            $this->query->where(function ($q) use ($term) {
-                $q->whereRaw('old_values LIKE ?', ["%{$term}%"])
-                    ->orWhereRaw('new_values LIKE ?', ["%{$term}%"])
-                    ->orWhereRaw('user_agent LIKE ?', ["%{$term}%"])
-                    ->orWhereRaw('ip_address LIKE ?', ["%{$term}%"])
-                    ->orWhereRaw('url LIKE ?', ["%{$term}%"]);
+            $like = '%'.escapeLike($term).'%';
+
+            $this->query->where(function ($q) use ($like) {
+                $q->whereRaw('old_values LIKE ? ESCAPE ?', [$like, '\\'])
+                    ->orWhereRaw('new_values LIKE ? ESCAPE ?', [$like, '\\'])
+                    ->orWhereRaw('user_agent LIKE ? ESCAPE ?', [$like, '\\'])
+                    ->orWhereRaw('ip_address LIKE ? ESCAPE ?', [$like, '\\'])
+                    ->orWhereRaw('url LIKE ? ESCAPE ?', [$like, '\\']);
             });
         }
 

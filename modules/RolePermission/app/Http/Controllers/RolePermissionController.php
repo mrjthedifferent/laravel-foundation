@@ -31,7 +31,7 @@ class RolePermissionController extends Controller
         $this->authorize('viewAny', Role::class);
 
         $roles = Role::withCount(['permissions', 'users'])
-            ->when($request->filled('name'), fn ($q) => $q->where('name', 'like', '%'.$request->name.'%'))
+            ->when($request->filled('name'), fn ($q) => $q->whereRaw('name LIKE ? ESCAPE ?', ['%'.escapeLike($request->name).'%', '\\']))
             ->paginate(perPage());
 
         return view('rolepermission::index', compact('roles'));
@@ -107,7 +107,7 @@ class RolePermissionController extends Controller
 
         $permissions = Permission::select('id', 'name', 'module_name', 'description')
             ->withCount('roles')
-            ->when($request->filled('name'), fn ($q) => $q->where('name', 'like', '%'.$request->name.'%'))
+            ->when($request->filled('name'), fn ($q) => $q->whereRaw('name LIKE ? ESCAPE ?', ['%'.escapeLike($request->name).'%', '\\']))
             ->when($request->filled('module'), fn ($q) => $q->where('module_name', $request->module))
             ->orderBy('module_name')
             ->orderBy('name')
