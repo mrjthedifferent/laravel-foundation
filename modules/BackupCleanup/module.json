@@ -1,0 +1,11 @@
+{
+    "name": "BackupCleanup",
+    "alias": "backupcleanup",
+    "description": "",
+    "keywords": [],
+    "priority": 8,
+    "providers": [
+        "Modules\\BackupCleanup\\Providers\\BackupCleanupServiceProvider"
+    ],
+    "files": []
+}

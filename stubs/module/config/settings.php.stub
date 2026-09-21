@@ -1,0 +1,8 @@
+<?php
+
+/*
+ * Settings this module owns, seeded into the settings table. Read them with
+ * config('settings.{key}.value'). Leave empty when the module has none.
+ */
+
+return [];

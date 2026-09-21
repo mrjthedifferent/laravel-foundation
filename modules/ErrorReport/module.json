@@ -1,0 +1,11 @@
+{
+    "name": "ErrorReport",
+    "alias": "errorreport",
+    "description": "",
+    "keywords": [],
+    "priority": 6,
+    "providers": [
+        "Modules\\ErrorReport\\Providers\\ErrorReportServiceProvider"
+    ],
+    "files": []
+}

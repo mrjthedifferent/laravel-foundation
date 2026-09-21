@@ -1,0 +1,121 @@
+{
+    "name": "mrjthedifferent/laravel-foundation",
+    "description": "The shared base of a Laravel admin application as one updatable package: sign-in, users, roles, settings, notifications, activity logs, backups and a Bootstrap 5 admin UI.",
+    "keywords": [
+        "laravel",
+        "admin",
+        "foundation",
+        "starter",
+        "modules",
+        "roles",
+        "permissions",
+        "settings",
+        "bootstrap"
+    ],
+    "homepage": "https://github.com/mrjthedifferent/laravel-foundation",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Md. Mahfuzur Rahman",
+            "homepage": "https://github.com/mrjthedifferent"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/mrjthedifferent/laravel-foundation/issues",
+        "source": "https://github.com/mrjthedifferent/laravel-foundation"
+    },
+    "require": {
+        "php": "^8.2",
+        "google/apiclient": "^2.19",
+        "guzzlehttp/guzzle": "^7.8",
+        "konekt/html": "^6.5",
+        "laravel-notification-channels/telegram": "^6.0",
+        "laravel/framework": "^12.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.23",
+        "mpdf/mpdf": "^8.2",
+        "nwidart/laravel-modules": "^12.0",
+        "opcodesio/log-viewer": "^3.12",
+        "owen-it/laravel-auditing": "^14.0",
+        "rap2hpoutre/fast-excel": "^5.5",
+        "spatie/laravel-data": "^4.18",
+        "spatie/laravel-permission": "^6.10"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.13",
+        "orchestra/testbench": "^10.0",
+        "phpunit/phpunit": "^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mrj\\Foundation\\Database\\Seeders\\": "database/seeders/",
+            "Mrj\\Foundation\\": "src/",
+            "Modules\\ActivityLog\\": "modules/ActivityLog/app/",
+            "Modules\\ActivityLog\\Database\\Factories\\": "modules/ActivityLog/database/factories/",
+            "Modules\\ActivityLog\\Database\\Seeders\\": "modules/ActivityLog/database/seeders/",
+            "Modules\\BackupCleanup\\": "modules/BackupCleanup/app/",
+            "Modules\\BackupCleanup\\Database\\Factories\\": "modules/BackupCleanup/database/factories/",
+            "Modules\\BackupCleanup\\Database\\Seeders\\": "modules/BackupCleanup/database/seeders/",
+            "Modules\\ErrorReport\\": "modules/ErrorReport/app/",
+            "Modules\\ErrorReport\\Database\\Factories\\": "modules/ErrorReport/database/factories/",
+            "Modules\\ErrorReport\\Database\\Seeders\\": "modules/ErrorReport/database/seeders/",
+            "Modules\\ImportDownloadManager\\": "modules/ImportDownloadManager/app/",
+            "Modules\\ImportDownloadManager\\Database\\Factories\\": "modules/ImportDownloadManager/database/factories/",
+            "Modules\\ImportDownloadManager\\Database\\Seeders\\": "modules/ImportDownloadManager/database/seeders/",
+            "Modules\\Notification\\": "modules/Notification/app/",
+            "Modules\\Notification\\Database\\Factories\\": "modules/Notification/database/factories/",
+            "Modules\\Notification\\Database\\Seeders\\": "modules/Notification/database/seeders/",
+            "Modules\\Otp\\": "modules/Otp/app/",
+            "Modules\\Otp\\Database\\Factories\\": "modules/Otp/database/factories/",
+            "Modules\\Otp\\Database\\Seeders\\": "modules/Otp/database/seeders/",
+            "Modules\\RolePermission\\": "modules/RolePermission/app/",
+            "Modules\\RolePermission\\Database\\Factories\\": "modules/RolePermission/database/factories/",
+            "Modules\\RolePermission\\Database\\Seeders\\": "modules/RolePermission/database/seeders/",
+            "Modules\\Settings\\": "modules/Settings/app/",
+            "Modules\\Settings\\Database\\Factories\\": "modules/Settings/database/factories/",
+            "Modules\\Settings\\Database\\Seeders\\": "modules/Settings/database/seeders/",
+            "Modules\\User\\": "modules/User/app/",
+            "Modules\\User\\Database\\Factories\\": "modules/User/database/factories/",
+            "Modules\\User\\Database\\Seeders\\": "modules/User/database/seeders/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mrj\\Foundation\\Tests\\": "tests/",
+            "App\\": "workbench/app/",
+            "Database\\Factories\\": "workbench/database/factories/",
+            "Modules\\ActivityLog\\Tests\\": "modules/ActivityLog/tests/",
+            "Modules\\BackupCleanup\\Tests\\": "modules/BackupCleanup/tests/",
+            "Modules\\ErrorReport\\Tests\\": "modules/ErrorReport/tests/",
+            "Modules\\ImportDownloadManager\\Tests\\": "modules/ImportDownloadManager/tests/",
+            "Modules\\Notification\\Tests\\": "modules/Notification/tests/",
+            "Modules\\Otp\\Tests\\": "modules/Otp/tests/",
+            "Modules\\RolePermission\\Tests\\": "modules/RolePermission/tests/",
+            "Modules\\Settings\\Tests\\": "modules/Settings/tests/",
+            "Modules\\User\\Tests\\": "modules/User/tests/",
+            "Tests\\": "workbench/tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mrj\\Foundation\\FoundationServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "0.9.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "wikimedia/composer-merge-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

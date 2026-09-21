@@ -1,0 +1,28 @@
+@extends('__ALIAS__::layouts.master')
+
+@section('breadcrumb')
+    <span class="breadcrumb-item active">List</span>
+@endsection
+
+@section('content')
+    <x-page-header title="__TITLES__" icon="ph-cube" />
+
+    <x-table-view-pagination title="__TITLES__" :data="$__VARS__" empty-message="No __LOWER_TITLES__ yet">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($__VARS__ as $__VAR__)
+                <tr>
+                    <td>{{ $__VAR__->name }}</td>
+                    <td><x-status-badge :active="$__VAR__->is_active" /></td>
+                    <td>{{ $__VAR__->created_at?->format('d M Y') }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </x-table-view-pagination>
+@endsection

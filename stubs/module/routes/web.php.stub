@@ -1,0 +1,8 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Modules\__NAME__\Http\Controllers\__NAME__Controller;
+
+Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('__SLUG__', [__NAME__Controller::class, 'index'])->name('__SLUG__.index');
+});

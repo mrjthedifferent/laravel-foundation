@@ -1,0 +1,11 @@
+{
+    "name": "ImportDownloadManager",
+    "alias": "importdownloadmanager",
+    "description": "",
+    "keywords": [],
+    "priority": 7,
+    "providers": [
+        "Modules\\ImportDownloadManager\\Providers\\ImportDownloadManagerServiceProvider"
+    ],
+    "files": []
+}

@@ -1,0 +1,11 @@
+{
+    "ActivityLog": true,
+    "BackupCleanup": true,
+    "ErrorReport": true,
+    "ImportDownloadManager": true,
+    "Notification": true,
+    "Otp": true,
+    "RolePermission": true,
+    "Settings": true,
+    "User": true
+}

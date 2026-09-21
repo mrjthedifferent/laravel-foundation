@@ -1,0 +1,16 @@
+{
+    "name": "app/__SLUG__-module",
+    "description": "",
+    "autoload": {
+        "psr-4": {
+            "Modules\\__NAME__\\": "app/",
+            "Modules\\__NAME__\\Database\\Factories\\": "database/factories/",
+            "Modules\\__NAME__\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\__NAME__\\Tests\\": "tests/"
+        }
+    }
+}

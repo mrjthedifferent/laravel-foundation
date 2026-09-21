@@ -1,0 +1,31 @@
+@if ($widget)
+    <div class="col-xl-4 col-lg-6 col-md-12">
+        <div class="card h-100">
+            <div class="card-header d-flex align-items-center">
+                <i class="ph-users-four me-2 text-primary"></i>
+                <h6 class="card-title mb-0">Users</h6>
+                @can('View User')
+                    <a href="{{ route('admin.users.index') }}" class="ms-auto btn btn-sm btn-outline-primary">
+                        View all
+                    </a>
+                @endcan
+            </div>
+            <div class="card-body">
+                <div class="row g-3 text-center">
+                    <div class="col-md-4">
+                        <div class="fs-4 fw-bold">{{ number_format($widget['total_users']) }}</div>
+                        <div class="text-muted small">Total</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="fs-4 fw-bold text-success">{{ number_format($widget['active_users']) }}</div>
+                        <div class="text-muted small">Active</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="fs-4 fw-bold text-info">{{ number_format($widget['new_today']) }}</div>
+                        <div class="text-muted small">New Today</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif

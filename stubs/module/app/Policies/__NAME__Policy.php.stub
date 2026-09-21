@@ -1,0 +1,34 @@
+<?php
+
+namespace Modules\__NAME__\Policies;
+
+use App\Models\User;
+use Modules\__NAME__\Models\__NAME__;
+
+class __NAME__Policy
+{
+    public function viewAny(User $user): bool
+    {
+        return $user->can('View __TITLE__');
+    }
+
+    public function view(User $user, __NAME__ $__VAR__): bool
+    {
+        return $user->can('View __TITLE__');
+    }
+
+    public function create(User $user): bool
+    {
+        return $user->can('Create __TITLE__');
+    }
+
+    public function update(User $user, __NAME__ $__VAR__): bool
+    {
+        return $user->can('Edit __TITLE__');
+    }
+
+    public function delete(User $user, __NAME__ $__VAR__): bool
+    {
+        return $user->can('Delete __TITLE__');
+    }
+}
