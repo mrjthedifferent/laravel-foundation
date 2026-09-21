@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.12.1
+
+- Fixed a test that depended on `owen-it/laravel-auditing`'s version and on model-boot timing
+  (caught by CI's `--prefer-lowest` leg, not by the normal test run). No functional change; the
+  `encrypted` setting type's audit redaction is unaffected and now covered by a version-independent
+  test.
+
 ## 0.12.0
 
 Security fixes. This release breaks some plaintext storage and default-credential
