@@ -33,6 +33,7 @@
         "laravel-notification-channels/telegram": "^8.0",
         "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
+        "laravel/slack-notification-channel": "^3.10",
         "laravel/socialite": "^5.23",
         "mpdf/mpdf": "^8.2",
         "nwidart/laravel-modules": "^13.0",
@@ -44,9 +45,12 @@
         "spatie/laravel-permission": "^8.0"
     },
     "require-dev": {
+        "driftingly/rector-laravel": "^2.6",
+        "larastan/larastan": "^3.12",
         "laravel/pint": "^1.13",
         "orchestra/testbench": "^11.0",
-        "phpunit/phpunit": "^12.5"
+        "phpunit/phpunit": "^12.5",
+        "rector/rector": "^2.6"
     },
     "autoload": {
         "psr-4": {

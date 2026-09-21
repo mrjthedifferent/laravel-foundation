@@ -6,10 +6,21 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\ErrorReport\Database\Factories\ErrorReportFactory;
+use Override;
 
 class ErrorReport extends Model
 {
     use HasFactory;
+
+    /**
+     * HasFactory's default guess is Database\Factories\{model}Factory in the
+     * app namespace; this package's factories live per-module instead.
+     */
+    protected static function newFactory(): ErrorReportFactory
+    {
+        return ErrorReportFactory::new();
+    }
 
     protected $fillable = [
         'uuid',
@@ -34,6 +45,7 @@ class ErrorReport extends Model
     /**
      * @return array<string, string>
      */
+    #[Override]
     protected function casts(): array
     {
         return [

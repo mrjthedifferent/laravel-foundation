@@ -15,17 +15,17 @@ final readonly class SmsLogQuery
         $this->query = SmsLog::query();
     }
 
-    public static function make(): static
+    public static function make(): self
     {
         return new self;
     }
 
-    public function search(?string $term): static
+    public function search(?string $term): self
     {
         if (filled($term)) {
             $like = '%'.escapeLike($term).'%';
 
-            $this->query->where(function ($q) use ($like) {
+            $this->query->where(function ($q) use ($like): void {
                 $q->whereRaw('phone LIKE ? ESCAPE ?', [$like, '\\'])
                     ->orWhereRaw('message LIKE ? ESCAPE ?', [$like, '\\']);
             });
@@ -34,7 +34,7 @@ final readonly class SmsLogQuery
         return $this;
     }
 
-    public function filterByStatus(?string $status): static
+    public function filterByStatus(?string $status): self
     {
         if (filled($status)) {
             $this->query->where('status', $status);
@@ -43,7 +43,7 @@ final readonly class SmsLogQuery
         return $this;
     }
 
-    public function filterByDateFrom(?string $date): static
+    public function filterByDateFrom(?string $date): self
     {
         if (filled($date)) {
             $this->query->whereDate('created_at', '>=', $date);
@@ -52,7 +52,7 @@ final readonly class SmsLogQuery
         return $this;
     }
 
-    public function filterByDateTo(?string $date): static
+    public function filterByDateTo(?string $date): self
     {
         if (filled($date)) {
             $this->query->whereDate('created_at', '<=', $date);
@@ -61,7 +61,7 @@ final readonly class SmsLogQuery
         return $this;
     }
 
-    public function orderByLatest(): static
+    public function orderByLatest(): self
     {
         $this->query->orderByDesc('id');
 

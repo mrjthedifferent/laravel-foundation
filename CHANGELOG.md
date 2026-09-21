@@ -1,5 +1,51 @@
 # Changelog
 
+## 0.13.0
+
+Tooling gate: strict types, static analysis, and a real bug this surfaced. No
+intentional behavior change other than the fix and the removed helpers below.
+
+**Found by the new static analysis, not previously caught by any test**
+
+- Fixed: reporting an error to Slack was completely broken —
+  `Illuminate\Notifications\Messages\SlackMessage` was referenced but
+  `laravel/slack-notification-channel` was never a declared dependency, so the
+  class did not exist at runtime. `toSlack()` is only called when a report is
+  actually sent, so this was invisible until that moment. Now a real
+  dependency, with a regression test.
+- Fixed: `ErrorReport::factory()` could not be resolved (`HasFactory`'s default
+  guess doesn't match this package's per-module factory namespaces, the same
+  reason five other models already override `newFactory()`) — added the same
+  override here.
+
+**Static types**
+
+- `declare(strict_types=1)` added to every file where Rector could prove it
+  changes nothing (151 files) — see `SafeDeclareStrictTypesRector`; deliberately
+  not forced everywhere, since that specific rule matters here (a truly blind
+  `declare(strict_types=1)` could turn today's harmless type coercion into a
+  `TypeError` elsewhere in the same file).
+- `#[\Override]` added to overriding methods; class constants gained native
+  types where inferrable.
+- Larastan (PHPStan) at level 5 with a committed baseline covering pre-existing
+  findings; CI now runs it, plus `rector --dry-run`, on every push.
+
+**Removed (dead code, zero callers anywhere in the codebase)**
+
+- Helpers: `ajaxResponse()`, `getCommonStatus()`, `getIntegerMonth()`,
+  `getLast11Digit()`, `engToBangla()`, `currency_number()`, `isImage()`,
+  `isUrl()`, `isIndexedArray()`. The last two Bangladesh-specific ones
+  (`getLast11Digit`, `engToBangla`) didn't belong in a generic package regardless
+  of use.
+- `UpdateUserRequest::rolesAreChanging()`, an unused protected method.
+
+**Also**
+
+- Three query classes' fluent methods (`ActivityLogQuery`, `EmailLogQuery`,
+  `SmsLogQuery`) return type changed from `static` to `self` — they are `final`
+  and always construct `new self(...)`; this makes the declared type match
+  reality rather than implying support for subclassing that doesn't exist.
+
 ## 0.12.1
 
 - Fixed a test that depended on `owen-it/laravel-auditing`'s version and on model-boot timing

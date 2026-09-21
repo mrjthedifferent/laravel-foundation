@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Modules\User\Enum\Gender;
 use Modules\User\Rules\UniquePhone;
 use Mrj\Foundation\Rules\PhoneNumber;
+use Override;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -49,6 +50,7 @@ class UpdateUserRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array
     {
         return [
@@ -61,6 +63,7 @@ class UpdateUserRequest extends FormRequest
     /**
      * Prepare the data for validation.
      */
+    #[Override]
     protected function prepareForValidation(): void
     {
         if ($this->filled('phone')) {
@@ -80,24 +83,5 @@ class UpdateUserRequest extends FormRequest
                 'password' => null,
             ]);
         }
-    }
-
-    /**
-     * Check if roles are being changed.
-     */
-    protected function rolesAreChanging(): bool
-    {
-        $userId = $this->route('id') ?? $this->route('user');
-        $user = User::find($userId);
-
-        if (! $user) {
-            return false;
-        }
-
-        $currentRoles = $user->roles->pluck('id')->toArray();
-        $newRoles = $this->input('roles', []);
-
-        return array_diff($currentRoles, $newRoles) !== []
-            || array_diff($newRoles, $currentRoles) !== [];
     }
 }

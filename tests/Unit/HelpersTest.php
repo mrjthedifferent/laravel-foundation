@@ -10,7 +10,7 @@ class HelpersTest extends TestCase
 {
     public function test_helpers_are_autoloaded(): void
     {
-        foreach (['ajaxResponse', 'integerStatus', 'getCommonStatus', 'getParPagePaginate', 'currency_number', 'enum_value', 'allPermissions', 'mailAppName'] as $function) {
+        foreach (['integerStatus', 'getParPagePaginate', 'enum_value', 'allPermissions', 'mailAppName'] as $function) {
             $this->assertTrue(function_exists($function), "$function() is not loaded");
         }
     }
@@ -20,14 +20,6 @@ class HelpersTest extends TestCase
         $this->assertSame(WorkerStopReason::Interrupted->value, enum_value(WorkerStopReason::Interrupted));
         $this->assertSame('plain', enum_value('plain'));
         $this->assertNull(enum_value(null));
-    }
-
-    public function test_ajax_response_is_json(): void
-    {
-        $response = ajaxResponse(200, 'Saved', null, ['id' => 1]);
-
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('Saved', $response->getData(true)['message']);
     }
 
     public function test_email_is_normalized(): void

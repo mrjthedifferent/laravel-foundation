@@ -3,6 +3,19 @@
 Manual steps a project must take when moving between versions. Versions without an entry
 need only `composer update mrjthedifferent/laravel-foundation` and `php artisan migrate`.
 
+## 0.12 to 0.13 (tooling gate)
+
+`composer update mrjthedifferent/laravel-foundation`. No migration.
+
+1. **Nine unused global helper functions were removed**: `ajaxResponse()`,
+   `getCommonStatus()`, `getIntegerMonth()`, `getLast11Digit()`, `engToBangla()`,
+   `currency_number()`, `isImage()`, `isUrl()`, `isIndexedArray()`. None had a
+   caller anywhere in this package; if your own project code called one of
+   these directly, inline its (short) implementation from the 0.12.1 source.
+2. If your project's error-report Slack channel was silently not sending
+   (it would have thrown a `Class not found` error), it now works — no action
+   needed, just confirm the webhook is still set correctly.
+
 ## 0.11 to 0.12 (security fixes)
 
 `composer update mrjthedifferent/laravel-foundation` then `php artisan migrate`.

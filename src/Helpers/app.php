@@ -25,10 +25,3 @@ if (! function_exists('apiTokenIdleExpirationMinutes')) {
             : (int) config('sanctum.idle_expiration', 43200);
     }
 }
-
-if (! function_exists('isIndexedArray')) {
-    function isIndexedArray(array $array): bool
-    {
-        return array_keys($array) === range(0, count($array) - 1);
-    }
-}

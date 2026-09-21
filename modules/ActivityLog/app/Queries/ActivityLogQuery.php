@@ -16,17 +16,17 @@ final readonly class ActivityLogQuery
         $this->query = Audit::query();
     }
 
-    public static function make(): static
+    public static function make(): self
     {
         return new self;
     }
 
-    public function search(?string $term): static
+    public function search(?string $term): self
     {
         if (filled($term)) {
             $like = '%'.escapeLike($term).'%';
 
-            $this->query->where(function ($q) use ($like) {
+            $this->query->where(function ($q) use ($like): void {
                 $q->whereRaw('old_values LIKE ? ESCAPE ?', [$like, '\\'])
                     ->orWhereRaw('new_values LIKE ? ESCAPE ?', [$like, '\\'])
                     ->orWhereRaw('user_agent LIKE ? ESCAPE ?', [$like, '\\'])
@@ -38,7 +38,7 @@ final readonly class ActivityLogQuery
         return $this;
     }
 
-    public function filterByEvent(?string $event): static
+    public function filterByEvent(?string $event): self
     {
         if (filled($event)) {
             $this->query->where('event', $event);
@@ -47,7 +47,7 @@ final readonly class ActivityLogQuery
         return $this;
     }
 
-    public function filterByAuditableType(?string $type): static
+    public function filterByAuditableType(?string $type): self
     {
         if (filled($type)) {
             $this->query->where('auditable_type', $type);
@@ -56,7 +56,7 @@ final readonly class ActivityLogQuery
         return $this;
     }
 
-    public function filterByUserId(mixed $userId): static
+    public function filterByUserId(mixed $userId): self
     {
         if (filled($userId)) {
             $this->query->where('user_id', $userId);
@@ -65,7 +65,7 @@ final readonly class ActivityLogQuery
         return $this;
     }
 
-    public function filterByDateFrom(?string $date): static
+    public function filterByDateFrom(?string $date): self
     {
         if (filled($date)) {
             $this->query->whereDate('created_at', '>=', $date);
@@ -74,7 +74,7 @@ final readonly class ActivityLogQuery
         return $this;
     }
 
-    public function filterByDateTo(?string $date): static
+    public function filterByDateTo(?string $date): self
     {
         if (filled($date)) {
             $this->query->whereDate('created_at', '<=', $date);
@@ -83,14 +83,14 @@ final readonly class ActivityLogQuery
         return $this;
     }
 
-    public function withUser(): static
+    public function withUser(): self
     {
         $this->query->with('user.roles');
 
         return $this;
     }
 
-    public function orderByLatest(): static
+    public function orderByLatest(): self
     {
         $this->query->orderBy('id', 'desc');
 

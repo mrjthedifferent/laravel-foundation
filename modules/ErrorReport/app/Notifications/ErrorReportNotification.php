@@ -65,7 +65,7 @@ class ErrorReportNotification extends Notification
         return (new SlackMessage)
             ->error()
             ->content('*'.config('app.name').' Error Report*')
-            ->attachment(function ($attachment) use ($report) {
+            ->attachment(function ($attachment) use ($report): void {
                 $attachment
                     ->title($report->exception_class, route('admin.error-reports.show', $report))
                     ->fields([
