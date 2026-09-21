@@ -3,6 +3,7 @@
 namespace Mrj\Foundation;
 
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
@@ -112,6 +113,11 @@ class FoundationServiceProvider extends ServiceProvider
     {
         // Set default string length for MariaDB compatibility
         Schema::defaultStringLength(191);
+
+        // Throw on lazy loading everywhere except production, so an N+1 surfaces
+        // in local/CI/staging as a hard error instead of a silent slow query that
+        // only shows up under production load.
+        Model::preventLazyLoading(! $this->app->isProduction());
 
         // The package ships its own Bootstrap 5 paginator rather than pointing at
         // one of Laravel's, whose view names change between majors. A project

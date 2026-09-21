@@ -1,5 +1,68 @@
 # Changelog
 
+## 0.12.0
+
+Security fixes. This release breaks some plaintext storage and default-credential
+behavior on purpose; see below for what to check after upgrading.
+
+**Critical**
+
+- Fixed: the API's `POST /manage-account` (reset/delete a user account) never checked
+  authorization on the *target* account — only that the caller's own password was correct. Any
+  authenticated user could delete or reset any other user's account, including an admin's, by
+  supplying that user's `user_id`. It now requires the `Delete User` permission for any target
+  other than the caller's own account, and is blocked in production, matching the web
+  equivalent. Self-service (no `user_id`, or your own ID) is unaffected.
+- Fixed: outbound HTTP calls (SMS gateway, Firebase push) disabled TLS verification
+  (`'verify' => false`) unconditionally, so every request — carrying gateway credentials and
+  OAuth tokens — travelled without verifying the server's certificate. Both now use Laravel's
+  `Http` client with verification on. `src/Traits/MyGuzzleClient.php` is removed.
+- Fixed: an import/export job's remarks (which can hold an exception message) were echoed
+  unescaped in the admin UI, a stored-XSS vector. They are now escaped, with line breaks
+  preserved separately.
+
+**Secrets**
+
+- New `encrypted` setting type: the value is encrypted at rest (`Modules\Settings\Contracts\SecretCipher`,
+  implemented by `MailerSecretCipher`) and excluded from the audit trail's plaintext. OAuth
+  client secrets (Google/GitHub/Apple), the Firebase service-account JSON, the error-report
+  Slack webhook and Telegram bot token now use it. A plaintext value already in the settings
+  table is read back correctly and re-encrypted on next save.
+- The generic Settings CRUD UI (`admin.settings.create`/`edit`) gained `encrypted` as a
+  selectable type, rendered as a password field that leaves an existing secret unchanged when
+  submitted blank.
+- `settings.type` changed from a fixed `enum` to `string`, so adding a setting type no longer
+  needs a schema migration.
+
+**Accounts**
+
+- The seeded Super Admin (`UserDatabaseSeeder`) refuses to run outside `local`/`testing` when
+  `SEED_ADMIN_PASSWORD` is unset, rather than falling back to a well-known default password.
+  Whatever password is used — the seeded default, an admin-set reset, or an admin-triggered
+  password reset for another user — the affected account is now forced to change it before
+  reaching any other page or API endpoint (`must_change_password`, new migration).
+
+**Input validation**
+
+- The API's profile update accepted an image upload with no type or size restriction
+  (`UpdateProfileRequest`). It now matches the validation already used for admin-created and
+  admin-edited users: `image`, `mimes:jpeg,png,jpg,gif,svg,webp`, `max:2048`.
+- `per_page` on activity/email/SMS log listings, error reports and push notifications was
+  unbounded; a large value could force an unbounded query. Capped at 100 (`cappedPerPage()`).
+- Search filters across users, roles, permissions, activity/email/SMS logs, error reports, push
+  notifications, imports/downloads and OTP verification codes treated `%`/`_` in the typed term
+  as SQL wildcards rather than literal characters (`escapeLike()`), which could make a search
+  match far more than intended, and — on SQLite specifically — silently fail to match a term
+  that itself contained `%`.
+
+**Also**
+
+- `Model::preventLazyLoading()` is on outside production, so an N+1 now throws in
+  local/CI/staging instead of only showing up as a slow query in production.
+- The Slack webhook fallback for error-report notifications read `LOG_SLACK_WEBHOOK_URL` via
+  `env()` at runtime (broken once config is cached); it now reads `config('logging.channels.slack.url')`.
+- Added `SECURITY.md` with a private disclosure process (GitHub Security Advisories).
+
 ## 0.11.2
 
 - The package ships its own Bootstrap 5 paginator (`pagination/links.blade.php`) instead of

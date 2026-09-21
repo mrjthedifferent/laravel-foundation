@@ -3,6 +3,28 @@
 Manual steps a project must take when moving between versions. Versions without an entry
 need only `composer update mrjthedifferent/laravel-foundation` and `php artisan migrate`.
 
+## 0.11 to 0.12 (security fixes)
+
+`composer update mrjthedifferent/laravel-foundation` then `php artisan migrate`.
+
+1. **Set `SEED_ADMIN_PASSWORD` before seeding a non-local environment.** The seeder now refuses
+   to run outside `local`/`testing` if it is unset, rather than using the well-known default
+   password. Local development and CI are unaffected.
+2. **The Super Admin (and anyone whose password an admin resets) must change their password on
+   next sign-in.** This is enforced everywhere, including the API — a client that doesn't
+   already handle a 403 with `"You must set a new password before continuing."` should add
+   that handling if it ever authenticates as a freshly seeded or reset account.
+3. **If you read `Setting::value` for `google_client_secret`, `github_client_secret`,
+   `apple_client_secret`, `firebase_credentials_json`, `error_report_slack_webhook` or
+   `error_report_telegram_bot_token` directly from the database column**, it is now ciphertext;
+   read it through the model (`$setting->value`), which decrypts automatically.
+4. **If you built the API's profile-update request with an image that isn't
+   `jpeg/png/jpg/gif/svg/webp` under 2MB**, it will now be rejected — matching what admin-side
+   user forms already enforced.
+5. If your app enables `Model::preventLazyLoading()` differently (e.g. always, or never), the
+   foundation now calls it too (`! app()->isProduction()`); the last call wins, so set it in
+   your own provider's `boot()` *after* the foundation's if you need to override it.
+
 ## 0.10 to 0.11 (Laravel 13)
 
 Upgrade your application to Laravel 13 first; follow
