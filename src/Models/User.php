@@ -19,6 +19,7 @@ use Modules\User\Enum\Gender;
 use Modules\User\Models\UserDocument;
 use Modules\User\Models\UserLoginHistory;
 use Mrj\Foundation\Support\Email;
+use Mrj\Foundation\Support\PhoneNumber;
 use Mrj\Foundation\Traits\HasImageAttribute;
 use OwenIt\Auditing\Auditable;
 use Spatie\Permission\Traits\HasRoles;
@@ -32,6 +33,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $uuid
  * @property string|null $email
  * @property Carbon|null $email_verified_at
+ * @property string|null $phone E.164, e.g. +8801712345678
+ * @property Carbon|null $phone_verified_at
  * @property string|null $name
  * @property string $password
  * @property bool $is_active
@@ -58,6 +61,7 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
      */
     protected $fillable = [
         'email',
+        'phone',
         'password',
         'is_active',
         'provider',
@@ -96,6 +100,15 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
         return Attribute::set(fn ($value) => Email::normalize($value));
     }
 
+    /**
+     * Store the phone number in E.164 form (+8801712345678) however it was typed,
+     * so sign-in, uniqueness and SMS delivery all compare one form.
+     */
+    protected function phone(): Attribute
+    {
+        return Attribute::set(fn ($value) => PhoneNumber::toE164($value === null ? null : (string) $value));
+    }
+
     protected static function booted(): void
     {
         static::creating(function (User $user) {
@@ -112,6 +125,7 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
     {
         return [
             'email_verified_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
             'gender' => Gender::class,
@@ -154,14 +168,15 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
     }
 
     /**
-     * Project hook: how to find a user by phone number (E.164). The users table
-     * has no phone column, so by default nobody matches; a project that keeps
-     * phone numbers overrides this scope to enable phone login and phone OTP.
-     * $phone is null when the value given was not a phone number.
+     * Find users by phone number. Any typed form is accepted; a value that is
+     * not a phone number matches nobody. A project that keeps phone numbers
+     * somewhere else overrides this scope.
      */
     public function scopeWherePhone(Builder $query, ?string $phone): Builder
     {
-        return $query->whereRaw('1 = 0');
+        $phone = PhoneNumber::toE164($phone);
+
+        return $phone === null ? $query->whereRaw('1 = 0') : $query->where($this->qualifyColumn('phone'), $phone);
     }
 
     public function firebaseTokens(): HasMany

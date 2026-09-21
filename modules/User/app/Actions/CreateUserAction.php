@@ -22,6 +22,7 @@ final readonly class CreateUserAction
             // The OwenIt Auditable observer automatically records the 'created' event
             $user = User::create([
                 'email' => $data->email,
+                'phone' => $data->phone,
                 'password' => $data->password,
                 'is_active' => $data->is_active,
                 'name' => $data->name,

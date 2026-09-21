@@ -8,7 +8,7 @@
 <x-search-card>
     <div class="col-md-3 mb-2">
         {!! Form::label('search', 'Search', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::text('search', request('search'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Name or email…']) !!}
+        {!! Form::text('search', request('search'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Name, email or phone…']) !!}
     </div>
     <div class="col-md-3 mb-2">
         {!! Form::label('role_id', 'Role', ['class' => 'form-label fs-sm']) !!}
@@ -35,6 +35,13 @@
     <div class="col-md-3 mb-2">
         {!! Form::label('email_verified', 'Email Verified', ['class' => 'form-label fs-sm']) !!}
         {!! Form::select('email_verified', ['' => 'All', '1' => 'Verified', '0' => 'Unverified'], request('email_verified'), [
+        'class' => 'form-control form-control-sm select',
+        'data-placeholder' => 'All',
+        ]) !!}
+    </div>
+    <div class="col-md-3 mb-2">
+        {!! Form::label('phone_verified', 'Phone Verified', ['class' => 'form-label fs-sm']) !!}
+        {!! Form::select('phone_verified', ['' => 'All', '1' => 'Verified', '0' => 'Unverified'], request('phone_verified'), [
         'class' => 'form-control form-control-sm select',
         'data-placeholder' => 'All',
         ]) !!}
@@ -131,6 +138,20 @@
                     <i class="ph-check-circle text-success" title="Email Verified"></i>
                     @else
                     <i class="ph-x-circle text-warning" title="Email Not Verified"></i>
+                    @endif
+                </div>
+                @endif
+
+                {{-- Phone --}}
+                @if ($user->phone)
+                <div class="fs-sm d-flex align-items-center gap-1 mt-1">
+                    <i class="ph-device-mobile text-muted"></i>
+                    <span>{{ $user->phone }}</span>
+
+                    @if ($user->phone_verified_at)
+                    <i class="ph-check-circle text-success" title="Phone Verified"></i>
+                    @else
+                    <i class="ph-x-circle text-muted" title="Phone Not Verified"></i>
                     @endif
                 </div>
                 @endif

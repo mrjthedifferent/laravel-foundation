@@ -26,6 +26,13 @@
             <x-input-error class="mt-2" :messages="$errors->get('name')"/>
         </div>
 
+        @if ($user->phone)
+        <div>
+            <x-input-label for="phone" :value="__('Mobile No')"/>
+            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" disabled :value="$user->phone"/>
+        </div>
+        @endif
+
         <div>
             <x-input-label for="email" :value="__('Email')"/>
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" disabled

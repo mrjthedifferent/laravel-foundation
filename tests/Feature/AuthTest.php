@@ -67,7 +67,7 @@ class AuthTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_phone_login_matches_nobody_until_a_project_defines_the_lookup(): void
+    public function test_an_unknown_phone_number_is_refused(): void
     {
         User::factory()->create(['password' => 'secret-password']);
 

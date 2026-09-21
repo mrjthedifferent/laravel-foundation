@@ -75,6 +75,11 @@
             {!! Form::email('email', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'email@example.com', 'required']) !!}
         </div>
         <div class="col-md-3">
+            {!! Form::label('phone', 'Mobile No', ['class' => 'form-label fw-semibold fs-sm']) !!}
+            {!! Form::text('phone', null, ['class' => 'form-control form-control-sm', 'placeholder' => '+8801712345678', 'inputmode' => 'tel']) !!}
+            <div class="form-text">With country code, e.g. +8801712345678</div>
+        </div>
+        <div class="col-md-3">
             {!! Form::label('password', 'Password <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
             <div class="position-relative">
                 {!! Form::password('password', ['class' => 'form-control pe-5', 'id' => 'password', 'placeholder' => 'Min. 8 characters', 'required', 'x-model' => 'password']) !!}

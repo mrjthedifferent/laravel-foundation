@@ -28,8 +28,10 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('users', UserController::class);
     Route::get('reset/password/{user}', [UserController::class, 'resetPassword'])->name('user.password.reset');
     Route::post('users/{user}/verify-email', [UserController::class, 'verifyEmail'])->name('users.verify.email');
+    Route::post('users/{user}/verify-phone', [UserController::class, 'verifyPhone'])->name('users.verify.phone');
     Route::get('users-export', [UserController::class, 'export'])->name('users.export');
     Route::get('users-bulk-upload', [UserController::class, 'bulkUploadPage'])->name('users.bulk.create');
+    Route::get('users-bulk-upload/sample', [UserController::class, 'bulkUploadSample'])->name('users.bulk.sample');
     Route::post('users-bulk-upload', [UserController::class, 'bulkUpload'])->name('users.bulk');
     Route::post('users/{user}/status', [UserController::class, 'updateStatus'])->name('users.status');
 

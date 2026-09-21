@@ -46,10 +46,9 @@ final readonly class OtpLoginAction
             ? Str::of(explode('@', $contact)[0])->replace(['.', '_', '-'], ' ')->title()->toString()
             : $contact;
 
-        // NOTE: the users table has no phone column, so a phone-only auto-registered
-        // user has no number stored unless the project keeps one (User::scopeWherePhone()).
         $userData = new UserData(
             email: $contactType === ContactType::Email ? $contact : null,
+            phone: $contactType === ContactType::Phone ? $contact : null,
             name: $name,
             password: Hash::make(Str::password(32)),
             roles: $role ? [$role->id] : [],
@@ -58,10 +57,8 @@ final readonly class OtpLoginAction
 
         $user = $this->createUser->execute($userData);
 
-        // Only email carries a verification flag.
-        if ($contactType === ContactType::Email) {
-            $this->markVerified->execute($user, 'email');
-        }
+        // The OTP proved ownership of the contact.
+        $this->markVerified->execute($user, $contactType->value);
 
         return $user;
     }

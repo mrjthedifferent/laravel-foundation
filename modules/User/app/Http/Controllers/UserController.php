@@ -26,7 +26,10 @@ use Modules\User\Http\Requests\UpdateStatusRequest;
 use Modules\User\Http\Requests\UpdateUserRequest;
 use Modules\User\Queries\UserQuery;
 use Mrj\Foundation\Http\Controllers\Controller;
+use Rap2hpoutre\FastExcel\FastExcel;
 use Spatie\Permission\Models\Role;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Web Controller for User Management
@@ -56,6 +59,7 @@ class UserController extends Controller
             ->filterByStatus($request->input('is_active') !== null ? (bool) $request->input('is_active') : null)
             ->filterByGender($request->input('gender'))
             ->emailVerified($request->input('email_verified') !== null ? (bool) $request->input('email_verified') : null)
+            ->phoneVerified($request->input('phone_verified') !== null ? (bool) $request->input('phone_verified') : null)
             ->filterByDateRange('created_at', $request->input('date_from'), $request->input('date_to'))
             ->search($request->input('search'))
             ->orderByLatest()
@@ -201,6 +205,51 @@ class UserController extends Controller
             Log::error('Account management failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
 
             return back()->with('error', 'Internal server error');
+        }
+    }
+
+    /**
+     * The spreadsheet template for bulk upload, built on the fly so it always
+     * matches the columns BulkUserRowProcessor reads.
+     */
+    public function bulkUploadSample(): StreamedResponse|BinaryFileResponse|string
+    {
+        $this->authorize('bulkUpload', User::class);
+
+        return (new FastExcel(collect([[
+            'name' => 'Jane Doe',
+            'email' => 'jane@example.com',
+            'phone' => '+8801712345678',
+            'role' => 'User',
+            'gender' => 'female',
+            'password' => 'change-me-123',
+            'is_active' => 1,
+        ]])))->download('users_sample.xlsx');
+    }
+
+    /**
+     * Manually verify user's phone
+     */
+    public function verifyPhone(User $user, MarkContactVerifiedAction $action): RedirectResponse
+    {
+        $this->authorize('verifyContact', $user);
+
+        if (empty($user->phone)) {
+            return back()->with('error', 'User has no phone number.');
+        }
+
+        if ($user->phone_verified_at) {
+            return back()->with('info', 'Phone is already verified.');
+        }
+
+        try {
+            $action->execute($user, 'phone');
+
+            return back()->with('success', 'Phone verified successfully.');
+        } catch (Exception $e) {
+            Log::error('Manual phone verification failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
+
+            return back()->with('error', 'Failed to verify phone.');
         }
     }
 

@@ -28,10 +28,11 @@ class UserResource extends JsonResource
             'gender' => $this->gender ?? '',
             'image' => $this->image,
 
-            // Contact information ('phone' is null unless the project's user model provides it)
+            // Contact information
             'email' => $this->email,
             'phone' => $this->phone,
             'email_verified_at' => $this->email_verified_at?->toDateTimeString(),
+            'phone_verified_at' => $this->phone_verified_at?->toDateTimeString(),
 
             // Status
             'is_active' => $this->is_active,

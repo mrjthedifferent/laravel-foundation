@@ -80,7 +80,7 @@ final readonly class UserQuery
     }
 
     /**
-     * Search users by name or email (case-insensitive).
+     * Search users by name, email or phone (case-insensitive).
      */
     public function search(?string $search): self
     {
@@ -90,10 +90,14 @@ final readonly class UserQuery
 
         $like = $this->query->getConnection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
 
+        // A phone is stored as +{country}{number}; a typed local form starts with 0.
+        $digits = ltrim((string) preg_replace('/\D/', '', $search), '0');
+
         return new self(
-            $this->query->where(function ($q) use ($search, $like) {
+            $this->query->where(function ($q) use ($search, $like, $digits) {
                 $q->where('name', $like, "%{$search}%")
-                    ->orWhere('email', $like, "%{$search}%");
+                    ->orWhere('email', $like, "%{$search}%")
+                    ->when(strlen($digits) >= 3, fn ($q) => $q->orWhere('phone', 'like', "%{$digits}%"));
             })
         );
     }
@@ -114,6 +118,22 @@ final readonly class UserQuery
         }
 
         return new self($query);
+    }
+
+    /**
+     * Filter by phone verification status
+     */
+    public function phoneVerified(?bool $verified = true): self
+    {
+        if ($verified === null) {
+            return $this;
+        }
+
+        return new self(
+            $verified
+                ? $this->query->whereNotNull('phone_verified_at')
+                : $this->query->whereNull('phone_verified_at')
+        );
     }
 
     /**

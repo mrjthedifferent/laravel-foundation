@@ -6,6 +6,8 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\User\Enum\Gender;
+use Modules\User\Rules\UniquePhone;
+use Mrj\Foundation\Rules\PhoneNumber;
 
 class StoreUserRequest extends FormRequest
 {
@@ -28,6 +30,7 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:80'],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
+            'phone' => ['nullable', 'string', new PhoneNumber, new UniquePhone],
             'password' => ['required', 'confirmed', 'min:6'],
             'gender' => ['nullable', Rule::in(Gender::values())],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
@@ -46,7 +49,6 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'email.unique' => 'The email has already been taken',
-            'phone.unique' => 'The mobile number has already been taken',
             'roles.required' => 'At least one role must be assigned',
             'roles.min' => 'At least one role must be assigned',
         ];

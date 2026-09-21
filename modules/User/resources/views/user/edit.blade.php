@@ -58,6 +58,17 @@
                     <div class="form-text text-warning"><i class="ph-warning me-1"></i>Not verified</div>
                 @endif
             </div>
+            <div class="col-md-6">
+                {!! Form::label('phone', 'Mobile No', ['class' => 'form-label fw-semibold fs-sm']) !!}
+                {!! Form::text('phone', $user->phone, ['class' => 'form-control form-control-sm', 'placeholder' => '+8801712345678', 'inputmode' => 'tel']) !!}
+                @if($user->phone && $user->phone_verified_at)
+                    <div class="form-text text-success"><i class="ph-check-circle me-1"></i>Verified on {{ $user->phone_verified_at->format('d M Y') }}</div>
+                @elseif($user->phone)
+                    <div class="form-text text-warning"><i class="ph-warning me-1"></i>Not verified</div>
+                @else
+                    <div class="form-text">With country code, e.g. +8801712345678</div>
+                @endif
+            </div>
         </div>
     </x-form-section>
 

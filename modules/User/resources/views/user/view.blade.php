@@ -23,6 +23,15 @@
                                         <i class="ph-check-circle text-success ms-1" title="Email Verified"></i>
                                     @endif
                                 @endif
+                                @if ($user->phone)
+                                    @if ($user->email)
+                                        <span class="mx-2">|</span>
+                                    @endif
+                                    <i class="ph-phone me-1"></i> {{ $user->phone }}
+                                    @if ($user->phone_verified_at)
+                                        <i class="ph-check-circle text-success ms-1" title="Phone Verified"></i>
+                                    @endif
+                                @endif
                             </p>
                             <div class="d-flex flex-wrap gap-1">
                                 @foreach ($user->roles as $role)
@@ -197,6 +206,33 @@
                                             @endif
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <th class="text-muted">Phone</th>
+                                        <td>{{ $user->phone ?? '—' }}</td>
+                                    </tr>
+                                    @if ($user->phone)
+                                    <tr>
+                                        <th class="text-muted">Phone Verified</th>
+                                        <td>
+                                            @if ($user->phone_verified_at)
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle">Verified</span>
+                                                <br>
+                                                <small class="text-muted">{{ $user->phone_verified_at->format('d M Y') }}</small>
+                                            @else
+                                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Not Verified</span>
+                                                @can('Verify User Contact')
+                                                    <form method="POST" action="{{ route('admin.users.verify.phone', $user) }}" class="d-inline ms-2">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-outline-success swal-confirm"
+                                                            data-text="Manually mark this user's phone as verified?">
+                                                            <i class="ph-check-circle me-1"></i>Verify Phone
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

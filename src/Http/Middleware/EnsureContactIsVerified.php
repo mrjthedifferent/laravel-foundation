@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Custom replacement for Laravel's built-in EnsureEmailIsVerified middleware.
  *
- * Passes if the authenticated user has verified their email.
+ * Passes if the authenticated user has verified either their email or their
+ * phone number, so an account that signs in by phone only is not locked out.
  */
 class EnsureContactIsVerified
 {
@@ -23,7 +24,7 @@ class EnsureContactIsVerified
             return $next($request);
         }
 
-        if (! empty($user->email_verified_at)) {
+        if (! empty($user->email_verified_at) || ! empty($user->phone_verified_at)) {
             return $next($request);
         }
 

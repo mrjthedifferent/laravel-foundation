@@ -28,6 +28,7 @@ final readonly class UpdateUserAction
             // The OwenIt Auditable observer automatically records the changed attributes
             $user->update([
                 'email' => $data->email ?? $user->email,
+                'phone' => $data->phone ?? $user->phone,
                 'is_active' => $data->is_active ?? $user->is_active,
                 'name' => $data->name ?? $user->name,
                 'image' => $data->image ?? $user->image,

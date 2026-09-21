@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.10.0
+
+- Users have a phone number: new `phone` and `phone_verified_at` columns, added by a new
+  migration. Numbers are stored in E.164 form (`+8801712345678`) however they are typed.
+- Sign-in, API login and OTP accept a phone number out of the box. `User::scopeWherePhone()`
+  now matches on the column; a project that keeps phones elsewhere can still override it.
+- User management: phone on the create and edit forms (unique, validated against the allowed
+  country codes), on the list and detail pages, in search, bulk upload and export, plus a
+  "Phone Verified" filter and a manual "Verify Phone" action.
+- The `verified` middleware passes when either the email or the phone is verified.
+- Fixed: the bulk upload "Download Sample" link pointed at a file the package never shipped.
+  The sample is now generated on request.
+
 ## 0.9.0
 
 First public release.

@@ -24,9 +24,9 @@ final readonly class ApiResetPasswordAction
     {
         $user->update(['password' => $newPassword]);
 
-        // Stamp email as verified since OTP was already validated by the caller.
-        if ($contactType === 'email') {
-            $user->forceFill(['email_verified_at' => now()])->save();
+        // Stamp the contact as verified since the OTP was already validated by the caller.
+        if (in_array($contactType, ['email', 'phone'], true)) {
+            $user->forceFill([$contactType.'_verified_at' => now()])->save();
         }
 
         event(new PasswordReset($user));

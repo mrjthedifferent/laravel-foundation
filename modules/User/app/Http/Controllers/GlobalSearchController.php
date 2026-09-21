@@ -34,7 +34,7 @@ class GlobalSearchController extends Controller
 
             $users = User::query()
                 ->where(function ($q) use ($like) {
-                    $q->where('name', 'like', $like)->orWhere('email', 'like', $like);
+                    $q->where('name', 'like', $like)->orWhere('email', 'like', $like)->orWhere('phone', 'like', $like);
                 })
                 ->latest()
                 ->limit(20)

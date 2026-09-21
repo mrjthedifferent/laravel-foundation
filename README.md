@@ -29,7 +29,7 @@ kits drift apart; a package does not.
 
 | Module | Provides |
 |---|---|
-| User | Sign-in, password reset by email, profile, user management, bulk upload, documents, login history, impersonation, API session endpoints |
+| User | Sign-in by email or phone, password reset by email, profile, user management, bulk upload, documents, login history, impersonation, API session endpoints |
 | RolePermission | Roles and permissions ([spatie/laravel-permission](https://github.com/spatie/laravel-permission)) with a management UI |
 | Settings | Database-backed settings, mail and SMS gateways, social sign-in keys, theme, privacy policy and terms pages |
 | Notification | In-app, email, SMS and push (FCM) notifications with per-channel switches |
@@ -172,7 +172,7 @@ Also available: `$composers`, `$commands`, `$middlewareAliases`, `$prependToGrou
 | A module's menu, permissions or settings | `php artisan vendor:publish --tag={alias}-module-config`, then edit `config/{alias}/` |
 | Which modules are on | `modules_statuses.json`, or `php artisan module:enable Otp` |
 | Who may sign in | Override `accessDenialMessage(): ?string` on `App\Models\User` |
-| Phone sign-in and phone OTP | Override `scopeWherePhone($query, ?string $phone)` on `App\Models\User`. The users table has no phone column, so this is off by default |
+| Where phone numbers live | Users have a `phone` column, stored in E.164 form, and can sign in with it. To keep phones in your own table instead, override `scopeWherePhone($query, ?string $phone)` on `App\Models\User` |
 | Colours, dark mode, RTL, sidebar style | Settings → Theme, or the settings seeder |
 | PDF fonts | Put a `.ttf` in `resources/fonts` and list it under `pdf.fonts` in `config/foundation.php` |
 | Files `foundation:sync` overwrites | List them under `sync.except` in `config/foundation.php` |

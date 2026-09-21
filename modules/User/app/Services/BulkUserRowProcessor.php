@@ -2,8 +2,10 @@
 
 namespace Modules\User\Services;
 
+use App\Models\User;
 use Modules\User\Actions\CreateUserAction;
 use Modules\User\Data\UserData;
+use Mrj\Foundation\Support\PhoneNumber;
 use Spatie\Permission\Models\Role;
 
 /**
@@ -21,7 +23,7 @@ final readonly class BulkUserRowProcessor
     /**
      * Process one spreadsheet row.
      *
-     * A user account is keyed by email.
+     * A user account is keyed by email; phone is optional and must be unique.
      *
      * @param  array<string, mixed>  $row
      * @param  array<int, string>  $existingEmails  Already-known emails (mutated in place on success)
@@ -44,6 +46,12 @@ final readonly class BulkUserRowProcessor
             return "Email: {$email} already exists at row: {$rowNo}";
         }
 
+        $phone = PhoneNumber::toE164(trim((string) ($row['phone'] ?? '')) ?: null);
+
+        if ($phone !== null && User::query()->where('phone', $phone)->exists()) {
+            return "Phone: {$phone} already exists at row: {$rowNo}";
+        }
+
         if (empty($row['role'])) {
             return "Role is required at row: {$rowNo}";
         }
@@ -58,6 +66,7 @@ final readonly class BulkUserRowProcessor
             $this->createUser->execute(UserData::from([
                 'name' => trim((string) ($row['name'] ?? '')) ?: (trim(($row['first_name'] ?? '').' '.($row['last_name'] ?? '')) ?: 'User'),
                 'email' => $email,
+                'phone' => $phone,
                 'password' => $row['password'] ?? null,
                 'password_confirmation' => $row['password'] ?? null,
                 'is_active' => $row['is_active'] ?? true,

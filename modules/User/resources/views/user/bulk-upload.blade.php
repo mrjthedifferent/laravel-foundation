@@ -19,7 +19,7 @@
         <span class="fs-sm">
             <strong>Instructions:</strong> Download the sample file, fill in user details, and upload.
             Required columns: <code>name</code>, <code>email</code>, <code>role</code>.
-            
+            Optional: <code>phone</code> (with country code), <code>gender</code>, <code>password</code>, <code>is_active</code>.
         </span>
     </x-alert>
 
@@ -33,7 +33,7 @@
             <div class="col-md-6">
                 <label class="form-label fw-semibold fs-sm">Sample Template</label>
                 <div>
-                    <a class="btn btn-sm btn-outline-secondary" href="{{ asset('sample/users_sample.xlsx') }}" download>
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.users.bulk.sample') }}">
                         <i class="ph-file-xls me-1"></i> Download Sample
                     </a>
                 </div>

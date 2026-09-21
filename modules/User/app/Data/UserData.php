@@ -18,6 +18,8 @@ class UserData extends Data
         #[Email]
         public ?string $email = null,
 
+        public ?string $phone = null,
+
         #[Min(6)]
         public ?string $password = null,
 

@@ -53,7 +53,6 @@ class BootstrapTest extends TestCase
             $this->assertTrue(Schema::hasTable($table), "$table table is missing");
         }
 
-        $this->assertTrue(Schema::hasColumns('users', ['uuid', 'name', 'is_active']));
-        $this->assertFalse(Schema::hasColumn('users', 'phone'));
+        $this->assertTrue(Schema::hasColumns('users', ['uuid', 'name', 'is_active', 'phone', 'phone_verified_at']));
     }
 }

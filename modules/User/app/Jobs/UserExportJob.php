@@ -58,6 +58,7 @@ class UserExportJob implements ShouldQueue
                     'SL' => $sl++,
                     'Name' => $user->name ?: '',
                     'Email' => $user->email ?: '',
+                    'Phone' => $user->phone ?: '',
                     'Gender' => $user->gender ? ucfirst($user->gender->value) : '',
                     'Role' => $user->roles->pluck('name')->implode(', '),
                     'Account Status' => $user->is_active ? 'Active' : 'Inactive',
