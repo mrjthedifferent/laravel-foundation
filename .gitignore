@@ -5,3 +5,5 @@
 /.idea
 /.vscode
 /.build
+/.t.log
+/.c.log
