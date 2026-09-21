@@ -29,7 +29,9 @@ class UpdateProfileRequest extends FormRequest
             'email_code' => ['nullable', 'string', 'required_with:email'],
             'name' => ['nullable', 'string', 'max:80'],
             'gender' => ['nullable', Rule::in(Gender::values())],
-            'image' => ['nullable'],
+            // Matches StoreUserRequest/UpdateUserRequest: type and size limited so an
+            // arbitrary file (or a file so large it fills the disk) can't reach storage.
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
         ];
     }
 
