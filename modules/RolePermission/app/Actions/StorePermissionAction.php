@@ -17,7 +17,7 @@ final readonly class StorePermissionAction
         return Permission::create([
             'name' => $name,
             'module_name' => $moduleName,
-            'guard_name' => 'web',
+            'guard_name' => config('foundation.guards.web'),
             'description' => $description,
         ]);
     }

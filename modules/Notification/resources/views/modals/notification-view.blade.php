@@ -29,7 +29,7 @@
 
     <div class="mb-3">
         <h6 class="fw-bold fs-xs text-muted text-uppercase mb-1">Date</h6>
-        <p class="mb-0">{{ $notification->created_at->format('Y-m-d H:i:s') }} <span class="text-muted">({{ $notification->created_at->diffForHumans() }})</span></p>
+        <p class="mb-0">{{ $notification->created_at->format(config('foundation.formats.datetime')) }} <span class="text-muted">({{ $notification->created_at->diffForHumans() }})</span></p>
     </div>
 
     <div class="mb-3">

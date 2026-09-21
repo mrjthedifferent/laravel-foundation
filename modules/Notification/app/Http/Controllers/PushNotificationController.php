@@ -10,7 +10,6 @@ use Modules\Notification\Actions\SendPushNotificationAction;
 use Modules\Notification\Http\Requests\StorePushNotificationRequest;
 use Modules\Notification\Models\PushNotification;
 use Modules\Notification\Queries\PushNotificationQuery;
-use Mrj\Foundation\Enum\PaginationEnum;
 use Mrj\Foundation\Http\Controllers\Controller;
 
 class PushNotificationController extends Controller
@@ -22,7 +21,7 @@ class PushNotificationController extends Controller
         $notifications = PushNotificationQuery::make()
             ->search($request->input('search'))
             ->orderByLatest()
-            ->paginate(cappedPerPage((int) $request->input('per_page', PaginationEnum::DEFAULT_PAGINATE)));
+            ->paginate(cappedPerPage((int) $request->input('per_page', config('foundation.pagination.default', 10))));
 
         return view('notification::push-notification.index', [
             'notifications' => $notifications,

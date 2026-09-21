@@ -25,7 +25,7 @@ final readonly class CloneRoleAction
 
         $clone = Role::create([
             'name' => $newName,
-            'guard_name' => 'web',
+            'guard_name' => config('foundation.guards.web'),
         ]);
 
         $clone->syncPermissions($role->permissions()->pluck('name')->toArray());

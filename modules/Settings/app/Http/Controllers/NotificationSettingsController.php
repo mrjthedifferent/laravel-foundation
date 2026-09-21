@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Modules\Notification\Support\NotificationToggleRegistry;
 use Modules\Settings\Models\Setting;
+use Modules\Settings\Providers\SettingsServiceProvider;
 use Mrj\Foundation\Http\Controllers\Controller;
 
 /**
@@ -108,7 +109,7 @@ class NotificationSettingsController extends Controller
                 }
             }
 
-            Cache::forget('app_settings');
+            Cache::forget(SettingsServiceProvider::cacheKey());
 
             return redirect()->route('admin.settings.special.notifications')
                 ->with('success', 'Notification settings updated successfully');

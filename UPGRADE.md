@@ -3,6 +3,30 @@
 Manual steps a project must take when moving between versions. Versions without an entry
 need only `composer update mrjthedifferent/laravel-foundation` and `php artisan migrate`.
 
+## 0.13 to 0.14 (configurability)
+
+`composer update mrjthedifferent/laravel-foundation`. No migration.
+
+Nothing changes for a project that hasn't touched the values below — every
+new config key defaults to the previous hard-coded behavior.
+
+1. **`SettingsServiceProvider::CACHE_KEY`** (a public constant) is now
+   **`SettingsServiceProvider::cacheKey()`** (a method, since it reads
+   `foundation.cache.prefix`). If your project referenced the constant
+   directly, call the method instead.
+2. **`config('foundation.user_model')` is gone.** Nothing in the package ever
+   actually used a value other than `App\Models\User` (95 files import it
+   directly), so removing it changes nothing unless your own code read that
+   key — if so, replace it with the `App\Models\User::class` you already have.
+3. **`Mrj\Foundation\Enum\PaginationEnum`** is deleted (`DEFAULT_PAGINATE` and
+   `DEFAULT_LIST` were both `10`). Replace any reference with
+   `config('foundation.pagination.default')`.
+4. If you want the admin panel under a different URL prefix, a different
+   domain, or with role names other than Super Admin/Admin/User, publish
+   `config/foundation.php` (`php artisan vendor:publish --tag=foundation-config`)
+   and set `routing`/`roles` there — do this **before** seeding, since role
+   names are only created once. Route names are unaffected either way.
+
 ## 0.12 to 0.13 (tooling gate)
 
 `composer update mrjthedifferent/laravel-foundation`. No migration.

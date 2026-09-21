@@ -16,7 +16,7 @@ final readonly class StoreRoleAction
     {
         return Role::create([
             'name' => $name,
-            'guard_name' => 'web',
+            'guard_name' => config('foundation.guards.web'),
         ]);
     }
 }

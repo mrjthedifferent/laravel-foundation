@@ -68,8 +68,8 @@ final readonly class SmsLogQuery
         return $this;
     }
 
-    public function paginate(int $perPage = 15): LengthAwarePaginator
+    public function paginate(?int $perPage = null): LengthAwarePaginator
     {
-        return $this->query->paginate($perPage)->withQueryString();
+        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10))->withQueryString();
     }
 }

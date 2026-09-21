@@ -4,6 +4,7 @@ namespace Modules\RolePermission\Actions;
 
 use Illuminate\Support\Facades\Artisan;
 use Modules\RolePermission\Database\Seeders\RolePermissionPermissionsSeeder;
+use Mrj\Foundation\Support\Roles;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
@@ -27,7 +28,7 @@ final readonly class SyncPermissionsAction
             '--force' => true,
         ]);
 
-        Role::where('name', 'Super Admin')->first()?->givePermissionTo(Permission::all());
+        Role::where('name', Roles::superAdmin())->first()?->givePermissionTo(Permission::all());
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
     }

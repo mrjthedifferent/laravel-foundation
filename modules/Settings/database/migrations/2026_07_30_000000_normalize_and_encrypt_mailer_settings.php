@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Cache;
 use Modules\Settings\Data\MailerData;
 use Modules\Settings\Data\SmsGatewayData;
 use Modules\Settings\Models\Setting;
+use Modules\Settings\Providers\SettingsServiceProvider;
 use Modules\Settings\Services\MailerSecretCipher;
 
 /**
@@ -28,7 +29,7 @@ return new class extends Migration
         $this->transform('email_mailers', fn (array $entry) => MailerData::fromEntry($entry)->toEntry($cipher));
         $this->transform('sms_gateways', fn (array $entry) => SmsGatewayData::fromEntry($entry)->toEntry($cipher));
 
-        Cache::forget('app_settings');
+        Cache::forget(SettingsServiceProvider::cacheKey());
     }
 
     public function down(): void
@@ -52,7 +53,7 @@ return new class extends Migration
             return $entry;
         });
 
-        Cache::forget('app_settings');
+        Cache::forget(SettingsServiceProvider::cacheKey());
     }
 
     /**

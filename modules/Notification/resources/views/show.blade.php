@@ -73,7 +73,7 @@
                         <tr>
                             <th class="text-muted fw-semibold fs-sm">Created</th>
                             <td class="fs-sm">
-                                {{ $notification->created_at->format('Y-m-d H:i:s') }}
+                                {{ $notification->created_at->format(config('foundation.formats.datetime')) }}
                                 <div class="text-muted fs-xs">{{ $notification->created_at->diffForHumans() }}</div>
                             </td>
                         </tr>
@@ -81,7 +81,7 @@
                             <th class="text-muted fw-semibold fs-sm">Read At</th>
                             <td class="fs-sm">
                                 @if($notification->read_at)
-                                    {{ $notification->read_at->format('Y-m-d H:i:s') }}
+                                    {{ $notification->read_at->format(config('foundation.formats.datetime')) }}
                                     <div class="text-muted fs-xs">{{ $notification->read_at->diffForHumans() }}</div>
                                 @else
                                     <span class="text-muted">Not read yet</span>

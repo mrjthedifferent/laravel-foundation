@@ -23,7 +23,7 @@ class UserDocumentResource extends JsonResource
             'document_number' => $this->document_number,
             'file_path' => $this->file_path,
             'back_file_path' => $this->back_file_path,
-            'expiry_date' => $this->expiry_date?->format('Y-m-d'),
+            'expiry_date' => $this->expiry_date?->format(config('foundation.formats.date')),
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),
         ];

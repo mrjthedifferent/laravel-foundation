@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Modules\ImportDownloadManager\Enum\ImportStatus;
 use Modules\ImportDownloadManager\Enum\ImportType;
 use Modules\ImportDownloadManager\Models\DownloadImportManager;
-use Mrj\Foundation\Enum\PaginationEnum;
 
 final readonly class DownloadImportQuery
 {
@@ -63,9 +62,9 @@ final readonly class DownloadImportQuery
         return new self($this->query->orderByDesc('id'));
     }
 
-    public function paginate(int $perPage = PaginationEnum::DEFAULT_LIST): LengthAwarePaginator
+    public function paginate(?int $perPage = null): LengthAwarePaginator
     {
-        return $this->query->paginate($perPage)->withQueryString();
+        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10))->withQueryString();
     }
 
     public function findByIds(array $ids): Collection

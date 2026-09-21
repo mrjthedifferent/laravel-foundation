@@ -11,7 +11,6 @@ use Illuminate\View\View;
 use Modules\Notification\Http\Resources\NotificationResource;
 use Modules\Notification\Models\Notification;
 use Modules\Notification\Queries\NotificationQuery;
-use Mrj\Foundation\Enum\PaginationEnum;
 use Mrj\Foundation\Http\Controllers\Controller;
 use Mrj\Foundation\Http\Responses\JsonResponseFactory;
 
@@ -35,7 +34,7 @@ class NotificationController extends Controller
             ->filterByReadStatus($isRead)
             ->filterByType($request->input('type'))
             ->orderByLatest()
-            ->paginate(max(1, min(100, $request->integer('per_page', PaginationEnum::DEFAULT_PAGINATE))));
+            ->paginate(cappedPerPage($request->integer('per_page', config('foundation.pagination.default', 10))));
 
         if ($request->wantsJson() || $request->is('api/*')) {
             return JsonResponseFactory::paginated(

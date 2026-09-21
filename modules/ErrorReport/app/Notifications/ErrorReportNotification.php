@@ -51,8 +51,8 @@ class ErrorReportNotification extends Notification
             ->line('**Exception:** '.$report->exception_class)
             ->line('**File:** '.$report->file.':'.$report->line)
             ->line('**Occurrences:** '.$report->occurrences)
-            ->line('**First seen:** '.$report->first_seen_at->format('Y-m-d H:i:s'))
-            ->line('**Last seen:** '.$report->last_seen_at->format('Y-m-d H:i:s'))
+            ->line('**First seen:** '.$report->first_seen_at->format(config('foundation.formats.datetime')))
+            ->line('**Last seen:** '.$report->last_seen_at->format(config('foundation.formats.datetime')))
             ->when($report->request_url, fn (MailMessage $m) => $m->line('**URL:** '.$report->request_url))
             ->action('View in Dashboard', route('admin.error-reports.show', $report));
     }

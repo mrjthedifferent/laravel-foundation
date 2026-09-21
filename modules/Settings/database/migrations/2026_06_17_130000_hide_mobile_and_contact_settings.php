@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Modules\Settings\Providers\SettingsServiceProvider;
 
 return new class extends Migration
 {
@@ -16,7 +17,7 @@ return new class extends Migration
             ->whereIn('group', ['Mobile App', 'Contact'])
             ->update(['is_visible' => false]);
 
-        Cache::forget('app_settings');
+        Cache::forget(SettingsServiceProvider::cacheKey());
     }
 
     /**
@@ -28,6 +29,6 @@ return new class extends Migration
             ->whereIn('group', ['Mobile App', 'Contact'])
             ->update(['is_visible' => true]);
 
-        Cache::forget('app_settings');
+        Cache::forget(SettingsServiceProvider::cacheKey());
     }
 };

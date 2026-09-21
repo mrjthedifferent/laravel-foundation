@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Modules\Otp\Enum\ContactType;
 use Modules\Otp\Models\VerificationCode;
-use Mrj\Foundation\Enum\PaginationEnum;
 
 /**
  * VerificationCode Query Builder
@@ -21,7 +20,7 @@ use Mrj\Foundation\Enum\PaginationEnum;
  *     ->filterByVerified(false)
  *     ->search('user@example.com')
  *     ->orderByLatest()
- *     ->paginate(PaginationEnum::DEFAULT_LIST);
+ *     ->paginate();
  */
 final readonly class VerificationCodeQuery
 {
@@ -117,9 +116,9 @@ final readonly class VerificationCodeQuery
     /**
      * Get paginated results
      */
-    public function paginate(int $perPage = PaginationEnum::DEFAULT_LIST): LengthAwarePaginator
+    public function paginate(?int $perPage = null): LengthAwarePaginator
     {
-        return $this->query->paginate($perPage);
+        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Mrj\Foundation;
 
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -170,7 +171,7 @@ class FoundationServiceProvider extends ServiceProvider
 
     private function configureMorphMap(): void
     {
-        Relation::morphMap(['user' => config('foundation.user_model')]);
+        Relation::morphMap(['user' => User::class]);
 
         if (config('foundation.enforce_morph_map') === true) {
             Relation::requireMorphMap();

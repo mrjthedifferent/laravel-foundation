@@ -228,7 +228,7 @@
 
             {{-- Time --}}
             <td class="text-nowrap">
-                <span class="small text-muted" title="{{ $audit->created_at->format('Y-m-d H:i:s') }}">
+                <span class="small text-muted" title="{{ $audit->created_at->format(config('foundation.formats.datetime')) }}">
                     {{ $audit->created_at->diffForHumans() }}
                 </span>
             </td>

@@ -264,13 +264,13 @@ class SettingsCrudTest extends TestCase
         Setting::updateOrCreate(['key' => 'app_name'], ['value' => 'Rebuilt', 'group' => 'General', 'type' => 'text']);
 
         // Stands in for the pre-0.11 payload: anything that is not an array.
-        Cache::forever(SettingsServiceProvider::CACHE_KEY, Setting::all());
+        Cache::forever(SettingsServiceProvider::cacheKey(), Setting::all());
 
         $settings = SettingsServiceProvider::cached();
 
         $this->assertIsArray($settings);
         $this->assertSame('Rebuilt', collect($settings)->firstWhere('key', 'app_name')['value']);
-        $this->assertIsArray(Cache::get(SettingsServiceProvider::CACHE_KEY));
+        $this->assertIsArray(Cache::get(SettingsServiceProvider::cacheKey()));
     }
 
     // --- encrypted type ---

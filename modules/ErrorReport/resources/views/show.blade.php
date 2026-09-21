@@ -55,10 +55,10 @@
                 <strong>Occurrences:</strong> {{ $errorReport->occurrences }}
             </div>
             <div class="col-md-4">
-                <strong>First seen:</strong> {{ $errorReport->first_seen_at->format('Y-m-d H:i:s') }}
+                <strong>First seen:</strong> {{ $errorReport->first_seen_at->format(config('foundation.formats.datetime')) }}
             </div>
             <div class="col-md-4">
-                <strong>Last seen:</strong> {{ $errorReport->last_seen_at->format('Y-m-d H:i:s') }}
+                <strong>Last seen:</strong> {{ $errorReport->last_seen_at->format(config('foundation.formats.datetime')) }}
             </div>
         </div>
         @if ($errorReport->request_url)

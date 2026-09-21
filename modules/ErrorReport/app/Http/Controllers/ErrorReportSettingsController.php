@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
 use Modules\ErrorReport\Http\Requests\UpdateErrorReportSettingsRequest;
 use Modules\Settings\Models\Setting;
+use Modules\Settings\Providers\SettingsServiceProvider;
 use Mrj\Foundation\Http\Controllers\Controller;
 
 class ErrorReportSettingsController extends Controller
@@ -48,7 +49,7 @@ class ErrorReportSettingsController extends Controller
         $dontReportArray = array_values(array_filter(array_map('trim', explode("\n", (string) $dontReport))));
         $this->saveSetting('error_report_dont_report', json_encode($dontReportArray));
 
-        Cache::forget('app_settings');
+        Cache::forget(SettingsServiceProvider::cacheKey());
 
         return redirect()->back()->with('success', 'Error Report settings updated successfully');
     }

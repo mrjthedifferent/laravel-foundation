@@ -55,11 +55,11 @@
         </div>
         <div class="col-md-4">
             <label class="form-label fw-semibold fs-sm text-muted">Sent At</label>
-            <div>{{ $emailLog->sent_at?->format('Y-m-d H:i:s') ?? '—' }}</div>
+            <div>{{ $emailLog->sent_at?->format(config('foundation.formats.datetime')) ?? '—' }}</div>
         </div>
         <div class="col-md-12">
             <label class="form-label fw-semibold fs-sm text-muted">Created At</label>
-            <div>{{ $emailLog->created_at->format('Y-m-d H:i:s') }}</div>
+            <div>{{ $emailLog->created_at->format(config('foundation.formats.datetime')) }}</div>
         </div>
         @if ($emailLog->error)
         <div class="col-md-12">

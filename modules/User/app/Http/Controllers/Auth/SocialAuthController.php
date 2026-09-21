@@ -58,12 +58,6 @@ class SocialAuthController extends Controller
 
         Auth::login($user, true);
 
-        // Redirect based on user role
-        $userRoles = $user->roles->pluck('name')->toArray();
-        if (in_array('Admin', $userRoles) || in_array('Super Admin', $userRoles)) {
-            return redirect()->intended(route('admin.dashboard', absolute: false));
-        }
-
         return redirect()->intended(route('admin.dashboard', absolute: false));
     }
 

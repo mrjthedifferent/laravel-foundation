@@ -58,7 +58,7 @@
                 <span class="text-muted">—</span>
                 @endif
             </td>
-            <td>{{ $log->created_at->format('Y-m-d H:i:s') }}</td>
+            <td>{{ $log->created_at->format(config('foundation.formats.datetime')) }}</td>
             @can('Delete SMS Log')
             <td class="text-end">
                 <x-dropdown-menu>

@@ -6,6 +6,7 @@ namespace Modules\Settings\Actions;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Modules\Settings\Providers\SettingsServiceProvider;
 
 /**
  * Re-seed all settings from module config/settings.php files and flush the cache.
@@ -22,6 +23,6 @@ final readonly class SyncSettingsAction
             '--force' => true,
         ]);
 
-        Cache::forget('app_settings');
+        Cache::forget(SettingsServiceProvider::cacheKey());
     }
 }

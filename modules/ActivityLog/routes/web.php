@@ -18,15 +18,19 @@ use Modules\ActivityLog\Http\Controllers\SmsLogController;
 |
 */
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(static function (): void {
-    // Activity Log routes
-    Route::get('activity-logs/track-ip', [ActivityLogController::class, 'trackIpInfo'])->name('track-ip');
-    Route::get('activity-logs/export', [ActivityLogController::class, 'export'])->name('activity-logs.export');
-    Route::resource('activity-logs', ActivityLogController::class)->only(['index', 'destroy', 'show']);
+Route::middleware(config('foundation.routing.middleware'))
+    ->domain(config('foundation.routing.domain'))
+    ->prefix(config('foundation.routing.prefix'))
+    ->name('admin.')
+    ->group(static function (): void {
+        // Activity Log routes
+        Route::get('activity-logs/track-ip', [ActivityLogController::class, 'trackIpInfo'])->name('track-ip');
+        Route::get('activity-logs/export', [ActivityLogController::class, 'export'])->name('activity-logs.export');
+        Route::resource('activity-logs', ActivityLogController::class)->only(['index', 'destroy', 'show']);
 
-    // SMS Log routes
-    Route::resource('sms-logs', SmsLogController::class)->only(['index', 'destroy']);
+        // SMS Log routes
+        Route::resource('sms-logs', SmsLogController::class)->only(['index', 'destroy']);
 
-    // Email Log routes
-    Route::resource('email-logs', EmailLogController::class)->only(['index', 'show', 'destroy']);
-});
+        // Email Log routes
+        Route::resource('email-logs', EmailLogController::class)->only(['index', 'show', 'destroy']);
+    });

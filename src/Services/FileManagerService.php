@@ -11,16 +11,20 @@ class FileManagerService
         return filter_var($url, FILTER_VALIDATE_URL);
     }
 
-    private static function getStoragePath($url, $disk = 'public'): string
+    private static function getStoragePath($url, ?string $disk = null): string
     {
+        $disk ??= config('foundation.storage.disk', 'public');
+
         return str_replace(Storage::disk($disk)->url(''), '', $url);
     }
 
     /**
      * Upload an image to local storage and return the file path.
      */
-    public static function uploadFile($file, ?string $existing_file = null, string $directory = 'files', string $disk = 'public', bool $isBase64 = false): ?string
+    public static function uploadFile($file, ?string $existing_file = null, string $directory = 'files', ?string $disk = null, bool $isBase64 = false): ?string
     {
+        $disk ??= config('foundation.storage.disk', 'public');
+
         if (! $file) {
             return null;
         }
@@ -56,8 +60,10 @@ class FileManagerService
     /**
      * Get the file path from local storage.
      */
-    public static function getImage(?string $filePath, string $disk = 'public', ?string $default = 'images/default.png'): ?string
+    public static function getImage(?string $filePath, ?string $disk = null, ?string $default = 'images/default.png'): ?string
     {
+        $disk ??= config('foundation.storage.disk', 'public');
+
         if (! $default && ! $filePath) {
             return null;
         }
@@ -71,8 +77,10 @@ class FileManagerService
     /**
      * Get the file path from local storage.
      */
-    public static function getFile(?string $filePath, string $disk = 'public', bool $getPath = false): ?string
+    public static function getFile(?string $filePath, ?string $disk = null, bool $getPath = false): ?string
     {
+        $disk ??= config('foundation.storage.disk', 'public');
+
         if ($getPath) {
             return $filePath ? Storage::disk($disk)->path($filePath) : null;
         }
@@ -83,8 +91,10 @@ class FileManagerService
     /**
      * Delete an image from local storage.
      */
-    public static function deleteFile(?string $filePath, string $disk = 'public'): bool
+    public static function deleteFile(?string $filePath, ?string $disk = null): bool
     {
+        $disk ??= config('foundation.storage.disk', 'public');
+
         if (! $filePath) {
             return true;
         }
@@ -122,16 +132,16 @@ class FileManagerService
     /**
      * List all files in a directory for a given disk.
      */
-    public static function listFiles(string $directory, string $disk = 'public'): array
+    public static function listFiles(string $directory, ?string $disk = null): array
     {
-        return \Storage::disk($disk)->files($directory);
+        return Storage::disk($disk ?? config('foundation.storage.disk', 'public'))->files($directory);
     }
 
     /**
      * Check if a file exists in a given disk.
      */
-    public static function fileExists(string $filePath, string $disk = 'public'): bool
+    public static function fileExists(string $filePath, ?string $disk = null): bool
     {
-        return \Storage::disk($disk)->exists($filePath);
+        return Storage::disk($disk ?? config('foundation.storage.disk', 'public'))->exists($filePath);
     }
 }

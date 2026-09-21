@@ -16,7 +16,7 @@ use Modules\Settings\Http\Controllers\Api\ApiSettingsController;
  *
 */
 
-Route::prefix('v1/settings')->group(function (): void {
+Route::prefix(config('foundation.routing.api_prefix').'/settings')->group(function (): void {
     Route::get('app', [ApiSettingsController::class, 'appSettings']);
     Route::get('privacy-policy', [ApiSettingsController::class, 'privacyPolicy']);
     Route::get('terms-conditions', [ApiSettingsController::class, 'termsConditions']);

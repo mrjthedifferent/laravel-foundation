@@ -35,7 +35,7 @@ class UserBulkUploadJob implements ShouldQueue
             app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Processing);
 
             $record = DownloadImportManager::findOrFail($this->importDownloadManagerId);
-            $filePath = Storage::disk('public')->path($record->url);
+            $filePath = Storage::disk(config('foundation.storage.disk'))->path($record->url);
 
             $collection = (new FastExcel)->import($filePath)->toArray();
 

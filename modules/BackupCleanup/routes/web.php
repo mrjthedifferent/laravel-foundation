@@ -16,14 +16,18 @@ use Modules\BackupCleanup\Http\Controllers\BackupController;
 |
 */
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function (): void {
-    Route::get('backups', [BackupController::class, 'index'])->name('backups.index');
-    Route::post('backups', [BackupController::class, 'store'])->name('backups.store');
-    Route::post('backups/cleanup', [BackupController::class, 'cleanup'])->name('backups.cleanup');
-    Route::get('backups/{filename}/download', [BackupController::class, 'download'])
-        ->name('backups.download')
-        ->where('filename', '.+');
-    Route::delete('backups/{filename}', [BackupController::class, 'destroy'])
-        ->name('backups.destroy')
-        ->where('filename', '.+');
-});
+Route::middleware(config('foundation.routing.middleware'))
+    ->domain(config('foundation.routing.domain'))
+    ->prefix(config('foundation.routing.prefix'))
+    ->name('admin.')
+    ->group(function (): void {
+        Route::get('backups', [BackupController::class, 'index'])->name('backups.index');
+        Route::post('backups', [BackupController::class, 'store'])->name('backups.store');
+        Route::post('backups/cleanup', [BackupController::class, 'cleanup'])->name('backups.cleanup');
+        Route::get('backups/{filename}/download', [BackupController::class, 'download'])
+            ->name('backups.download')
+            ->where('filename', '.+');
+        Route::delete('backups/{filename}', [BackupController::class, 'destroy'])
+            ->name('backups.destroy')
+            ->where('filename', '.+');
+    });

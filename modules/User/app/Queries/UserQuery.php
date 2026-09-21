@@ -7,7 +7,6 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\LazyCollection;
-use Mrj\Foundation\Enum\PaginationEnum;
 
 /**
  * User Query Builder
@@ -20,7 +19,7 @@ use Mrj\Foundation\Enum\PaginationEnum;
  *     ->withRelations(['roles'])
  *     ->filterByRole($roleId)
  *     ->search($searchTerm)
- *     ->paginate(PaginationEnum::DEFAULT_LIST);
+ *     ->paginate();
  */
 final readonly class UserQuery
 {
@@ -181,9 +180,9 @@ final readonly class UserQuery
     /**
      * Get paginated results
      */
-    public function paginate(int $perPage = PaginationEnum::DEFAULT_LIST): LengthAwarePaginator
+    public function paginate(?int $perPage = null): LengthAwarePaginator
     {
-        return $this->query->paginate($perPage)->withQueryString();
+        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10))->withQueryString();
     }
 
     /**

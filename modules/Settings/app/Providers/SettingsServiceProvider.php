@@ -139,7 +139,14 @@ class SettingsServiceProvider extends ModuleServiceProvider
         }
     }
 
-    public const CACHE_KEY = 'app_settings';
+    /**
+     * The cache key every settings-cache read/write in the package goes
+     * through, prefixed per foundation.cache.prefix.
+     */
+    public static function cacheKey(): string
+    {
+        return config('foundation.cache.prefix').'app_settings';
+    }
 
     /**
      * Every setting as a plain array, cached.
@@ -151,7 +158,7 @@ class SettingsServiceProvider extends ModuleServiceProvider
      */
     public static function cached(): array
     {
-        $settings = Cache::get(self::CACHE_KEY);
+        $settings = Cache::get(self::cacheKey());
 
         // A cache written before 0.11 holds Setting models. Laravel 13 hands those
         // back as __PHP_Incomplete_Class rather than unserializing them, so an app
@@ -170,7 +177,7 @@ class SettingsServiceProvider extends ModuleServiceProvider
             ])
             ->all();
 
-        Cache::forever(self::CACHE_KEY, $settings);
+        Cache::forever(self::cacheKey(), $settings);
 
         return $settings;
     }

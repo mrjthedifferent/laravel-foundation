@@ -78,7 +78,7 @@ class ActivityLogExportJob implements ShouldQueue
                         'User' => $audit->user
                             ? "{$audit->user->name} (ID: {$audit->user->getKey()})"
                             : 'System',
-                        'Date' => $audit->created_at->format('Y-m-d H:i:s'),
+                        'Date' => $audit->created_at->format(config('foundation.formats.datetime')),
                     ];
                 });
 
@@ -95,9 +95,12 @@ class ActivityLogExportJob implements ShouldQueue
                 default => 'xlsx'
             };
 
-            Storage::makeDirectory('public/exports');
-            $filePath = 'exports/activity_logs_'.time().'.'.$extension;
-            $fullPath = storage_path('app/public/'.$filePath);
+            $disk = config('foundation.storage.disk');
+            $exportsPath = config('foundation.storage.exports_path');
+
+            Storage::disk($disk)->makeDirectory($exportsPath);
+            $filePath = $exportsPath.'/activity_logs_'.time().'.'.$extension;
+            $fullPath = Storage::disk($disk)->path($filePath);
 
             if ($format === 'pdf') {
                 $html = view('exports.pdf.generic', [

@@ -91,7 +91,7 @@
 
                         {{-- Time --}}
                         <td class="text-muted small text-nowrap">
-                            {{ $audit->created_at->format('Y-m-d H:i:s') }}
+                            {{ $audit->created_at->format(config('foundation.formats.datetime')) }}
                         </td>
 
                         {{-- IP / URL --}}

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use JsonException;
 use Modules\Settings\Contracts\SecretCipher;
+use Modules\Settings\Providers\SettingsServiceProvider;
 use Mrj\Foundation\Services\FileManagerService;
 use Override;
 use OwenIt\Auditing\Auditable;
@@ -42,7 +43,7 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
 
     private static function flush(): void
     {
-        Cache::forget('app_settings');
+        Cache::forget(SettingsServiceProvider::cacheKey());
 
         // Once per process: the notification settings page writes a row per notification per
         // channel, and restarting on each would boot the command hundreds of times in one

@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.14.0
+
+Configurability: a project can now change the admin panel's URL prefix/domain,
+role names, page sizes, date formats, storage disk and cache keys without
+touching package code. Route NAMES (`admin.users.index`, ...) stay fixed on
+purpose — see UPGRADE.md if you rely on any of the values these replace.
+
+- **Routing**: `foundation.routing.{prefix,domain,middleware,api_prefix}`.
+  Every module's `admin`/`v1` URL prefix now reads from config; route names,
+  and therefore every `route(...)` call and menu entry, are unaffected.
+- **Roles**: `foundation.roles.{super_admin,admin,user}`, read through the new
+  `Mrj\Foundation\Support\Roles` accessor rather than a `'Super Admin'`
+  literal scattered across 5 files.
+- **Guards**: `foundation.guards.web`, the Spatie Permission guard every role
+  and permission this package creates is stamped with.
+- **Pagination**: `foundation.pagination.{default,max,options}` is now the one
+  source for page size — `perPage()`, `cappedPerPage()` and
+  `getParPagePaginate()` all read it, and the redundant `PaginationEnum` class
+  (two constants, both `10`) is removed.
+- **Formats**: `foundation.formats.{date,datetime}` for the admin UI's detail
+  pages, exports and notifications.
+- **Storage**: `foundation.storage.{disk,exports_path}`. `FileManagerService`
+  and the two export jobs read it instead of hard-coding `'public'`; fixed the
+  export jobs along the way — they wrote via `storage_path('app/public/...')`
+  regardless of which disk they claimed to use, which only ever happened to
+  work because the disk was always `'public'`.
+- **Cache**: `foundation.cache.prefix`, prepended to every cache key the
+  package writes. `SettingsServiceProvider::CACHE_KEY` (a constant) is now
+  `cacheKey()` (a method, since it needs to read config); the ~10 places that
+  hard-coded the literal `'app_settings'` now call it too.
+- **Removed**: `foundation.user_model`. It was read once at boot while ~95
+  files import `App\Models\User` directly (Laravel's own convention), so it
+  silently did nothing anywhere else. `App\Models\User` extending
+  `Mrj\Foundation\Models\User` is documented as a requirement instead.
+
 ## 0.13.0
 
 Tooling gate: strict types, static analysis, and a real bug this surfaced. No

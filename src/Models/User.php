@@ -20,6 +20,7 @@ use Modules\User\Models\UserDocument;
 use Modules\User\Models\UserLoginHistory;
 use Mrj\Foundation\Support\Email;
 use Mrj\Foundation\Support\PhoneNumber;
+use Mrj\Foundation\Support\Roles;
 use Mrj\Foundation\Traits\HasImageAttribute;
 use Override;
 use OwenIt\Auditing\Auditable;
@@ -149,7 +150,7 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
 
     public function isAdmin(): bool
     {
-        return $this->hasRole('Admin') || $this->hasRole('Super Admin');
+        return $this->hasRole(Roles::admin()) || $this->hasRole(Roles::superAdmin());
     }
 
     /**
@@ -159,7 +160,7 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
      */
     public function isSuperAdmin(): bool
     {
-        return $this->hasRole('Super Admin');
+        return $this->hasRole(Roles::superAdmin());
     }
 
     /**

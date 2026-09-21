@@ -17,7 +17,7 @@ use Modules\Notification\Models\Notification;
  *     ->forUser($user)
  *     ->filterByReadStatus(false)
  *     ->orderByLatest()
- *     ->paginate(15);
+ *     ->paginate();
  */
 final readonly class NotificationQuery
 {
@@ -81,9 +81,9 @@ final readonly class NotificationQuery
     /**
      * Get paginated results, preserving query string.
      */
-    public function paginate(int $perPage = 15): LengthAwarePaginator
+    public function paginate(?int $perPage = null): LengthAwarePaginator
     {
-        return $this->query->paginate($perPage)->withQueryString();
+        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10))->withQueryString();
     }
 
     /**

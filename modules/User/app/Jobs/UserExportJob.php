@@ -74,9 +74,12 @@ class UserExportJob implements ShouldQueue
                 default => 'xlsx'
             };
 
-            Storage::makeDirectory('public/exports');
-            $filePath = 'exports/user_list_'.time().'.'.$extension;
-            $fullPath = storage_path('app/public/'.$filePath);
+            $disk = config('foundation.storage.disk');
+            $exportsPath = config('foundation.storage.exports_path');
+
+            Storage::disk($disk)->makeDirectory($exportsPath);
+            $filePath = $exportsPath.'/user_list_'.time().'.'.$extension;
+            $fullPath = Storage::disk($disk)->path($filePath);
 
             if ($format === 'pdf') {
                 $html = view('exports.pdf.generic', [

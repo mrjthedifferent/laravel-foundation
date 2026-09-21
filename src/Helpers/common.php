@@ -43,19 +43,30 @@ if (! function_exists('integerStatus')) {
 
 if (! function_exists('getParPagePaginate')) {
 
+    /**
+     * The page-size picker's options, e.g. for a <select>: ['10' => '10', ...].
+     */
     function getParPagePaginate(): array
     {
-        return ['10' => '10', '25' => '25', '50' => '50', '100' => '100'];
+        $options = array_map('strval', config('foundation.pagination.options', [10, 25, 50, 100]));
+
+        return array_combine($options, $options);
     }
 }
 
 if (! function_exists('perPage')) {
 
-    function perPage(int $default = 10): int
+    /**
+     * The page size for a listing that offers the fixed picker
+     * (foundation.pagination.options): the request's ?per_page if it is one
+     * of those options, otherwise $default (or foundation.pagination.default).
+     */
+    function perPage(?int $default = null): int
     {
+        $default ??= (int) config('foundation.pagination.default', 10);
         $val = (int) request('per_page', $default);
 
-        return in_array($val, [10, 25, 50, 100]) ? $val : $default;
+        return in_array($val, config('foundation.pagination.options', [10, 25, 50, 100]), true) ? $val : $default;
     }
 }
 
@@ -82,8 +93,10 @@ if (! function_exists('cappedPerPage')) {
      * ?per_page=999999999 turns a paginated log/report listing into an
      * unbounded query.
      */
-    function cappedPerPage(int $value, int $max = 100): int
+    function cappedPerPage(int $value, ?int $max = null): int
     {
+        $max ??= (int) config('foundation.pagination.max', 100);
+
         return max(1, min($max, $value));
     }
 }

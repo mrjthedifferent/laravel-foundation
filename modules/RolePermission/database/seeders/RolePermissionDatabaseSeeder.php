@@ -3,6 +3,7 @@
 namespace Modules\RolePermission\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Mrj\Foundation\Support\Roles;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -14,9 +15,9 @@ class RolePermissionDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $superAdmin = Role::firstOrCreate(['name' => 'Super Admin']);
-        Role::firstOrCreate(['name' => 'Admin']);
-        Role::firstOrCreate(['name' => 'User']);
+        $superAdmin = Role::firstOrCreate(['name' => Roles::superAdmin()]);
+        Role::firstOrCreate(['name' => Roles::admin()]);
+        Role::firstOrCreate(['name' => Roles::user()]);
 
         $superAdmin->syncPermissions(Permission::pluck('name'));
     }

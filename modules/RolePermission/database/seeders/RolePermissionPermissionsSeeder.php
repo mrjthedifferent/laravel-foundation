@@ -35,7 +35,7 @@ class RolePermissionPermissionsSeeder extends Seeder
                     ['name' => $permission['name']],
                     [
                         'module_name' => $permission['module_name'],
-                        'guard_name' => 'web',
+                        'guard_name' => config('foundation.guards.web'),
                     ]
                 );
             }

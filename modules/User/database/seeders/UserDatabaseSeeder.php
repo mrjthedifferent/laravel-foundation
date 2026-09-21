@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Modules\User\Actions\CreateUserAction;
 use Modules\User\Data\UserData;
+use Mrj\Foundation\Support\Roles;
 use RuntimeException;
 use Spatie\Permission\Models\Role;
 
@@ -42,7 +43,7 @@ class UserDatabaseSeeder extends Seeder
             $password = self::LOCAL_DEV_PASSWORD;
         }
 
-        $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin', 'guard_name' => 'web']);
+        $superAdminRole = Role::firstOrCreate(['name' => Roles::superAdmin(), 'guard_name' => config('foundation.guards.web')]);
 
         /** @var CreateUserAction $action */
         $action = app(CreateUserAction::class);

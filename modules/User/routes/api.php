@@ -11,7 +11,7 @@ use Modules\User\Http\Controllers\Api\UserDocumentController;
  * no public sign-up, social sign-up or OTP auto-login endpoint.
  */
 
-Route::prefix('v1')->group(function (): void {
+Route::prefix(config('foundation.routing.api_prefix'))->group(function (): void {
     Route::post('login', [UserController::class, 'login'])->middleware('throttle:auth');
 
     Route::middleware(['auth:sanctum', 'throttle:api'])->group(function (): void {

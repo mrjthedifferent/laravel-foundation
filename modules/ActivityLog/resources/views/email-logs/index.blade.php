@@ -64,7 +64,7 @@
                     {{ ucfirst($log->status) }}
                 </span>
             </td>
-            <td>{{ $log->sent_at?->format('Y-m-d H:i:s') ?? '—' }}</td>
+            <td>{{ $log->sent_at?->format(config('foundation.formats.datetime')) ?? '—' }}</td>
             <td class="text-end">
                 <x-dropdown-menu>
                     <x-dropdown-link :url="route('admin.email-logs.show', $log->id)">

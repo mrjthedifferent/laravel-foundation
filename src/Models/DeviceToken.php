@@ -2,6 +2,7 @@
 
 namespace Mrj\Foundation\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Override;
@@ -18,6 +19,6 @@ class DeviceToken extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(config('foundation.user_model'));
+        return $this->belongsTo(User::class);
     }
 }

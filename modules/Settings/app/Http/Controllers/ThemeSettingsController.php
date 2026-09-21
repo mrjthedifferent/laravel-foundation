@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Modules\Settings\Models\Setting;
+use Modules\Settings\Providers\SettingsServiceProvider;
 use Mrj\Foundation\Http\Controllers\Controller;
 
 class ThemeSettingsController extends Controller
@@ -71,7 +72,7 @@ class ThemeSettingsController extends Controller
             );
         }
 
-        Cache::forget('app_settings');
+        Cache::forget(SettingsServiceProvider::cacheKey());
 
         return redirect()->back()->with('success', 'Theme settings updated successfully');
     }
