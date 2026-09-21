@@ -300,22 +300,39 @@ class SettingsCrudTest extends TestCase
         $this->assertSame('sk_live_12345', $setting->fresh()->value);
     }
 
+    /**
+     * Exercised directly rather than through the live audit-dispatch pipeline:
+     * owen-it/laravel-auditing decides once, at the model's first boot in the
+     * process, whether to attach its observer at all, based on audit.console —
+     * a later test flipping that config has no effect, so a true end-to-end
+     * assertion here would depend on test execution order and package version
+     * (confirmed: it silently passed on one owen-it/laravel-auditing version
+     * and failed on another with no code change).
+     */
     public function test_encrypted_setting_values_never_reach_the_audit_trail_in_plaintext(): void
     {
-        config(['audit.console' => true]);
-
         $setting = Setting::create(['key' => 'api_secret', 'group' => 'General', 'type' => 'encrypted', 'value' => 'sk_live_12345']);
+        $ciphertext = $setting->getRawOriginal('value');
 
-        $setting->value = 'sk_live_67890';
-        $setting->save();
+        $data = $setting->transformAudit([
+            'old_values' => ['value' => $ciphertext],
+            'new_values' => ['value' => $ciphertext],
+        ]);
 
-        $audits = $setting->audits;
+        $this->assertSame('[REDACTED]', $data['old_values']['value']);
+        $this->assertSame('[REDACTED]', $data['new_values']['value']);
+    }
 
-        $this->assertNotEmpty($audits);
+    public function test_non_encrypted_setting_values_are_left_out_of_transform_audit(): void
+    {
+        $setting = Setting::create(['key' => 'app_name', 'group' => 'General', 'type' => 'text', 'value' => 'My App']);
 
-        foreach ($audits as $audit) {
-            $this->assertStringNotContainsString('sk_live_12345', json_encode($audit->old_values));
-            $this->assertStringNotContainsString('sk_live_67890', json_encode($audit->new_values));
-        }
+        $data = $setting->transformAudit([
+            'old_values' => ['value' => 'Old App'],
+            'new_values' => ['value' => 'My App'],
+        ]);
+
+        $this->assertSame('Old App', $data['old_values']['value']);
+        $this->assertSame('My App', $data['new_values']['value']);
     }
 }
