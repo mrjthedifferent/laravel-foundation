@@ -13,6 +13,7 @@ use Mrj\Foundation\Exceptions\Handler;
 use Mrj\Foundation\Foundation;
 use Mrj\Foundation\Http\Middleware\CheckUserIsActive;
 use Mrj\Foundation\Http\Middleware\EnsureContactIsVerified;
+use Mrj\Foundation\Http\Middleware\EnsurePasswordIsChanged;
 use Mrj\Foundation\Http\Middleware\SlideSanctumTokenExpiry;
 use Mrj\Foundation\Tests\TestCase;
 
@@ -30,9 +31,10 @@ class BootstrapTest extends TestCase
         $aliases = $middleware->getMiddlewareAliases();
 
         $this->assertContains(CheckUserIsActive::class, $groups['web']);
+        $this->assertContains(EnsurePasswordIsChanged::class, $groups['web']);
         $this->assertSame(
-            [CheckUserIsActive::class, SlideSanctumTokenExpiry::class],
-            array_slice($groups['api'], -2),
+            [CheckUserIsActive::class, EnsurePasswordIsChanged::class, SlideSanctumTokenExpiry::class],
+            array_slice($groups['api'], -3),
         );
         $this->assertSame(EnsureContactIsVerified::class, $aliases['verified']);
         $this->assertSame('ProjectMiddleware', $aliases['project']);

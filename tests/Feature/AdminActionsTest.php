@@ -22,6 +22,10 @@ class AdminActionsTest extends TestCase
 
         $this->withoutMiddleware([PreventRequestForgery::class]);
         $this->seed(FoundationSeeder::class);
+
+        // Not under test here; the forced-password-change flow is covered by
+        // AdminSmokeTest and AccessTest.
+        $this->admin()->forceFill(['must_change_password' => false])->save();
     }
 
     private function admin(): User

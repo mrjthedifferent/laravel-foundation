@@ -4,6 +4,7 @@ namespace Mrj\Foundation\Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Support\Facades\Route;
 use Mrj\Foundation\Database\Seeders\FoundationSeeder;
 use Mrj\Foundation\Support\SidebarMenu;
@@ -69,6 +70,11 @@ class AdminSmokeTest extends TestCase
     public function test_super_admin_can_open_every_sidebar_page(): void
     {
         $admin = $this->admin();
+
+        // The seeded admin must change their password before reaching any other
+        // page; this test is about the sidebar, so satisfy that requirement first.
+        $admin->forceFill(['must_change_password' => false])->save();
+
         $groups = app(SidebarMenu::class)->forUser($admin, null);
 
         $this->assertNotEmpty($groups);
@@ -85,6 +91,31 @@ class AdminSmokeTest extends TestCase
         $this->actingAs($admin)->get(route('admin.dashboard'))->assertOk()->assertSee('Administration');
         $this->actingAs($admin)->get(route('admin.profile.edit'))->assertOk();
         $this->actingAs($admin)->get(route('admin.users.show', $admin))->assertOk();
+    }
+
+    /**
+     * The password in .env (or the local-only fallback) is known to whoever set
+     * it up, so a freshly seeded admin must be forced to change it before doing
+     * anything else — the exact scenario the previous test bypasses on purpose.
+     */
+    public function test_freshly_seeded_admin_must_change_their_password_before_using_the_app(): void
+    {
+        $admin = $this->admin();
+
+        $this->assertTrue($admin->must_change_password);
+
+        $this->actingAs($admin)->get(route('admin.dashboard'))->assertRedirect(route('admin.profile.edit'));
+
+        $this->withoutMiddleware([PreventRequestForgery::class])
+            ->actingAs($admin)
+            ->put(route('password.update'), [
+                'current_password' => config('foundation.seed_admin.password') ?: '12345678',
+                'password' => 'a-new-strong-password',
+                'password_confirmation' => 'a-new-strong-password',
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->actingAs($admin->fresh())->get(route('admin.dashboard'))->assertOk();
     }
 
     public function test_every_module_model_used_in_a_morph_relation_has_an_alias(): void

@@ -54,13 +54,14 @@ return [
 
     /*
     | The first Super Admin, created by the User module's seeder when no account
-    | with this email exists. Set a real password in .env before seeding anywhere
-    | other than a local machine, and change it after the first sign-in.
+    | with this email exists. SEED_ADMIN_PASSWORD is required outside local/testing
+    | environments; the seeder aborts rather than fall back to a guessable password,
+    | and forces a change on first sign-in regardless of environment.
     */
     'seed_admin' => [
         'name' => env('SEED_ADMIN_NAME', 'Super Admin'),
         'email' => env('SEED_ADMIN_EMAIL', 'superadmin@example.com'),
-        'password' => env('SEED_ADMIN_PASSWORD', '12345678'),
+        'password' => env('SEED_ADMIN_PASSWORD'),
     ],
 
     /*

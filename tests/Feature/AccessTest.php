@@ -3,6 +3,7 @@
 namespace Mrj\Foundation\Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Laravel\Sanctum\Sanctum;
 use Mrj\Foundation\Http\Middleware\CheckUserIsActive;
 use Mrj\Foundation\Tests\TestCase;
@@ -49,5 +50,44 @@ class AccessTest extends TestCase
 
         $this->assertNotEmpty($user->uuid);
         $this->assertSame('mixed@example.com', $user->email);
+    }
+
+    /**
+     * must_change_password is deliberately not mass-assignable (it must never
+     * be settable through a user-editable form), so tests set it with
+     * forceFill(), the same way the seeder and password-reset actions do.
+     */
+    private function userWhoMustChangePassword(): User
+    {
+        $user = User::factory()->create();
+        $user->forceFill(['must_change_password' => true])->save();
+
+        return $user;
+    }
+
+    public function test_a_user_who_must_change_their_password_is_redirected_away_from_other_pages(): void
+    {
+        $this->actingAs($this->userWhoMustChangePassword())
+            ->get('/admin/dashboard')
+            ->assertRedirect(route('admin.profile.edit'));
+    }
+
+    public function test_a_user_who_must_change_their_password_can_still_reach_the_profile_and_logout_pages(): void
+    {
+        $user = $this->userWhoMustChangePassword();
+
+        $this->withoutMiddleware([PreventRequestForgery::class]);
+
+        $this->actingAs($user)->get(route('admin.profile.edit'))->assertOk();
+        $this->actingAs($user)->post(route('logout'))->assertRedirect();
+    }
+
+    public function test_a_user_who_must_change_their_password_is_forbidden_on_the_api(): void
+    {
+        Sanctum::actingAs($this->userWhoMustChangePassword());
+
+        $this->getJson('/api/ping')
+            ->assertForbidden()
+            ->assertJsonPath('message', 'You must set a new password before continuing.');
     }
 }

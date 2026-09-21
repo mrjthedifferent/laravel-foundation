@@ -37,6 +37,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Carbon|null $phone_verified_at
  * @property string|null $name
  * @property string $password
+ * @property bool $must_change_password
  * @property bool $is_active
  * @property string|null $image
  * @property string|null $gender
@@ -127,6 +128,7 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
             'email_verified_at' => 'datetime',
             'phone_verified_at' => 'datetime',
             'password' => 'hashed',
+            'must_change_password' => 'boolean',
             'is_active' => 'boolean',
             'gender' => Gender::class,
         ];

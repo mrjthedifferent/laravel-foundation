@@ -15,7 +15,7 @@ final readonly class ChangePasswordAction
 {
     public function execute(User $user, string $newPassword): void
     {
-        $user->update(['password' => $newPassword]);
+        $user->forceFill(['password' => $newPassword, 'must_change_password' => false])->save();
 
         $user->notify(new AppNotification(
             title: 'Password Changed',
