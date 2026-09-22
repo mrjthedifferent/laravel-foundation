@@ -110,6 +110,20 @@ if (! function_exists('snakeCase')) {
     }
 }
 
+if (! function_exists('form_old_key')) {
+
+    /**
+     * A bracketed field name (roles[], option_keys[]) as the dot-notation key
+     * old() understands — Laravel's own old() takes dot paths, not the raw
+     * HTML array-name syntax a <select multiple> or a repeated-row input
+     * submits under.
+     */
+    function form_old_key(string $name): string
+    {
+        return str_replace(['.', '[]', '[', ']'], ['_', '', '.', ''], $name);
+    }
+}
+
 if (! function_exists('enum_value')) {
 
     /**
