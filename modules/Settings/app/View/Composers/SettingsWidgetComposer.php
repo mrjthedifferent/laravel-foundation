@@ -2,38 +2,37 @@
 
 namespace Modules\Settings\View\Composers;
 
-use Illuminate\View\View;
 use Modules\Settings\Models\Setting;
-use Mrj\Foundation\Services\Dashboard\DashboardCache;
+use Mrj\Foundation\Support\WidgetComposer;
+use Override;
 
 /**
- * Supplies the Settings dashboard widget. The queries live here rather than in the
- * Blade partial so they can be cached and so the view stays free of data access.
+ * Supplies the Settings dashboard widget.
  *
- * These are unscoped, application-wide totals, so a single shared cache key is safe.
- * A widget that ever becomes user-scoped must gain a scope segment in its key.
+ * This is an unscoped, application-wide total, so a single shared cache key
+ * is safe. A widget that ever becomes user-scoped must gain a scope segment
+ * in its key.
  */
-final readonly class SettingsWidgetComposer
+final class SettingsWidgetComposer extends WidgetComposer
 {
-    public function __construct(private DashboardCache $cache) {}
-
-    public function compose(View $view): void
+    #[Override]
+    protected function permissions(): array
     {
-        $view->with('widget', $this->data());
+        return ['Edit System Setting', 'Edit Special Setting', 'Developer Setting'];
     }
 
-    /**
-     * @return array<string, mixed>|null null when the viewer may not see the widget
-     */
-    private function data(): ?array
+    #[Override]
+    protected function key(): string
     {
-        if (! auth()->user()?->hasAnyPermission(['Edit System Setting', 'Edit Special Setting', 'Developer Setting'])) {
-            return null;
-        }
+        return 'settings';
+    }
 
-        return $this->cache->remember('widget:settings', fn (): array => [
+    #[Override]
+    protected function build(): array
+    {
+        return [
             'total_settings' => Setting::query()->count(),
             'visible_settings' => Setting::query()->where('is_visible', true)->count(),
-        ]);
+        ];
     }
 }

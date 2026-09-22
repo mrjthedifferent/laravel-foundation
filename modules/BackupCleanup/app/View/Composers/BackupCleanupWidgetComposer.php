@@ -2,9 +2,10 @@
 
 namespace Modules\BackupCleanup\View\Composers;
 
-use Illuminate\View\View;
 use Modules\BackupCleanup\Actions\ListBackupsAction;
 use Mrj\Foundation\Services\Dashboard\DashboardCache;
+use Mrj\Foundation\Support\WidgetComposer;
+use Override;
 use Throwable;
 
 /**
@@ -12,39 +13,40 @@ use Throwable;
  * listing backups stats every file on the disk, which is a round-trip per file once
  * the backup disk is remote.
  */
-final readonly class BackupCleanupWidgetComposer
+final class BackupCleanupWidgetComposer extends WidgetComposer
 {
     public function __construct(
-        private DashboardCache $cache,
-        private ListBackupsAction $listBackups,
-    ) {}
-
-    public function compose(View $view): void
-    {
-        $view->with('widget', $this->data());
+        DashboardCache $cache,
+        private readonly ListBackupsAction $listBackups,
+    ) {
+        parent::__construct($cache);
     }
 
-    /**
-     * @return array<string, mixed>|null null when the viewer may not see the widget
-     */
-    private function data(): ?array
+    #[Override]
+    protected function permissions(): array
     {
-        if (! auth()->user()?->hasAnyPermission(['View Backup', 'Create Backup'])) {
-            return null;
+        return ['View Backup', 'Create Backup'];
+    }
+
+    #[Override]
+    protected function key(): string
+    {
+        return 'backupcleanup';
+    }
+
+    #[Override]
+    protected function build(): array
+    {
+        try {
+            $backups = $this->listBackups->execute();
+
+            return [
+                'count' => $backups->count(),
+                'latest' => $backups->first(),
+            ];
+        } catch (Throwable) {
+            // An unreachable or unconfigured backup disk must not break the dashboard.
+            return ['count' => 0, 'latest' => null];
         }
-
-        return $this->cache->remember('widget:backupcleanup', function (): array {
-            try {
-                $backups = $this->listBackups->execute();
-
-                return [
-                    'count' => $backups->count(),
-                    'latest' => $backups->first(),
-                ];
-            } catch (Throwable) {
-                // An unreachable or unconfigured backup disk must not break the dashboard.
-                return ['count' => 0, 'latest' => null];
-            }
-        });
     }
 }

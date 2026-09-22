@@ -2,39 +2,38 @@
 
 namespace Modules\RolePermission\View\Composers;
 
-use Illuminate\View\View;
-use Mrj\Foundation\Services\Dashboard\DashboardCache;
+use Mrj\Foundation\Support\WidgetComposer;
+use Override;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 /**
- * Supplies the Roles & Permissions dashboard widget. The queries live here rather than in the
- * Blade partial so they can be cached and so the view stays free of data access.
+ * Supplies the Roles & Permissions dashboard widget.
  *
- * These are unscoped, application-wide totals, so a single shared cache key is safe.
- * A widget that ever becomes user-scoped must gain a scope segment in its key.
+ * This is an unscoped, application-wide total, so a single shared cache key
+ * is safe. A widget that ever becomes user-scoped must gain a scope segment
+ * in its key.
  */
-final readonly class RolePermissionWidgetComposer
+final class RolePermissionWidgetComposer extends WidgetComposer
 {
-    public function __construct(private DashboardCache $cache) {}
-
-    public function compose(View $view): void
+    #[Override]
+    protected function permissions(): array
     {
-        $view->with('widget', $this->data());
+        return ['View Role', 'Assign Permission'];
     }
 
-    /**
-     * @return array<string, mixed>|null null when the viewer may not see the widget
-     */
-    private function data(): ?array
+    #[Override]
+    protected function key(): string
     {
-        if (! auth()->user()?->hasAnyPermission(['View Role', 'Assign Permission'])) {
-            return null;
-        }
+        return 'rolepermission';
+    }
 
-        return $this->cache->remember('widget:rolepermission', fn (): array => [
+    #[Override]
+    protected function build(): array
+    {
+        return [
             'total_roles' => Role::query()->count(),
             'total_permissions' => Permission::query()->count(),
-        ]);
+        ];
     }
 }

@@ -2,40 +2,39 @@
 
 namespace Modules\ImportDownloadManager\View\Composers;
 
-use Illuminate\View\View;
 use Modules\ImportDownloadManager\Enum\ImportStatus;
 use Modules\ImportDownloadManager\Models\DownloadImportManager;
-use Mrj\Foundation\Services\Dashboard\DashboardCache;
+use Mrj\Foundation\Support\WidgetComposer;
+use Override;
 
 /**
- * Supplies the Import / Download dashboard widget. The queries live here rather than in the
- * Blade partial so they can be cached and so the view stays free of data access.
+ * Supplies the Import / Download dashboard widget.
  *
- * These are unscoped, application-wide totals, so a single shared cache key is safe.
- * A widget that ever becomes user-scoped must gain a scope segment in its key.
+ * This is an unscoped, application-wide total, so a single shared cache key
+ * is safe. A widget that ever becomes user-scoped must gain a scope segment
+ * in its key.
  */
-final readonly class ImportDownloadManagerWidgetComposer
+final class ImportDownloadManagerWidgetComposer extends WidgetComposer
 {
-    public function __construct(private DashboardCache $cache) {}
-
-    public function compose(View $view): void
+    #[Override]
+    protected function permissions(): array
     {
-        $view->with('widget', $this->data());
+        return ['Download Import Manager Management'];
     }
 
-    /**
-     * @return array<string, mixed>|null null when the viewer may not see the widget
-     */
-    private function data(): ?array
+    #[Override]
+    protected function key(): string
     {
-        if (! auth()->user()?->hasAnyPermission(['Download Import Manager Management'])) {
-            return null;
-        }
+        return 'importdownloadmanager';
+    }
 
-        return $this->cache->remember('widget:importdownloadmanager', fn (): array => [
+    #[Override]
+    protected function build(): array
+    {
+        return [
             'total_jobs' => DownloadImportManager::query()->count(),
             'pending_jobs' => DownloadImportManager::query()->where('status', ImportStatus::Pending)->count(),
             'completed_jobs' => DownloadImportManager::query()->where('status', ImportStatus::Completed)->count(),
-        ]);
+        ];
     }
 }

@@ -2,37 +2,36 @@
 
 namespace Modules\Otp\View\Composers;
 
-use Illuminate\View\View;
 use Modules\Otp\Models\OtpWhitelist;
 use Modules\Otp\Models\VerificationCode;
-use Mrj\Foundation\Services\Dashboard\DashboardCache;
+use Mrj\Foundation\Support\WidgetComposer;
+use Override;
 
 /**
- * Supplies the OTP dashboard widget. The queries live here rather than in the
- * Blade partial so they can be cached and so the view stays free of data access.
+ * Supplies the OTP dashboard widget.
  *
- * These are unscoped, application-wide totals, so a single shared cache key is safe.
- * A widget that ever becomes user-scoped must gain a scope segment in its key.
+ * This is an unscoped, application-wide total, so a single shared cache key
+ * is safe. A widget that ever becomes user-scoped must gain a scope segment
+ * in its key.
  */
-final readonly class OtpWidgetComposer
+final class OtpWidgetComposer extends WidgetComposer
 {
-    public function __construct(private DashboardCache $cache) {}
-
-    public function compose(View $view): void
+    #[Override]
+    protected function permissions(): array
     {
-        $view->with('widget', $this->data());
+        return ['View OTP Whitelist', 'View Verification Code History'];
     }
 
-    /**
-     * @return array<string, mixed>|null null when the viewer may not see the widget
-     */
-    private function data(): ?array
+    #[Override]
+    protected function key(): string
     {
-        if (! auth()->user()?->hasAnyPermission(['View OTP Whitelist', 'View Verification Code History'])) {
-            return null;
-        }
+        return 'otp';
+    }
 
-        return $this->cache->remember('widget:otp', fn (): array => [
+    #[Override]
+    protected function build(): array
+    {
+        return [
             // `created_at` is a timestamp, so use a half-open range, not whereDate().
             'verified_today' => VerificationCode::query()
                 ->where('created_at', '>=', today())
@@ -41,6 +40,6 @@ final readonly class OtpWidgetComposer
                 ->count(),
             'whitelist_count' => OtpWhitelist::query()->count(),
             'active_whitelist' => OtpWhitelist::query()->where('is_active', true)->count(),
-        ]);
+        ];
     }
 }
