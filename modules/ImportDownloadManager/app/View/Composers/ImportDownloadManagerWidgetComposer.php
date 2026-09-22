@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\ImportDownloadManager\View\Composers;
 
 use Modules\ImportDownloadManager\Enum\ImportStatus;

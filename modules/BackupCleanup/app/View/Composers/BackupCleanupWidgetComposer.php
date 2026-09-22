@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\BackupCleanup\View\Composers;
 
 use Modules\BackupCleanup\Actions\ListBackupsAction;

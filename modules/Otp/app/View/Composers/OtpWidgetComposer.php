@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Otp\View\Composers;
 
 use Modules\Otp\Models\OtpWhitelist;
