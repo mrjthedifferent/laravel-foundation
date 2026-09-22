@@ -65,10 +65,7 @@ Sign in at `/login` with the Super Admin you just created.
 ```bash
 laravel new my-project && cd my-project
 
-# Until the package is listed on Packagist:
-composer config repositories.foundation vcs https://github.com/mrjthedifferent/laravel-foundation
 composer config allow-plugins.wikimedia/composer-merge-plugin true
-
 composer require mrjthedifferent/laravel-foundation
 php artisan foundation:install
 php artisan migrate --seed
