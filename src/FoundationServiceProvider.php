@@ -32,6 +32,7 @@ use Mrj\Foundation\Support\NullImpersonationContext;
 use Mrj\Foundation\Support\NullOtpVerifier;
 use Mrj\Foundation\View\Components\AppLayout;
 use Mrj\Foundation\View\Components\GuestLayout;
+use Mrj\Foundation\View\Components\ModuleLayout;
 use Mrj\Foundation\View\Components\StatusBadge;
 use Mrj\Foundation\View\Composers\ThemeComposer;
 use Override;
@@ -197,6 +198,7 @@ class FoundationServiceProvider extends ServiceProvider
 
         Blade::component('app-layout', AppLayout::class);
         Blade::component('guest-layout', GuestLayout::class);
+        Blade::component('module-layout', ModuleLayout::class);
         Blade::component('status-badge', StatusBadge::class);
 
         View::composer([
