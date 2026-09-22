@@ -20,6 +20,8 @@ Every module has its own layout — one line, via `<x-module-layout>`:
 
 A page still `@extends('thing::layouts.master')` and fills `@section('breadcrumb')` / `@section('content')` exactly as before — `route`/`label` only supply the layout's own "Home → Things" breadcrumb prefix.
 
+`<x-module-layout>` wraps `<x-app-layout>`, which is the **one** application shell: sidebar (brand, navigation, signed-in user), navbar (⌘K search, notifications, account menu), the breadcrumb row, the content column — the only part of the page that scrolls — and the footer below it. There are no layout variants. A page never writes navbar, sidebar or footer markup; it declares its sidebar entry in `config/menu.php` and fills `@section('content')`.
+
 ---
 
 ### Translations
@@ -76,23 +78,27 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 | Component | Purpose |
 |---|---|
 | `<x-app-layout>` | Root page wrapper (use in `layouts/master.blade.php` only) |
-| `<x-page-header title="" icon="" subtitle="" :back-url="" back-label="">` | Page-level heading with optional back button and action slot |
+| `<x-module-layout route="" :label="">` | A module's `layouts/master.blade.php`, in one line |
+| `<x-page-header title="" icon="" subtitle="" :back-url="" back-label="">` | Page-level heading (`.fd-page-head`) with optional back button and `$actions` slot |
 | `<x-form-section title="" icon="">` | Wraps a card section inside a create/edit form |
 | `<x-search-card>` | Filter form wrapper for list pages |
-| `<x-table-view-pagination>` | Card + table + pagination for list pages |
+| `<x-table-view-pagination>` | Card + table + pagination + empty state for list pages |
+| `<x-table-actions>` / `<x-table-action>` | Action group for the table card header; overflow collapses into a menu |
+| `<x-table-export-dropdown>` / `<x-table-export-item>` | Export menu for the table's `$exports` slot |
+| `<x-stat-card label="" :value="" icon="">` | KPI tile (`.fd-stat`) for dashboards |
+| `<x-status-badge :active="">` | Status dot + translated Active/Inactive label (`.fd-status`) |
 | `<x-dropdown-menu>` | Action dropdown in table rows |
 | `<x-dropdown-link :url="">` | Link item inside `x-dropdown-menu` |
 | `<x-modal id="" title="">` | Bootstrap modal dialog |
-| `<x-module-layout route="" label="">` | A module's `layouts/master.blade.php`, in one line |
+| `<x-alert type="">` | Inline alert with a matching Phosphor icon |
 | `<x-form.input>`, `<x-form.select>`, `<x-form.textarea>`, `<x-form.file>`, `<x-form.checkbox>`, `<x-form.label>` | Labeled form fields — old-input, validation errors and `is-invalid` built in (see `patterns.md` / `ui-components.md` for the full API) |
 
-`<x-page-header>` supports an `$actions` slot for buttons placed on the right side:
+`<x-page-header>`'s `$actions` slot holds the page's context — badges, status, an avatar, a secondary action — placed on the trailing edge before the back button. The submit button of a create/edit form does **not** go here; it goes in the form's bottom row (see the templates below).
 ```blade
-<x-page-header title="Create Thing" icon="ph-plus" :back-url="route('admin.things.index')" back-label="Back to List">
+<x-page-header :title="$thing->name" icon="ph-pencil-simple" :back-url="route('admin.things.index')" back-label="Back to List">
     <x-slot name="actions">
-        <button type="submit" class="btn btn-primary px-5">
-            <i class="ph-floppy-disk me-1"></i>Save
-        </button>
+        <span class="badge bg-primary">{{ display_label($thing->type) }}</span>
+        <x-status-badge :active="$thing->is_active" class="fs-xs" />
     </x-slot>
 </x-page-header>
 ```
@@ -123,8 +129,8 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
     <x-table-view-pagination :title="__('thing::thing.index.title')" :data="$things" :empty-message="__('thing::thing.index.empty')">
         <x-slot name="actions">
             @can('Create Thing')
-                <a href="{{ route('admin.things.create') }}" class="btn btn-primary w-sm">
-                    <i class="ph-plus me-1"></i> {{ __('thing::thing.index.add') }}
+                <a href="{{ route('admin.things.create') }}" class="btn btn-sm btn-primary">
+                    <i class="ph-plus"></i>{{ __('thing::thing.index.add') }}
                 </a>
             @endcan
         </x-slot>
@@ -145,20 +151,21 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
                         <x-dropdown-menu>
                             @can('View Thing')
                                 <x-dropdown-link :url="route('admin.things.show', $thing->id)">
-                                    <i class="ph-eye me-2"></i> {{ __('foundation::foundation.common.view') }}
+                                    <i class="ph-eye"></i>{{ __('foundation::foundation.common.view') }}
                                 </x-dropdown-link>
                             @endcan
                             @can('Edit Thing')
                                 <x-dropdown-link :url="route('admin.things.edit', $thing->id)">
-                                    <i class="ph-pencil-simple me-2"></i> {{ __('foundation::foundation.common.edit') }}
+                                    <i class="ph-pencil-simple"></i>{{ __('foundation::foundation.common.edit') }}
                                 </x-dropdown-link>
                             @endcan
                             @can('Delete Thing')
+                                <div class="dropdown-divider"></div>
                                 <x-dropdown-link
                                     :url="route('admin.things.destroy', $thing->id)"
-                                    class="text-danger swal-confirm"
+                                    class="text-danger swal-delete"
                                     data-text="{{ __('thing::thing.index.delete_confirm', ['name' => $thing->name]) }}">
-                                    <i class="ph-trash me-2"></i> {{ __('foundation::foundation.common.delete') }}
+                                    <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
                                 </x-dropdown-link>
                             @endcan
                         </x-dropdown-menu>
@@ -190,13 +197,7 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
         :title="__('thing::thing.create.title')"
         icon="ph-plus"
         :back-url="route('admin.things.index')"
-        :back-label="__('thing::thing.form.back')">
-        <x-slot name="actions">
-            <button type="submit" class="btn btn-primary px-5">
-                <i class="ph-floppy-disk me-1"></i>{{ __('thing::thing.create.submit') }}
-            </button>
-        </x-slot>
-    </x-page-header>
+        :back-label="__('thing::thing.form.back')" />
 
     <x-form-section :title="__('thing::thing.form.basic_information')" icon="ph-info">
         <div class="row g-3">
@@ -208,6 +209,15 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
             </div>
         </div>
     </x-form-section>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <a href="{{ route('admin.things.index') }}" class="btn btn-light">
+            <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
+        </a>
+        <x-primary-button class="px-5">
+            <i class="ph-floppy-disk"></i>{{ __('thing::thing.create.submit') }}
+        </x-primary-button>
+    </div>
 
 </form>
 @endsection
@@ -236,9 +246,7 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
         :back-url="route('admin.things.index')"
         :back-label="__('thing::thing.form.back')">
         <x-slot name="actions">
-            <button type="submit" class="btn btn-primary px-5">
-                <i class="ph-floppy-disk me-1"></i>{{ __('thing::thing.edit.submit') }}
-            </button>
+            <x-status-badge :active="$thing->is_active" class="fs-xs" />
         </x-slot>
     </x-page-header>
 
@@ -254,6 +262,15 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
             </div>
         </div>
     </x-form-section>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <a href="{{ route('admin.things.index') }}" class="btn btn-light">
+            <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
+        </a>
+        <x-primary-button class="px-5">
+            <i class="ph-floppy-disk"></i>{{ __('thing::thing.edit.submit') }}
+        </x-primary-button>
+    </div>
 
 </form>
 @endsection
@@ -271,17 +288,21 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 
 **Page structure:**
 - Create/edit forms must use `<x-page-header>` for the top heading and `<x-form-section>` for each card section — never write raw `<div class="card">` header markup manually.
-- Place the submit button inside `<x-page-header>`'s `$actions` slot, not in a separate footer row.
+- The `$actions` slot carries context (badges, status, an avatar, a secondary action). The submit button goes in the bottom row below the last section: `btn-light` Cancel on the leading edge, `<x-primary-button>` on the trailing edge.
 
-**Icons:** Use Phosphor icons (`ph-*`). Common ones: `ph-plus`, `ph-pencil-simple`, `ph-eye`, `ph-trash`, `ph-floppy-disk`, `ph-arrow-left`, `ph-x`, `ph-check-circle`, `ph-warning`.
+**Icons:** Phosphor (`ph-*`) is the only icon set — Font Awesome is not loaded, so an `fa-*` class renders nothing. Common ones: `ph-plus`, `ph-pencil-simple`, `ph-eye`, `ph-trash`, `ph-floppy-disk`, `ph-arrow-left`, `ph-x`, `ph-check-circle`, `ph-warning-circle`. An icon inside a `.btn`, a `.dropdown-item` or a `.navbar-nav-link` takes **no** `me-1`/`me-2` — those containers set their own gap.
+
+**Buttons:** `btn-primary` for the one primary action, `btn-light` for Cancel/Back/Reset and other secondary buttons, `btn-ghost` when it should be borderless, `btn-icon` for a square icon-only button. Don't write `btn-outline-secondary` in a new view. Anything in a card header or a table row also takes `btn-sm`.
 
 **Authorization:** Gate all action buttons and links with `@can('Permission Name') ... @endcan`.
 
-**Status badges:** `<x-status-badge :active="$thing->is_active" />` — already translated; don't hand-write the badge markup.
+**Status:** `<x-status-badge :active="$thing->is_active" />` — a `.fd-status` dot plus an already-translated label; don't hand-write badge markup for state. A label or count that isn't state is a soft badge: `bg-*-subtle` + `text-*-emphasis`.
+
+**Styling:** No inline `style=` attributes, and never add rules to the package's `assets/css/foundation.css` — it is overwritten on update. Use Bootstrap utilities, the `.fd-*` classes and the `--fd-*` tokens (see `ui-components.md`); project-wide CSS belongs in `resources/css/app.css`.
 
 **Scripts:** Add page-specific JS with `@push('scripts') <script>...</script> @endpush` at the bottom of the view.
 
-**Delete confirmation:** Add `class="swal-confirm"` and `data-text="..."` to any link/button to get an automatic SweetAlert2 confirmation before following it.
+**Confirmations:** `class="swal-confirm"` + `data-text="..."` follows the link after a yes/no; `swal-delete` submits it as a DELETE; `swal-post` submits it with the method in `data-method`.
 
 ---
 

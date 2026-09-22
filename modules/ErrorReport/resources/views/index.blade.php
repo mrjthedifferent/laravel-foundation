@@ -36,7 +36,7 @@
             <td>
                 <span class="fw-semibold">{{ class_basename($report->exception_class) }}</span>
             </td>
-            <td style="max-width: 200px;">
+            <td class="w-sm">
                 <x-truncated-text :text="$report->message" :limit="60" />
             </td>
             <td class="small font-monospace">
@@ -50,16 +50,16 @@
             </td>
             <td>
                 @if ($report->isResolved())
-                    <span class="badge bg-success-subtle text-success border border-success-subtle">{{ __('errorreport::errorreport.index.status_resolved') }}</span>
+                    <span class="fd-status is-success">{{ __('errorreport::errorreport.index.status_resolved') }}</span>
                 @else
-                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ __('errorreport::errorreport.index.open') }}</span>
+                    <span class="fd-status is-danger">{{ __('errorreport::errorreport.index.open') }}</span>
                 @endif
             </td>
             <td class="text-end">
                 <x-dropdown-menu>
                     @can('View Error Report')
                     <x-dropdown-link :url="route('admin.error-reports.show', $report)">
-                        <i class="ph-eye me-2"></i> {{ __('errorreport::errorreport.index.view') }}
+                        <i class="ph-eye"></i> {{ __('errorreport::errorreport.index.view') }}
                     </x-dropdown-link>
                     @endcan
                     @can('Resolve Error Report')
@@ -67,7 +67,7 @@
                     <form action="{{ route('admin.error-reports.resolve', $report) }}" method="POST" class="d-inline">
                         @csrf
                         <button type="submit" class="dropdown-item">
-                            <i class="ph-check-circle me-2"></i> {{ __('errorreport::errorreport.index.mark_resolved') }}
+                            <i class="ph-check-circle"></i> {{ __('errorreport::errorreport.index.mark_resolved') }}
                         </button>
                     </form>
                     @endif
@@ -76,7 +76,7 @@
                     <button type="button" class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.error-reports.destroy', $report) }}"
                         data-text="{{ __('errorreport::errorreport.index.delete_confirm') }}">
-                        <i class="ph-trash me-2"></i> {{ __('errorreport::errorreport.index.delete') }}
+                        <i class="ph-trash"></i> {{ __('errorreport::errorreport.index.delete') }}
                     </button>
                     @endcan
                 </x-dropdown-menu>

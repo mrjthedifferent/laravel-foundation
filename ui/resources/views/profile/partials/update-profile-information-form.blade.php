@@ -63,7 +63,7 @@
             <x-input-label for="image" :value="__('foundation::foundation.profile.image')"/>
             <div class="mt-1 flex items-center">
                 @if ($user->image)
-                    <img src="{{ $user->image }}" alt="{{ $user->name }}" class="w-10 h-10 rounded-full" style="height: 40px; width: 40px;"/>
+                    <img src="{{ $user->image }}" alt="{{ $user->name }}" class="fd-avatar fd-avatar-lg"/>
                 @endif
                 <input id="image" name="image" type="file" class="mt-1 block w-full"/>
             </div>

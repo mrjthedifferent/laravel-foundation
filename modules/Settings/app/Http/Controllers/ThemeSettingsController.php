@@ -16,17 +16,31 @@ class ThemeSettingsController extends Controller
      * All theme setting keys managed by this controller.
      */
     private const array THEME_KEYS = [
-        'theme_layout',
         'theme_color_mode',
         'theme_direction',
         'theme_color_palette',
         'theme_custom_color',
         'theme_sidebar_color',
-        'theme_sidebar_color_custom',
         'theme_sidebar_type',
-        'theme_navbar_color',
-        'theme_navbar_bg',
-        'theme_font_family',
+    ];
+
+    /** Palette names earlier versions saved, mapped to the curated palette that replaced them. */
+    private const array PALETTE_ALIASES = [
+        'purple' => 'violet',
+        'cyan' => 'teal',
+        'orange' => 'amber',
+        'yellow' => 'amber',
+        'pink' => 'rose',
+        'red' => 'rose',
+    ];
+
+    /** What each key accepts; a value outside the list falls back to the default. */
+    private const array THEME_CHOICES = [
+        'theme_color_mode' => ['light', 'dark', 'auto'],
+        'theme_direction' => ['ltr', 'rtl'],
+        'theme_color_palette' => ['indigo', 'blue', 'violet', 'teal', 'green', 'amber', 'rose', 'slate', 'custom'],
+        'theme_sidebar_color' => ['light', 'dark'],
+        'theme_sidebar_type' => ['default', 'mini'],
     ];
 
     /**
@@ -36,9 +50,11 @@ class ThemeSettingsController extends Controller
     {
         $this->authorize('editSpecial', Setting::class);
 
+        $defaults = $this->defaults();
+
         $theme = [];
         foreach (self::THEME_KEYS as $key) {
-            $theme[$key] = config("settings.{$key}.value") ?? $this->defaults()[$key] ?? '';
+            $theme[$key] = $this->normalize($key, config("settings.{$key}.value") ?? $defaults[$key] ?? '');
         }
 
         return view('settings::special.theme', compact('theme'));
@@ -54,12 +70,7 @@ class ThemeSettingsController extends Controller
         $defaults = $this->defaults();
 
         foreach (self::THEME_KEYS as $key) {
-            $value = $request->input($key, $defaults[$key] ?? '');
-
-            // Guard theme_layout to only allow valid values
-            if ($key === 'theme_layout' && ! in_array($value, ['1', '2', '3'], true)) {
-                $value = '1';
-            }
+            $value = $this->normalize($key, $request->input($key, $defaults[$key] ?? ''));
 
             Setting::updateOrCreate(
                 ['key' => $key],
@@ -85,18 +96,40 @@ class ThemeSettingsController extends Controller
     private function defaults(): array
     {
         return [
-            'theme_layout' => '1',
             'theme_color_mode' => 'light',
             'theme_direction' => 'ltr',
-            'theme_color_palette' => 'blue',
-            'theme_custom_color' => '#0c83ff',
-            'theme_sidebar_color' => 'dark',
-            'theme_sidebar_color_custom' => '',
+            'theme_color_palette' => 'indigo',
+            'theme_custom_color' => '#4f46e5',
+            'theme_sidebar_color' => 'light',
             'theme_sidebar_type' => 'default',
-            'theme_navbar_color' => 'dark',
-            'theme_navbar_bg' => '',
-            'theme_font_family' => 'inter',
         ];
+    }
+
+    /**
+     * Bring a stored or submitted value into range: a palette an earlier version saved maps to
+     * the nearest curated one, and anything else unknown falls back to the default.
+     */
+    private function normalize(string $key, mixed $value): string
+    {
+        $default = $this->defaults()[$key] ?? '';
+
+        if (! is_string($value)) {
+            return $default;
+        }
+
+        if ($key === 'theme_custom_color') {
+            return preg_match('/^#[0-9a-fA-F]{6}$/', $value) ? $value : $default;
+        }
+
+        if ($key === 'theme_color_palette') {
+            $value = self::PALETTE_ALIASES[$value] ?? $value;
+        }
+
+        if (isset(self::THEME_CHOICES[$key]) && ! in_array($value, self::THEME_CHOICES[$key], true)) {
+            return $default;
+        }
+
+        return $value;
     }
 
     /**
@@ -104,6 +137,6 @@ class ThemeSettingsController extends Controller
      */
     private function keyType(string $key): string
     {
-        return in_array($key, ['theme_navbar_bg', 'theme_custom_color', 'theme_sidebar_color_custom'], true) ? 'text' : 'select';
+        return $key === 'theme_custom_color' ? 'text' : 'select';
     }
 }

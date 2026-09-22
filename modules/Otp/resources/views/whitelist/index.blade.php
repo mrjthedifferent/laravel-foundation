@@ -16,7 +16,7 @@
 
         <thead>
             <tr>
-                <th width="5%">{{ __('otp::otp.whitelist_index.col_id') }}</th>
+                <th>{{ __('otp::otp.whitelist_index.col_id') }}</th>
                 <th>{{ __('otp::otp.whitelist_index.col_type') }}</th>
                 <th>{{ __('otp::otp.whitelist_index.col_recipient') }}</th>
                 <th>{{ __('otp::otp.whitelist_index.col_fixed_otp') }}</th>
@@ -31,26 +31,26 @@
                     <td>{{ $whitelist->id }}</td>
                     <td>{{ $whitelist->recipient_type->label() }}</td>
                     <td>{{ $whitelist->recipient }}</td>
-                    <td>{{ $whitelist->fixed_otp }}</td>
+                    <td><code class="fs-sm">{{ $whitelist->fixed_otp }}</code></td>
                     <td>
                         @if ($whitelist->is_active)
-                            <span class="badge bg-success-subtle text-success border border-success-subtle">{{ __('foundation::foundation.common.active') }}</span>
+                            <span class="fd-status is-success">{{ __('foundation::foundation.common.active') }}</span>
                         @else
-                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ __('foundation::foundation.common.inactive') }}</span>
+                            <span class="fd-status">{{ __('foundation::foundation.common.inactive') }}</span>
                         @endif
                     </td>
-                    <td>{{ $whitelist->description }}</td>
+                    <td class="text-muted">{{ $whitelist->description }}</td>
                     <td class="text-end">
                         <x-dropdown-menu>
                             @can('View OTP Whitelist')
                                 <x-dropdown-link :url="route('admin.otp-whitelist.show', $whitelist->id)">
-                                    <i class="ph-eye me-2"></i> {{ __('otp::otp.whitelist_index.view_entry') }}
+                                    <i class="ph-eye"></i>{{ __('otp::otp.whitelist_index.view_entry') }}
                                 </x-dropdown-link>
                             @endcan
 
                             @can('Edit OTP Whitelist')
                                 <x-dropdown-link :url="route('admin.otp-whitelist.edit', $whitelist->id)">
-                                    <i class="ph-pencil-simple me-2"></i> {{ __('otp::otp.whitelist_index.edit_entry') }}
+                                    <i class="ph-pencil-simple"></i>{{ __('otp::otp.whitelist_index.edit_entry') }}
                                 </x-dropdown-link>
                             @endcan
 
@@ -58,7 +58,7 @@
                                 <button type="button" class="dropdown-item text-danger swal-delete"
                                     data-url="{{ route('admin.otp-whitelist.destroy', $whitelist->id) }}"
                                     data-text="{{ __('otp::otp.whitelist_index.delete_confirm') }}">
-                                    <i class="ph-trash me-2"></i> {{ __('otp::otp.whitelist_index.delete_entry') }}
+                                    <i class="ph-trash"></i>{{ __('otp::otp.whitelist_index.delete_entry') }}
                                 </button>
                             @endcan
                         </x-dropdown-menu>

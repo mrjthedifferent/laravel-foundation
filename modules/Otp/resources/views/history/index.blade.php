@@ -26,7 +26,7 @@
 <x-table-view-pagination title="{{ __('otp::otp.history_index.breadcrumb') }}" :data="$codes" empty-icon="ph-lock-key" empty-message="{{ __('otp::otp.history_index.empty') }}">
     <thead>
         <tr>
-            <th width="5%">{{ __('otp::otp.history_index.col_id') }}</th>
+            <th>{{ __('otp::otp.history_index.col_id') }}</th>
             <th>{{ __('otp::otp.history_index.col_contact_type') }}</th>
             <th>{{ __('otp::otp.history_index.col_contact') }}</th>
             <th>{{ __('otp::otp.history_index.col_code') }}</th>
@@ -40,29 +40,29 @@
         <tr>
             <td>{{ $code->id }}</td>
             <td>
-                <span class="badge {{ $code->contact_type->value === 'email' ? 'bg-info-subtle text-info border border-info-subtle' : 'bg-warning-subtle text-warning border border-warning-subtle' }}">
+                <span class="badge {{ $code->contact_type->value === 'email' ? 'bg-info' : 'bg-warning' }}">
                     {{ $code->contact_type->label() }}
                 </span>
             </td>
             <td>{{ $code->contact }}</td>
             <td>
                 @if(config('app.debug'))
-                <code>{{ $code->code }}</code>
+                <code class="fs-sm">{{ $code->code }}</code>
                 @else
-                <code>••••••</code>
+                <code class="fs-sm">••••••</code>
                 @endif
             </td>
             <td>
                 @if($code->is_verified)
-                <span class="badge bg-success-subtle text-success border border-success-subtle">{{ __('otp::otp.history_index.badge_verified') }}</span>
+                <span class="fd-status is-success">{{ __('otp::otp.history_index.badge_verified') }}</span>
                 @elseif($code->expires_at->isPast())
-                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">{{ __('otp::otp.history_index.badge_expired') }}</span>
+                <span class="fd-status">{{ __('otp::otp.history_index.badge_expired') }}</span>
                 @else
-                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">{{ __('otp::otp.history_index.badge_pending') }}</span>
+                <span class="fd-status is-warning">{{ __('otp::otp.history_index.badge_pending') }}</span>
                 @endif
             </td>
-            <td>{{ $code->expires_at->format('Y-m-d H:i') }}</td>
-            <td>{{ $code->created_at->format('Y-m-d H:i') }}</td>
+            <td class="text-muted">{{ $code->expires_at->format('Y-m-d H:i') }}</td>
+            <td class="text-muted">{{ $code->created_at->format('Y-m-d H:i') }}</td>
         </tr>
         @endforeach
     </tbody>

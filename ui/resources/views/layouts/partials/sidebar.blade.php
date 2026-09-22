@@ -1,80 +1,66 @@
 @php
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
+
 $current_route = Route::currentRouteName();
 
 $theme = $theme ?? [];
-$themeSidebarColor = $theme['sidebarColor'] ?? $themeSidebarColor ?? config('settings.theme_sidebar_color.value', 'dark');
-$themeSidebarColorCustom = $theme['sidebarColorCustom'] ?? $themeSidebarColorCustom ?? config('settings.theme_sidebar_color_custom.value', '');
-$themeSidebarType = $theme['sidebarType'] ?? $themeSidebarType ?? config('settings.theme_sidebar_type.value', 'default');
-$themeLayout = $theme['layout'] ?? $themeLayout ?? config('settings.theme_layout.value', '1');
+$themeSidebarColor = $theme['sidebarColor'] ?? config('settings.theme_sidebar_color.value', 'light');
+$themeSidebarType = $theme['sidebarType'] ?? config('settings.theme_sidebar_type.value', 'default');
 
-if (!empty($themeSidebarColorCustom) && !preg_match('/^#[0-9a-fA-F]{6}$/', $themeSidebarColorCustom)) {
-    $themeSidebarColorCustom = '';
-}
+$sidebarColorClass = $themeSidebarColor === 'dark' ? 'sidebar-dark' : 'sidebar-light';
+$sidebarTypeClass = $themeSidebarType === 'mini' ? 'sidebar-main-resized' : '';
 
-// Color class: use sidebar-custom when a hex is provided, else sidebar-dark|sidebar-light|sidebar-primary
-if (!empty($themeSidebarColorCustom)) {
-$sidebarColorClass = 'sidebar-custom';
-$sidebarBgStyle = 'background-color:' . $themeSidebarColorCustom . ' !important;';
-} else {
-$sidebarColorClass = match($themeSidebarColor) {
-'light' => 'sidebar-light',
-'primary' => 'sidebar-primary',
-default => 'sidebar-dark',
-};
-$sidebarBgStyle = '';
-}
-
-// Button style: white for dark/primary/custom, secondary for light
-$btnStyle = ($themeSidebarColor === 'light' && empty($themeSidebarColorCustom)) ? 'btn-flat-secondary' : 'btn-flat-white';
-
-// Type class: (default = nothing extra) | sidebar-main-resized (mini)
-$sidebarTypeClass = ($themeSidebarType === 'mini') ? 'sidebar-main-resized' : '';
-
-// Layout 3: detached sidebar
-$sidebarLayoutClass = ($themeLayout === '3') ? 'align-self-start' : '';
-
-// Button style: white for dark/primary/custom, secondary for light
-$btnStyle = ($themeSidebarColor === 'light' && empty($themeSidebarColorCustom)) ? 'btn-flat-secondary' : 'btn-flat-white';
+$user = Auth::user();
+$appName = mailAppName();
+$logo = mailLogoUrl();
+$monogram = Str::upper(Str::substr(trim($appName), 0, 1));
+$userInitials = Str::upper(Str::substr(trim((string) $user?->name), 0, 1));
+$userRole = $user?->isSuperAdmin()
+    ? __('foundation::foundation.common.super_admin')
+    : display_label($user?->roles->first()?->name ?? '');
 @endphp
 
 <!-- Main sidebar -->
-<div class="sidebar {{ $sidebarColorClass }} sidebar-main sidebar-expand-lg {{ $sidebarTypeClass }} {{ $sidebarLayoutClass }}"
-    id="main-sidebar"
-    @if($sidebarBgStyle) style="{{ $sidebarBgStyle }}" @endif>
+<div class="sidebar {{ $sidebarColorClass }} sidebar-main sidebar-expand-lg {{ $sidebarTypeClass }}" id="main-sidebar">
 
-    <!-- Sidebar content -->
-    <div class="sidebar-content">
-
-        <!-- Sidebar header -->
+    <!-- Brand -->
+    <div class="sidebar-header">
         <div class="sidebar-section">
-            <div class="sidebar-section-body d-flex justify-content-center">
-                <h5 class="sidebar-resize-hide flex-grow-1 my-auto">{{ __('foundation::foundation.sidebar.navigation') }}</h5>
+            <div class="sidebar-section-body d-flex justify-content-between">
+                <a href="{{ route('admin.dashboard') }}" class="fd-brand">
+                    @if ($logo)
+                        <img src="{{ $logo }}" alt="">
+                    @else
+                        <span class="fd-brand-mark">{{ $monogram }}</span>
+                    @endif
+                    <span class="fd-brand-name">{{ $appName }}</span>
+                </a>
 
-                <div>
-                    <button type="button" class="btn {{ $btnStyle }} btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-search-trigger sidebar-resize-hide d-none d-lg-inline-flex" id="sidebarSearchBtn" data-bs-popup="tooltip" data-bs-placement="bottom" data-toggle="tooltip" data-placement="top" title="{{ __('foundation::foundation.sidebar.search_shortcut') }}">
-                        <i class="ph-magnifying-glass"></i>
-                    </button>
+                <button type="button"
+                    class="btn btn-ghost btn-icon btn-sm sidebar-main-resize sidebar-resize-hide d-none d-lg-inline-flex"
+                    title="{{ __('foundation::foundation.sidebar.toggle') }}"
+                    aria-label="{{ __('foundation::foundation.sidebar.toggle') }}">
+                    <i class="ph-sidebar-simple"></i>
+                </button>
 
-                    <button type="button" class="btn {{ $btnStyle }} btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex">
-                        <i class="ph-arrows-left-right"></i>
-                    </button>
-
-                    <button type="button" class="btn {{ $btnStyle }} btn-icon btn-sm rounded-pill border-transparent sidebar-mobile-main-toggle d-lg-none">
-                        <i class="ph-x"></i>
-                    </button>
-                </div>
+                <button type="button" class="btn btn-ghost btn-icon btn-sm sidebar-mobile-main-toggle d-lg-none"
+                    aria-label="{{ __('foundation::foundation.common.close') }}">
+                    <i class="ph-x"></i>
+                </button>
             </div>
         </div>
-        <!-- /sidebar header -->
+    </div>
+    <!-- /brand -->
 
-        <!-- Main navigation -->
+    <!-- Main navigation: the only part of the sidebar that scrolls -->
+    <div class="sidebar-content">
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" id="navbar-nav" data-nav-type="accordion">
 
-                <!-- Main -->
                 <li class="nav-item-header pt-0">
-                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">{{ __('foundation::foundation.sidebar.main') }}</div>
+                    <div class="sidebar-resize-hide">{{ __('foundation::foundation.sidebar.main') }}</div>
                     <i class="ph-dots-three sidebar-resize-show"></i>
                 </li>
 
@@ -106,8 +92,8 @@ $btnStyle = ($themeSidebarColor === 'light' && empty($themeSidebarColorCustom)) 
                         @foreach ($group['items'] as $item)
                         <li class="nav-item">
                             <a href="{{ $item['href'] }}" class="nav-link @if ($item['active']) active @endif" @if ($item['target']) target="{{ $item['target'] }}" @endif>
-                                <i class="{{ $item['icon'] }} me-1"></i>
-                                {{ $item['label'] }}
+                                <i class="{{ $item['icon'] }}"></i>
+                                <span>{{ $item['label'] }}</span>
                             </a>
                         </li>
                         @endforeach
@@ -125,10 +111,26 @@ $btnStyle = ($themeSidebarColor === 'light' && empty($themeSidebarColorCustom)) 
 
             </ul>
         </div>
-        <!-- /main navigation -->
-
     </div>
-    <!-- /sidebar content -->
+    <!-- /main navigation -->
+
+    @if ($user)
+    <!-- Signed-in user -->
+    <div class="sidebar-footer">
+        <a href="{{ Route::has('admin.profile.edit') ? route('admin.profile.edit') : '#' }}" class="fd-sidebar-user">
+            @if ($user->image)
+                <img src="{{ $user->image }}" class="fd-avatar" alt="{{ $user->name }}">
+            @else
+                <span class="fd-avatar">{{ $userInitials }}</span>
+            @endif
+            <span class="min-width-0 sidebar-resize-hide">
+                <span class="fd-sidebar-name text-truncate d-block">{{ $user->name }}</span>
+                <span class="fs-xs text-truncate d-block">{{ $userRole }}</span>
+            </span>
+        </a>
+    </div>
+    <!-- /signed-in user -->
+    @endif
 
 </div>
 <!-- /main sidebar -->

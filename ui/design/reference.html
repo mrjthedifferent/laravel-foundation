@@ -1,0 +1,572 @@
+<title>Foundation Design Reference</title>
+<link id="bs-css" rel="stylesheet" href="assets/css/bootstrap.min.css" data-ltr="assets/css/bootstrap.min.css" data-rtl="assets/css/bootstrap.rtl.min.css">
+<link rel="stylesheet" href="assets/fonts/inter/inter.css">
+<link rel="stylesheet" href="assets/icons/phosphor/phosphor.css">
+<link rel="stylesheet" href="assets/css/foundation.css">
+<style>
+    /* Reference-page chrome only; everything else is foundation.css */
+    .ref-controls {
+        position: fixed; z-index: 1090; inset-inline-end: 1rem; bottom: 1rem;
+        display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .875rem;
+        max-width: calc(100% - 2rem); padding: .5rem .75rem;
+        background: var(--fd-surface); border: 1px solid var(--fd-border);
+        border-radius: 999px; box-shadow: var(--fd-shadow-lg); font-size: var(--fd-text-sm);
+        padding-bottom: calc(.5rem + env(safe-area-inset-bottom, 0px));
+    }
+    .ref-seg { display: inline-flex; padding: 2px; background: var(--fd-subtle); border-radius: 999px; }
+    .ref-seg button { border: 0; background: transparent; color: var(--fd-muted); font: 500 var(--fd-text-xs)/1 var(--fd-font); padding: .375rem .625rem; border-radius: 999px; }
+    .ref-seg button[aria-pressed="true"] { background: var(--fd-surface); color: var(--fd-text-strong); box-shadow: var(--fd-shadow-sm); }
+    .ref-swatches { display: inline-flex; gap: .25rem; align-items: center; }
+    .ref-swatch { width: 1.125rem; height: 1.125rem; border-radius: 50%; border: 0; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); padding: 0; }
+    .ref-swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--fd-surface), 0 0 0 4px var(--fd-text-strong); }
+    .ref-custom { width: 1.125rem; height: 1.125rem; padding: 0; border: 0; border-radius: 50%; overflow: hidden; background: none; }
+    .ref-custom::-webkit-color-swatch-wrapper { padding: 0; }
+    .ref-custom::-webkit-color-swatch { border: 0; border-radius: 50%; }
+    .ref-screen[hidden] { display: none !important; }
+    .ref-sparkline { width: 100%; height: 2.5rem; display: block; }
+    /* The plot keeps its own left-to-right coordinates, whatever the page direction */
+    .chart-area { width: 100%; height: 12rem; display: block; direction: ltr; }
+    .chart-grid line { stroke: var(--fd-border); stroke-width: 1; }
+    .chart-axis text { fill: var(--fd-faint); font: 500 11px var(--fd-font); }
+    .demo-row { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+    .demo-dropdown { position: static; display: block; box-shadow: var(--fd-shadow-lg); }
+    .demo-modal { position: relative; max-width: 30rem; }
+</style>
+
+<div class="page-content">
+    <!-- Sidebar -->
+    <div class="sidebar sidebar-main sidebar-expand-lg sidebar-light" id="main-sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-section">
+                <div class="sidebar-section-body d-flex justify-content-between">
+                    <a href="#dashboard" class="fd-brand" data-screen-link="dashboard">
+                        <span class="fd-brand-mark">H</span>
+                        <span class="fd-brand-name">Harbor Admin</span>
+                    </a>
+                    <button type="button" class="btn btn-ghost btn-icon btn-sm sidebar-main-resize d-none d-lg-inline-flex sidebar-resize-hide" id="mini-toggle" title="Collapse sidebar" aria-label="Collapse sidebar">
+                        <i class="ph-sidebar-simple"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-content">
+            <div class="sidebar-section">
+                <ul class="nav nav-sidebar" id="navbar-nav">
+                    <li class="nav-item">
+                        <a href="#dashboard" class="nav-link active" data-screen-link="dashboard"><i class="ph-house"></i><span>Dashboard</span></a>
+                    </li>
+                    <li class="nav-item-header"><div class="sidebar-resize-hide">Administration</div><i class="ph-dots-three sidebar-resize-show"></i></li>
+                    <li class="nav-item"><a href="#users" class="nav-link" data-screen-link="users"><i class="ph-users"></i><span>Users</span></a></li>
+                    <li class="nav-item"><a href="#form" class="nav-link" data-screen-link="form"><i class="ph-user-plus"></i><span>Create user</span></a></li>
+                    <li class="nav-item"><a href="#empty" class="nav-link" data-screen-link="empty"><i class="ph-shield-check"></i><span>Roles &amp; Permissions</span></a></li>
+                    <li class="nav-item nav-item-submenu nav-item-open">
+                        <a href="#" class="nav-link"><i class="ph-clock-counter-clockwise"></i><span>Activity</span></a>
+                        <ul class="nav-group-sub collapse show">
+                            <li class="nav-item"><a href="#users" class="nav-link" data-screen-link="users">Activity log</a></li>
+                            <li class="nav-item"><a href="#empty" class="nav-link" data-screen-link="empty">Email log</a></li>
+                            <li class="nav-item"><a href="#empty" class="nav-link" data-screen-link="empty">SMS log</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item-header"><div class="sidebar-resize-hide">Communications</div><i class="ph-dots-three sidebar-resize-show"></i></li>
+                    <li class="nav-item"><a href="#components" class="nav-link" data-screen-link="components"><i class="ph-bell"></i><span>Notifications</span></a></li>
+                    <li class="nav-item-header"><div class="sidebar-resize-hide">System</div><i class="ph-dots-three sidebar-resize-show"></i></li>
+                    <li class="nav-item"><a href="#components" class="nav-link" data-screen-link="components"><i class="ph-gear-six"></i><span>Settings &amp; components</span></a></li>
+                    <li class="nav-item"><a href="#login" class="nav-link" data-screen-link="login"><i class="ph-sign-in"></i><span>Sign-in page</span></a></li>
+                    <li class="nav-item"><a href="#error" class="nav-link" data-screen-link="error"><i class="ph-warning-circle"></i><span>404 page</span></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <div class="d-flex align-items-center gap-2">
+                <span class="fd-avatar">JR</span>
+                <div class="min-width-0 sidebar-resize-hide">
+                    <div class="fs-sm fw-semibold text-truncate fd-sidebar-name">Jamal Rahman</div>
+                    <div class="fs-xs text-truncate">Super Admin</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <!-- Navbar -->
+        <div class="navbar navbar-expand-lg navbar-static" id="main-navbar">
+            <div class="container-fluid">
+                <div class="navbar-group">
+                    <button type="button" class="navbar-toggler sidebar-mobile-main-toggle d-lg-none" aria-label="Open navigation"><i class="ph-list"></i></button>
+                </div>
+                <button type="button" class="fd-search-trigger" id="cmdk-open">
+                    <i class="ph-magnifying-glass"></i><span>Search or jump to…</span>
+                    <span class="fd-kbd" data-kbd-mod>Ctrl</span><span class="fd-kbd">K</span>
+                </button>
+                <ul class="nav navbar-group">
+                    <li class="nav-item d-none d-sm-block">
+                        <a href="#" class="navbar-nav-link online-indicator rounded-pill gap-2"><span class="fd-status is-success"></span>12 online</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="navbar-nav-link navbar-nav-link-icon" data-bs-toggle="offcanvas" data-bs-target="#notifications" aria-label="Notifications">
+                            <i class="ph-bell"></i><span class="fd-notify-dot" data-count="3"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="navbar-nav-link px-1" data-bs-toggle="dropdown" aria-label="Account"><span class="fd-avatar">JR</span></a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <div class="dropdown-header">jamal@harbor.example</div>
+                            <a href="#" class="dropdown-item"><i class="ph-user-circle"></i>My profile</a>
+                            <a href="#" class="dropdown-item"><i class="ph-palette"></i>Appearance</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item"><i class="ph-sign-out"></i>Sign out</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-inner">
+            <!-- DASHBOARD -->
+            <div class="content ref-screen" data-screen="dashboard">
+                <div class="fd-page-head">
+                    <div>
+                        <nav class="breadcrumb"><span class="breadcrumb-item active">Dashboard</span></nav>
+                        <h1 class="fd-page-title">Good morning, Jamal</h1>
+                        <p class="fd-page-subtitle">Tuesday, 22 September · here's what changed since yesterday.</p>
+                    </div>
+                    <div class="fd-page-actions">
+                        <button class="btn btn-light"><i class="ph-download-simple"></i>Export</button>
+                        <button class="btn btn-primary" data-screen-link="form"><i class="ph-plus"></i>New user</button>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="card"><div class="fd-stat">
+                            <div class="fd-stat-head"><span class="fd-stat-label">Active users</span><span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-users"></i></span></div>
+                            <div class="fd-stat-value">1,284</div>
+                            <div class="fd-stat-foot"><span class="fd-delta is-up"><i class="ph-arrow-up-right"></i>4.1%</span>vs last week</div>
+                        </div></div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="card"><div class="fd-stat">
+                            <div class="fd-stat-head"><span class="fd-stat-label">Sign-ins today</span><span class="fd-icon-tile fd-icon-tile-sm is-info"><i class="ph-sign-in"></i></span></div>
+                            <div class="fd-stat-value">342</div>
+                            <div class="fd-stat-foot"><span class="fd-delta is-up"><i class="ph-arrow-up-right"></i>12%</span>vs yesterday</div>
+                        </div></div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="card"><div class="fd-stat">
+                            <div class="fd-stat-head"><span class="fd-stat-label">Open error reports</span><span class="fd-icon-tile fd-icon-tile-sm is-danger"><i class="ph-bug"></i></span></div>
+                            <div class="fd-stat-value">7</div>
+                            <div class="fd-stat-foot"><span class="fd-delta is-down"><i class="ph-arrow-down-right"></i>2</span>new since Monday</div>
+                        </div></div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="card"><div class="fd-stat">
+                            <div class="fd-stat-head"><span class="fd-stat-label">Last backup</span><span class="fd-icon-tile fd-icon-tile-sm is-success"><i class="ph-database"></i></span></div>
+                            <div class="fd-stat-value">2h</div>
+                            <div class="fd-stat-foot"><span class="fd-delta is-flat">412 MB</span>daily at 02:00</div>
+                        </div></div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-xl-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="card-title">Sign-ins, last 14 days</h6>
+                                <div class="ms-auto nav nav-pills">
+                                    <a class="nav-link active" href="#">14 days</a><a class="nav-link" href="#">30 days</a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <svg class="chart-area" viewBox="0 0 640 200" preserveAspectRatio="none" role="img" aria-label="Sign-ins rising from about 210 to 342 over 14 days">
+                                    <defs>
+                                        <linearGradient id="area-fill" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0" stop-color="var(--fd-accent)" stop-opacity=".22"></stop>
+                                            <stop offset="1" stop-color="var(--fd-accent)" stop-opacity="0"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                    <g class="chart-grid"><line x1="36" y1="20" x2="630" y2="20"></line><line x1="36" y1="80" x2="630" y2="80"></line><line x1="36" y1="140" x2="630" y2="140"></line><line x1="36" y1="180" x2="630" y2="180"></line></g>
+                                    <g class="chart-axis"><text x="0" y="24">400</text><text x="0" y="84">300</text><text x="0" y="144">200</text><text x="8" y="184">150</text></g>
+                                    <path d="M36 139 L82 131 L128 136 L174 119 L220 124 L266 107 L312 113 L358 96 L404 101 L450 86 L496 90 L542 74 L588 79 L630 55 L630 180 L36 180 Z" fill="url(#area-fill)"></path>
+                                    <path d="M36 139 L82 131 L128 136 L174 119 L220 124 L266 107 L312 113 L358 96 L404 101 L450 86 L496 90 L542 74 L588 79 L630 55" fill="none" stroke="var(--fd-accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+                                    <circle cx="630" cy="55" r="4" fill="var(--fd-surface)" stroke="var(--fd-accent)" stroke-width="2" vector-effect="non-scaling-stroke"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div class="card-header"><h6 class="card-title">Recent activity</h6><a href="#" class="ms-auto fs-sm" data-screen-link="users">View all</a></div>
+                            <div class="card-body py-1">
+                                <ul class="fd-feed">
+                                    <li><span class="fd-icon-tile fd-icon-tile-sm is-success"><i class="ph-user-plus"></i></span><div class="fd-feed-body"><strong>Nadia Islam</strong> was created by Jamal</div><span class="fd-feed-meta">4m</span></li>
+                                    <li><span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-shield-check"></i></span><div class="fd-feed-body">Role <strong>Editor</strong> gained 3 permissions</div><span class="fd-feed-meta">18m</span></li>
+                                    <li><span class="fd-icon-tile fd-icon-tile-sm is-warning"><i class="ph-gear-six"></i></span><div class="fd-feed-body">Mail transport switched to <strong>SMTP</strong></div><span class="fd-feed-meta">1h</span></li>
+                                    <li><span class="fd-icon-tile fd-icon-tile-sm is-neutral"><i class="ph-database"></i></span><div class="fd-feed-body">Backup <span class="font-monospace fs-sm">2026-09-22-0200.zip</span> finished</div><span class="fd-feed-meta">2h</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- USERS TABLE -->
+            <div class="content ref-screen" data-screen="users" hidden>
+                <div class="fd-page-head">
+                    <div>
+                        <nav class="breadcrumb"><a href="#dashboard" class="breadcrumb-item" data-screen-link="dashboard">Administration</a><span class="breadcrumb-item active">Users</span></nav>
+                        <h1 class="fd-page-title">Users</h1>
+                        <p class="fd-page-subtitle">People who can sign in to Harbor Admin.</p>
+                    </div>
+                    <div class="fd-page-actions">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"><i class="ph-export"></i>Export</button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="#" class="dropdown-item"><i class="ph-file-csv"></i>CSV</a>
+                                <a href="#" class="dropdown-item"><i class="ph-file-xls"></i>Excel</a>
+                                <a href="#" class="dropdown-item"><i class="ph-file-pdf"></i>PDF</a>
+                            </div>
+                        </div>
+                        <button class="btn btn-light"><i class="ph-upload-simple"></i>Import</button>
+                        <button class="btn btn-primary" data-screen-link="form"><i class="ph-plus"></i>Add user</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="fd-toolbar">
+                        <div class="fd-toolbar-search"><i class="ph-magnifying-glass"></i><input class="form-control" id="user-search" placeholder="Name, email or phone…"></div>
+                        <select class="form-select" id="user-role" aria-label="Role"><option>All roles</option><option>Admin</option><option>Editor</option><option>User</option></select>
+                        <select class="form-select" id="user-status" aria-label="Status"><option>Any status</option><option>Active</option><option>Inactive</option></select>
+                        <span class="ms-auto fs-sm text-muted">1,284 users</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead><tr><th style="width:2.5rem"><input class="form-check-input" type="checkbox" aria-label="Select all"></th><th>Name</th><th>Role</th><th>Status</th><th>Last sign-in</th><th class="text-end">Sessions</th><th style="width:3rem"></th></tr></thead>
+                            <tbody>
+                                <tr><td><input class="form-check-input" type="checkbox" aria-label="Select Nadia"></td><td><div class="d-flex align-items-center gap-2"><span class="fd-avatar">NI</span><div><div class="fw-medium" style="color:var(--fd-text-strong)">Nadia Islam</div><div class="fs-xs text-muted">nadia@harbor.example</div></div></div></td><td><span class="badge bg-primary">Admin</span></td><td><span class="fd-status is-success">Active</span></td><td class="text-muted">4 min ago</td><td class="text-end">12</td><td class="text-end"><button class="btn btn-ghost btn-icon btn-sm" aria-label="Actions"><i class="ph-dots-three"></i></button></td></tr>
+                                <tr><td><input class="form-check-input" type="checkbox" aria-label="Select Omar"></td><td><div class="d-flex align-items-center gap-2"><span class="fd-avatar">OF</span><div><div class="fw-medium" style="color:var(--fd-text-strong)">Omar Faruk</div><div class="fs-xs text-muted">+880 1712 345678</div></div></div></td><td><span class="badge bg-secondary">Editor</span></td><td><span class="fd-status is-success">Active</span></td><td class="text-muted">Yesterday, 18:40</td><td class="text-end">3</td><td class="text-end"><button class="btn btn-ghost btn-icon btn-sm" aria-label="Actions"><i class="ph-dots-three"></i></button></td></tr>
+                                <tr><td><input class="form-check-input" type="checkbox" aria-label="Select Priya"></td><td><div class="d-flex align-items-center gap-2"><span class="fd-avatar">PS</span><div><div class="fw-medium" style="color:var(--fd-text-strong)">Priya Sen</div><div class="fs-xs text-muted">priya@harbor.example</div></div></div></td><td><span class="badge bg-secondary">User</span></td><td><span class="fd-status is-warning">Password reset</span></td><td class="text-muted">3 days ago</td><td class="text-end">1</td><td class="text-end"><button class="btn btn-ghost btn-icon btn-sm" aria-label="Actions"><i class="ph-dots-three"></i></button></td></tr>
+                                <tr><td><input class="form-check-input" type="checkbox" aria-label="Select Leo"></td><td><div class="d-flex align-items-center gap-2"><span class="fd-avatar">LM</span><div><div class="fw-medium" style="color:var(--fd-text-strong)">Leo Martin</div><div class="fs-xs text-muted">leo@harbor.example</div></div></div></td><td><span class="badge bg-secondary">User</span></td><td><span class="fd-status">Inactive</span></td><td class="text-muted">12 Aug</td><td class="text-end">0</td><td class="text-end"><button class="btn btn-ghost btn-icon btn-sm" aria-label="Actions"><i class="ph-dots-three"></i></button></td></tr>
+                                <tr><td><input class="form-check-input" type="checkbox" aria-label="Select Sara"></td><td><div class="d-flex align-items-center gap-2"><span class="fd-avatar">SA</span><div><div class="fw-medium" style="color:var(--fd-text-strong)">Sara Ahmed <span class="badge bg-danger ms-1"><i class="ph-crown"></i>Super Admin</span></div><div class="fs-xs text-muted">sara@harbor.example</div></div></div></td><td><span class="text-muted fs-sm">—</span></td><td><span class="fd-status is-success">Active</span></td><td class="text-muted">1 hour ago</td><td class="text-end">27</td><td class="text-end"><button class="btn btn-ghost btn-icon btn-sm" aria-label="Actions"><i class="ph-dots-three"></i></button></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="fd-table-foot">
+                        <span>Showing 1–5 of 1,284</span>
+                        <ul class="pagination mb-0">
+                            <li class="page-item disabled"><span class="page-link">‹</span></li>
+                            <li class="page-item active"><span class="page-link">1</span></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">›</a></li>
+                        </ul>
+                        <span class="d-inline-flex align-items-center gap-2">Per page <select class="form-select form-select-sm" style="width:auto" aria-label="Per page"><option>10</option><option>25</option></select></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMPTY STATE -->
+            <div class="content ref-screen" data-screen="empty" hidden>
+                <div class="fd-page-head">
+                    <div>
+                        <nav class="breadcrumb"><a href="#dashboard" class="breadcrumb-item" data-screen-link="dashboard">Activity</a><span class="breadcrumb-item active">Email log</span></nav>
+                        <h1 class="fd-page-title">Email log</h1>
+                        <p class="fd-page-subtitle">Every message the app has sent, with its delivery status.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="fd-toolbar">
+                        <div class="fd-toolbar-search"><i class="ph-magnifying-glass"></i><input class="form-control" id="mail-search" placeholder="Recipient or subject…" value="invoice"></div>
+                        <select class="form-select" id="mail-status" aria-label="Status"><option>Failed</option></select>
+                    </div>
+                    <div class="fd-empty">
+                        <span class="fd-empty-icon"><i class="ph-envelope-simple"></i></span>
+                        <div class="fd-empty-title">No failed emails match “invoice”</div>
+                        <div class="fd-empty-text">Every message with that subject was delivered. Clear the filters to see all 3,920 sent emails.</div>
+                        <button class="btn btn-light btn-sm"><i class="ph-x"></i>Clear filters</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FORM -->
+            <div class="content ref-screen" data-screen="form" hidden>
+                <div class="fd-page-head">
+                    <div>
+                        <nav class="breadcrumb"><a href="#users" class="breadcrumb-item" data-screen-link="users">Users</a><span class="breadcrumb-item active">New user</span></nav>
+                        <h1 class="fd-page-title">Create user</h1>
+                        <p class="fd-page-subtitle">They'll get an email to set their password.</p>
+                    </div>
+                    <div class="fd-page-actions">
+                        <button class="btn btn-light" data-screen-link="users">Cancel</button>
+                        <button class="btn btn-primary"><i class="ph-floppy-disk"></i>Create user</button>
+                    </div>
+                </div>
+                <div class="card"><div class="card-body p-4">
+                    <div class="fd-form-section">
+                        <div><h2 class="fd-form-section-title">Profile</h2><p class="fd-form-section-text">Shown in the admin panel and in emails they receive.</p></div>
+                        <div class="row g-3">
+                            <div class="col-md-6"><label class="form-label required" for="f-name">Full name</label><input class="form-control" id="f-name" value="Nadia Islam"></div>
+                            <div class="col-md-6"><label class="form-label" for="f-gender">Gender</label><select class="form-select" id="f-gender"><option>Female</option><option>Male</option><option>Other</option></select></div>
+                            <div class="col-12"><label class="form-label" for="f-photo">Profile image</label><input class="form-control" type="file" id="f-photo"><div class="form-text">JPEG or PNG, up to 2 MB.</div></div>
+                        </div>
+                    </div>
+                    <div class="fd-form-section">
+                        <div><h2 class="fd-form-section-title">Sign-in</h2><p class="fd-form-section-text">They can sign in with either the email or the phone number.</p></div>
+                        <div class="row g-3">
+                            <div class="col-md-6"><label class="form-label required" for="f-email">Email</label><input class="form-control is-invalid" id="f-email" value="nadia@harbor"><div class="invalid-feedback">Enter a full email address, like nadia@harbor.example.</div></div>
+                            <div class="col-md-6"><label class="form-label" for="f-phone">Mobile</label><input class="form-control" id="f-phone" placeholder="+8801712345678"><div class="form-text">With country code.</div></div>
+                        </div>
+                    </div>
+                    <div class="fd-form-section">
+                        <div><h2 class="fd-form-section-title">Access</h2><p class="fd-form-section-text">Roles decide what they can see and change.</p></div>
+                        <div class="row g-3">
+                            <div class="col-md-6"><label class="form-label required" for="f-role">Role</label><select class="form-select" id="f-role"><option>Editor</option><option>Admin</option></select></div>
+                            <div class="col-md-6"><span class="form-label d-block">Status</span><div class="form-check form-switch d-flex align-items-center gap-2 mb-0" style="min-height:2.25rem"><input class="form-check-input mt-0" type="checkbox" id="f-active" checked><label class="form-check-label" for="f-active">Active — can sign in now</label></div></div>
+                        </div>
+                    </div>
+                </div></div>
+            </div>
+
+            <!-- COMPONENTS -->
+            <div class="content ref-screen" data-screen="components" hidden>
+                <div class="fd-page-head">
+                    <div>
+                        <nav class="breadcrumb"><span class="breadcrumb-item active">System</span></nav>
+                        <h1 class="fd-page-title">Components</h1>
+                        <p class="fd-page-subtitle">The building blocks every module page is made of.</p>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-lg-6"><div class="card"><div class="card-header"><h6 class="card-title">Buttons</h6></div><div class="card-body">
+                        <div class="demo-row mb-3"><button class="btn btn-primary">Save changes</button><button class="btn btn-light">Cancel</button><button class="btn btn-ghost">Skip</button><button class="btn btn-danger"><i class="ph-trash"></i>Delete</button></div>
+                        <div class="demo-row"><button class="btn btn-primary btn-sm"><i class="ph-plus"></i>Add</button><button class="btn btn-light btn-sm">Small</button><button class="btn btn-outline-primary btn-sm">View all</button><button class="btn btn-light btn-icon" aria-label="More"><i class="ph-dots-three"></i></button><button class="btn btn-primary" disabled>Disabled</button></div>
+                    </div></div></div>
+                    <div class="col-lg-6"><div class="card"><div class="card-header"><h6 class="card-title">Badges &amp; status</h6></div><div class="card-body">
+                        <div class="demo-row mb-3"><span class="badge bg-primary">Admin</span><span class="badge bg-success">Delivered</span><span class="badge bg-warning">Pending</span><span class="badge bg-danger">Failed</span><span class="badge bg-info">Queued</span><span class="badge bg-secondary">Draft</span><span class="badge badge-count">1,284</span></div>
+                        <div class="demo-row"><span class="fd-status is-success">Active</span><span class="fd-status is-warning">Retrying</span><span class="fd-status is-danger">Suspended</span><span class="fd-status">Inactive</span></div>
+                    </div></div></div>
+                    <div class="col-lg-6"><div class="card"><div class="card-header"><h6 class="card-title">Dropdown</h6></div><div class="card-body">
+                        <div class="dropdown-menu demo-dropdown">
+                            <div class="dropdown-header">Nadia Islam</div>
+                            <a href="#" class="dropdown-item"><i class="ph-eye"></i>View profile</a>
+                            <a href="#" class="dropdown-item"><i class="ph-pencil-simple"></i>Edit</a>
+                            <a href="#" class="dropdown-item"><i class="ph-key"></i>Reset password</a>
+                            <a href="#" class="dropdown-item"><i class="ph-user-switch"></i>Impersonate</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-danger"><i class="ph-trash"></i>Delete user</a>
+                        </div>
+                    </div></div></div>
+                    <div class="col-lg-6"><div class="card"><div class="card-header"><h6 class="card-title">Toasts</h6></div><div class="card-body d-flex flex-column gap-2">
+                        <div class="swal2-popup swal2-toast" style="display:flex;position:static;width:100%"><div class="fd-toast"><i class="ph-check-circle fd-toast-icon is-success"></i><div><div class="fd-toast-title">User created</div><div class="fd-toast-text">Nadia Islam can now sign in.</div></div></div></div>
+                        <div class="swal2-popup swal2-toast" style="display:flex;position:static;width:100%"><div class="fd-toast"><i class="ph-warning-circle fd-toast-icon is-error"></i><div><div class="fd-toast-title">Couldn't send test email</div><div class="fd-toast-text">SMTP refused the login. Check the password in Settings → Email.</div></div></div></div>
+                    </div></div></div>
+                    <div class="col-lg-6"><div class="card"><div class="card-header"><h6 class="card-title">Dialog</h6><button class="btn btn-light btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#demo-modal">Open</button></div><div class="card-body">
+                        <div class="modal-content demo-modal">
+                            <div class="modal-header"><h5 class="modal-title">Delete this role?</h5><button type="button" class="btn-close" aria-label="Close"></button></div>
+                            <div class="modal-body text-muted">“Editor” is held by 14 users. They will lose its 23 permissions immediately.</div>
+                            <div class="modal-footer"><button class="btn btn-light">Cancel</button><button class="btn btn-danger">Delete role</button></div>
+                        </div>
+                    </div></div></div>
+                    <div class="col-lg-6"><div class="card"><div class="card-header"><h6 class="card-title">Alerts &amp; tabs</h6></div><div class="card-body d-flex flex-column gap-3">
+                        <div class="alert alert-warning mb-0"><i class="ph-warning"></i><div>SMS gateway is in <strong>log mode</strong>: messages are written to the log, not sent.</div></div>
+                        <ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" href="#">General</a></li><li class="nav-item"><a class="nav-link" href="#">Email</a></li><li class="nav-item"><a class="nav-link" href="#">SMS</a></li><li class="nav-item"><a class="nav-link" href="#">Theme</a></li></ul>
+                    </div></div></div>
+                </div>
+            </div>
+
+            <!-- SIGN IN -->
+            <div class="ref-screen" data-screen="login" hidden>
+                <div class="fd-auth">
+                    <div class="fd-auth-aside">
+                        <a href="#dashboard" class="fd-brand" style="color:#fafafa" data-screen-link="dashboard"><span class="fd-brand-mark">H</span><span class="fd-brand-name">Harbor Admin</span></a>
+                        <div>
+                            <p class="fd-auth-quote">Everything your team runs on, in one quiet place.</p>
+                            <p class="fd-auth-quote-meta">Users, roles, settings and logs for Harbor.</p>
+                        </div>
+                        <div class="fs-xs" style="color:#71717a">© 2026 Harbor</div>
+                    </div>
+                    <div class="fd-auth-main">
+                        <div class="login-form">
+                            <h1 class="fd-auth-title">Sign in</h1>
+                            <p class="fd-auth-lead">Use your email or phone number.</p>
+                            <div class="mb-3"><label class="form-label" for="l-login">Email or phone</label><input class="form-control form-control-lg" id="l-login" value="jamal@harbor.example"></div>
+                            <div class="mb-2"><div class="d-flex justify-content-between"><label class="form-label" for="l-pass">Password</label><a href="#" class="fs-sm">Forgot password?</a></div><input class="form-control form-control-lg" type="password" id="l-pass" value="secretpass"></div>
+                            <div class="form-check mb-4"><input class="form-check-input" type="checkbox" id="l-remember"><label class="form-check-label fs-sm" for="l-remember">Keep me signed in</label></div>
+                            <button class="btn btn-primary btn-lg w-100">Sign in</button>
+                            <div class="fd-divider">or</div>
+                            <div class="d-grid gap-2"><button class="btn btn-light"><i class="ph-google-logo"></i>Continue with Google</button><button class="btn btn-light"><i class="ph-github-logo"></i>Continue with GitHub</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 404 -->
+            <div class="ref-screen" data-screen="error" hidden>
+                <div class="fd-error" style="min-height:80vh">
+                    <div class="fd-error-code">404</div>
+                    <h1 class="fd-error-title">This page isn't here</h1>
+                    <p class="fd-error-text">The link may be old, or the page was moved. Check the address, or head back to the dashboard.</p>
+                    <div class="demo-row justify-content-center"><button class="btn btn-light" data-screen-link="dashboard"><i class="ph-arrow-left"></i>Go back</button><button class="btn btn-primary" data-screen-link="dashboard">Dashboard</button></div>
+                </div>
+            </div>
+
+        </div>
+            <div class="navbar navbar-sm navbar-footer ref-footer">
+                <div class="container-fluid"><span>© 2026 Harbor · Laravel Foundation 1.1</span><span class="ms-auto d-flex gap-2"><a href="#" class="navbar-nav-link">Privacy</a><a href="#" class="navbar-nav-link">Support</a></span></div>
+            </div>
+    </div>
+</div>
+
+<!-- Notifications drawer -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="notifications" aria-labelledby="notifications-title">
+    <div class="offcanvas-header"><h5 class="offcanvas-title fs-base fw-semibold" id="notifications-title">Notifications</h5><button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button></div>
+    <div class="offcanvas-body p-2">
+        <div class="notification-item is-unread"><span class="fd-icon-tile fd-icon-tile-sm is-danger"><i class="ph-bug"></i></span><div><div class="fs-sm fw-semibold" style="color:var(--fd-text-strong)">New error: QueryException</div><div class="fs-xs text-muted">Seen 14 times in the last hour · 6m</div></div></div>
+        <div class="notification-item is-unread"><span class="fd-icon-tile fd-icon-tile-sm is-success"><i class="ph-file-arrow-down"></i></span><div><div class="fs-sm fw-semibold" style="color:var(--fd-text-strong)">Users export is ready</div><div class="fs-xs text-muted">1,284 rows · 22m</div></div></div>
+        <div class="notification-item"><span class="fd-icon-tile fd-icon-tile-sm is-neutral"><i class="ph-key"></i></span><div><div class="fs-sm fw-semibold" style="color:var(--fd-text-strong)">Password changed</div><div class="fs-xs text-muted">From Chrome on Windows · 2h</div></div></div>
+    </div>
+    <div class="offcanvas-footer p-2 d-flex gap-2"><button class="btn btn-ghost btn-sm">Mark all read</button><button class="btn btn-light btn-sm ms-auto">View all</button></div>
+</div>
+
+<!-- Real modal -->
+<div class="modal fade" id="demo-modal" tabindex="-1" aria-labelledby="demo-modal-title">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title" id="demo-modal-title">Delete this role?</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+        <div class="modal-body text-muted">“Editor” is held by 14 users. They will lose its 23 permissions immediately.</div>
+        <div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal">Cancel</button><button class="btn btn-danger" data-bs-dismiss="modal">Delete role</button></div>
+    </div></div>
+</div>
+
+<!-- Command palette -->
+<div class="fd-cmdk-backdrop" id="cmdk" hidden>
+    <div class="fd-cmdk" role="dialog" aria-label="Search">
+        <div class="fd-cmdk-input"><i class="ph-magnifying-glass"></i><input id="cmdk-input" placeholder="Search pages and people…" autocomplete="off"><span class="fd-kbd">Esc</span></div>
+        <div class="fd-cmdk-list">
+            <div class="fd-cmdk-group">Pages</div>
+            <a class="fd-cmdk-item is-active" data-screen-link="users"><i class="ph-users"></i>Users<span class="fd-cmdk-hint">Administration</span></a>
+            <a class="fd-cmdk-item" data-screen-link="empty"><i class="ph-shield-check"></i>Roles &amp; Permissions<span class="fd-cmdk-hint">Administration</span></a>
+            <a class="fd-cmdk-item" data-screen-link="components"><i class="ph-envelope-simple"></i>Email settings<span class="fd-cmdk-hint">Settings</span></a>
+            <div class="fd-cmdk-group">People</div>
+            <a class="fd-cmdk-item" data-screen-link="users"><span class="fd-avatar fd-avatar-sm">NI</span>Nadia Islam<span class="fd-cmdk-hint">nadia@harbor.example</span></a>
+            <a class="fd-cmdk-item" data-screen-link="users"><span class="fd-avatar fd-avatar-sm">OF</span>Omar Faruk<span class="fd-cmdk-hint">+880 1712 345678</span></a>
+        </div>
+        <div class="fd-cmdk-foot"><span><span class="fd-kbd">↑</span><span class="fd-kbd">↓</span>Navigate</span><span><span class="fd-kbd">↵</span>Open</span><span class="ms-auto">Esc to close</span></div>
+    </div>
+</div>
+
+<!-- Reference controls -->
+<div class="ref-controls" role="toolbar" aria-label="Preview options">
+    <div class="ref-seg" data-control="theme"><button type="button" data-value="light">Light</button><button type="button" data-value="dark">Dark</button></div>
+    <div class="ref-seg" data-control="dir"><button type="button" data-value="ltr" aria-pressed="true">LTR</button><button type="button" data-value="rtl">RTL</button></div>
+    <div class="ref-seg" data-control="sidebar"><button type="button" data-value="light" aria-pressed="true">Light sidebar</button><button type="button" data-value="dark">Dark sidebar</button></div>
+    <div class="ref-swatches" data-control="palette" aria-label="Accent">
+        <button type="button" class="ref-swatch" data-value="indigo" style="background:#4f46e5" aria-label="Indigo" aria-pressed="true"></button>
+        <button type="button" class="ref-swatch" data-value="blue" style="background:#2563eb" aria-label="Blue"></button>
+        <button type="button" class="ref-swatch" data-value="violet" style="background:#7c3aed" aria-label="Violet"></button>
+        <button type="button" class="ref-swatch" data-value="teal" style="background:#0f766e" aria-label="Teal"></button>
+        <button type="button" class="ref-swatch" data-value="green" style="background:#15803d" aria-label="Green"></button>
+        <button type="button" class="ref-swatch" data-value="amber" style="background:#b45309" aria-label="Amber"></button>
+        <button type="button" class="ref-swatch" data-value="rose" style="background:#e11d48" aria-label="Rose"></button>
+        <button type="button" class="ref-swatch" data-value="slate" style="background:#334155" aria-label="Slate"></button>
+        <input type="color" class="ref-custom" id="custom-accent" value="#0c83ff" aria-label="Custom brand colour" title="Custom brand colour">
+    </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script>
+(function () {
+    var root = document.documentElement;
+
+    // Show the key people actually press on this machine
+    if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) {
+        document.querySelectorAll('[data-kbd-mod]').forEach(function (el) { el.textContent = '⌘'; });
+    }
+
+    function pressed(control, value) {
+        document.querySelectorAll('[data-control="' + control + '"] [data-value]').forEach(function (b) {
+            b.setAttribute('aria-pressed', String(b.dataset.value === value));
+        });
+    }
+
+    function setTheme(t) { root.setAttribute('data-bs-theme', t); pressed('theme', t); }
+    var host = root.getAttribute('data-theme');
+    setTheme(host === 'dark' || host === 'light' ? host : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+
+    function setDir(d) {
+        root.setAttribute('dir', d);
+        var css = document.getElementById('bs-css');
+        css.href = d === 'rtl' ? css.dataset.rtl : css.dataset.ltr;
+        pressed('dir', d);
+    }
+
+    function setPalette(p) { root.setAttribute('data-color-palette', p); pressed('palette', p); }
+    setPalette('indigo');
+
+    function setSidebar(s) {
+        var sb = document.getElementById('main-sidebar');
+        sb.classList.toggle('sidebar-dark', s === 'dark');
+        sb.classList.toggle('sidebar-light', s !== 'dark');
+        pressed('sidebar', s);
+    }
+
+    document.querySelectorAll('[data-control]').forEach(function (group) {
+        group.addEventListener('click', function (e) {
+            var b = e.target.closest('[data-value]');
+            if (!b) return;
+            var c = group.dataset.control, v = b.dataset.value;
+            if (c === 'theme') setTheme(v);
+            if (c === 'dir') setDir(v);
+            if (c === 'palette') setPalette(v);
+            if (c === 'sidebar') setSidebar(v);
+        });
+    });
+
+    document.getElementById('custom-accent').addEventListener('input', function (e) {
+        var hex = e.target.value, n = parseInt(hex.slice(1), 16);
+        root.style.setProperty('--custom-primary', hex);
+        root.style.setProperty('--custom-primary-rgb', ((n >> 16) & 255) + ', ' + ((n >> 8) & 255) + ', ' + (n & 255));
+        setPalette('custom');
+    });
+
+    document.getElementById('mini-toggle').addEventListener('click', function () {
+        document.getElementById('main-sidebar').classList.toggle('sidebar-main-resized');
+    });
+    document.querySelector('.sidebar-mobile-main-toggle').addEventListener('click', function () {
+        document.body.classList.toggle('sidebar-mobile-expanded');
+    });
+    document.addEventListener('click', function (e) {
+        if (document.body.classList.contains('sidebar-mobile-expanded') && !e.target.closest('.sidebar') && !e.target.closest('.sidebar-mobile-main-toggle')) {
+            document.body.classList.remove('sidebar-mobile-expanded');
+        }
+    });
+
+    var fullBleed = { login: true, error: true };
+    function show(name) {
+        document.querySelectorAll('.ref-screen').forEach(function (s) { s.hidden = s.dataset.screen !== name; });
+        document.getElementById('main-sidebar').style.display = fullBleed[name] ? 'none' : '';
+        document.getElementById('main-navbar').style.display = fullBleed[name] ? 'none' : '';
+        document.querySelector('.ref-footer').style.display = fullBleed[name] ? 'none' : '';
+        document.querySelectorAll('.nav-sidebar .nav-link[data-screen-link]').forEach(function (a) {
+            a.classList.toggle('active', a.dataset.screenLink === name);
+        });
+        closeCmdk();
+        document.body.classList.remove('sidebar-mobile-expanded');
+        window.scrollTo(0, 0);
+    }
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest('[data-screen-link]');
+        if (!link) return;
+        e.preventDefault();
+        show(link.dataset.screenLink);
+    });
+
+    var cmdk = document.getElementById('cmdk');
+    function openCmdk() { cmdk.hidden = false; document.getElementById('cmdk-input').focus(); }
+    function closeCmdk() { cmdk.hidden = true; }
+    document.getElementById('cmdk-open').addEventListener('click', openCmdk);
+    cmdk.addEventListener('click', function (e) { if (e.target === cmdk) closeCmdk(); });
+    document.addEventListener('keydown', function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); cmdk.hidden ? openCmdk() : closeCmdk(); }
+        if (e.key === 'Escape') closeCmdk();
+    });
+})();
+</script>

@@ -15,11 +15,11 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
     @csrf
 
     {{-- ── Sticky unsaved-changes bar ── --}}
-    <div id="save-bar" class="d-none mb-3 sticky-top" style="z-index:1020;">
+    <div id="save-bar" class="d-none mb-3 sticky-top">
         <div class="alert alert-warning d-flex align-items-center justify-content-between py-2 px-3 mb-0 rounded-0 border-start-0 border-end-0">
             <span><i class="ph-warning-circle me-2"></i>{!! __('settings::settings.index.unsaved_changes') !!}</span>
             <button type="submit" class="btn btn-dark btn-sm px-3">
-                <i class="ph-floppy-disk me-1"></i> {{ __('settings::settings.index.save_now') }}
+                <i class="ph-floppy-disk"></i>{{ __('settings::settings.index.save_now') }}
             </button>
         </div>
     </div>
@@ -27,28 +27,24 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
     <div class="card shadow-sm">
 
         {{-- ── Card header ── --}}
-        <div class="card-header d-flex align-items-center justify-content-between py-2">
-            <div class="d-flex align-items-center gap-2">
-                <div class="bg-primary bg-opacity-10 text-primary rounded d-flex align-items-center justify-content-center" style="width:32px;height:32px;">
-                    <i class="ph-gear"></i>
-                </div>
-                <div>
-                    <div class="fw-bold">{{ __('settings::settings.index.title') }}</div>
-                    <div class="text-muted fs-xs">{{ __('settings::settings.index.subtitle') }}</div>
-                </div>
+        <div class="card-header">
+            <span class="fd-icon-tile"><i class="ph-gear"></i></span>
+            <div>
+                <div class="card-title">{{ __('settings::settings.index.title') }}</div>
+                <div class="text-muted fs-xs">{{ __('settings::settings.index.subtitle') }}</div>
             </div>
-            <button type="submit" class="btn btn-primary btn-sm px-4">
-                <i class="ph-floppy-disk me-1"></i> {{ __('settings::settings.index.save_changes') }}
+            <button type="submit" class="btn btn-primary btn-sm ms-auto">
+                <i class="ph-floppy-disk"></i>{{ __('settings::settings.index.save_changes') }}
             </button>
         </div>
 
         <div class="card-body p-0">
-            <div class="row g-0" style="min-height:520px;">
+            <div class="row g-0">
 
                 {{-- ── Sidebar ── --}}
                 <div class="col-md-2 border-end bg-body-tertiary">
                     <div class="p-2">
-                        <div class="text-muted px-2 pt-2 pb-1 fs-xs fw-bold text-uppercase" style="letter-spacing:.06em;">
+                        <div class="fd-overline px-2 pt-2 pb-1">
                             {{ __('settings::settings.index.categories') }}
                         </div>
                         <nav class="nav flex-column gap-1 nav-pills" id="settingsTabs" role="tablist">
@@ -80,7 +76,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                 <i class="{{ $tabIcon }}"></i>
                                 <span class="text-nowrap">{{ display_label($tabKey) }}</span>
                                 @if($visibleCount > 0)
-                                <span class="badge rounded-pill ms-auto bg-black bg-opacity-10 text-body fs-xs">{{ $visibleCount }}</span>
+                                <span class="badge badge-count ms-auto">{{ $visibleCount }}</span>
                                 @endif
                             </a>
                             @endforeach
@@ -97,12 +93,12 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                             role="tabpanel">
 
                             {{-- Section header --}}
-                            <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom border-2">
-                                <div class="bg-primary bg-opacity-10 text-primary rounded d-flex align-items-center justify-content-center" style="width:28px;height:28px;">
+                            <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                                <span class="fd-icon-tile fd-icon-tile-sm">
                                     <i class="{{ $tabIcon ?? 'ph-sliders' }}"></i>
-                                </div>
+                                </span>
                                 <div>
-                                    <div class="fw-bold text-uppercase fs-xs" style="letter-spacing:.04em;">{{ display_label($tabKey) }}</div>
+                                    <div class="fd-overline">{{ display_label($tabKey) }}</div>
                                     @php $tabCount = count($group); @endphp
                                     <div class="text-muted fs-xs">{{ trans_choice('settings::settings.index.setting_count', $tabCount) }}</div>
                                 </div>
@@ -136,7 +132,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                             {{-- Card label row --}}
                                             <div class="d-flex align-items-center gap-1 mb-2">
                                                 <span class="fw-semibold fs-sm">{{ $label }}</span>
-                                                <span class="badge ms-auto bg-{{ $badgeColor }}-subtle text-{{ $badgeColor }} border border-{{ $badgeColor }}-subtle fs-xs text-uppercase">{{ $setting->type }}</span>
+                                                <span class="badge ms-auto bg-{{ $badgeColor }} text-uppercase">{{ $setting->type }}</span>
                                             </div>
 
                                             {{-- ── Boolean ── --}}
@@ -185,8 +181,8 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                             <div class="mt-1">
                                                 @if ($setting->value)
                                                 <a href="{{ $setting->value }}" target="_blank"
-                                                    class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1 mb-2">
-                                                    <i class="ph-file-arrow-down"></i> {{ __('settings::settings.index.view_current_file') }}
+                                                    class="btn btn-light btn-sm mb-2">
+                                                    <i class="ph-file-arrow-down"></i>{{ __('settings::settings.index.view_current_file') }}
                                                 </a>
                                                 @endif
                                                 <input type="file" name="{{ $setting->key }}" id="{{ $setting->key }}"
@@ -248,9 +244,8 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                             @elseif ($setting->type === 'json')
                                             <textarea name="{{ $setting->key }}"
                                                 id="{{ $setting->key }}"
-                                                class="form-control form-control-sm settings-input font-monospace"
-                                                rows="5"
-                                                style="font-size:.78rem;">{{ is_array($setting->value) ? json_encode($setting->value, JSON_PRETTY_PRINT) : $setting->value }}</textarea>
+                                                class="form-control form-control-sm settings-input font-monospace fs-xs"
+                                                rows="5">{{ is_array($setting->value) ? json_encode($setting->value, JSON_PRETTY_PRINT) : $setting->value }}</textarea>
 
                                             {{-- ── Encrypted ── --}}
                                             @elseif ($setting->type === 'encrypted')
@@ -296,7 +291,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
         <div class="card-footer d-flex justify-content-between align-items-center">
             <span class="text-muted fs-sm"><i class="ph-info me-1"></i>{{ __('settings::settings.index.footer_note') }}</span>
             <button type="submit" class="btn btn-primary px-5">
-                <i class="ph-floppy-disk me-1"></i> {{ __('settings::settings.index.save_changes') }}
+                <i class="ph-floppy-disk"></i>{{ __('settings::settings.index.save_changes') }}
             </button>
         </div>
 

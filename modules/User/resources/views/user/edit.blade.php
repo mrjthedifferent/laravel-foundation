@@ -18,12 +18,11 @@
         back-label="{{ __('user::user.edit.back_label') }}">
         <x-slot name="actions">
             @foreach($user->roles as $role)
-                <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-xs">{{ $role->name }}</span>
+                <span class="badge bg-primary">{{ $role->name }}</span>
             @endforeach
             <x-status-badge :active="$user->is_active" class="fs-xs" />
             <img :src="imagePreview || @js($user->image)" id="img-preview-hero"
-                 class="rounded-circle border ms-1"
-                 style="width:32px;height:32px;object-fit:cover;" alt="{{ $user->name }}">
+                 class="fd-avatar ms-1" alt="{{ $user->name }}">
         </x-slot>
     </x-page-header>
 
@@ -77,11 +76,11 @@
     </x-form-section>
 
     <div class="d-flex justify-content-between align-items-center">
-        <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary">
-            <i class="ph-x me-1"></i>{{ __('foundation::foundation.common.cancel') }}
+        <a href="{{ route('admin.users.index') }}" class="btn btn-light">
+            <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
         <x-primary-button id="main-submit-button" class="px-5">
-            <i class="ph-floppy-disk me-1"></i>{{ __('user::user.edit.submit') }}
+            <i class="ph-floppy-disk"></i>{{ __('user::user.edit.submit') }}
         </x-primary-button>
     </div>
 </div>

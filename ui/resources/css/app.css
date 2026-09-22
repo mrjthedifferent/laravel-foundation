@@ -1,130 +1,19 @@
-/* App styles — add custom CSS here or import additional stylesheets */
+/* App styles — add custom CSS here or import additional stylesheets.
+ *
+ * The admin theme lives in public/assets/css/foundation.css, which is served directly
+ * (no build step). Anything that styles the shared UI belongs there, not here. */
 
-/* Form required indicator */
-.form-label.required:after {
-    content: " *";
-    color: red;
-}
-
-/* Custom scrollbar */
-.custom-scrollbar {
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-.custom-scrollbar::-webkit-scrollbar {
-    height: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--gray-500);
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: var(--gray-600);
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-    background-color: var(--gray-200);
-}
-
-/* Theme selector cards */
-.theme-card-selected {
-    border-color: var(--bs-primary) !important;
-    outline: 2px solid var(--bs-primary);
-    outline-offset: -1px;
-    background-color: var(--bs-body-bg) !important;
-}
-.theme-radio-card {
-    transition: border-color 0.15s, outline 0.15s;
-}
-.rs-item-selected {
-    border-color: var(--bs-primary) !important;
-    background-color: var(--bs-body-bg) !important;
-    outline: 1px solid var(--bs-primary);
-    outline-offset: -1px;
-}
-
-/* Layout static: sidebar & floating settings button */
-@media (min-width: 992px) {
-    #main-sidebar.align-self-start {
-        margin: 1rem 0 1rem 1rem;
-        border-radius: 0.5rem;
-        overflow: clip;
-    }
-    #main-sidebar.align-self-start .sidebar-content {
-        height: auto;
-        overflow: visible;
-    }
-}
-.btn-floating-settings {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: 1050;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease-in-out;
-    background-color: var(--white) !important;
-    color: var(--primary) !important;
-    border: 1px solid var(--gray-300);
-}
-.btn-floating-settings:hover {
-    transform: scale(1.1);
-}
-
-/* Toast styling — background tint and accent from primary/status color */
-.swal2-popup.swal2-toast.toast-success {
-    --toast-accent: var(--success);
-    background: color-mix(in srgb, var(--success) 12%, var(--white)) !important;
-    border-left: 4px solid var(--success);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-}
-.swal2-popup.swal2-toast.toast-error {
-    --toast-accent: var(--danger);
-    background: color-mix(in srgb, var(--danger) 12%, var(--white)) !important;
-    border-left: 4px solid var(--danger);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-}
-.swal2-popup.swal2-toast.toast-warning {
-    --toast-accent: var(--warning);
-    background: color-mix(in srgb, var(--warning) 12%, var(--white)) !important;
-    border-left: 4px solid var(--warning);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-}
-.swal2-popup.swal2-toast.toast-info {
-    --toast-accent: var(--primary);
-    background: color-mix(in srgb, var(--primary) 14%, var(--white)) !important;
-    border-left: 4px solid var(--primary);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-}
-
-/* Dark mode — darker background tints for visibility */
-[data-color-theme=dark] .swal2-popup.swal2-toast.toast-success,
-html[data-color-theme=dark] .swal2-popup.swal2-toast.toast-success {
-    background: color-mix(in srgb, var(--success) 20%, var(--gray-800)) !important;
-}
-[data-color-theme=dark] .swal2-popup.swal2-toast.toast-error,
-html[data-color-theme=dark] .swal2-popup.swal2-toast.toast-error {
-    background: color-mix(in srgb, var(--danger) 20%, var(--gray-800)) !important;
-}
-[data-color-theme=dark] .swal2-popup.swal2-toast.toast-warning,
-html[data-color-theme=dark] .swal2-popup.swal2-toast.toast-warning {
-    background: color-mix(in srgb, var(--warning) 20%, var(--gray-800)) !important;
-}
-[data-color-theme=dark] .swal2-popup.swal2-toast.toast-info,
-html[data-color-theme=dark] .swal2-popup.swal2-toast.toast-info {
-    background: color-mix(in srgb, var(--primary) 22%, var(--gray-800)) !important;
-}
-
-/* Online presence indicator */
 .online-pulse {
-    width: 6px;
-    height: 6px;
     animation: online-pulse 2s ease-in-out infinite;
 }
+
 @keyframes online-pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+    50% { opacity: 0.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .online-pulse {
+        animation: none;
+    }
 }

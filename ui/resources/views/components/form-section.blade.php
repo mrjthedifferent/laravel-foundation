@@ -5,9 +5,9 @@
 ])
 
 <div class="card mb-3">
-    <div class="card-header py-2 d-flex align-items-center gap-2 bg-body-tertiary border-bottom">
-        <i class="{{ $icon }} text-primary"></i>
-        <span class="fw-semibold text-uppercase fs-xs" style="letter-spacing:.05em;">{{ $title }}</span>
+    <div class="card-header">
+        <span class="fd-icon-tile fd-icon-tile-sm"><i class="{{ $icon }}"></i></span>
+        <span class="fd-overline">{{ $title }}</span>
         @isset($badge)
             {{ $badge }}
         @endisset
@@ -16,4 +16,3 @@
         {{ $slot }}
     </div>
 </div>
-

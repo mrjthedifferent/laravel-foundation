@@ -20,9 +20,9 @@
         <div class="row g-3">
             <div class="col-sm-6">
                 <div class="d-flex gap-2">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;">
+                    <span class="fd-icon-tile fd-icon-tile-sm">
                         <i class="ph-git-merge"></i>
-                    </div>
+                    </span>
                     <div>
                         <div class="fw-semibold fs-sm">{{ __('settings::settings.import.merge_mode_title') }}</div>
                         <div class="text-muted fs-xs">{{ __('settings::settings.import.merge_mode_desc') }}</div>
@@ -31,9 +31,9 @@
             </div>
             <div class="col-sm-6">
                 <div class="d-flex gap-2">
-                    <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;">
+                    <span class="fd-icon-tile fd-icon-tile-sm is-danger">
                         <i class="ph-arrows-clockwise"></i>
-                    </div>
+                    </span>
                     <div>
                         <div class="fw-semibold fs-sm">{{ __('settings::settings.import.overwrite_mode_title') }}</div>
                         <div class="text-muted fs-xs">{{ __('settings::settings.import.overwrite_mode_desc') }}</div>
@@ -88,11 +88,11 @@
     </x-alert>
 
     <div class="d-flex justify-content-between align-items-center">
-        <a href="{{ route('admin.settings.manage') }}" class="btn btn-outline-secondary">
-            <i class="ph-x me-1"></i>{{ __('foundation::foundation.common.cancel') }}
+        <a href="{{ route('admin.settings.manage') }}" class="btn btn-light">
+            <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
         <button type="submit" class="btn btn-primary px-4">
-            <i class="ph-upload me-1"></i>{{ __('settings::settings.import.submit') }}
+            <i class="ph-upload"></i>{{ __('settings::settings.import.submit') }}
         </button>
     </div>
 

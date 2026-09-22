@@ -6,30 +6,30 @@ const LOADING_HTML = '<i class="ph-spinner spinner"></i>';
 
 function initSwalHelpers() {
     if (typeof window.Swal === 'undefined') return;
-    const toastColors = {
-        success: { accent: 'var(--success)', text: 'var(--success)' },
-        error: { accent: 'var(--danger)', text: 'var(--danger)' },
-        warning: { accent: 'var(--warning)', text: 'var(--warning)' },
-        info: { accent: 'var(--primary)', text: 'var(--primary)' },
+    // The toast's look comes from .fd-toast-* in foundation.css, not from inline styles.
+    const toastIcons = {
+        success: 'ph-check-circle',
+        error: 'ph-x-circle',
+        warning: 'ph-warning-circle',
+        info: 'ph-info',
     };
 
     window.toast = (icon, title, text) => {
-        const colors = toastColors[icon] || toastColors.info;
-        const opts = {
-            icon,
+        const tone = toastIcons[icon] ? icon : 'info';
+
+        window.Swal.fire({
             timer: 8000,
             showConfirmButton: false,
             position: 'top-end',
             toast: true,
             buttonsStyling: false,
-            customClass: { popup: `toast-${icon}` },
-        };
-        if (text) {
-            opts.html = `<div style="text-align:left;border-left:4px solid ${colors.accent};padding-left:10px"><strong>${escapeHtml(title || '')}</strong><br><span style="color:${colors.text};font-size:.875em">${escapeHtml(text)}</span></div>`;
-        } else {
-            opts.html = `<div style="text-align:left;border-left:4px solid ${colors.accent};padding-left:10px"><strong>${escapeHtml(title || '')}</strong></div>`;
-        }
-        window.Swal.fire(opts);
+            customClass: { popup: `fd-toast toast-${tone}` },
+            html: `<i class="${toastIcons[tone]} fd-toast-icon is-${tone}"></i>
+                <span class="min-width-0">
+                    <span class="fd-toast-title">${escapeHtml(title || '')}</span>
+                    ${text ? `<span class="fd-toast-text d-block">${escapeHtml(text)}</span>` : ''}
+                </span>`,
+        });
     };
 
     function escapeHtml(str) {

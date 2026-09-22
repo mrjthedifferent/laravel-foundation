@@ -1,159 +1,81 @@
-@php
-$theme = $theme ?? [];
-$themeNavbarColor = $theme['navbarColor'] ?? $themeNavbarColor ?? config('settings.theme_navbar_color.value', 'dark');
-$themeNavbarBg = $theme['navbarBg'] ?? $themeNavbarBg ?? config('settings.theme_navbar_bg.value', '');
-$themeLayout = $theme['layout'] ?? $themeLayout ?? config('settings.theme_layout.value', '1');
-
-$navbarColorClass = match($themeNavbarColor) {
-'light' => 'navbar-light',
-'primary' => 'navbar-primary',
-default => 'navbar-dark',
-};
-$navbarBorderClass = ($themeNavbarColor === 'light')
-? 'border-bottom'
-: 'border-bottom border-bottom-white border-opacity-10';
-$navbarShadow = ($themeLayout === '2') ? 'shadow' : '';
-
-// Hex custom background — validate and build inline style
-$navbarBgStyle = '';
-if (!empty($themeNavbarBg) && preg_match('/^#[0-9a-fA-F]{6}$/', $themeNavbarBg)) {
-$navbarBgStyle = 'background-color:' . $themeNavbarBg . ' !important;';
-}
-// Search bar color theme: light navbar needs light-mode search, dark/primary need dark
-$searchColorTheme = ($themeNavbarColor === 'light') ? 'light' : 'dark';
-@endphp
 <!-- Main navbar -->
-<div class="navbar {{ $navbarColorClass }} navbar-expand-lg navbar-static {{ $navbarBorderClass }} {{ $navbarShadow }}"
-    id="main-navbar"
-    @if($navbarBgStyle) style="{{ $navbarBgStyle }}" @endif>
+<div class="navbar navbar-expand-lg navbar-static" id="main-navbar">
     <div class="container-fluid">
 
-        <div class="d-flex d-lg-none me-2">
-            <button type="button" class="navbar-toggler sidebar-mobile-main-toggle rounded-pill">
+        <div class="navbar-group">
+            <button type="button" class="navbar-toggler sidebar-mobile-main-toggle d-lg-none"
+                aria-label="{{ __('foundation::foundation.sidebar.navigation') }}">
                 <i class="ph-list"></i>
             </button>
         </div>
 
-        <div class="navbar-brand flex-1 flex-lg-0">
-            <a href="{{ route('admin.dashboard') }}" class="d-inline-flex align-items-center">
-                @if (mailLogoUrl())
-                <img src="{{ mailLogoUrl() }}" alt="{{ mailAppName() }}">
-                @else
-                <span class="fw-semibold">{{ mailAppName() }}</span>
-                @endif
-            </a>
-        </div>
+        {{-- One search entry point: it opens the ⌘K palette (resources/js/navigation-search.js). --}}
+        <button type="button" class="fd-search-trigger" id="globalSearchTrigger"
+            @if (Route::has('admin.global-search')) data-search-url="{{ route('admin.global-search') }}" @endif
+            data-search-strings="{{ json_encode([
+                'label' => __('foundation::foundation.search.label'),
+                'placeholder' => __('foundation::foundation.navbar.search_placeholder'),
+                'pages' => __('foundation::foundation.search.pages'),
+                'people' => __('foundation::foundation.search.people'),
+                'empty' => __('foundation::foundation.search.empty'),
+                'navigate' => __('foundation::foundation.search.navigate'),
+                'open' => __('foundation::foundation.search.open'),
+                'dismiss' => __('foundation::foundation.search.dismiss'),
+            ], JSON_UNESCAPED_UNICODE) }}">
+            <i class="ph-magnifying-glass"></i>
+            <span>{{ __('foundation::foundation.navbar.search_placeholder') }}</span>
+            <span class="fd-kbd" data-kbd-mod>Ctrl</span><span class="fd-kbd">K</span>
+        </button>
 
-        <ul class="nav flex-row">
-            <li class="nav-item d-lg-none">
-                <a href="#navbar_search" class="navbar-nav-link navbar-nav-link-icon rounded-pill" data-bs-toggle="collapse">
-                    <i class="ph-magnifying-glass"></i>
-                </a>
-            </li>
-        </ul>
-
-        <div class="navbar-collapse justify-content-center flex-lg-1 order-2 order-lg-1 collapse" id="navbar_search">
-            <div class="navbar-search flex-fill position-relative mt-2 mt-lg-0 mx-lg-3">
-                <div class="form-control-feedback form-control-feedback-start flex-grow-1" data-color-theme="{{ $searchColorTheme }}">
-                    <!-- Added ID globalSearchInput -->
-                    <input type="text" id="globalSearchInput" class="form-control bg-transparent rounded-pill" placeholder="{{ __('foundation::foundation.navbar.search_placeholder') }}" data-bs-toggle="dropdown">
-                    <div class="form-control-feedback-icon">
-                        <i class="ph-magnifying-glass"></i>
-                    </div>
-                    <!-- Added ID globalSearchDropdown -->
-                    <div class="dropdown-menu w-100" id="globalSearchDropdown" data-color-theme="light">
-                        <button type="button" class="dropdown-item">
-                            <div class="text-center w-32px me-3">
-                                <i class="ph-magnifying-glass"></i>
-                            </div>
-                            <span>{{ __('foundation::foundation.navbar.search_everywhere') }}</span>
-                        </button>
-                    </div>
-                </div>
-
-                <a href="#" class="navbar-nav-link align-items-center justify-content-center w-40px h-32px rounded-pill position-absolute end-0 top-50 translate-middle-y p-0 me-1"
-                    data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                    <i class="ph-faders-horizontal"></i>
-                </a>
-
-                <div class="dropdown-menu w-100 p-3">
-                    <div class="d-flex align-items-center mb-3">
-                        <h6 class="mb-0">{{ __('foundation::foundation.navbar.search_options') }}</h6>
-                        <a href="#" class="text-body rounded-pill ms-auto">
-                            <i class="ph-clock-counter-clockwise"></i>
-                        </a>
-                    </div>
-                    <div class="mb-3">
-                        <label class="d-block form-label">{{ __('foundation::foundation.navbar.category') }}</label>
-                        <label class="form-check form-check-inline">
-                            <input type="radio" name="globalSearchCategory" value="all" class="form-check-input" checked>
-                            <span class="form-check-label">{{ __('foundation::foundation.navbar.all') }}</span>
-                        </label>
-                        <label class="form-check form-check-inline">
-                            <input type="radio" name="globalSearchCategory" value="users" class="form-check-input">
-                            <span class="form-check-label">{{ __('foundation::foundation.navbar.users') }}</span>
-                        </label>
-                    </div>
-                    <div class="d-flex">
-                        <button type="button" class="btn btn-light" id="globalSearchResetBtn">{{ __('foundation::foundation.common.reset') }}</button>
-                        <div class="ms-auto">
-                            <button type="button" class="btn btn-light" data-bs-toggle="dropdown">{{ __('foundation::foundation.common.cancel') }}</button>
-                            <button type="button" class="btn btn-primary ms-2" id="globalSearchApplyBtn">{{ __('foundation::foundation.navbar.apply') }}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <ul class="nav flex-row justify-content-end order-1 order-lg-2">
+        <ul class="nav navbar-group">
 
             @if(config('broadcasting.default') === 'reverb' && filled(config('reverb.apps.apps.0.key')))
-            <li class="nav-item dropdown d-flex align-items-center">
-                <a href="#" id="online-user-count" class="online-indicator d-inline-flex align-items-center gap-1 ms-2 px-2 py-1 rounded-pill {{ $themeNavbarColor === 'light' ? 'bg-dark bg-opacity-10' : 'bg-white bg-opacity-10' }} text-body text-decoration-none"
-                    data-bs-toggle="dropdown" data-bs-auto-close="outside" title="{{ __('foundation::foundation.navbar.users_online') }}">
-                    <span class="position-relative d-flex">
-                        <i class="ph-users-three"></i>
-                        <span class="online-pulse position-absolute top-0 start-100 translate-middle rounded-circle bg-success"></span>
-                    </span>
-                    <span class="online-count fw-semibold small">0</span>
+            <li class="nav-item dropdown d-none d-sm-flex align-items-center">
+                <a href="#" id="online-user-count" class="navbar-nav-link online-indicator rounded-pill gap-2"
+                    data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                    title="{{ __('foundation::foundation.navbar.users_online') }}">
+                    <span class="fd-status is-success online-pulse"></span>
+                    <span class="online-count fw-semibold">0</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end py-2" id="online-users-dropdown">
-                    <h6 class="dropdown-header py-1">
+                    <h6 class="dropdown-header">
                         <i class="ph-users-three me-2"></i>{{ __('foundation::foundation.navbar.online_now') }}
                     </h6>
                     <div class="dropdown-divider my-1"></div>
-                    <div id="online-users-list" class="px-3 py-2 text-muted small" style="max-height: 280px; overflow-y: auto;">
+                    <div id="online-users-list" class="px-3 py-2 text-muted fs-sm fd-scroll-y">
                         <span class="online-users-empty">{{ __('foundation::foundation.navbar.no_users_online') }}</span>
                         <div id="online-users-items" class="d-none"></div>
-                        <div id="online-users-more" class="small text-muted pt-1 mt-1 border-top d-none"></div>
+                        <div id="online-users-more" class="fs-sm text-muted pt-1 mt-1 border-top d-none"></div>
                     </div>
                 </div>
             </li>
             @endif
+
             @if (Route::has('admin.notification.index'))
             <li class="nav-item">
-                <a href="#" class="navbar-nav-link navbar-nav-link-icon rounded-pill"
-                    data-bs-toggle="offcanvas" data-bs-target="#notifications">
+                <a href="#" class="navbar-nav-link navbar-nav-link-icon" data-bs-toggle="offcanvas"
+                    data-bs-target="#notifications" aria-label="{{ __('foundation::foundation.navbar.notifications') }}">
                     <i class="ph-bell"></i>
-                    <span id="notification-count"
-                        class="badge bg-yellow text-black position-absolute top-0 end-0 translate-middle-top zindex-1 rounded-pill mt-1 me-1">
-                        0
-                    </span>
+                    <span id="notification-count" class="fd-notify-dot" data-count="0"></span>
                 </a>
             </li>
             @endif
 
-            <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
-                <a href="#" class="navbar-nav-link align-items-center p-1" data-bs-toggle="dropdown">
-                    <img src="{{ Auth::user()?->image ?: asset('images/person.png') }}"
-                        class="w-32px h-32px" alt="{{ Auth::user()?->name }}">
-                    <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()?->name }}</span>
+            <li class="nav-item dropdown">
+                <a href="#" class="navbar-nav-link px-1" data-bs-toggle="dropdown"
+                    aria-label="{{ __('foundation::foundation.navbar.my_profile') }}">
+                    @if (Auth::user()?->image)
+                        <img src="{{ Auth::user()->image }}" class="fd-avatar" alt="{{ Auth::user()->name }}">
+                    @else
+                        <span class="fd-avatar">{{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr((string) Auth::user()?->name, 0, 1)) }}</span>
+                    @endif
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
+                    <div class="dropdown-header text-truncate">{{ Auth::user()?->email }}</div>
                     @if (Route::has('admin.profile.edit'))
                     <a href="{{ route('admin.profile.edit') }}" class="dropdown-item">
-                        <i class="ph-user-circle me-2"></i>
+                        <i class="ph-user-circle"></i>
                         {{ __('foundation::foundation.navbar.my_profile') }}
                     </a>
                     @endif
@@ -163,7 +85,7 @@ $searchColorTheme = ($themeNavbarColor === 'light') ? 'light' : 'dark';
                         <x-dropdown-link :url="route('admin.impersonation.leave')"
                             data-text="{{ __('foundation::foundation.layout.return_to_own_account_confirm') }}"
                             class="swal-post">
-                            <i class="ph-user-switch me-2"></i>{{ __('foundation::foundation.layout.return_to_my_account') }}
+                            <i class="ph-user-switch"></i>{{ __('foundation::foundation.layout.return_to_my_account') }}
                         </x-dropdown-link>
                     @endif
                     @if (Route::has('logout'))
@@ -171,7 +93,7 @@ $searchColorTheme = ($themeNavbarColor === 'light') ? 'light' : 'dark';
                     <x-dropdown-link :url="route('logout')"
                         data-text="{{ __('foundation::foundation.layout.logout_confirm') }}"
                         class="swal-post">
-                        <i class="ph-sign-out me-2"></i>{{ __('foundation::foundation.layout.logout') }}
+                        <i class="ph-sign-out"></i>{{ __('foundation::foundation.layout.logout') }}
                     </x-dropdown-link>
                     @endif
                 </div>

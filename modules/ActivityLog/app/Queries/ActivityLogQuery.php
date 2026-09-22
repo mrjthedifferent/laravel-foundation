@@ -70,7 +70,9 @@ final class ActivityLogQuery extends QueryBuilder
 
     public function withUser(): self
     {
-        $this->query->with('user.roles');
+        // The index shows the audited record's own label, so the morph target comes along:
+        // without it the view lazy-loads it, which Laravel refuses when lazy loading is off.
+        $this->query->with(['user.roles', 'auditable']);
 
         return $this;
     }

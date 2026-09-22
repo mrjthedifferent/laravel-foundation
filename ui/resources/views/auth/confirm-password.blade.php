@@ -1,47 +1,27 @@
 <x-guest-layout>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('foundation::foundation.auth.confirm_password') }}</div>
+    <form method="POST" action="{{ route('password.confirm') }}">
+        @csrf
 
-                    <div class="card-body">
-                        {{ __('foundation::foundation.auth.confirm_password_notice') }}
+        <span class="fd-icon-tile fd-icon-tile-lg mb-3"><i class="ph-lock-key"></i></span>
 
-                        <form method="POST" action="{{ route('password.confirm') }}">
-                            @csrf
+        <h1 class="fd-auth-title">{{ __('foundation::foundation.auth.confirm_password') }}</h1>
+        <p class="fd-auth-lead">{{ __('foundation::foundation.auth.confirm_password_notice') }}</p>
 
-                            <div class="row mb-3">
-                                <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('foundation::foundation.auth.password') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                    @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-0">
-                                <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('foundation::foundation.auth.confirm_password') }}
-                                    </button>
-
-                                    @if (Route::has('password.request'))
-                                        <a class="btn btn-link" href="{{ route('password.request') }}">
-                                            {{ __('foundation::foundation.auth.forgot_password_link') }}
-                                        </a>
-                                    @endif
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <div class="mb-4">
+            <label for="password" class="form-label">{{ __('foundation::foundation.auth.password') }}</label>
+            <input id="password" type="password" class="form-control form-control-lg @error('password') is-invalid @enderror"
+                name="password" required autocomplete="current-password" autofocus>
+            @error('password')
+                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
         </div>
-    </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-100">{{ __('foundation::foundation.auth.confirm_password') }}</button>
+
+        @if (Route::has('password.request'))
+            <div class="text-center mt-3">
+                <a href="{{ route('password.request') }}" class="fs-sm">{{ __('foundation::foundation.auth.forgot_password_link') }}</a>
+            </div>
+        @endif
+    </form>
 </x-guest-layout>

@@ -21,50 +21,17 @@
 
     @include('layouts.partials.head-styles', ['theme' => $theme])
 
-    <style>
-        :root {
-            --custom-primary: {{ $theme['customColor'] }};
-            --custom-primary-rgb: {{ $theme['ccR'] }}, {{ $theme['ccG'] }}, {{ $theme['ccB'] }};
-            --custom-primary-dark: {{ $theme['customColorDark'] }};
-            --custom-sidebar-bg: {{ !empty($theme['sidebarColorCustom']) ? $theme['sidebarColorCustom'] : 'transparent' }};
-        }
-    </style>
-
     <script src="{{ asset('assets/js/foundation.js') }}"></script>
 </head>
 <body class="auth-backdrop">
-<!-- Page content -->
-<div class="page-content">
-    <!-- Main content -->
-    <div class="content-wrapper">
-        <div class="content-inner">
-            <div class="content d-flex justify-content-center align-items-center">
-                <!-- Container -->
-                <div class="flex-fill">
-                    <!-- Error title -->
-                    <div class="text-center mb-4">
-                        <div class="error-title mb-3">@yield('code', '404')</div>
-                        <h6 class="w-md-25 mx-md-auto">
-                            @yield('message', __('foundation::foundation.errors.service_unavailable'))
-                        </h6>
-                    </div>
-                    <!-- /error title -->
+<div class="fd-error">
+    <div class="fd-error-code">@yield('code', '404')</div>
+    <h1 class="fd-error-title">@yield('message', __('foundation::foundation.errors.service_unavailable'))</h1>
+    <p class="fd-error-text">@yield('description', __('foundation::foundation.errors.description'))</p>
 
-                    <!-- Error content -->
-                    <div class="text-center">
-                        <a href="/" class="btn btn-primary">
-                            <i class="ph-house me-2"></i>
-                            {{ __('foundation::foundation.errors.return_home') }}
-                        </a>
-                    </div>
-                    <!-- /error content -->
-                </div>
-                <!-- /container -->
-            </div>
-        </div>
-    </div>
-    <!-- /main content -->
+    <a href="/" class="btn btn-primary">
+        <i class="ph-house"></i>{{ __('foundation::foundation.errors.return_home') }}
+    </a>
 </div>
-<!-- /page content -->
 </body>
 </html>

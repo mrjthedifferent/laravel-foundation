@@ -18,71 +18,67 @@ $totalCount = isset($data) ? ($isPaginator ? $data->total() : count($data)) : 0;
 
 <div class="card">
     {{-- Header --}}
-    <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2 {{ isset($tabs) ? 'py-0' : 'py-2' }}">
-        <div class="d-flex align-items-center gap-2 py-2">
-            <h6 class="card-title mb-0 fw-semibold">{{ $title }}</h6>
-            @if($hasRows)
-            <span class="badge bg-secondary fw-normal">{{ number_format($totalCount) }}</span>
-            @endif
-        </div>
+    <div class="card-header {{ isset($tabs) ? 'pb-0' : '' }}">
+        <h6 class="card-title">{{ $title }}</h6>
+        @if($hasRows)
+        <span class="badge bg-secondary-subtle text-secondary-emphasis fw-normal">{{ number_format($totalCount) }}</span>
+        @endif
 
         @isset($tabs)
-            <ul class="nav nav-tabs nav-tabs-highlight card-header-tabs border-bottom-0 mb-0">
+            <ul class="nav nav-tabs card-header-tabs mb-0">
                 {{ $tabs }}
             </ul>
         @endisset
 
-        <div class="d-flex align-items-center gap-2 flex-wrap py-2">
+        <div class="d-flex align-items-center gap-2 flex-wrap ms-auto">
             @isset($actions)
             {{ $actions }}
             @endisset
             @isset($exports)
                 {{ $exports }}
             @endisset
-
         </div>
     </div>
 
     {{-- Body --}}
     <div class="card-body p-0">
         @if($hasRows)
-        <div class="table-responsive" style="min-height: 375px;">
-            <table class="table table-hover table-borderless table-xs align-middle mb-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
                 {{ $slot }}
             </table>
         </div>
 
         {{-- Footer: only shown for paginated data --}}
         @if($isPaginator)
-        <div class="d-flex align-items-center justify-content-between px-3 py-2 border-top flex-wrap gap-2">
-            <div class="flex-1">
-                <span class="text-muted fs-sm">
-                    {{ __('foundation::foundation.table.showing', ['first' => $data->firstItem(), 'last' => $data->lastItem(), 'total' => number_format($data->total())]) }}
-                </span>
-            </div>
+        <div class="fd-table-foot">
+            <span>
+                {{ __('foundation::foundation.table.showing', ['first' => $data->firstItem(), 'last' => $data->lastItem(), 'total' => number_format($data->total())]) }}
+            </span>
 
-            <div class="d-flex justify-content-center flex-1">
-                {{ $data->withQueryString()->links() }}
-            </div>
-
-            <div class="d-flex align-items-center justify-content-end flex-1">
+            <div class="d-flex align-items-center gap-3 flex-wrap ms-auto">
                 {{-- Navigation control, not a form field: no name and no <form> wrapper, so an
                      enclosing form (e.g. a bulk-action POST) can never capture or submit it. --}}
                 <div class="d-flex align-items-center gap-2">
-                    <label class="text-muted fs-sm mb-0 text-nowrap">{{ __('foundation::foundation.table.per_page') }}</label>
-                    <select class="form-control form-control-sm select js-per-page">
+                    <label class="mb-0 text-nowrap">{{ __('foundation::foundation.table.per_page') }}</label>
+                    <select class="form-select form-select-sm select js-per-page">
                         @foreach(getParPagePaginate() as $size => $label)
                             <option value="{{ $size }}" @selected((int) $size === perPage())>{{ $label }}</option>
                         @endforeach
                     </select>
                 </div>
+
+                {{ $data->withQueryString()->links() }}
             </div>
         </div>
         @endif
         @else
-        <div class="text-center py-5 text-muted d-flex flex-column align-items-center justify-content-center" style="min-height: 400px;">
-            <i class="{{ $emptyIcon }} d-block mb-2 opacity-25 fs-1"></i>
-            <p class="mb-0 fs-sm">{{ $emptyMessage }}</p>
+        <div class="fd-empty">
+            <span class="fd-empty-icon"><i class="{{ $emptyIcon }}"></i></span>
+            <p class="fd-empty-title">{{ $emptyMessage }}</p>
+            @isset($emptyAction)
+                {{ $emptyAction }}
+            @endisset
         </div>
         @endif
     </div>

@@ -1,3 +1,4 @@
-<span {{ $attributes->merge(['class' => 'badge ' . ($active ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle')]) }}>
+{{-- A status dot plus a label, so state reads at a glance without a heavy pill. --}}
+<span {{ $attributes->merge(['class' => 'fd-status ' . ($active ? 'is-success' : 'is-danger')]) }}>
     {{ $active ? $activeLabel : $inactiveLabel }}
 </span>

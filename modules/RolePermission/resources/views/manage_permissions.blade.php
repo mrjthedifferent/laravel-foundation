@@ -17,18 +17,18 @@
 <x-table-view-pagination title="{{ __('rolepermission::rolepermission.manage_permissions.title') }}" :data="$permissions" empty-icon="ph-shield-slash" empty-message="{{ __('rolepermission::rolepermission.manage_permissions.empty') }}">
     <x-slot name="actions">
         <x-table-action id="bulk-delete-btn" class="btn-danger btn-sm d-none" icon="ph-trash" title="{{ __('rolepermission::rolepermission.manage_permissions.delete_selected') }}" />
-        <x-table-action class="btn-primary btn-sm me-2" icon="ph-plus" title="{{ __('rolepermission::rolepermission.manage_permissions.create_permission') }}" data-bs-toggle="modal" data-bs-target="#createPermissionModal" />
-        <x-table-action :href="route('admin.permission.sync')" class="btn-success btn-sm me-2 swal-post" icon="ph-eject" title="{{ __('rolepermission::rolepermission.manage_permissions.sync_permissions') }}" data-text="{{ __('rolepermission::rolepermission.manage_permissions.sync_permissions_confirm') }}" />
+        <x-table-action class="btn-primary btn-sm" icon="ph-plus" title="{{ __('rolepermission::rolepermission.manage_permissions.create_permission') }}" data-bs-toggle="modal" data-bs-target="#createPermissionModal" />
+        <x-table-action :href="route('admin.permission.sync')" class="btn-success btn-sm swal-post" icon="ph-eject" title="{{ __('rolepermission::rolepermission.manage_permissions.sync_permissions') }}" data-text="{{ __('rolepermission::rolepermission.manage_permissions.sync_permissions_confirm') }}" />
     </x-slot>
 
     <thead>
         <tr>
-            <th style="width:36px"><input type="checkbox" class="form-check-input" id="select-all"></th>
+            <th class="w-32px"><input type="checkbox" class="form-check-input" id="select-all"></th>
             <th>{{ __('rolepermission::rolepermission.manage_permissions.module_label') }}</th>
             <th>{{ __('rolepermission::rolepermission.manage_permissions.permission_name_label') }}</th>
             <th>{{ __('foundation::foundation.common.description') }}</th>
             <th>{{ __('rolepermission::rolepermission.manage_permissions.col_used_by') }}</th>
-            <th class="text-end" style="width:60px">{{ __('foundation::foundation.common.action') }}</th>
+            <th class="text-end">{{ __('foundation::foundation.common.action') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -37,11 +37,11 @@
             @foreach ($permissions as $permission)
             <tr>
                 <td><input type="checkbox" class="form-check-input permission-checkbox" name="permission_ids[]" value="{{ $permission->id }}"></td>
-                <td><span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle fs-xs">{{ display_label($permission->module_name) }}</span></td>
+                <td><span class="badge bg-secondary">{{ display_label($permission->module_name) }}</span></td>
                 <td class="fw-semibold fs-sm">{{ display_label($permission->name) }}</td>
                 <td class="text-muted fs-sm">{{ $permission->description ?: '—' }}</td>
                 <td>
-                    <span class="badge bg-info-subtle text-info border border-info-subtle">{{ __('rolepermission::rolepermission.manage_permissions.roles_count', ['count' => $permission->roles_count]) }}</span>
+                    <span class="badge bg-info">{{ __('rolepermission::rolepermission.manage_permissions.roles_count', ['count' => $permission->roles_count]) }}</span>
                     @if ($permission->roles_count > 0)
                     <a href="#" class="show-roles ms-1" data-permission-id="{{ $permission->id }}" title="{{ __('rolepermission::rolepermission.manage_permissions.view_roles_title') }}">
                         <i class="ph-info text-muted"></i>
@@ -53,7 +53,7 @@
                         <button type="button" class="dropdown-item text-danger swal-delete"
                             data-url="{{ route('admin.permission.delete', $permission->id) }}"
                             data-text="{{ __('rolepermission::rolepermission.manage_permissions.delete_permission_confirm') }}">
-                            <i class="ph-trash me-2"></i>{{ __('foundation::foundation.common.delete') }}
+                            <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
                         </button>
                     </x-dropdown-menu>
                 </td>
@@ -80,7 +80,7 @@
             <x-form.textarea name="description" label="{{ __('rolepermission::rolepermission.manage_permissions.description_optional_label') }}" :rows="2" />
         </div>
         <x-slot name="footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
             <button type="submit" form="createPermissionForm" class="btn btn-primary">{{ __('foundation::foundation.common.create') }}</button>
         </x-slot>
     </form>
@@ -94,7 +94,7 @@
         </div>
     </div>
     <x-slot name="footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('foundation::foundation.common.close') }}</button>
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('foundation::foundation.common.close') }}</button>
     </x-slot>
 </x-modal>
 @endsection

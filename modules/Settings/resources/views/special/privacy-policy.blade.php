@@ -6,12 +6,10 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header d-flex align-items-center gap-2 py-2">
-        <div class="bg-primary bg-opacity-10 text-primary rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width:32px;height:32px;">
-            <i class="ph-file-text"></i>
-        </div>
+    <div class="card-header">
+        <span class="fd-icon-tile"><i class="ph-file-text"></i></span>
         <div>
-            <div class="fw-bold">{{ __('settings::settings.special_privacy_policy.title') }}</div>
+            <div class="card-title">{{ __('settings::settings.special_privacy_policy.title') }}</div>
             <div class="text-muted fs-xs">{{ __('settings::settings.special_privacy_policy.subtitle') }}</div>
         </div>
     </div>
@@ -23,7 +21,7 @@
             </div>
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary px-4">
-                    <i class="ph-floppy-disk me-1"></i>{{ __('settings::settings.special_privacy_policy.submit') }}
+                    <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_privacy_policy.submit') }}
                 </button>
             </div>
         </form>

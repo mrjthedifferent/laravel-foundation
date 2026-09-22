@@ -18,226 +18,209 @@
 </x-alert>
 @endif
 
-{{-- Filter card --}}
-<div class="card mb-3">
-    <div class="card-body">
-        <div class="row g-2 align-items-end">
-            <div class="col-md-4">
-                <label class="form-label">{{ __('settings::settings.manage.search_label') }}</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-white border-end-0"><i class="ph-magnifying-glass text-muted"></i></span>
-                    <input type="text" id="settings-search" class="form-control form-control-sm border-start-0"
-                        placeholder="{{ __('settings::settings.manage.search_placeholder') }}">
-                    <button class="btn btn-light border" id="clear-search" type="button" title="{{ __('settings::settings.manage.clear') }}">
-                        <i class="ph-x"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">{{ __('settings::settings.manage.group_label') }}</label>
-                <select id="group-filter" class="form-select form-select-sm">
-                    <option value="">{{ __('settings::settings.manage.all_groups') }}</option>
-                    @foreach($settings->pluck('group')->unique()->sort()->values() as $group)
-                    <option value="{{ $group }}">{{ display_label($group) }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">{{ __('settings::settings.manage.type_label') }}</label>
-                <select id="type-filter" class="form-select form-select-sm">
-                    <option value="">{{ __('settings::settings.manage.all_types') }}</option>
-                    @foreach($settings->pluck('type')->unique()->sort()->values() as $type)
-                    <option value="{{ $type }}">{{ ucfirst($type) }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-auto ms-auto mb-2 d-flex align-items-end">
-                <button type="button" id="reset-filters-btn" class="btn btn-sm btn-outline-secondary">
-                    <i class="ph-arrow-counter-clockwise me-1"></i>{{ __('foundation::foundation.common.reset') }}
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
 {{-- Table card --}}
 <div class="card">
-    <div class="card-header d-flex align-items-center justify-content-between">
-        <h4 class="card-title mb-0">
-            {{ __('settings::settings.manage.title') }}
-            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle ms-1 fw-normal">
-                {{ __('settings::settings.manage.showing_pre') }} <span id="visible-count">{{ $settings->count() }}</span> {{ __('settings::settings.manage.showing_of') }} {{ $settings->count() }}
-            </span>
-        </h4>
-        <div class="d-flex gap-2">
-            <a href="{{ route('admin.settings.sync') }}" class="btn btn-success w-sm swal-post"
+    <div class="card-header">
+        <h6 class="card-title">{{ __('settings::settings.manage.title') }}</h6>
+        <div class="d-flex flex-wrap gap-2 ms-auto">
+            <a href="{{ route('admin.settings.sync') }}" class="btn btn-light swal-post"
                 data-text="{{ __('settings::settings.manage.sync_confirm') }}">
-                <i class="ph-eject me-1"></i>{{ __('settings::settings.manage.sync') }}
+                <i class="ph-eject"></i>{{ __('settings::settings.manage.sync') }}
             </a>
-            <a href="{{ route('admin.settings.export') }}" class="btn btn-success w-sm">
-                <i class="ph-download me-1"></i>{{ __('foundation::foundation.common.export') }}
+            <a href="{{ route('admin.settings.export') }}" class="btn btn-light">
+                <i class="ph-download"></i>{{ __('foundation::foundation.common.export') }}
             </a>
-            <a href="{{ route('admin.settings.import_form') }}" class="btn btn-secondary w-sm">
-                <i class="ph-upload me-1"></i>{{ __('settings::settings.manage.import') }}
+            <a href="{{ route('admin.settings.import_form') }}" class="btn btn-light">
+                <i class="ph-upload"></i>{{ __('settings::settings.manage.import') }}
             </a>
-            <a href="{{ route('admin.settings.create') }}" class="btn btn-primary w-sm">
-                <i class="ph-plus me-1"></i>{{ __('settings::settings.manage.new_setting') }}
+            <a href="{{ route('admin.settings.create') }}" class="btn btn-primary">
+                <i class="ph-plus"></i>{{ __('settings::settings.manage.new_setting') }}
             </a>
         </div>
     </div>
 
-    <div class="card-body pt-2 px-2">
-
-        {{-- Bulk action bar --}}
-        <div id="bulk-bar" class="d-none align-items-center gap-2 flex-wrap border rounded p-2 mb-2 bg-body-tertiary">
-            <span class="fw-semibold fs-sm">
-                <i class="ph-check-square me-1"></i><span id="selected-count">0</span> {{ __('settings::settings.manage.selected') }}
-            </span>
-            <div class="vr mx-1"></div>
-            <div class="input-group input-group-sm flex-nowrap" style="width:auto;">
-                <select id="bulk-action" class="form-select form-select-sm" style="min-width:145px;">
-                    <option value="">{{ __('settings::settings.manage.choose_action') }}</option>
-                    <option value="visibility">{{ __('settings::settings.manage.action_visibility') }}</option>
-                    <option value="group">{{ __('settings::settings.manage.action_group') }}</option>
-                    <option value="delete">{{ __('settings::settings.manage.action_delete') }}</option>
-                </select>
-                <select id="bulk-visibility" class="form-select form-select-sm d-none" style="min-width:130px;">
-                    <option value="1">{{ __('settings::settings.manage.make_visible') }}</option>
-                    <option value="0">{{ __('settings::settings.manage.make_hidden') }}</option>
-                </select>
-                <select id="bulk-group" class="form-select form-select-sm d-none" style="min-width:130px;">
-                    @foreach($settings->pluck('group')->unique()->sort()->values() as $group)
-                    <option value="{{ $group }}">{{ display_label($group) }}</option>
-                    @endforeach
-                    <option value="new">{{ __('settings::settings.manage.new_group_option') }}</option>
-                </select>
-                <input type="text" id="bulk-new-group" class="form-control form-control-sm d-none"
-                    placeholder="{{ __('settings::settings.manage.new_group_placeholder') }}" style="min-width:130px;">
-                <button type="button" id="apply-bulk-action" class="btn btn-sm btn-primary">{{ __('settings::settings.manage.apply') }}</button>
-            </div>
-            <button type="button" id="deselect-all" class="btn btn-sm btn-outline-secondary ms-auto">
-                <i class="ph-x me-1"></i>{{ __('settings::settings.manage.clear') }}
-            </button>
+    {{-- Filters --}}
+    <div class="fd-toolbar">
+        <div class="fd-toolbar-search">
+            <i class="ph-magnifying-glass"></i>
+            <input type="text" id="settings-search" class="form-control"
+                aria-label="{{ __('settings::settings.manage.search_label') }}"
+                placeholder="{{ __('settings::settings.manage.search_placeholder') }}">
         </div>
+        <select id="group-filter" class="form-select" aria-label="{{ __('settings::settings.manage.group_label') }}">
+            <option value="">{{ __('settings::settings.manage.all_groups') }}</option>
+            @foreach($settings->pluck('group')->unique()->sort()->values() as $group)
+            <option value="{{ $group }}">{{ display_label($group) }}</option>
+            @endforeach
+        </select>
+        <select id="type-filter" class="form-select" aria-label="{{ __('settings::settings.manage.type_label') }}">
+            <option value="">{{ __('settings::settings.manage.all_types') }}</option>
+            @foreach($settings->pluck('type')->unique()->sort()->values() as $type)
+            <option value="{{ $type }}">{{ ucfirst($type) }}</option>
+            @endforeach
+        </select>
+        <button type="button" id="clear-search" class="btn btn-ghost btn-icon" title="{{ __('settings::settings.manage.clear') }}">
+            <i class="ph-x"></i>
+        </button>
+        <button type="button" id="reset-filters-btn" class="btn btn-light ms-auto">
+            <i class="ph-arrow-counter-clockwise"></i>{{ __('foundation::foundation.common.reset') }}
+        </button>
+    </div>
 
-        {{-- Select-all row --}}
-        <div id="select-bar" class="d-flex align-items-center pb-2">
-            <button type="button" id="select-all" class="btn btn-sm btn-outline-secondary">
-                <i class="ph-check-square me-1"></i>{{ __('settings::settings.manage.select_all_visible') }}
-            </button>
-        </div>
+    {{-- Bulk action bar --}}
+    <div id="bulk-bar" class="fd-toolbar d-none">
+        <span class="fw-medium fs-sm">
+            <i class="ph-check-square"></i> <span id="selected-count">0</span> {{ __('settings::settings.manage.selected') }}
+        </span>
+        <select id="bulk-action" class="form-select" aria-label="{{ __('settings::settings.manage.choose_action') }}">
+            <option value="">{{ __('settings::settings.manage.choose_action') }}</option>
+            <option value="visibility">{{ __('settings::settings.manage.action_visibility') }}</option>
+            <option value="group">{{ __('settings::settings.manage.action_group') }}</option>
+            <option value="delete">{{ __('settings::settings.manage.action_delete') }}</option>
+        </select>
+        <select id="bulk-visibility" class="form-select d-none" aria-label="{{ __('settings::settings.manage.action_visibility') }}">
+            <option value="1">{{ __('settings::settings.manage.make_visible') }}</option>
+            <option value="0">{{ __('settings::settings.manage.make_hidden') }}</option>
+        </select>
+        <select id="bulk-group" class="form-select d-none" aria-label="{{ __('settings::settings.manage.action_group') }}">
+            @foreach($settings->pluck('group')->unique()->sort()->values() as $group)
+            <option value="{{ $group }}">{{ display_label($group) }}</option>
+            @endforeach
+            <option value="new">{{ __('settings::settings.manage.new_group_option') }}</option>
+        </select>
+        <input type="text" id="bulk-new-group" class="form-control d-none"
+            aria-label="{{ __('settings::settings.manage.new_group_placeholder') }}"
+            placeholder="{{ __('settings::settings.manage.new_group_placeholder') }}">
+        <button type="button" id="apply-bulk-action" class="btn btn-primary btn-sm">{{ __('settings::settings.manage.apply') }}</button>
+        <button type="button" id="deselect-all" class="btn btn-ghost btn-sm ms-auto">
+            <i class="ph-x"></i>{{ __('settings::settings.manage.clear') }}
+        </button>
+    </div>
 
-        {{-- Table --}}
-        <div class="table-responsive custom-scrollbar" style="min-height: 375px;">
-            <table class="table table-hover table-borderless table-nowrap table-xs align-middle mb-0" id="settings-table">
-                <thead class="table-active">
-                    <tr>
-                        <th style="width:36px;"><input class="form-check-input" type="checkbox" id="check-all"></th>
-                        <th>{{ __('settings::settings.manage.col_key') }}</th>
-                        <th>{{ __('settings::settings.manage.col_group') }}</th>
-                        <th>{{ __('settings::settings.manage.col_type') }}</th>
-                        <th>{{ __('settings::settings.manage.col_value') }}</th>
-                        <th>{{ __('foundation::foundation.common.description') }}</th>
-                        <th class="text-center" style="width:70px;">{{ __('settings::settings.manage.col_visible') }}</th>
-                        <th class="text-center" style="width:70px;">{{ __('settings::settings.manage.col_required') }}</th>
-                        <th class="text-end" style="width:80px;">{{ __('foundation::foundation.common.action') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                    $typeColors = [
-                    'text' => 'secondary', 'textarea' => 'secondary',
-                    'integer' => 'info', 'float' => 'info',
-                    'boolean' => 'success',
-                    'select' => 'primary', 'multi-select' => 'primary',
-                    'image' => 'warning', 'file' => 'warning',
-                    'json' => 'danger', 'array' => 'danger',
-                    ];
-                    @endphp
-                    @forelse($settings as $setting)
-                    @php $c = $typeColors[$setting->type] ?? 'secondary'; @endphp
-                    <tr class="setting-row"
-                        data-key="{{ $setting->key }}"
-                        data-group="{{ $setting->group }}"
-                        data-type="{{ $setting->type }}"
-                        data-desc="{{ $setting->description }}"
-                        data-id="{{ $setting->id }}">
-                        <td><input class="form-check-input setting-checkbox" type="checkbox" value="{{ $setting->id }}"></td>
-                        <td>
-                            <code class="text-body fs-sm">{{ $setting->key }}</code>
-                        </td>
-                        <td>
-                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">{{ display_label($setting->group) }}</span>
-                        </td>
-                        <td>
-                            <span class="badge bg-{{ $c }}-subtle text-{{ $c }} border border-{{ $c }}-subtle text-uppercase">{{ $setting->type }}</span>
-                        </td>
-                        <td>
-                            @if($setting->type === 'image' && $setting->value)
-                            <img src="{{ $setting->value }}" style="height:26px;width:52px;object-fit:cover;" class="rounded">
-                            @elseif($setting->type === 'file' && $setting->value)
-                            <a href="{{ $setting->value }}" target="_blank" class="text-primary fs-sm">
-                                <i class="ph-file me-1"></i>File
-                            </a>
-                            @elseif($setting->type === 'boolean')
-                            @if($setting->value)
-                            <span class="badge bg-success-subtle text-success border border-success-subtle">{{ __('settings::settings.manage.enabled') }}</span>
-                            @else
-                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ __('settings::settings.manage.disabled') }}</span>
-                            @endif
-                            @elseif(in_array($setting->type, ['json','array']))
-                            <span class="badge bg-{{ $c }}-subtle text-{{ $c }} border border-{{ $c }}-subtle text-uppercase">{{ strtoupper($setting->type) }}</span>
-                            @else
-                            <span class="text-muted fs-sm">{{ Str::limit(is_array($setting->value) ? implode(', ', $setting->value) : $setting->value, 35) }}</span>
-                            @endif
-                        </td>
-                        <td>
-                            <span class="text-muted fs-sm">{{ Str::limit(display_label($setting->description), 40) }}</span>
-                        </td>
-                        <td class="text-center">
-                            @if($setting->is_visible)
-                            <i class="ph-eye text-success" title="{{ __('settings::settings.manage.visible_tooltip') }}"></i>
-                            @else
-                            <i class="ph-eye-slash text-muted" title="{{ __('settings::settings.manage.hidden_tooltip') }}"></i>
-                            @endif
-                        </td>
-                        <td class="text-center">
-                            @if($setting->required)
-                            <i class="ph-asterisk text-warning" title="{{ __('settings::settings.manage.required_tooltip') }}"></i>
-                            @else
-                            <span class="text-muted">—</span>
-                            @endif
-                        </td>
-                        <td class="text-end">
-                            <x-dropdown-menu>
-                                <x-dropdown-link :url="route('admin.settings.edit', $setting)">
-                                    <i class="ph-pencil-simple me-2"></i> {{ __('foundation::foundation.common.edit') }}
-                                </x-dropdown-link>
-                                <div class="dropdown-divider"></div>
-                                <button type="button" class="dropdown-item text-danger swal-delete"
-                                    data-url="{{ route('admin.settings.destroy', $setting) }}"
-                                    data-text="{{ __('settings::settings.manage.delete_confirm', ['key' => $setting->key]) }}">
-                                    <i class="ph-trash me-2"></i> {{ __('foundation::foundation.common.delete') }}
-                                </button>
-                            </x-dropdown-menu>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="9" class="text-center py-4 text-muted">
-                            {{ __('settings::settings.manage.no_settings_found') }}
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+    {{-- Select-all row --}}
+    <div id="select-bar" class="fd-toolbar">
+        <button type="button" id="select-all" class="btn btn-light btn-sm">
+            <i class="ph-check-square"></i>{{ __('settings::settings.manage.select_all_visible') }}
+        </button>
+    </div>
 
-        <div id="no-results" class="text-center py-5 d-none text-muted">
-            <i class="ph-magnifying-glass d-block mb-2 opacity-25" style="font-size:2.5rem;"></i>
-            {{ __('settings::settings.manage.no_results') }}
-        </div>
+    {{-- Table --}}
+    <div class="table-responsive custom-scrollbar">
+        <table class="table table-hover table-nowrap align-middle mb-0" id="settings-table">
+            <thead>
+                <tr>
+                    <th><input class="form-check-input" type="checkbox" id="check-all" aria-label="{{ __('settings::settings.manage.select_all_visible') }}"></th>
+                    <th>{{ __('settings::settings.manage.col_key') }}</th>
+                    <th>{{ __('settings::settings.manage.col_group') }}</th>
+                    <th>{{ __('settings::settings.manage.col_type') }}</th>
+                    <th>{{ __('settings::settings.manage.col_value') }}</th>
+                    <th>{{ __('foundation::foundation.common.description') }}</th>
+                    <th class="text-center">{{ __('settings::settings.manage.col_visible') }}</th>
+                    <th class="text-center">{{ __('settings::settings.manage.col_required') }}</th>
+                    <th class="text-end">{{ __('foundation::foundation.common.action') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                $typeColors = [
+                'text' => 'secondary', 'textarea' => 'secondary',
+                'integer' => 'info', 'float' => 'info',
+                'boolean' => 'success',
+                'select' => 'primary', 'multi-select' => 'primary',
+                'image' => 'warning', 'file' => 'warning',
+                'json' => 'danger', 'array' => 'danger',
+                ];
+                @endphp
+                @forelse($settings as $setting)
+                @php $c = $typeColors[$setting->type] ?? 'secondary'; @endphp
+                <tr class="setting-row"
+                    data-key="{{ $setting->key }}"
+                    data-group="{{ $setting->group }}"
+                    data-type="{{ $setting->type }}"
+                    data-desc="{{ $setting->description }}"
+                    data-id="{{ $setting->id }}">
+                    <td><input class="form-check-input setting-checkbox" type="checkbox" value="{{ $setting->id }}"></td>
+                    <td>
+                        <code class="text-body fs-sm">{{ $setting->key }}</code>
+                    </td>
+                    <td>
+                        <span class="badge bg-secondary">{{ display_label($setting->group) }}</span>
+                    </td>
+                    <td>
+                        <span class="badge bg-{{ $c }} text-uppercase">{{ $setting->type }}</span>
+                    </td>
+                    <td>
+                        @if($setting->type === 'image' && $setting->value)
+                        <img src="{{ $setting->value }}" class="rounded h-24px" alt="{{ $setting->key }}">
+                        @elseif($setting->type === 'file' && $setting->value)
+                        <a href="{{ $setting->value }}" target="_blank" class="fs-sm">
+                            <i class="ph-file"></i> {{ __('settings::settings.index.view_current_file') }}
+                        </a>
+                        @elseif($setting->type === 'boolean')
+                        @if($setting->value)
+                        <span class="fd-status is-success">{{ __('settings::settings.manage.enabled') }}</span>
+                        @else
+                        <span class="fd-status is-danger">{{ __('settings::settings.manage.disabled') }}</span>
+                        @endif
+                        @elseif(in_array($setting->type, ['json','array']))
+                        <span class="badge bg-{{ $c }} text-uppercase">{{ strtoupper($setting->type) }}</span>
+                        @else
+                        <span class="text-muted fs-sm">{{ Str::limit(is_array($setting->value) ? implode(', ', $setting->value) : $setting->value, 35) }}</span>
+                        @endif
+                    </td>
+                    <td>
+                        <span class="text-muted fs-sm">{{ Str::limit(display_label($setting->description), 40) }}</span>
+                    </td>
+                    <td class="text-center">
+                        @if($setting->is_visible)
+                        <i class="ph-eye text-success" title="{{ __('settings::settings.manage.visible_tooltip') }}"></i>
+                        @else
+                        <i class="ph-eye-slash text-muted" title="{{ __('settings::settings.manage.hidden_tooltip') }}"></i>
+                        @endif
+                    </td>
+                    <td class="text-center">
+                        @if($setting->required)
+                        <i class="ph-asterisk text-warning" title="{{ __('settings::settings.manage.required_tooltip') }}"></i>
+                        @else
+                        <span class="text-muted">—</span>
+                        @endif
+                    </td>
+                    <td class="text-end">
+                        <x-dropdown-menu>
+                            <x-dropdown-link :url="route('admin.settings.edit', $setting)">
+                                <i class="ph-pencil-simple"></i>{{ __('foundation::foundation.common.edit') }}
+                            </x-dropdown-link>
+                            <div class="dropdown-divider"></div>
+                            <button type="button" class="dropdown-item text-danger swal-delete"
+                                data-url="{{ route('admin.settings.destroy', $setting) }}"
+                                data-text="{{ __('settings::settings.manage.delete_confirm', ['key' => $setting->key]) }}">
+                                <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
+                            </button>
+                        </x-dropdown-menu>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="9" class="text-center py-4 text-muted">
+                        {{ __('settings::settings.manage.no_settings_found') }}
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 
+    <div id="no-results" class="fd-empty d-none">
+        <span class="fd-empty-icon"><i class="ph-magnifying-glass"></i></span>
+        <div class="fd-empty-title">{{ __('settings::settings.manage.no_results') }}</div>
+    </div>
+
+    <div class="fd-table-foot">
+        <span>
+            {{ __('settings::settings.manage.showing_pre') }}
+            <span id="visible-count">{{ $settings->count() }}</span>
+            {{ __('settings::settings.manage.showing_of') }} {{ $settings->count() }}
+        </span>
     </div>
 
     {{-- Hidden bulk forms --}}

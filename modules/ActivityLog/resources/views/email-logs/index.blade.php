@@ -64,7 +64,7 @@
             <td class="text-end">
                 <x-dropdown-menu>
                     <x-dropdown-link :url="route('admin.email-logs.show', $log->id)">
-                        <i class="ph-eye me-2"></i> {{ __('foundation::foundation.common.view') }}
+                        <i class="ph-eye"></i> {{ __('foundation::foundation.common.view') }}
                     </x-dropdown-link>
                     @can('Delete Email Log')
                     <div class="dropdown-divider"></div>
@@ -72,7 +72,7 @@
                         class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.email-logs.destroy', $log->id) }}"
                         data-text="{{ __('activitylog::activitylog.email_logs_index.delete_confirm') }}">
-                        <i class="ph-trash me-2"></i> {{ __('foundation::foundation.common.delete') }}
+                        <i class="ph-trash"></i> {{ __('foundation::foundation.common.delete') }}
                     </button>
                     @endcan
                 </x-dropdown-menu>

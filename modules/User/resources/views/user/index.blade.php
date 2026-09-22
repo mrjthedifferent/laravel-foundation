@@ -73,22 +73,19 @@
 
     <thead>
         <tr>
-            <th style="width:52px">{{ __('user::user.index.col_photo') }}</th>
+            <th class="w-48px">{{ __('user::user.index.col_photo') }}</th>
             <th>{{ __('foundation::foundation.common.name') }}</th>
             <th>{{ __('user::user.index.role_label') }}</th>
             <th>{{ __('user::user.index.col_contacts') }}</th>
             <th>{{ __('foundation::foundation.common.status') }}</th>
-            <th class="text-end" style="width:60px">{{ __('foundation::foundation.common.action') }}</th>
+            <th class="text-end">{{ __('foundation::foundation.common.action') }}</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($users as $user)
         <tr>
             <td>
-                <img src="{{ $user->image }}"
-                    class="rounded-circle border"
-                    style="height:40px;width:40px;object-fit:cover;"
-                    alt="{{ $user->name }}">
+                <img src="{{ $user->image }}" class="fd-avatar" alt="{{ $user->name }}">
             </td>
             <td>
                 <a href="{{ route('admin.users.show', $user->id) }}" class="fw-semibold text-body">
@@ -99,9 +96,11 @@
                 @endif
             </td>
             <td>
-                @foreach ($user->roles as $role)
-                <span class="badge bg-primary-subtle text-primary border border-primary-subtle">{{ $role->name }}</span>
-                @endforeach
+                <div class="d-flex flex-wrap gap-1">
+                    @foreach ($user->roles as $role)
+                    <span class="badge bg-primary">{{ $role->name }}</span>
+                    @endforeach
+                </div>
             </td>
             <td>
                 {{-- Email --}}
@@ -136,33 +135,33 @@
             <td>
                 <x-status-badge :active="$user->is_active" />
                 @if ($user->isSuperAdmin())
-                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle ms-1"><i class="ph-crown me-1"></i>{{ __('user::user.common.super_admin') }}</span>
+                    <span class="badge bg-danger ms-1"><i class="ph-crown"></i>{{ __('user::user.common.super_admin') }}</span>
                 @endif
             </td>
             <td class="text-end">
                 <x-dropdown-menu>
                     @can('View User')
                     <x-dropdown-link :url="route('admin.users.show', $user->id)">
-                        <i class="ph-eye me-2"></i>{{ __('foundation::foundation.common.view') }}
+                        <i class="ph-eye"></i>{{ __('foundation::foundation.common.view') }}
                     </x-dropdown-link>
                     @endcan
                     @can('Edit User')
                     <x-dropdown-link :url="route('admin.users.edit', $user->id)">
-                        <i class="ph-pencil-simple me-2"></i>{{ __('foundation::foundation.common.edit') }}
+                        <i class="ph-pencil-simple"></i>{{ __('foundation::foundation.common.edit') }}
                     </x-dropdown-link>
                     @endcan
                     @can('User Password Reset')
                     <x-dropdown-link :url="route('admin.user.password.reset', $user->id)"
                         data-text="{{ __('user::user.index.reset_password_confirm') }}"
                         class="swal-confirm">
-                        <i class="ph-key me-2"></i>{{ __('user::user.index.reset_password') }}
+                        <i class="ph-key"></i>{{ __('user::user.index.reset_password') }}
                     </x-dropdown-link>
                     @endcan
                     @can('impersonate', $user)
                     <x-dropdown-link :url="route('admin.users.impersonate', $user->id)"
                         data-text="{{ __('user::user.index.impersonate_confirm', ['name' => $user->name]) }}"
                         class="swal-post">
-                        <i class="ph-user-switch me-2"></i>{{ __('user::user.index.impersonate') }}
+                        <i class="ph-user-switch"></i>{{ __('user::user.index.impersonate') }}
                     </x-dropdown-link>
                     @endcan
                     @if (!app()->environment('production'))
@@ -171,7 +170,7 @@
                     <x-dropdown-link
                         :url="route('admin.users.show', $user->id) . '#manage-account'"
                         class="text-warning">
-                        <i class="ph-gear me-2"></i>{{ __('user::user.index.manage_account') }}
+                        <i class="ph-gear"></i>{{ __('user::user.index.manage_account') }}
                     </x-dropdown-link>
                     @endcan
                     @endif

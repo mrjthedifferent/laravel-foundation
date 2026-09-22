@@ -28,9 +28,8 @@
 
         <x-page-header title="{{ __('settings::settings.edit.title') }}" icon="ph-pencil-simple-line" :back-url="route('admin.settings.manage')" back-label="{{ __('settings::settings.edit.back') }}">
             <x-slot name="actions">
-                <code
-                    class="bg-primary bg-opacity-10 text-body rounded px-2 py-1 fs-xs fw-semibold">{{ $setting->key }}</code>
-                <span class="badge bg-{{ $tc }}-subtle text-{{ $tc }} border border-{{ $tc }}-subtle text-uppercase fs-xs">{{ $setting->type }}</span>
+                <code class="bg-body-tertiary rounded px-2 py-1 fs-xs fw-semibold">{{ $setting->key }}</code>
+                <span class="badge bg-{{ $tc }} text-uppercase">{{ $setting->type }}</span>
             </x-slot>
         </x-page-header>
 
@@ -105,9 +104,9 @@
 
         {{-- Section 3: Current Value — card kept with id for JS toggling --}}
         <div id="value_container" class="card mb-3">
-            <div class="card-header py-2 d-flex align-items-center gap-2 bg-body-tertiary border-bottom">
-                <i class="ph-pencil-line text-primary"></i>
-                <span class="fw-semibold text-uppercase fs-xs">{{ __('settings::settings.edit.value_header') }}</span>
+            <div class="card-header">
+                <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-pencil-line"></i></span>
+                <span class="fd-overline">{{ __('settings::settings.edit.value_header') }}</span>
             </div>
             <div class="card-body">
                 <div id="value_text_container" class="{{ $setting->type === 'text' ? '' : 'd-none' }}">
@@ -137,8 +136,8 @@
                 <div id="value_file_container" class="{{ $setting->type === 'file' ? '' : 'd-none' }}">
                     @if ($setting->type === 'file' && $setting->value)
                         <a href="{{ $setting->value }}" target="_blank"
-                            class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 mb-2">
-                            <i class="ph-file-arrow-down"></i> {{ __('settings::settings.edit.view_current_file') }}
+                            class="btn btn-sm btn-light mb-2">
+                            <i class="ph-file-arrow-down"></i>{{ __('settings::settings.edit.view_current_file') }}
                         </a>
                     @endif
                     <input type="file" class="form-control form-control-sm" name="value_file">
@@ -147,23 +146,23 @@
                 <div id="value_image_container" class="{{ $setting->type === 'image' ? '' : 'd-none' }}">
                     @if ($setting->type === 'image' && $setting->value)
                         <img src="{{ $setting->value }}" alt="{{ $setting->key }}" id="img-preview"
-                            class="img-thumbnail d-block mb-2" style="max-height:100px;max-width:220px;object-fit:contain;">
+                            class="img-thumbnail d-block mb-2 fd-thumb">
                     @else
-                        <img src="" id="img-preview" class="img-thumbnail d-none mb-2"
-                            style="max-height:100px;max-width:220px;object-fit:contain;">
+                        <img src="" alt="" id="img-preview"
+                            class="img-thumbnail d-none mb-2 fd-thumb">
                     @endif
                     <input type="file" class="form-control form-control-sm" name="value_image" id="value_image_input"
                         accept="image/*">
                     <div class="form-text">{{ __('settings::settings.edit.leave_empty_image') }}</div>
                 </div>
                 <div id="value_json_container" class="{{ $setting->type === 'json' ? '' : 'd-none' }}">
-                    <div id="json-editor" class="border rounded" style="height:320px;"></div>
+                    <div id="json-editor" class="border rounded"></div>
                     <x-form.input type="hidden" name="value_json" id="value_json" :value="old('value_json', $setting->type === 'json' ? (is_string($setting->value) ? $setting->value : json_encode($setting->value)) : '{}')" />
                     <div class="d-flex align-items-center gap-2 mt-2">
-                        <button type="button" class="btn btn-sm btn-light border" id="format-json"><i
-                                class="ph-brackets-curly me-1"></i>{{ __('settings::settings.edit.json_format') }}</button>
-                        <button type="button" class="btn btn-sm btn-light border" id="validate-json"><i
-                                class="ph-check me-1"></i>{{ __('settings::settings.edit.json_validate') }}</button>
+                        <button type="button" class="btn btn-sm btn-light" id="format-json"><i
+                                class="ph-brackets-curly"></i>{{ __('settings::settings.edit.json_format') }}</button>
+                        <button type="button" class="btn btn-sm btn-light" id="validate-json"><i
+                                class="ph-check"></i>{{ __('settings::settings.edit.json_validate') }}</button>
                         <span id="json-validation-result" class="ms-1 fs-sm"></span>
                     </div>
                 </div>
@@ -187,20 +186,20 @@
                             @foreach ($setting->value as $val)
                                 <div class="input-group input-group-sm mb-2 array-value-row">
                                     <x-form.input name="value_array[]" :value="$val" />
-                                    <button type="button" class="btn btn-outline-danger"
+                                    <button type="button" class="btn btn-outline-danger btn-icon"
                                         onclick="removeArrayValue(this)"><i class="ph-trash"></i></button>
                                 </div>
                             @endforeach
                         @else
                             <div class="input-group input-group-sm mb-2 array-value-row">
                                 <x-form.input name="value_array[]" placeholder="{{ __('settings::settings.edit.array_value_placeholder') }}" />
-                                <button type="button" class="btn btn-outline-danger" onclick="removeArrayValue(this)"><i
+                                <button type="button" class="btn btn-outline-danger btn-icon" onclick="removeArrayValue(this)"><i
                                         class="ph-trash"></i></button>
                             </div>
                         @endif
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addArrayValue()">
-                        <i class="ph-plus me-1"></i>{{ __('settings::settings.edit.add_value') }}
+                    <button type="button" class="btn btn-sm btn-light" onclick="addArrayValue()">
+                        <i class="ph-plus"></i>{{ __('settings::settings.edit.add_value') }}
                     </button>
                 </div>
             </div>
@@ -209,17 +208,15 @@
         {{-- Section 4: Options — card kept with id for JS toggling --}}
         <div id="options_container"
             class="card mb-3 {{ in_array($setting->type, ['select', 'multi-select']) ? '' : 'd-none' }}">
-            <div class="card-header py-2 d-flex align-items-center justify-content-between bg-body-tertiary border-bottom">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="ph-list-bullets text-primary"></i>
-                    <span class="fw-semibold text-uppercase fs-xs">{{ __('settings::settings.edit.section_options') }}</span>
-                </div>
-                <span class="text-muted fs-xs">{{ __('settings::settings.edit.options_badge') }}</span>
+            <div class="card-header">
+                <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-list-bullets"></i></span>
+                <span class="fd-overline">{{ __('settings::settings.edit.section_options') }}</span>
+                <span class="text-muted fs-xs ms-auto">{{ __('settings::settings.edit.options_badge') }}</span>
             </div>
             <div class="card-body">
                 <div class="row g-0 mb-2 px-1">
-                    <div class="col-5"><span class="text-muted fw-bold text-uppercase fs-xs">{{ __('settings::settings.edit.options_col_key') }}</span></div>
-                    <div class="col-5"><span class="text-muted fw-bold text-uppercase fs-xs">{{ __('settings::settings.edit.options_col_label') }}</span></div>
+                    <div class="col-5"><span class="fd-overline">{{ __('settings::settings.edit.options_col_key') }}</span></div>
+                    <div class="col-5"><span class="fd-overline">{{ __('settings::settings.edit.options_col_label') }}</span></div>
                 </div>
                 <div id="options_list">
                     @if (in_array($setting->type, ['select', 'multi-select']) && is_array($setting->options) && count($setting->options))
@@ -227,7 +224,7 @@
                             <div class="row g-2 mb-2 align-items-center option-row">
                                 <div class="col-5"><x-form.input name="option_keys[]" :value="$optKey" /></div>
                                 <div class="col-5"><x-form.input name="option_values[]" :value="$optVal" /></div>
-                                <div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger"
+                                <div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon"
                                         onclick="removeOption(this)"><i class="ph-trash"></i></button></div>
                             </div>
                         @endforeach
@@ -235,24 +232,24 @@
                         <div class="row g-2 mb-2 align-items-center option-row">
                             <div class="col-5"><x-form.input name="option_keys[]" placeholder="{{ __('settings::settings.edit.option_key_placeholder') }}" /></div>
                             <div class="col-5"><x-form.input name="option_values[]" placeholder="{{ __('settings::settings.edit.option_value_placeholder') }}" /></div>
-                            <div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger"
+                            <div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon"
                                     onclick="removeOption(this)"><i class="ph-trash"></i></button></div>
                         </div>
                     @endif
                 </div>
-                <button type="button" class="btn btn-sm btn-outline-primary mt-1" onclick="addOption()">
-                    <i class="ph-plus me-1"></i>{{ __('settings::settings.edit.add_option') }}
+                <button type="button" class="btn btn-sm btn-light mt-1" onclick="addOption()">
+                    <i class="ph-plus"></i>{{ __('settings::settings.edit.add_option') }}
                 </button>
             </div>
         </div>
 
         {{-- Footer actions --}}
         <div class="d-flex justify-content-between align-items-center">
-            <a href="{{ route('admin.settings.manage') }}" class="btn btn-outline-secondary">
-                <i class="ph-x me-1"></i>{{ __('foundation::foundation.common.cancel') }}
+            <a href="{{ route('admin.settings.manage') }}" class="btn btn-light">
+                <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
             </a>
             <button type="submit" class="btn btn-primary px-4">
-                <i class="ph-floppy-disk me-1"></i>{{ __('settings::settings.edit.submit') }}
+                <i class="ph-floppy-disk"></i>{{ __('settings::settings.edit.submit') }}
             </button>
         </div>
 
@@ -353,7 +350,10 @@
             editor.setTheme('ace/theme/xcode');
             editor.session.setMode('ace/mode/json');
             editor.setOptions({
-                showPrintMargin: false
+                showPrintMargin: false,
+                // Sizes the editor from its content instead of a fixed inline height.
+                minLines: 18,
+                maxLines: 18
             });
             var raw = document.getElementById('value_json').value || '{}';
             try {
@@ -422,7 +422,7 @@
             var row = '<div class="row g-2 mb-2 align-items-center option-row">' +
                 '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_keys[]" placeholder="{{ __('settings::settings.edit.option_key_placeholder') }}"></div>' +
                 '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_values[]" placeholder="{{ __('settings::settings.edit.option_value_placeholder') }}"></div>' +
-                '<div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger" onclick="removeOption(this)"><i class="ph-trash"></i></button></div></div>';
+                '<div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon" onclick="removeOption(this)"><i class="ph-trash"></i></button></div></div>';
             document.getElementById('options_list').insertAdjacentHTML('beforeend', row);
         }
 
@@ -432,7 +432,7 @@
 
         function addArrayValue() {
             var row =
-                '<div class="input-group input-group-sm mb-2 array-value-row"><input type="text" class="form-control" name="value_array[]" placeholder="{{ __('settings::settings.edit.array_value_placeholder') }}"><button type="button" class="btn btn-outline-danger" onclick="removeArrayValue(this)"><i class="ph-trash"></i></button></div>';
+                '<div class="input-group input-group-sm mb-2 array-value-row"><input type="text" class="form-control" name="value_array[]" placeholder="{{ __('settings::settings.edit.array_value_placeholder') }}"><button type="button" class="btn btn-outline-danger btn-icon" onclick="removeArrayValue(this)"><i class="ph-trash"></i></button></div>';
             document.getElementById('array_values_list').insertAdjacentHTML('beforeend', row);
         }
 

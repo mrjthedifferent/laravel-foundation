@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ $theme['direction'] }}"
-    data-bs-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}" 
-    data-color-palette="{{ $theme['palette'] }}" data-theme-layout="{{ $theme['layout'] }}"
-    class="{{ $theme['isLayoutStatic'] ? 'layout-static' : '' }}">
+    data-bs-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}"
+    data-color-palette="{{ $theme['palette'] }}">
 
 <head>
     <meta charset="utf-8">
@@ -23,47 +22,23 @@
     @stack('head_scripts')
 </head>
 
-<body class="{{ $theme['isLayoutStatic'] ? 'layout-static' : '' }}">
+<body>
 
     @include('layouts.partials.impersonation-banner')
 
-    @if ($theme['layout'] === '2')
-        <div class="page-content">
-            @include('layouts.partials.sidebar', ['theme' => $theme])
-            <div class="content-wrapper">
-                @include('layouts.partials.navbar', ['theme' => $theme])
-                <div class="content-inner">
-                    @include('layouts.partials.page-header')
-                    <div class="content pt-0">{{ $slot }}</div>
-                    @include('layouts.partials.footer')
-                </div>
+    {{-- The shell fills the viewport: the sidebar, the navbar and the footer stay put,
+         and only the content column scrolls. --}}
+    <div class="page-content">
+        @include('layouts.partials.sidebar', ['theme' => $theme])
+        <div class="content-wrapper">
+            @include('layouts.partials.navbar', ['theme' => $theme])
+            <div class="content-inner">
+                @include('layouts.partials.page-header')
+                <main class="content pt-0">{{ $slot }}</main>
             </div>
+            @include('layouts.partials.footer')
         </div>
-    @elseif($theme['layout'] === '3')
-        @include('layouts.partials.navbar', ['theme' => $theme])
-        <div class="page-content pt-0">
-            @include('layouts.partials.sidebar', ['theme' => $theme])
-            <div class="content-wrapper">
-                <div class="content-inner">
-                    @include('layouts.partials.page-header')
-                    <div class="content pt-0">{{ $slot }}</div>
-                </div>
-            </div>
-        </div>
-        @include('layouts.partials.footer')
-    @else
-        @include('layouts.partials.navbar', ['theme' => $theme])
-        <div class="page-content">
-            @include('layouts.partials.sidebar', ['theme' => $theme])
-            <div class="content-wrapper">
-                <div class="content-inner">
-                    @include('layouts.partials.page-header')
-                    <div class="content pt-0">{{ $slot }}</div>
-                    @include('layouts.partials.footer')
-                </div>
-            </div>
-        </div>
-    @endif
+    </div>
 
     @if (Route::has('admin.notification.index'))
         @include('layouts.partials.notification')
@@ -76,10 +51,10 @@
     <script src="{{ asset('assets/vendor/select2/select2.min.js') }}"></script>
     @stack('scripts')
 
-    <a href="#" class="btn btn-sm btn-light btn-floating-settings" data-bs-toggle="offcanvas"
-        data-bs-target="#demo_config">
+    <button type="button" class="btn btn-light btn-icon btn-floating-settings" data-bs-toggle="offcanvas"
+        data-bs-target="#demo_config" aria-label="{{ __('foundation::foundation.theme_config.title') }}">
         <i class="ph-gear"></i>
-    </a>
+    </button>
 
 </body>
 

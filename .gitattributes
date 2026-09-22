@@ -11,6 +11,7 @@
 
 # Left out of the archive Composer installs into projects
 /tests export-ignore
+/ui/design export-ignore
 /workbench export-ignore
 /.github export-ignore
 /phpunit.xml.dist export-ignore

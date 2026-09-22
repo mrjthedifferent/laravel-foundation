@@ -8,12 +8,10 @@
 <div class="card">
 
     {{-- Header --}}
-    <div class="card-header d-flex align-items-center gap-2 py-2">
-        <div class="bg-primary bg-opacity-10 text-primary rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width:32px;height:32px;">
-            <i class="ph-users-three"></i>
-        </div>
+    <div class="card-header">
+        <span class="fd-icon-tile"><i class="ph-users-three"></i></span>
         <div>
-            <div class="fw-bold">{{ __('settings::settings.special_social_auth.title') }}</div>
+            <div class="card-title">{{ __('settings::settings.special_social_auth.title') }}</div>
             <div class="text-muted fs-xs">{{ __('settings::settings.special_social_auth.subtitle') }}</div>
         </div>
     </div>
@@ -30,13 +28,11 @@
 
             {{-- Google --}}
             <div class="card mb-3">
-                <div class="card-header py-2 d-flex align-items-center justify-content-between bg-body-tertiary border-bottom">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="ph-google-logo text-primary"></i>
-                        <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">Google</span>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-primary test-provider-btn" data-provider="google">
-                        <i class="ph-plug me-1"></i>{{ __('settings::settings.special_social_auth.test') }}
+                <div class="card-header">
+                    <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-google-logo"></i></span>
+                    <span class="fd-overline">Google</span>
+                    <button type="button" class="btn btn-sm btn-light test-provider-btn ms-auto" data-provider="google">
+                        <i class="ph-plug"></i>{{ __('settings::settings.special_social_auth.test') }}
                     </button>
                 </div>
                 <div class="card-body">
@@ -48,7 +44,7 @@
                             <x-form.label for="google_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
                             <div class="input-group input-group-sm">
                                 <x-form.input type="password" name="google_client_secret" />
-                                <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="google_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
+                                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost pw-toggle text-muted position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="google_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -60,13 +56,11 @@
 
             {{-- GitHub --}}
             <div class="card mb-3">
-                <div class="card-header py-2 d-flex align-items-center justify-content-between bg-body-tertiary border-bottom">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="ph-github-logo text-primary"></i>
-                        <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">GitHub</span>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-primary test-provider-btn" data-provider="github">
-                        <i class="ph-plug me-1"></i>{{ __('settings::settings.special_social_auth.test') }}
+                <div class="card-header">
+                    <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-github-logo"></i></span>
+                    <span class="fd-overline">GitHub</span>
+                    <button type="button" class="btn btn-sm btn-light test-provider-btn ms-auto" data-provider="github">
+                        <i class="ph-plug"></i>{{ __('settings::settings.special_social_auth.test') }}
                     </button>
                 </div>
                 <div class="card-body">
@@ -78,7 +72,7 @@
                             <x-form.label for="github_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
                             <div class="input-group input-group-sm">
                                 <x-form.input type="password" name="github_client_secret" />
-                                <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="github_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
+                                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost pw-toggle text-muted position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="github_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -90,13 +84,11 @@
 
             {{-- Apple --}}
             <div class="card mb-3">
-                <div class="card-header py-2 d-flex align-items-center justify-content-between bg-body-tertiary border-bottom">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="ph-apple-logo text-primary"></i>
-                        <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">Apple</span>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-primary test-provider-btn" data-provider="apple">
-                        <i class="ph-plug me-1"></i>{{ __('settings::settings.special_social_auth.test') }}
+                <div class="card-header">
+                    <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-apple-logo"></i></span>
+                    <span class="fd-overline">Apple</span>
+                    <button type="button" class="btn btn-sm btn-light test-provider-btn ms-auto" data-provider="apple">
+                        <i class="ph-plug"></i>{{ __('settings::settings.special_social_auth.test') }}
                     </button>
                 </div>
                 <div class="card-body">
@@ -108,7 +100,7 @@
                             <x-form.label for="apple_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
                             <div class="input-group input-group-sm">
                                 <x-form.input type="password" name="apple_client_secret" />
-                                <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="apple_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
+                                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost pw-toggle text-muted position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="apple_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -129,7 +121,7 @@
 
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary px-4">
-                    <i class="ph-floppy-disk me-1"></i>{{ __('settings::settings.special_social_auth.submit') }}
+                    <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_social_auth.submit') }}
                 </button>
             </div>
         </form>
@@ -170,7 +162,7 @@ document.querySelectorAll('.test-provider-btn').forEach(function (btn) {
         });
         var originalHtml = this.innerHTML;
         this.disabled = true;
-        this.innerHTML = '<i class="ph-circle-notch ph-spin me-1"></i>{{ __('settings::settings.common.testing') }}';
+        this.innerHTML = '<i class="ph-circle-notch ph-spin"></i>{{ __('settings::settings.common.testing') }}';
         var self = this;
 
         fetch(routeMap[provider], {

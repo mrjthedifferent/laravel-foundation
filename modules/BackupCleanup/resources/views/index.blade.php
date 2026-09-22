@@ -24,12 +24,12 @@
 
         <thead>
             <tr>
-                <th style="width:44px">#</th>
+                <th class="w-48px">#</th>
                 <th>{{ __('backupcleanup::backupcleanup.index.col_file_name') }}</th>
                 <th>{{ __('backupcleanup::backupcleanup.index.col_size') }}</th>
                 <th>{{ __('backupcleanup::backupcleanup.index.col_created_at') }}</th>
                 <th>{{ __('backupcleanup::backupcleanup.index.col_disk') }}</th>
-                <th class="text-end" style="width:60px">{{ __('foundation::foundation.common.action') }}</th>
+                <th class="text-end">{{ __('foundation::foundation.common.action') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -54,13 +54,13 @@
                         <x-dropdown-menu>
                             @can('Download Backup')
                                 <x-dropdown-link :url="route('admin.backups.download', ['filename' => $file['filename']])">
-                                    <i class="ph-download-simple me-2"></i>{{ __('backupcleanup::backupcleanup.index.download') }}
+                                    <i class="ph-download-simple"></i>{{ __('backupcleanup::backupcleanup.index.download') }}
                                 </x-dropdown-link>
                             @endcan
                             @can('Delete Backup')
                                 <div class="dropdown-divider"></div>
                                 <x-dropdown-link :url="route('admin.backups.destroy', ['filename' => $file['filename']])"
-                                    class="text-danger swal-delete" data-text="{{ __('backupcleanup::backupcleanup.index.delete_confirm') }}" data-method="DELETE"><i class="ph-trash me-2"></i> {{ __('backupcleanup::backupcleanup.index.delete') }}
+                                    class="text-danger swal-delete" data-text="{{ __('backupcleanup::backupcleanup.index.delete_confirm') }}" data-method="DELETE"><i class="ph-trash"></i> {{ __('backupcleanup::backupcleanup.index.delete') }}
                                 </x-dropdown-link>
                             @endcan
                         </x-dropdown-menu>

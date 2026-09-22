@@ -62,7 +62,7 @@
                         class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.sms-logs.destroy', $log->id) }}"
                         data-text="{{ __('activitylog::activitylog.sms_logs_index.delete_confirm') }}">
-                        <i class="ph-trash me-2"></i> {{ __('foundation::foundation.common.delete') }}
+                        <i class="ph-trash"></i> {{ __('foundation::foundation.common.delete') }}
                     </button>
                 </x-dropdown-menu>
             </td>
@@ -73,7 +73,7 @@
 </x-table-view-pagination>
 
 <x-modal id="response-modal" title="{{ __('activitylog::activitylog.sms_logs_index.gateway_response') }}">
-    <pre id="response-content" class="mb-0" style="white-space: pre-wrap; word-break: break-all;"></pre>
+    <pre id="response-content" class="mb-0 fd-scroll-y overflow-auto"></pre>
 </x-modal>
 @endsection
 

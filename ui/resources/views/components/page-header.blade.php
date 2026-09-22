@@ -6,29 +6,26 @@
     'backLabel'=> null,
 ])
 
-<div class="d-flex align-items-center justify-content-between mb-3 gap-2 flex-wrap">
-    <div class="d-flex align-items-center gap-3">
+<div class="fd-page-head">
+    <div class="fd-page-head-main">
         @if($icon)
-            <div class="bg-primary bg-opacity-10 text-primary rounded d-flex align-items-center justify-content-center flex-shrink-0"
-                 style="width:38px;height:38px;font-size:1.2rem;">
-                <i class="{{ $icon }}"></i>
-            </div>
+            <span class="fd-icon-tile fd-icon-tile-lg"><i class="{{ $icon }}"></i></span>
         @endif
-        <div>
-            <h5 class="mb-0 fw-bold lh-1">{{ $title }}</h5>
+        <div class="min-width-0">
+            <h1 class="fd-page-title">{{ $title }}</h1>
             @if($subtitle)
-                <div class="text-muted fs-xs mt-1">{{ $subtitle }}</div>
+                <p class="fd-page-subtitle">{{ $subtitle }}</p>
             @endif
         </div>
     </div>
 
-    <div class="d-flex align-items-center gap-2">
+    <div class="fd-page-actions">
         @isset($actions)
             {{ $actions }}
         @endisset
         @if($backUrl)
-            <a href="{{ $backUrl }}" class="btn btn-sm btn-outline-secondary">
-                <i class="ph-arrow-left me-1"></i>{{ $backLabel ?? __('foundation::foundation.components.back') }}
+            <a href="{{ $backUrl }}" class="btn btn-light">
+                <i class="ph-arrow-left"></i>{{ $backLabel ?? __('foundation::foundation.components.back') }}
             </a>
         @endif
     </div>

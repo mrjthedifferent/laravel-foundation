@@ -179,6 +179,14 @@
                     ? $select.data('minimum-results-for-search') : 8,
                 dropdownParent: $modal.length ? $modal : undefined
             });
+
+            // Select2 renders its own combobox; without this it reaches a screen reader unnamed.
+            var name = $select.attr('aria-label')
+                || $('label[for="' + $select.attr('id') + '"]').first().text().trim()
+                || $select.attr('name');
+            if (name) {
+                $select.next('.select2').find('.select2-selection__rendered').attr('aria-label', name);
+            }
         });
     }
 

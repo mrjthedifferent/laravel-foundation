@@ -40,12 +40,12 @@
 
     <thead>
         <tr>
-            <th style="width:44px">#</th>
-            <th style="width:100px">{{ __('notification::notification.index.col_type') }}</th>
+            <th>#</th>
+            <th class="text-nowrap">{{ __('notification::notification.index.col_type') }}</th>
             <th>{{ __('notification::notification.index.col_message') }}</th>
-            <th style="width:90px">{{ __('foundation::foundation.common.status') }}</th>
-            <th style="width:130px">{{ __('notification::notification.index.col_date') }}</th>
-            <th class="text-end" style="width:100px">{{ __('foundation::foundation.common.action') }}</th>
+            <th class="text-nowrap">{{ __('foundation::foundation.common.status') }}</th>
+            <th class="text-nowrap">{{ __('notification::notification.index.col_date') }}</th>
+            <th class="text-end text-nowrap">{{ __('foundation::foundation.common.action') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -60,54 +60,54 @@
                         default => ['bg' => 'primary', 'icon' => 'ph-info'],
                     };
                 @endphp
-                <span class="badge bg-{{ $typeConfig['bg'] }}-subtle text-{{ $typeConfig['bg'] }} border border-{{ $typeConfig['bg'] }}-subtle fs-xs d-inline-flex align-items-center gap-1">
+                <span class="badge bg-{{ $typeConfig['bg'] }}">
                     <i class="ph {{ $typeConfig['icon'] }}"></i>
                     {{ ucfirst($notification->type) }}
                 </span>
             </td>
             <td>
                 <div class="d-flex flex-column gap-1">
-                    <strong class="text-body">{{ $notification->title }}</strong>
+                    <span class="fw-medium text-strong">{{ $notification->title }}</span>
                     @if($notification->body)
                         <span class="text-muted fs-sm">{{ Str::limit($notification->body, 80) }}</span>
                     @endif
                     @if($notification->download_url)
-                        <a href="{{ $notification->download_url }}" class="btn btn-sm btn-success align-self-start mt-1" target="_blank" rel="noopener">
-                            <i class="ph-download-simple me-1"></i>{{ __('notification::notification.index.download') }}
+                        <a href="{{ $notification->download_url }}" class="btn btn-sm btn-light align-self-start mt-1" target="_blank" rel="noopener">
+                            <i class="ph-download-simple"></i>{{ __('notification::notification.index.download') }}
                         </a>
                     @endif
                 </div>
             </td>
             <td>
                 @if ($notification->read_at)
-                <span class="badge bg-success-subtle text-success border border-success-subtle">{{ __('notification::notification.index.status_read') }}</span>
+                <span class="fd-status is-success">{{ __('notification::notification.index.status_read') }}</span>
                 @else
-                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">{{ __('notification::notification.index.status_unread') }}</span>
+                <span class="fd-status is-warning">{{ __('notification::notification.index.status_unread') }}</span>
                 @endif
             </td>
             <td class="text-nowrap fs-sm">{{ $notification->created_at->diffForHumans() }}</td>
             <td class="text-end">
                 <x-dropdown-menu>
                     <x-dropdown-link :url="route('admin.notification.show', $notification->id)">
-                        <i class="ph-eye me-2"></i>{{ __('foundation::foundation.common.view') }}
+                        <i class="ph-eye"></i>{{ __('foundation::foundation.common.view') }}
                     </x-dropdown-link>
                     @if($notification->download_url)
                     <a href="{{ $notification->download_url }}" class="dropdown-item" target="_blank" rel="noopener">
-                        <i class="ph-download-simple me-2"></i>{{ __('notification::notification.index.download') }}
+                        <i class="ph-download-simple"></i>{{ __('notification::notification.index.download') }}
                     </a>
                     @endif
                     @if ($notification->read_at)
                     <form action="{{ route('admin.notification.mark-as-unread', $notification->id) }}" method="POST">
                         @csrf @method('PATCH')
                         <button type="submit" class="dropdown-item">
-                            <i class="ph-envelope-simple me-2"></i>{{ __('notification::notification.index.mark_as_unread') }}
+                            <i class="ph-envelope-simple"></i>{{ __('notification::notification.index.mark_as_unread') }}
                         </button>
                     </form>
                     @else
                     <form action="{{ route('admin.notification.mark-as-read', $notification->id) }}" method="POST">
                         @csrf @method('PATCH')
                         <button type="submit" class="dropdown-item">
-                            <i class="ph-envelope-open me-2"></i>{{ __('notification::notification.index.mark_as_read') }}
+                            <i class="ph-envelope-open"></i>{{ __('notification::notification.index.mark_as_read') }}
                         </button>
                     </form>
                     @endif
@@ -115,7 +115,7 @@
                     <button type="button" class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.notification.destroy', $notification->id) }}"
                         data-text="{{ __('notification::notification.index.delete_confirm') }}">
-                        <i class="ph-trash me-2"></i>{{ __('foundation::foundation.common.delete') }}
+                        <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
                     </button>
                 </x-dropdown-menu>
             </td>

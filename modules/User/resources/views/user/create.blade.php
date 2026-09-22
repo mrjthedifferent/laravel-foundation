@@ -56,8 +56,7 @@
         </div>
         <div class="col-md-3 d-flex align-items-center">
             <img x-show="imagePreview" x-bind:src="imagePreview" alt="Preview"
-                class="rounded-circle border"
-                style="width:52px;height:52px;object-fit:cover;">
+                class="fd-avatar fd-avatar-lg">
         </div>
     </div>
 </x-form-section>
@@ -75,7 +74,8 @@
             <x-form.label for="password" required>{{ __('user::user.create.password_label') }}</x-form.label>
             <div class="position-relative">
                 <input type="password" name="password" id="password" class="form-control pe-5" placeholder="{{ __('user::user.create.password_placeholder') }}" required x-model="password">
-                <button type="button" class="btn border-0 text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" tabindex="-1"
+                <button type="button" class="btn btn-ghost btn-icon position-absolute top-50 end-0 translate-middle-y" tabindex="-1"
+                        aria-label="{{ __('foundation::foundation.auth.show_password') }}"
                         @click="togglePassword('password')">
                     <i x-show="!passwordVisible" class="ph-eye"></i>
                     <i x-show="passwordVisible" class="ph-eye-slash" x-cloak></i>
@@ -90,7 +90,8 @@
             </span>
             <div class="position-relative">
                 <input type="password" name="password_confirmation" id="password_confirmation" class="form-control pe-5" placeholder="{{ __('user::user.create.password_confirmation_placeholder') }}" required x-model="passwordConfirmation">
-                <button type="button" class="btn border-0 text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" tabindex="-1"
+                <button type="button" class="btn btn-ghost btn-icon position-absolute top-50 end-0 translate-middle-y" tabindex="-1"
+                        aria-label="{{ __('foundation::foundation.auth.show_password') }}"
                         @click="togglePassword('password_confirmation')">
                     <i x-show="!passwordConfirmVisible" class="ph-eye"></i>
                     <i x-show="passwordConfirmVisible" class="ph-eye-slash" x-cloak></i>
@@ -112,11 +113,11 @@
 </x-form-section>
 
 <div class="d-flex justify-content-between align-items-center">
-    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary">
-        <i class="ph-x me-1"></i>{{ __('foundation::foundation.common.cancel') }}
+    <a href="{{ route('admin.users.index') }}" class="btn btn-light">
+        <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
     </a>
     <x-primary-button id="submit-button" class="px-5">
-        <i class="ph-user-plus me-1"></i>{{ __('user::user.create.breadcrumb') }}
+        <i class="ph-user-plus"></i>{{ __('user::user.create.breadcrumb') }}
     </x-primary-button>
 </div>
 </div>

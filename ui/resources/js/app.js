@@ -1,6 +1,5 @@
 import './bootstrap';
 import { initNavigationSearch } from './navigation-search';
-import { initGlobalSearch } from './global-search';
 import { initEchoSubscriptions } from './echo-subscribe';
 
 import Alpine from 'alpinejs';
@@ -18,7 +17,6 @@ function runWhenReady() {
 }
 function runSearchInits() {
     initNavigationSearch();
-    initGlobalSearch();
 }
 
 if (document.readyState === 'loading') {

@@ -19,21 +19,17 @@
 <div class="card">
 
     {{-- Page header --}}
-    <div class="card-header d-flex align-items-center justify-content-between py-2">
-        <div class="d-flex align-items-center gap-2">
-            <div class="bg-primary bg-opacity-10 text-primary rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width:32px;height:32px;">
-                <i class="ph-envelope"></i>
-            </div>
-            <div>
-                <div class="fw-bold">{{ __('settings::settings.special_email_mailers.title') }}</div>
-                <div class="text-muted fs-xs">{{ __('settings::settings.special_email_mailers.subtitle') }}</div>
-            </div>
+    <div class="card-header">
+        <span class="fd-icon-tile"><i class="ph-envelope"></i></span>
+        <div>
+            <div class="card-title">{{ __('settings::settings.special_email_mailers.title') }}</div>
+            <div class="text-muted fs-xs">{{ __('settings::settings.special_email_mailers.subtitle') }}</div>
         </div>
-        <div class="d-flex align-items-center gap-2">
-            <input type="email" id="test_email_address" class="form-control form-control-sm"
-                   placeholder="test@example.com" style="width:200px;">
-            <button type="button" id="sendEmailBtn" class="btn btn-sm btn-outline-primary">
-                <i class="ph-paper-plane-tilt me-1"></i>{{ __('settings::settings.special_email_mailers.send_test') }}
+        <div class="d-flex align-items-center gap-2 ms-auto">
+            <input type="email" id="test_email_address" class="form-control form-control-sm w-sm"
+                   aria-label="{{ __('settings::settings.special_email_mailers.send_test') }}" placeholder="test@example.com">
+            <button type="button" id="sendEmailBtn" class="btn btn-sm btn-light">
+                <i class="ph-paper-plane-tilt"></i>{{ __('settings::settings.special_email_mailers.send_test') }}
             </button>
         </div>
     </div>
@@ -42,8 +38,8 @@
 
         {{-- Provider quick-ref --}}
         <details class="mb-4">
-            <summary class="d-flex align-items-center gap-2 p-3 rounded border bg-body-tertiary fw-semibold fs-sm cursor-pointer" style="list-style:none;">
-                <i class="ph-question text-primary"></i> {{ __('settings::settings.special_email_mailers.quickref_summary') }}
+            <summary class="d-flex align-items-center gap-2 p-3 rounded border bg-body-tertiary fw-semibold fs-sm cursor-pointer">
+                <i class="ph-question"></i> {{ __('settings::settings.special_email_mailers.quickref_summary') }}
             </summary>
             <div class="border border-top-0 rounded-bottom p-3 fs-sm">
                 <div class="row g-3">
@@ -83,9 +79,9 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
 
             {{-- Active mailer selector --}}
             <div class="card mb-4">
-                <div class="card-header py-2 d-flex align-items-center gap-2 bg-body-tertiary border-bottom">
-                    <i class="ph-check-circle text-primary"></i>
-                    <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">{{ __('settings::settings.special_email_mailers.active_mailer_header') }}</span>
+                <div class="card-header">
+                    <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-check-circle"></i></span>
+                    <span class="fd-overline">{{ __('settings::settings.special_email_mailers.active_mailer_header') }}</span>
                 </div>
                 <div class="card-body">
                     <x-form.select
@@ -107,13 +103,11 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
                 @if(is_array($emailMailers->value) && count($emailMailers->value) > 0)
                     @foreach($emailMailers->value as $index => $mailer)
                     <div class="card mb-3 mailer-card">
-                        <div class="card-header py-2 d-flex align-items-center justify-content-between bg-body-tertiary border-bottom">
-                            <div class="d-flex align-items-center gap-2">
-                                <i class="ph-envelope-simple text-primary"></i>
-                                <span class="fw-semibold fs-sm">{{ $mailer['TYPE'] }}</span>
-                            </div>
-                            <button type="button" class="btn btn-sm btn-outline-danger remove-mailer-btn">
-                                <i class="ph-trash me-1"></i>{{ __('settings::settings.common.remove') }}
+                        <div class="card-header">
+                            <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-envelope-simple"></i></span>
+                            <span class="card-title">{{ $mailer['TYPE'] }}</span>
+                            <button type="button" class="btn btn-sm btn-outline-danger remove-mailer-btn ms-auto">
+                                <i class="ph-trash"></i>{{ __('settings::settings.common.remove') }}
                             </button>
                         </div>
                         <div class="card-body">
@@ -143,7 +137,7 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
                                     <x-form.label for="email_mailers_{{ $index }}_password">{{ __('settings::settings.special_email_mailers.field_password') }}</x-form.label>
                                     <div class="input-group input-group-sm">
                                         <x-form.input type="password" name="email_mailers[{{ $index }}][VALUE][password]" id="email_mailers_{{ $index }}_password" :placeholder="! empty($mailer['VALUE']['password']) ? '•••••••• (unchanged)' : __('settings::settings.special_email_mailers.enter_password')" />
-                                        <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
+                                        <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost pw-toggle text-muted position-absolute top-50 end-0 translate-middle-y toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
                                     </div>
                                     <div class="form-text">{{ __('settings::settings.special_email_mailers.password_help') }}</div>
                                 </div>
@@ -160,7 +154,7 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
                                     <x-form.label for="email_mailers_{{ $index }}_client_secret" required>{{ __('settings::settings.special_email_mailers.field_client_secret') }}</x-form.label>
                                     <div class="input-group input-group-sm">
                                         <x-form.input type="password" name="email_mailers[{{ $index }}][VALUE][client_secret]" id="email_mailers_{{ $index }}_client_secret" :placeholder="! empty($mailer['VALUE']['client_secret']) ? '•••••••• (unchanged)' : __('settings::settings.special_email_mailers.enter_client_secret')" />
-                                        <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
+                                        <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost pw-toggle text-muted position-absolute top-50 end-0 translate-middle-y toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
                                     </div>
                                     <div class="form-text">{!! __('settings::settings.special_email_mailers.client_secret_help') !!}</div>
                                 </div>
@@ -184,11 +178,11 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
             </div>
 
             <div class="d-flex align-items-center justify-content-between mt-2">
-                <button type="button" class="btn btn-sm btn-outline-primary" id="addMailerBtn">
-                    <i class="ph-plus me-1"></i>{{ __('settings::settings.special_email_mailers.add_mailer') }}
+                <button type="button" class="btn btn-sm btn-light" id="addMailerBtn">
+                    <i class="ph-plus"></i>{{ __('settings::settings.special_email_mailers.add_mailer') }}
                 </button>
                 <button type="submit" class="btn btn-primary px-4">
-                    <i class="ph-floppy-disk me-1"></i>{{ __('settings::settings.special_email_mailers.save_mailers') }}
+                    <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_email_mailers.save_mailers') }}
                 </button>
             </div>
         </form>
@@ -251,12 +245,10 @@ document.getElementById('addMailerBtn').addEventListener('click', function () {
     var idx = mailerIndex++;
     var html = `
     <div class="card mb-3 mailer-card">
-        <div class="card-header py-2 d-flex align-items-center justify-content-between bg-body-tertiary border-bottom">
-            <div class="d-flex align-items-center gap-2">
-                <i class="ph-envelope-simple text-primary"></i>
-                <span class="fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.new_mailer') }}</span>
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-danger remove-mailer-btn"><i class="ph-trash me-1"></i>{{ __('settings::settings.common.remove') }}</button>
+        <div class="card-header">
+            <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-envelope-simple"></i></span>
+            <span class="card-title">{{ __('settings::settings.special_email_mailers.new_mailer') }}</span>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-mailer-btn ms-auto"><i class="ph-trash"></i>{{ __('settings::settings.common.remove') }}</button>
         </div>
         <div class="card-body">
             <div class="row g-3">
@@ -294,7 +286,7 @@ document.getElementById('addMailerBtn').addEventListener('click', function () {
                     <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_password') }}</label>
                     <div class="input-group input-group-sm">
                         <input type="password" name="email_mailers[${idx}][VALUE][password]" class="form-control form-control-sm">
-                        <button type="button" class="btn btn-outline-secondary toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
+                        <button type="button" class="btn btn-light toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
                     </div>
                 </div>
 
@@ -311,7 +303,7 @@ document.getElementById('addMailerBtn').addEventListener('click', function () {
                     <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_client_secret') }} <span class="text-danger">*</span></label>
                     <div class="input-group input-group-sm">
                         <input type="password" name="email_mailers[${idx}][VALUE][client_secret]" class="form-control form-control-sm">
-                        <button type="button" class="btn btn-outline-secondary toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
+                        <button type="button" class="btn btn-light toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
                     </div>
                     <div class="form-text">{!! __('settings::settings.special_email_mailers.client_secret_short_help') !!}</div>
                 </div>
@@ -344,7 +336,7 @@ document.getElementById('sendEmailBtn').addEventListener('click', function () {
     }
     var btn = this, orig = btn.innerHTML;
     btn.disabled = true;
-    btn.innerHTML = '<i class="ph-circle-notch ph-spin me-1"></i>{{ __('settings::settings.common.sending') }}';
+    btn.innerHTML = '<i class="ph-circle-notch ph-spin"></i>{{ __('settings::settings.common.sending') }}';
     $.post('{{ route("admin.settings.special.send_test_email") }}', { email: email, _token: '{{ csrf_token() }}' })
         .done(function (r) {
             window.toast('success', '{{ __('settings::settings.special_email_mailers.test_email_sent_title') }}', r.message);

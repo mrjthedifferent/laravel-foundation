@@ -81,9 +81,9 @@
         </x-form-section>
 
         <div class="card mb-3 d-none" id="value_container">
-            <div class="card-header py-2 d-flex align-items-center gap-2 bg-body-tertiary border-bottom">
-                <i class="ph-pencil-line text-primary"></i>
-                <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">{{ __('settings::settings.create.value_header') }}</span>
+            <div class="card-header">
+                <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-pencil-line"></i></span>
+                <span class="fd-overline">{{ __('settings::settings.create.value_header') }}</span>
             </div>
             <div class="card-body">
                 <div id="value_text_container" class="d-none">
@@ -118,13 +118,13 @@
                         accept="image/*">
                 </div>
                 <div id="value_json_container" class="d-none">
-                    <div id="json-editor" class="border rounded" style="height:320px;"></div>
+                    <div id="json-editor" class="border rounded"></div>
                     <x-form.input type="hidden" name="value_json" id="value_json" :value="old('value_json', '{}')" />
                     <div class="d-flex align-items-center gap-2 mt-2">
-                        <button type="button" class="btn btn-sm btn-light border" id="format-json"><i
-                                class="ph-brackets-curly me-1"></i>{{ __('settings::settings.create.json_format') }}</button>
-                        <button type="button" class="btn btn-sm btn-light border" id="validate-json"><i
-                                class="ph-check me-1"></i>{{ __('settings::settings.create.json_validate') }}</button>
+                        <button type="button" class="btn btn-sm btn-light" id="format-json"><i
+                                class="ph-brackets-curly"></i>{{ __('settings::settings.create.json_format') }}</button>
+                        <button type="button" class="btn btn-sm btn-light" id="validate-json"><i
+                                class="ph-check"></i>{{ __('settings::settings.create.json_validate') }}</button>
                         <span id="json-validation-result" class="ms-1 fs-sm"></span>
                     </div>
                 </div>
@@ -142,12 +142,12 @@
                     <div id="array_values_list">
                         <div class="input-group input-group-sm mb-2 array-value-row">
                             <x-form.input name="value_array[]" placeholder="{{ __('settings::settings.create.array_value_placeholder') }}" />
-                            <button type="button" class="btn btn-outline-danger" onclick="removeArrayValue(this)"><i
+                            <button type="button" class="btn btn-outline-danger btn-icon" onclick="removeArrayValue(this)"><i
                                     class="ph-trash"></i></button>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addArrayValue()">
-                        <i class="ph-plus me-1"></i>{{ __('settings::settings.create.add_value') }}
+                    <button type="button" class="btn btn-sm btn-light" onclick="addArrayValue()">
+                        <i class="ph-plus"></i>{{ __('settings::settings.create.add_value') }}
                     </button>
                 </div>
             </div>
@@ -159,32 +159,32 @@
                     <span class="text-muted fs-xs ms-auto">{{ __('settings::settings.create.options_badge') }}</span>
                 </x-slot>
                 <div class="row g-0 mb-2 px-1">
-                    <div class="col-5"><span class="text-muted fw-bold text-uppercase fs-xs">{{ __('settings::settings.create.options_col_key') }}</span></div>
-                    <div class="col-5"><span class="text-muted fw-bold text-uppercase fs-xs">{{ __('settings::settings.create.options_col_label') }}</span></div>
+                    <div class="col-5"><span class="fd-overline">{{ __('settings::settings.create.options_col_key') }}</span></div>
+                    <div class="col-5"><span class="fd-overline">{{ __('settings::settings.create.options_col_label') }}</span></div>
                 </div>
                 <div id="options_list">
                     <div class="row g-2 mb-2 align-items-center option-row">
                         <div class="col-5"><x-form.input name="option_keys[]" placeholder="{{ __('settings::settings.create.option_key_placeholder') }}" /></div>
                         <div class="col-5"><x-form.input name="option_values[]" placeholder="{{ __('settings::settings.create.option_value_placeholder') }}" /></div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-sm btn-outline-danger remove-option"
+                            <button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-option"
                                 onclick="removeOption(this)"><i class="ph-trash"></i></button>
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-sm btn-outline-primary mt-1" onclick="addOption()">
-                    <i class="ph-plus me-1"></i>{{ __('settings::settings.create.add_option') }}
+                <button type="button" class="btn btn-sm btn-light mt-1" onclick="addOption()">
+                    <i class="ph-plus"></i>{{ __('settings::settings.create.add_option') }}
                 </button>
             </x-form-section>
         </div>
 
         {{-- Footer actions --}}
         <div class="d-flex justify-content-between align-items-center">
-            <a href="{{ route('admin.settings.manage') }}" class="btn btn-outline-secondary">
-                <i class="ph-x me-1"></i>{{ __('foundation::foundation.common.cancel') }}
+            <a href="{{ route('admin.settings.manage') }}" class="btn btn-light">
+                <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
             </a>
             <button type="submit" class="btn btn-primary px-4">
-                <i class="ph-floppy-disk me-1"></i>{{ __('settings::settings.create.submit') }}
+                <i class="ph-floppy-disk"></i>{{ __('settings::settings.create.submit') }}
             </button>
         </div>
 
@@ -245,7 +245,10 @@
             editor.session.setMode('ace/mode/json');
             editor.setOptions({
                 fontSize: '13px',
-                showPrintMargin: false
+                showPrintMargin: false,
+                // Sizes the editor from its content instead of a fixed inline height.
+                minLines: 18,
+                maxLines: 18
             });
             try {
                 editor.setValue(JSON.stringify(JSON.parse(document.getElementById('value_json').value || '{}'), null, 2), -
@@ -294,7 +297,7 @@
             var row = '<div class="row g-2 mb-2 align-items-center option-row">' +
                 '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_keys[]" placeholder="{{ __('settings::settings.create.option_key_placeholder') }}"></div>' +
                 '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_values[]" placeholder="{{ __('settings::settings.create.option_value_placeholder') }}"></div>' +
-                '<div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger remove-option" onclick="removeOption(this)"><i class="ph-trash"></i></button></div>' +
+                '<div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-option" onclick="removeOption(this)"><i class="ph-trash"></i></button></div>' +
                 '</div>';
             document.getElementById('options_list').insertAdjacentHTML('beforeend', row);
         }
@@ -305,7 +308,7 @@
 
         function addArrayValue() {
             var row =
-                '<div class="input-group input-group-sm mb-2 array-value-row"><input type="text" class="form-control" name="value_array[]" placeholder="{{ __('settings::settings.create.array_value_placeholder') }}"><button type="button" class="btn btn-outline-danger" onclick="removeArrayValue(this)"><i class="ph-trash"></i></button></div>';
+                '<div class="input-group input-group-sm mb-2 array-value-row"><input type="text" class="form-control" name="value_array[]" placeholder="{{ __('settings::settings.create.array_value_placeholder') }}"><button type="button" class="btn btn-outline-danger btn-icon" onclick="removeArrayValue(this)"><i class="ph-trash"></i></button></div>';
             document.getElementById('array_values_list').insertAdjacentHTML('beforeend', row);
         }
 

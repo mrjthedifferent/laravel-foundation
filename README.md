@@ -22,7 +22,7 @@ kits drift apart; a package does not.
 
 - Laravel 13, PHP 8.3+, built on [nwidart/laravel-modules](https://github.com/nWidart/laravel-modules)
 - Server-rendered Blade, Bootstrap 5.3, no build step required for the admin theme
-- Light and dark mode, RTL, 11 colour palettes, collapsible sidebar
+- Light and dark mode, RTL, 8 accent palettes (or your own brand colour), collapsible sidebar
 - Everything a project needs to change is overridable without forking
 
 ## What is inside

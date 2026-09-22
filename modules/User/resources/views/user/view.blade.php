@@ -9,14 +9,13 @@
     {{-- Header Card --}}
     <div class="card mb-3">
         <div class="card-body">
-            <div class="row align-items-center">
+            <div class="row align-items-center g-3">
                 <div class="col-md-8">
                     <div class="d-flex align-items-center gap-3">
-                        <img src="{{ $user->image }}" class="rounded-circle border flex-shrink-0"
-                            style="height:70px;width:70px;object-fit:cover;" alt="{{ $user->name }}">
-                        <div>
-                            <h5 class="mb-1 fw-bold">{{ $user->name }}</h5>
-                            <p class="mb-1 text-muted fs-sm">
+                        <img src="{{ $user->image }}" class="fd-avatar fd-avatar-lg" alt="{{ $user->name }}">
+                        <div class="min-width-0">
+                            <h5 class="mb-1">{{ $user->name }}</h5>
+                            <p class="mb-2 text-muted fs-sm">
                                 @if ($user->email)
                                     <i class="ph-envelope me-1"></i> {{ $user->email }}
                                     @if ($user->email_verified_at)
@@ -25,7 +24,7 @@
                                 @endif
                                 @if ($user->phone)
                                     @if ($user->email)
-                                        <span class="mx-2">|</span>
+                                        <span class="mx-2">·</span>
                                     @endif
                                     <i class="ph-phone me-1"></i> {{ $user->phone }}
                                     @if ($user->phone_verified_at)
@@ -35,36 +34,38 @@
                             </p>
                             <div class="d-flex flex-wrap gap-1">
                                 @if ($user->isSuperAdmin())
-                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle"><i class="ph-crown me-1"></i>{{ __('user::user.common.super_admin') }}</span>
+                                    <span class="badge bg-danger"><i class="ph-crown"></i>{{ __('user::user.common.super_admin') }}</span>
                                 @endif
                                 @foreach ($user->roles as $role)
-                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle">{{ $role->name }}</span>
+                                    <span class="badge bg-primary">{{ $role->name }}</span>
                                 @endforeach
                                 <x-status-badge :active="$user->is_active" />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 text-end mt-3 mt-md-0">
-                    @can('Edit User')
-                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-primary me-2">
-                            <i class="ph-pencil-simple me-1"></i> {{ __('user::user.view.edit_user') }}
-                        </a>
-                    @endcan
-                    @can('User Password Reset')
-                        <a href="{{ route('admin.user.password.reset', $user->id) }}"
-                            class="btn btn-sm btn-outline-warning swal-confirm"
-                            data-text="{{ __('user::user.view.reset_password_confirm') }}">
-                            <i class="ph-key me-1"></i> {{ __('user::user.view.reset_password') }}
-                        </a>
-                    @endcan
-                    @can('impersonate', $user)
-                        <a href="{{ route('admin.users.impersonate', $user->id) }}"
-                            class="btn btn-sm btn-outline-dark ms-2 swal-post"
-                            data-text="{{ __('user::user.view.impersonate_confirm', ['name' => $user->name]) }}">
-                            <i class="ph-user-switch me-1"></i> {{ __('user::user.view.impersonate') }}
-                        </a>
-                    @endcan
+                <div class="col-md-4">
+                    <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+                        @can('Edit User')
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-primary">
+                                <i class="ph-pencil-simple"></i>{{ __('user::user.view.edit_user') }}
+                            </a>
+                        @endcan
+                        @can('User Password Reset')
+                            <a href="{{ route('admin.user.password.reset', $user->id) }}"
+                                class="btn btn-sm btn-light swal-confirm"
+                                data-text="{{ __('user::user.view.reset_password_confirm') }}">
+                                <i class="ph-key"></i>{{ __('user::user.view.reset_password') }}
+                            </a>
+                        @endcan
+                        @can('impersonate', $user)
+                            <a href="{{ route('admin.users.impersonate', $user->id) }}"
+                                class="btn btn-sm btn-light swal-post"
+                                data-text="{{ __('user::user.view.impersonate_confirm', ['name' => $user->name]) }}">
+                                <i class="ph-user-switch"></i>{{ __('user::user.view.impersonate') }}
+                            </a>
+                        @endcan
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,7 +85,7 @@
                     <button class="nav-link" id="documents-tab" data-bs-toggle="tab"
                         data-bs-target="#documents" type="button" role="tab" aria-selected="false">
                         <i class="ph-files me-1"></i> {{ __('user::user.view.tab_documents') }}
-                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle ms-1">{{ $user->documents->count() }}</span>
+                        <span class="badge badge-count ms-1">{{ $user->documents->count() }}</span>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -99,145 +100,124 @@
 
                 {{-- Tab 1: Personal Information --}}
                 <div class="tab-pane fade show active" id="personal" role="tabpanel">
-                    <div class="row">
+                    <div class="row g-4">
                         <div class="col-md-6">
-                            <table class="table table-nowrap mb-0">
-                                <tbody>
-                                    <tr>
-                                        <th class="text-muted" width="140">{{ __('user::user.view.col_id') }}</th>
-                                        <td>{{ $user->id }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-muted">{{ __('user::user.view.col_uuid') }}</th>
-                                        <td><small class="font-monospace">{{ $user->uuid ?? 'N/A' }}</small></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-muted">{{ __('user::user.view.col_full_name') }}</th>
-                                        <td>{{ $user->name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-muted">{{ __('user::user.view.col_email') }}</th>
-                                        <td>
-                                            {{ $user->email ?? 'N/A' }}
-                                            @if ($user->email && $user->email_verified_at)
-                                                <i class="ph-check-circle text-success ms-1" title="{{ __('user::user.common.verified') }}"></i>
-                                            @elseif ($user->email)
-                                                <i class="ph-x-circle text-warning ms-1" title="{{ __('user::user.view.not_verified_badge') }}"></i>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-muted">{{ __('user::user.view.col_gender') }}</th>
-                                        <td>{{ ucfirst($user->gender?->value ?? 'N/A') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-muted">{{ __('user::user.view.col_roles') }}</th>
-                                        <td>
-                                            @forelse ($user->roles as $role)
-                                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle me-1">{{ $role->name }}</span>
-                                            @empty
-                                                <span class="text-muted">{{ __('user::user.view.no_roles') }}</span>
-                                            @endforelse
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-muted">{{ __('foundation::foundation.common.status') }}</th>
-                                        <td>
-                                            <x-status-badge :active="$user->is_active" />
-                                        </td>
-                                    </tr>
-                                    @if ($user->provider)
-                                        <tr>
-                                            <th class="text-muted">{{ __('user::user.view.col_social_login') }}</th>
-                                            <td><span class="badge bg-info-subtle text-info border border-info-subtle">{{ ucfirst($user->provider) }}</span></td>
-                                        </tr>
+                            <dl class="fd-dl">
+                                <dt>{{ __('user::user.view.col_id') }}</dt>
+                                <dd>{{ $user->id }}</dd>
+
+                                <dt>{{ __('user::user.view.col_uuid') }}</dt>
+                                <dd><span class="font-monospace fs-sm">{{ $user->uuid ?? 'N/A' }}</span></dd>
+
+                                <dt>{{ __('user::user.view.col_full_name') }}</dt>
+                                <dd>{{ $user->name }}</dd>
+
+                                <dt>{{ __('user::user.view.col_email') }}</dt>
+                                <dd>
+                                    {{ $user->email ?? 'N/A' }}
+                                    @if ($user->email && $user->email_verified_at)
+                                        <i class="ph-check-circle text-success ms-1" title="{{ __('user::user.common.verified') }}"></i>
+                                    @elseif ($user->email)
+                                        <i class="ph-x-circle text-warning ms-1" title="{{ __('user::user.view.not_verified_badge') }}"></i>
                                     @endif
-                                </tbody>
-                            </table>
+                                </dd>
+
+                                <dt>{{ __('user::user.view.col_gender') }}</dt>
+                                <dd>{{ ucfirst($user->gender?->value ?? 'N/A') }}</dd>
+
+                                <dt>{{ __('user::user.view.col_roles') }}</dt>
+                                <dd>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        @forelse ($user->roles as $role)
+                                            <span class="badge bg-primary">{{ $role->name }}</span>
+                                        @empty
+                                            <span class="text-muted">{{ __('user::user.view.no_roles') }}</span>
+                                        @endforelse
+                                    </div>
+                                </dd>
+
+                                <dt>{{ __('foundation::foundation.common.status') }}</dt>
+                                <dd><x-status-badge :active="$user->is_active" /></dd>
+
+                                @if ($user->provider)
+                                    <dt>{{ __('user::user.view.col_social_login') }}</dt>
+                                    <dd><span class="badge bg-info">{{ ucfirst($user->provider) }}</span></dd>
+                                @endif
+                            </dl>
                         </div>
                         <div class="col-md-6">
-                            <table class="table table-nowrap mb-0">
-                                <tbody>
-                                    <tr>
-                                        <th class="text-muted" width="160">{{ __('user::user.view.col_last_login') }}</th>
-                                        <td>
-                                            @if ($user->latestLogin)
-                                                {{ $user->latestLogin->logged_in_at->format('d M Y h:i A') }}
-                                                <br>
-                                                <small class="text-muted">{{ $user->latestLogin->logged_in_at->diffForHumans() }}</small>
-                                            @else
-                                                <span class="text-muted">{{ __('user::user.view.never_logged_in') }}</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-muted">{{ __('user::user.view.col_created') }}</th>
-                                        <td>
-                                            {{ $user->created_at->format('d M Y h:i A') }}
-                                            <br>
-                                            <small class="text-muted">{{ $user->created_at->diffForHumans() }}</small>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-muted">{{ __('user::user.view.col_updated') }}</th>
-                                        <td>
-                                            {{ $user->updated_at->format('d M Y h:i A') }}
-                                            <br>
-                                            <small class="text-muted">{{ $user->updated_at->diffForHumans() }}</small>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-muted">{{ __('user::user.view.col_email_verified') }}</th>
-                                        <td>
-                                            @if ($user->email_verified_at)
-                                                <span class="badge bg-success-subtle text-success border border-success-subtle">{{ __('user::user.common.verified') }}</span>
-                                                <br>
-                                                <small class="text-muted">{{ $user->email_verified_at->format('d M Y') }}</small>
-                                            @else
-                                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">{{ __('user::user.view.not_verified_badge') }}</span>
-                                                @can('Verify User Contact')
-                                                    @if ($user->email)
-                                                        <form method="POST" action="{{ route('admin.users.verify.email', $user) }}" class="d-inline ms-2">
-                                                            @csrf
-                                                            <button type="submit" class="btn btn-sm btn-outline-success swal-confirm"
-                                                                data-text="{{ __('user::user.view.verify_email_confirm') }}">
-                                                                <i class="ph-check-circle me-1"></i>{{ __('user::user.view.verify_email') }}
-                                                            </button>
-                                                        </form>
-                                                    @endif
-                                                @endcan
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-muted">{{ __('user::user.view.col_phone') }}</th>
-                                        <td>{{ $user->phone ?? '—' }}</td>
-                                    </tr>
-                                    @if ($user->phone)
-                                    <tr>
-                                        <th class="text-muted">{{ __('user::user.view.col_phone_verified') }}</th>
-                                        <td>
-                                            @if ($user->phone_verified_at)
-                                                <span class="badge bg-success-subtle text-success border border-success-subtle">{{ __('user::user.common.verified') }}</span>
-                                                <br>
-                                                <small class="text-muted">{{ $user->phone_verified_at->format('d M Y') }}</small>
-                                            @else
-                                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">{{ __('user::user.view.not_verified_badge') }}</span>
-                                                @can('Verify User Contact')
-                                                    <form method="POST" action="{{ route('admin.users.verify.phone', $user) }}" class="d-inline ms-2">
+                            <dl class="fd-dl">
+                                <dt>{{ __('user::user.view.col_last_login') }}</dt>
+                                <dd>
+                                    @if ($user->latestLogin)
+                                        {{ $user->latestLogin->logged_in_at->format('d M Y h:i A') }}
+                                        <div class="text-muted fs-xs">{{ $user->latestLogin->logged_in_at->diffForHumans() }}</div>
+                                    @else
+                                        <span class="text-muted">{{ __('user::user.view.never_logged_in') }}</span>
+                                    @endif
+                                </dd>
+
+                                <dt>{{ __('user::user.view.col_created') }}</dt>
+                                <dd>
+                                    {{ $user->created_at->format('d M Y h:i A') }}
+                                    <div class="text-muted fs-xs">{{ $user->created_at->diffForHumans() }}</div>
+                                </dd>
+
+                                <dt>{{ __('user::user.view.col_updated') }}</dt>
+                                <dd>
+                                    {{ $user->updated_at->format('d M Y h:i A') }}
+                                    <div class="text-muted fs-xs">{{ $user->updated_at->diffForHumans() }}</div>
+                                </dd>
+
+                                <dt>{{ __('user::user.view.col_email_verified') }}</dt>
+                                <dd>
+                                    @if ($user->email_verified_at)
+                                        <span class="badge bg-success">{{ __('user::user.common.verified') }}</span>
+                                        <div class="text-muted fs-xs">{{ $user->email_verified_at->format('d M Y') }}</div>
+                                    @else
+                                        <div class="d-flex flex-wrap align-items-center gap-2">
+                                            <span class="badge bg-warning">{{ __('user::user.view.not_verified_badge') }}</span>
+                                            @can('Verify User Contact')
+                                                @if ($user->email)
+                                                    <form method="POST" action="{{ route('admin.users.verify.email', $user) }}" class="d-inline">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-sm btn-outline-success swal-confirm"
+                                                        <button type="submit" class="btn btn-sm btn-light swal-confirm"
+                                                            data-text="{{ __('user::user.view.verify_email_confirm') }}">
+                                                            <i class="ph-check-circle"></i>{{ __('user::user.view.verify_email') }}
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            @endcan
+                                        </div>
+                                    @endif
+                                </dd>
+
+                                <dt>{{ __('user::user.view.col_phone') }}</dt>
+                                <dd>{{ $user->phone ?? '—' }}</dd>
+
+                                @if ($user->phone)
+                                    <dt>{{ __('user::user.view.col_phone_verified') }}</dt>
+                                    <dd>
+                                        @if ($user->phone_verified_at)
+                                            <span class="badge bg-success">{{ __('user::user.common.verified') }}</span>
+                                            <div class="text-muted fs-xs">{{ $user->phone_verified_at->format('d M Y') }}</div>
+                                        @else
+                                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                                <span class="badge bg-warning">{{ __('user::user.view.not_verified_badge') }}</span>
+                                                @can('Verify User Contact')
+                                                    <form method="POST" action="{{ route('admin.users.verify.phone', $user) }}" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-light swal-confirm"
                                                             data-text="{{ __('user::user.view.verify_phone_confirm') }}">
-                                                            <i class="ph-check-circle me-1"></i>{{ __('user::user.view.verify_phone') }}
+                                                            <i class="ph-check-circle"></i>{{ __('user::user.view.verify_phone') }}
                                                         </button>
                                                     </form>
                                                 @endcan
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    @endif
-                                </tbody>
-                            </table>
+                                            </div>
+                                        @endif
+                                    </dd>
+                                @endif
+                            </dl>
                         </div>
                     </div>
                 </div>
@@ -246,7 +226,7 @@
                 <div class="tab-pane fade" id="documents" role="tabpanel">
                     <div class="table-responsive mb-4">
                         <table class="table table-hover table-borderless table-nowrap align-middle">
-                            <thead class="table-active">
+                            <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>{{ __('user::user.view.col_type') }}</th>
@@ -262,35 +242,37 @@
                             <tbody>
                                 @forelse ($user->documents as $document)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td class="text-muted">{{ $loop->iteration }}</td>
                                         <td>{{ $document->document_type->label() }}</td>
                                         <td>{{ $document->document_number ?? 'N/A' }}</td>
                                         <td>
-                                            <a href="{{ \Mrj\Foundation\Services\FileManagerService::getFile($document->file_path) }}"
-                                                target="_blank" class="btn btn-sm btn-outline-info me-1">
-                                                <i class="ph-eye me-1"></i> {{ __('user::user.view.doc_front') }}
-                                            </a>
-                                            @if ($document->back_file_path)
-                                                <a href="{{ \Mrj\Foundation\Services\FileManagerService::getFile($document->back_file_path) }}"
-                                                    target="_blank" class="btn btn-sm btn-outline-info">
-                                                    <i class="ph-eye me-1"></i> {{ __('user::user.view.doc_back') }}
+                                            <div class="d-flex flex-wrap gap-1">
+                                                <a href="{{ \Mrj\Foundation\Services\FileManagerService::getFile($document->file_path) }}"
+                                                    target="_blank" class="btn btn-sm btn-light">
+                                                    <i class="ph-eye"></i>{{ __('user::user.view.doc_front') }}
                                                 </a>
-                                            @endif
+                                                @if ($document->back_file_path)
+                                                    <a href="{{ \Mrj\Foundation\Services\FileManagerService::getFile($document->back_file_path) }}"
+                                                        target="_blank" class="btn btn-sm btn-light">
+                                                        <i class="ph-eye"></i>{{ __('user::user.view.doc_back') }}
+                                                    </a>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td>
                                             {{ $document->expiry_date ? $document->expiry_date->format('d M Y') : 'N/A' }}
                                             @if ($document->expiry_date && $document->expiry_date->isPast())
-                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle ms-1">{{ __('user::user.view.expired_badge') }}</span>
+                                                <span class="badge bg-danger ms-1">{{ __('user::user.view.expired_badge') }}</span>
                                             @endif
                                         </td>
-                                        <td>{{ $document->created_at->format('d M Y') }}</td>
+                                        <td class="text-muted">{{ $document->created_at->format('d M Y') }}</td>
                                         @can('Edit User')
                                             <td class="text-end">
                                                 <x-dropdown-menu>
                                                     <button type="button" class="dropdown-item text-danger swal-delete"
                                                         data-url="{{ route('admin.users.documents.destroy', [$user->id, $document->id]) }}"
                                                         data-text="{{ __('user::user.view.delete_document_confirm') }}">
-                                                        <i class="ph-trash me-2"></i> {{ __('foundation::foundation.common.delete') }}
+                                                        <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
                                                     </button>
                                                 </x-dropdown-menu>
                                             </td>
@@ -298,9 +280,11 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center text-muted py-4">
-                                            <i class="ph-folder-open d-block mb-2 opacity-25 fs-4"></i>
-                                            {{ __('user::user.view.no_documents') }}
+                                        <td colspan="7" class="p-0">
+                                            <div class="fd-empty">
+                                                <span class="fd-empty-icon"><i class="ph-folder-open"></i></span>
+                                                <div class="fd-empty-title">{{ __('user::user.view.no_documents') }}</div>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforelse
@@ -311,9 +295,7 @@
                     {{-- Upload Form --}}
                     @can('Edit User')
                         <div class="border-top pt-4">
-                            <div class="fw-semibold fs-sm mb-3">
-                                <i class="ph-upload me-1 text-primary"></i> {{ __('user::user.view.upload_document_heading') }}
-                            </div>
+                            <div class="fd-overline mb-3">{{ __('user::user.view.upload_document_heading') }}</div>
                             <form action="{{ route('admin.users.documents.store', $user->id) }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
@@ -339,7 +321,7 @@
                                 </div>
                                 <div class="mt-3">
                                     <x-primary-button type="submit">
-                                        <i class="ph-upload me-1"></i> {{ __('user::user.view.upload_document_submit') }}
+                                        <i class="ph-upload"></i>{{ __('user::user.view.upload_document_submit') }}
                                     </x-primary-button>
                                 </div>
                             </form>
@@ -351,7 +333,7 @@
                 <div class="tab-pane fade" id="login-history" role="tabpanel">
                     <div class="table-responsive">
                         <table class="table table-hover table-borderless table-nowrap align-middle">
-                            <thead class="table-active">
+                            <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>{{ __('user::user.view.col_device') }}</th>
@@ -365,7 +347,7 @@
                             <tbody>
                                 @forelse ($loginHistory as $history)
                                     <tr>
-                                        <td>{{ $loginHistory->firstItem() + $loop->index }}</td>
+                                        <td class="text-muted">{{ $loginHistory->firstItem() + $loop->index }}</td>
                                         <td>
                                             @if ($history->device_type === 'mobile')
                                                 <i class="ph-device-mobile text-muted me-1"></i>
@@ -381,8 +363,7 @@
                                         <td><span class="font-monospace fs-xs">{{ $history->ip_address ?? 'N/A' }}</span></td>
                                         <td>
                                             {{ $history->logged_in_at->format('d M Y h:i A') }}
-                                            <br>
-                                            <small class="text-muted">{{ $history->logged_in_at->diffForHumans() }}</small>
+                                            <div class="text-muted fs-xs">{{ $history->logged_in_at->diffForHumans() }}</div>
                                         </td>
                                         <td>
                                             @if ($history->logged_out_at)
@@ -394,18 +375,25 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center text-muted py-4">
-                                            <i class="ph-clock-counter-clockwise d-block mb-2 opacity-25 fs-4"></i>
-                                            {{ __('user::user.view.no_login_history') }}
+                                        <td colspan="7" class="p-0">
+                                            <div class="fd-empty">
+                                                <span class="fd-empty-icon"><i class="ph-clock-counter-clockwise"></i></span>
+                                                <div class="fd-empty-title">{{ __('user::user.view.no_login_history') }}</div>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-3">
-                        {{ $loginHistory->links() }}
-                    </div>
+                    @if ($loginHistory->total() > 0)
+                        <div class="fd-table-foot">
+                            <span>
+                                {{ __('foundation::foundation.table.showing', ['first' => $loginHistory->firstItem(), 'last' => $loginHistory->lastItem(), 'total' => number_format($loginHistory->total())]) }}
+                            </span>
+                            {{ $loginHistory->links() }}
+                        </div>
+                    @endif
                 </div>
 
             </div>
@@ -415,10 +403,10 @@
     {{-- Manage Account (non-production only) --}}
     @if (!app()->environment('production'))
         @can('Delete User')
-            <div class="card border-danger mt-3" id="manage-account">
-                <div class="card-header bg-danger text-white d-flex align-items-center gap-2">
-                    <i class="ph-warning-octagon"></i>
-                    <span class="fw-semibold">{{ __('user::user.view.manage_account_heading') }}</span>
+            <div class="card mt-3" id="manage-account">
+                <div class="card-header">
+                    <span class="fd-icon-tile fd-icon-tile-sm is-danger"><i class="ph-warning-octagon"></i></span>
+                    <h6 class="card-title">{{ __('user::user.view.manage_account_heading') }}</h6>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('admin.users.account.manage', $user->id) }}">
@@ -448,17 +436,19 @@
                             </div>
                             <div class="col-md-6">
                                 <div id="manageResetWarning" class="alert alert-warning mb-0">
-                                    <strong>{{ __('user::user.view.warning_label') }}</strong> {{ __('user::user.view.reset_warning_text') }}
+                                    <i class="ph-warning"></i>
+                                    <div><strong>{{ __('user::user.view.warning_label') }}</strong> {{ __('user::user.view.reset_warning_text') }}</div>
                                 </div>
                                 <div id="manageDeleteWarning" class="alert alert-danger mb-0 d-none">
-                                    <strong>{{ __('user::user.view.danger_label') }}</strong> {{ __('user::user.view.delete_warning_text') }}
+                                    <i class="ph-warning-octagon"></i>
+                                    <div><strong>{{ __('user::user.view.danger_label') }}</strong> {{ __('user::user.view.delete_warning_text') }}</div>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-3">
                             <button type="submit" id="manageConfirmButton" class="btn btn-warning swal-confirm"
                                     data-text="{{ __('user::user.view.manage_account_confirm') }}">
-                                <i class="ph-arrow-counter-clockwise me-1"></i> {{ __('user::user.view.confirm_reset') }}
+                                <i class="ph-arrow-counter-clockwise"></i>{{ __('user::user.view.confirm_reset') }}
                             </button>
                         </div>
                     </form>
@@ -502,10 +492,10 @@
                 document.getElementById('manageDeleteWarning').classList.toggle('d-none', !isDelete);
                 const btn = document.getElementById('manageConfirmButton');
                 if (isDelete) {
-                    btn.innerHTML = '<i class="ph-trash me-1"></i> {{ __('user::user.view.confirm_delete') }}';
+                    btn.innerHTML = '<i class="ph-trash"></i>{{ __('user::user.view.confirm_delete') }}';
                     btn.className = 'btn btn-danger';
                 } else {
-                    btn.innerHTML = '<i class="ph-arrow-counter-clockwise me-1"></i> {{ __('user::user.view.confirm_reset') }}';
+                    btn.innerHTML = '<i class="ph-arrow-counter-clockwise"></i>{{ __('user::user.view.confirm_reset') }}';
                     btn.className = 'btn btn-warning';
                 }
             }

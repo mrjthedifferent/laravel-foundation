@@ -17,7 +17,7 @@
             <x-input-label for="update_password_current_password" :value="__('foundation::foundation.profile.current_password')" />
             <div class="position-relative mt-1">
                 <x-text-input id="update_password_current_password" name="current_password" type="password" class="block w-full pe-5" autocomplete="current-password" />
-                <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" data-target="update_password_current_password" tabindex="-1">
+                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost btn-icon pw-toggle position-absolute top-50 end-0 translate-middle-y" data-target="update_password_current_password" tabindex="-1">
                     <i class="ph-eye"></i>
                 </button>
             </div>
@@ -28,7 +28,7 @@
             <x-input-label for="update_password_password" :value="__('foundation::foundation.profile.new_password')" />
             <div class="position-relative mt-1">
                 <x-text-input id="update_password_password" name="password" type="password" class="block w-full pe-5" autocomplete="new-password" />
-                <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" data-target="update_password_password" tabindex="-1">
+                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost btn-icon pw-toggle position-absolute top-50 end-0 translate-middle-y" data-target="update_password_password" tabindex="-1">
                     <i class="ph-eye"></i>
                 </button>
             </div>
@@ -39,7 +39,7 @@
             <x-input-label for="update_password_password_confirmation" :value="__('foundation::foundation.profile.confirm_password')" />
             <div class="position-relative mt-1">
                 <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="block w-full pe-5" autocomplete="new-password" />
-                <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" data-target="update_password_password_confirmation" tabindex="-1">
+                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost btn-icon pw-toggle position-absolute top-50 end-0 translate-middle-y" data-target="update_password_password_confirmation" tabindex="-1">
                     <i class="ph-eye"></i>
                 </button>
             </div>

@@ -54,11 +54,11 @@
 </x-form-section>
 
 <div class="d-flex justify-content-between align-items-center">
-    <a href="{{ route('admin.push.notification.index') }}" class="btn btn-outline-secondary">
-        <i class="ph-x me-1"></i>{{ __('foundation::foundation.common.cancel') }}
+    <a href="{{ route('admin.push.notification.index') }}" class="btn btn-light">
+        <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
     </a>
     <x-primary-button id="submit-button" class="px-5">
-        <i class="ph-paper-plane-tilt me-1"></i>{{ __('notification::notification.push_notification_create.send_notification') }}
+        <i class="ph-paper-plane-tilt"></i>{{ __('notification::notification.push_notification_create.send_notification') }}
     </x-primary-button>
 </div>
 

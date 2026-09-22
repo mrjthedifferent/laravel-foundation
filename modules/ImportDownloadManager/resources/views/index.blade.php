@@ -24,7 +24,7 @@ use Modules\ImportDownloadManager\Enum\ImportType;
 <x-table-view-pagination title="{{ __('importdownloadmanager::importdownloadmanager.index.title') }}" :data="$downloadImports" empty-icon="ph-tray" empty-message="{{ __('importdownloadmanager::importdownloadmanager.index.empty') }}">
     <x-slot name="actions">
         <x-table-actions>
-            <x-table-action :href="route('admin.download.import.manager.index')" class="btn-outline-secondary" icon="ph-arrows-clockwise" title="{{ __('importdownloadmanager::importdownloadmanager.index.refresh') }}" />
+            <x-table-action :href="route('admin.download.import.manager.index')" class="btn-light" icon="ph-arrows-clockwise" title="{{ __('importdownloadmanager::importdownloadmanager.index.refresh') }}" />
         </x-table-actions>
     </x-slot>
 
@@ -81,12 +81,12 @@ use Modules\ImportDownloadManager\Enum\ImportType;
                     @can('Import Manager Data Download')
                     @if ($item->status === ImportStatus::Completed && $item->type === ImportType::Download)
                     <x-dropdown-link :url="route('admin.download.import.manager.download', ['downloadImportManager' => $item->id])">
-                        <i class="ph-download-simple me-2"></i> {{ __('importdownloadmanager::importdownloadmanager.index.download') }}
+                        <i class="ph-download-simple"></i> {{ __('importdownloadmanager::importdownloadmanager.index.download') }}
                     </x-dropdown-link>
                     @endif
                     @if ($item->type !== ImportType::Download)
                     <x-dropdown-link :url="route('admin.download.import.manager.download', ['downloadImportManager' => $item->id])">
-                        <i class="ph-download-simple me-2"></i> {{ __('importdownloadmanager::importdownloadmanager.index.download_source_file') }}
+                        <i class="ph-download-simple"></i> {{ __('importdownloadmanager::importdownloadmanager.index.download_source_file') }}
                     </x-dropdown-link>
                     @endif
                     @endcan
@@ -96,7 +96,7 @@ use Modules\ImportDownloadManager\Enum\ImportType;
                     <button type="button" class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.download.import.manager.delete', ['downloadImportManager' => $item->id]) }}"
                         data-text="{{ __('importdownloadmanager::importdownloadmanager.index.delete_confirm') }}">
-                        <i class="ph-trash me-2"></i> {{ __('importdownloadmanager::importdownloadmanager.index.delete') }}
+                        <i class="ph-trash"></i> {{ __('importdownloadmanager::importdownloadmanager.index.delete') }}
                     </button>
                     @endif
                     @endcan

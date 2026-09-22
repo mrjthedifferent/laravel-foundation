@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ $theme['direction'] }}"
-    data-bs-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}" 
+    data-bs-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}"
     data-color-palette="{{ $theme['palette'] }}">
 
 <head>
@@ -24,18 +24,43 @@
 
 <body class="auth-backdrop">
 
-    @include('layouts.partials.auth-navbar')
+    <div class="fd-auth">
+        {{-- The brand panel: hidden on phones, where the form is all that matters. --}}
+        <aside class="fd-auth-aside">
+            <a href="{{ url('/') }}" class="fd-brand">
+                @if (mailLogoUrl())
+                    <img src="{{ mailLogoUrl() }}" alt="">
+                @endif
+                <span class="fd-brand-name">{{ mailAppName() }}</span>
+            </a>
 
-    <div class="page-content">
-        <div class="content-wrapper">
-            <div class="content-inner">
-                {{ $slot }}
+            <div>
+                <p class="fd-auth-quote">{{ __('foundation::foundation.auth.tagline') }}</p>
+                <p class="fd-auth-quote-meta">{{ __('foundation::foundation.auth.tagline_meta', ['app' => mailAppName()]) }}</p>
             </div>
-        </div>
-    </div>
 
-    @include('layouts.partials.footer')
-    @include('layouts.partials.right-sidebar')
+            <div class="fs-xs fd-auth-copyright">
+                &copy; @if(date('Y') == config('app.copyright_year', date('Y'))) {{ date('Y') }} @else {{ config('app.copyright_year') }} - {{ date('Y') }} @endif {{ config('app.name') }}
+            </div>
+        </aside>
+
+        <main class="fd-auth-main">
+            <div class="login-form">
+                {{ $slot }}
+
+                @auth
+                    @if (Route::has('logout'))
+                        <form method="POST" action="{{ route('logout') }}" class="text-center mt-4">
+                            @csrf
+                            <button type="submit" class="btn btn-ghost btn-sm">
+                                <i class="ph-sign-out"></i>{{ __('foundation::foundation.layout.logout') }}
+                            </button>
+                        </form>
+                    @endif
+                @endauth
+            </div>
+        </main>
+    </div>
 
     @stack('modals')
 

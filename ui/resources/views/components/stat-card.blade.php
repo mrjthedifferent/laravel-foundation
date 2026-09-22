@@ -6,31 +6,46 @@
     'href'   => null,
     'change' => null,       # {{-- e.g. '+12%' --}}
     'changeUp' => true,
+    'caption' => null,      # {{-- what the change is measured against --}}
 ])
 
-<div class="card">
-    <div class="card-body">
-        <div class="d-flex align-items-center gap-3">
-            <div class="bg-{{ $color }} bg-opacity-10 text-{{ $color }} rounded d-flex align-items-center justify-content-center flex-shrink-0"
-                 style="width:48px;height:48px;font-size:1.5rem;">
-                <i class="{{ $icon }}"></i>
-            </div>
-            <div class="flex-fill min-width-0">
-                <div class="text-muted fs-xs mb-1">{{ $label }}</div>
-                <div class="fw-bold fs-5 lh-1">
-                    @if($href)
-                        <a href="{{ $href }}" class="text-body text-decoration-none stretched-link">{{ $value }}</a>
-                    @else
-                        {{ $value }}
-                    @endif
-                </div>
+@php
+    $tone = match ($color) {
+        'success' => 'is-success',
+        'warning' => 'is-warning',
+        'danger'  => 'is-danger',
+        'info'    => 'is-info',
+        'secondary' => 'is-neutral',
+        default   => '',
+    };
+@endphp
+
+<div class="card h-100">
+    <div class="fd-stat">
+        <div class="fd-stat-head">
+            <span class="fd-stat-label">{{ $label }}</span>
+            <span class="fd-icon-tile fd-icon-tile-sm {{ $tone }}"><i class="{{ $icon }}"></i></span>
+        </div>
+
+        <div class="fd-stat-value">
+            @if($href)
+                <a href="{{ $href }}" class="text-reset text-decoration-none stretched-link">{{ $value }}</a>
+            @else
+                {{ $value }}
+            @endif
+        </div>
+
+        @if($change !== null || $caption)
+            <div class="fd-stat-foot">
                 @if($change !== null)
-                    <div class="fs-xs mt-1 {{ $changeUp ? 'text-success' : 'text-danger' }}">
-                        <i class="{{ $changeUp ? 'ph-trend-up' : 'ph-trend-down' }} me-1"></i>{{ $change }}
-                    </div>
+                    <span class="fd-delta {{ $changeUp ? 'is-up' : 'is-down' }}">
+                        <i class="{{ $changeUp ? 'ph-arrow-up-right' : 'ph-arrow-down-right' }}"></i>{{ $change }}
+                    </span>
+                @endif
+                @if($caption)
+                    {{ $caption }}
                 @endif
             </div>
-        </div>
+        @endif
     </div>
 </div>
-

@@ -3,13 +3,16 @@
 namespace Mrj\Foundation\Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Support\Facades\Route;
+use Modules\Settings\Models\Setting;
 use Mrj\Foundation\Database\Seeders\FoundationSeeder;
 use Mrj\Foundation\Support\SidebarMenu;
 use Mrj\Foundation\Tests\TestCase;
 use Nwidart\Modules\Facades\Module;
+use OwenIt\Auditing\Models\Audit;
 use Spatie\Permission\Models\Permission;
 
 /**
@@ -121,6 +124,34 @@ class AdminSmokeTest extends TestCase
             ->assertSessionHasNoErrors();
 
         $this->actingAs($admin->fresh())->get(route('admin.dashboard'))->assertOk();
+    }
+
+    /**
+     * The activity log prints the audited record's own label, which means reading the morph
+     * target: the query eager-loads it, because a lazy load there is a violation outside
+     * production and an N+1 inside it.
+     */
+    public function test_the_activity_log_shows_the_label_of_the_record_that_changed(): void
+    {
+        Model::preventLazyLoading();
+
+        $setting = Setting::query()->firstOrFail();
+
+        Audit::query()->create([
+            'event' => 'updated',
+            'auditable_type' => 'setting',
+            'auditable_id' => $setting->id,
+            'old_values' => ['value' => 'before'],
+            'new_values' => ['value' => 'after'],
+            'url' => 'http://localhost/admin/settings',
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'phpunit',
+        ]);
+
+        $this->actingAs($this->admin())
+            ->get(route('admin.activity-logs.index'))
+            ->assertOk()
+            ->assertSee($setting->key);
     }
 
     public function test_every_module_model_used_in_a_morph_relation_has_an_alias(): void

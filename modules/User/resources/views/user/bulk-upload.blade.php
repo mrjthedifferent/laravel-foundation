@@ -29,10 +29,10 @@
                 <div class="form-text">{{ __('user::user.bulk_upload.accepted_formats') }}</div>
             </div>
             <div class="col-md-6">
-                <label class="form-label fw-semibold fs-sm">{{ __('user::user.bulk_upload.sample_template_label') }}</label>
+                <label class="form-label">{{ __('user::user.bulk_upload.sample_template_label') }}</label>
                 <div>
-                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.users.bulk.sample') }}">
-                        <i class="ph-file-xls me-1"></i> {{ __('user::user.bulk_upload.download_sample') }}
+                    <a class="btn btn-sm btn-light" href="{{ route('admin.users.bulk.sample') }}">
+                        <i class="ph-file-xls"></i>{{ __('user::user.bulk_upload.download_sample') }}
                     </a>
                 </div>
                 <div class="form-text">{{ __('user::user.bulk_upload.sample_hint') }}</div>
@@ -41,11 +41,11 @@
     </x-form-section>
 
     <div class="d-flex justify-content-between align-items-center">
-        <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary">
-            <i class="ph-x me-1"></i> {{ __('foundation::foundation.common.cancel') }}
+        <a href="{{ route('admin.users.index') }}" class="btn btn-light">
+            <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
         <x-primary-button type="submit">
-            <i class="ph-upload me-1"></i> {{ __('user::user.bulk_upload.submit') }}
+            <i class="ph-upload"></i>{{ __('user::user.bulk_upload.submit') }}
         </x-primary-button>
     </div>
 

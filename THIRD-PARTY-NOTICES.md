@@ -12,7 +12,6 @@ and keep their own licenses.
 | [Quill](https://quilljs.com) | 2.0.3 | BSD-3-Clause | `vendor/quill` |
 | [Ace](https://ace.c9.io) | 1.44 | BSD-3-Clause | `vendor/ace` |
 | [Phosphor Icons](https://phosphoricons.com) | 1.4.2 | MIT | `icons/phosphor` |
-| [Font Awesome Free](https://fontawesome.com) | 5.15.4 | Icons CC BY 4.0, fonts SIL OFL 1.1, code MIT | `icons/fontawesome` |
 | [Inter](https://rsms.me/inter) | 4.1 | SIL OFL 1.1 | `fonts/inter` |
 
 `css/foundation.css`, `js/foundation.js` and the images are part of this package (MIT).

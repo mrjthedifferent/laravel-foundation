@@ -1,37 +1,35 @@
 @if ($widget)
-    <div class="col-xl-4 col-lg-6 col-md-12">
+    <div class="col-xl-4 col-lg-6">
         <div class="card h-100">
-            <div class="card-header d-flex align-items-center">
-                <i class="ph-database me-2 text-danger"></i>
-                <h6 class="card-title mb-0">{{ __('backupcleanup::backupcleanup.widget.title') }}</h6>
+            <div class="card-header">
+                <span class="fd-icon-tile fd-icon-tile-sm is-info"><i class="ph-database"></i></span>
+                <h6 class="card-title">{{ __('backupcleanup::backupcleanup.widget.title') }}</h6>
                 @can('View Backup')
-                    <a href="{{ route('admin.backups.index') }}" class="ms-auto btn btn-sm btn-outline-danger">
+                    <a href="{{ route('admin.backups.index') }}" class="ms-auto fs-sm">
                         {{ __('backupcleanup::backupcleanup.widget.view_all') }}
                     </a>
                 @endcan
             </div>
             <div class="card-body">
-                <div class="row g-3 text-center mb-3">
-                    <div class="col-md-12">
-                        <div class="fs-4 fw-bold text-danger">{{ number_format($widget['count']) }}</div>
-                        <div class="text-muted small">{{ __('backupcleanup::backupcleanup.widget.files_label') }}</div>
-                    </div>
-                </div>
+                <div class="fd-stat-value">{{ number_format($widget['count']) }}</div>
+                <div class="fd-stat-label">{{ __('backupcleanup::backupcleanup.widget.files_label') }}</div>
+
                 @if ($widget['latest'])
-                    <div class="border-top pt-2">
-                        <div class="text-muted small fw-semibold mb-1 text-uppercase">{{ __('backupcleanup::backupcleanup.widget.last_backup') }}</div>
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="ph-file-zip text-muted"></i>
-                            <div class="flex-grow-1 min-width-0">
-                                <div class="small text-truncate">{{ $widget['latest']['filename'] }}</div>
-                                <div class="text-muted small">
-                                    {{ \Carbon\Carbon::createFromTimestamp($widget['latest']['date'])->diffForHumans() }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="fd-overline mt-4 mb-1">{{ __('backupcleanup::backupcleanup.widget.last_backup') }}</div>
+                    <ul class="fd-feed">
+                        <li>
+                            <span class="fd-icon-tile fd-icon-tile-sm is-neutral"><i class="ph-file-zip"></i></span>
+                            <span class="fd-feed-body text-truncate">{{ $widget['latest']['filename'] }}</span>
+                            <span class="fd-feed-meta">
+                                {{ \Carbon\Carbon::createFromTimestamp($widget['latest']['date'])->diffForHumans(null, true, true) }}
+                            </span>
+                        </li>
+                    </ul>
                 @else
-                    <div class="text-center text-muted small border-top pt-2">{{ __('backupcleanup::backupcleanup.widget.none') }}</div>
+                    <div class="fd-empty py-4">
+                        <span class="fd-empty-icon"><i class="ph-archive"></i></span>
+                        <div class="fd-empty-title">{{ __('backupcleanup::backupcleanup.widget.none') }}</div>
+                    </div>
                 @endif
             </div>
         </div>

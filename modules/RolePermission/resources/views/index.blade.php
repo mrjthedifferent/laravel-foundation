@@ -28,7 +28,7 @@
             <th>{{ __('foundation::foundation.common.name') }}</th>
             <th>{{ __('rolepermission::rolepermission.index.col_permissions_assigned') }}</th>
             <th>{{ __('rolepermission::rolepermission.index.col_users_assigned') }}</th>
-            <th class="text-end" style="width:60px">{{ __('foundation::foundation.common.action') }}</th>
+            <th class="text-end">{{ __('foundation::foundation.common.action') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -36,13 +36,13 @@
         <tr>
             <td class="fw-semibold">{{ $role->name }}</td>
             <td>
-                <span class="badge bg-info-subtle text-info border border-info-subtle">{{ $role->permissions_count }}</span>
+                <span class="badge bg-info">{{ $role->permissions_count }}</span>
             </td>
             <td>
                 @if ($role->users_count > 0)
-                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">{{ $role->users_count }}</span>
+                <span class="badge bg-warning">{{ $role->users_count }}</span>
                 @else
-                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">0</span>
+                <span class="badge bg-secondary">0</span>
                 @endif
             </td>
             <td class="text-end">
@@ -52,19 +52,19 @@
                         data-role-id="{{ $role->id }}"
                         data-role-name="{{ $role->name }}"
                         data-url="{{ route('admin.role.update', $role->id) }}">
-                        <i class="ph-pencil me-2"></i>{{ __('foundation::foundation.common.edit') }}
+                        <i class="ph-pencil"></i>{{ __('foundation::foundation.common.edit') }}
                     </button>
                     @endcan
                     @can('Assign Permission')
                     <x-dropdown-link :url="route('admin.role.assign.permission.get', $role->id)">
-                        <i class="ph-shield-check me-2"></i>{{ __('rolepermission::rolepermission.index.assign_permissions') }}
+                        <i class="ph-shield-check"></i>{{ __('rolepermission::rolepermission.index.assign_permissions') }}
                     </x-dropdown-link>
                     @endcan
                     @can('Create Role')
                     <x-dropdown-link :url="route('admin.role.clone', $role->id)"
                         class="swal-confirm"
                         data-text="{{ __('rolepermission::rolepermission.index.clone_role_confirm') }}">
-                        <i class="ph-copy me-2"></i>{{ __('rolepermission::rolepermission.index.clone_role') }}
+                        <i class="ph-copy"></i>{{ __('rolepermission::rolepermission.index.clone_role') }}
                     </x-dropdown-link>
                     @endcan
                     @can('Delete Role')
@@ -72,7 +72,7 @@
                     <x-dropdown-link :url="route('admin.role.destroy', $role->id)"
                         class="swal-delete text-danger"
                         data-text="{{ __('rolepermission::rolepermission.index.delete_role_confirm') }}">
-                        <i class="ph-trash me-2"></i>{{ __('rolepermission::rolepermission.index.delete_role') }}
+                        <i class="ph-trash"></i>{{ __('rolepermission::rolepermission.index.delete_role') }}
                     </x-dropdown-link>
                     @endif
                     @endcan
@@ -91,7 +91,7 @@
             <x-form.input name="role_name" label="{{ __('rolepermission::rolepermission.index.role_name_label') }}" required placeholder="{{ __('rolepermission::rolepermission.index.role_name_placeholder') }}" />
         </div>
         <x-slot name="footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
             <button type="submit" form="createForm" class="btn btn-primary">{{ __('rolepermission::rolepermission.index.create_role') }}</button>
         </x-slot>
     </form>
@@ -106,7 +106,7 @@
         </div>
     </form>
     <x-slot name="footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
         <button type="submit" form="updateForm" class="btn btn-primary">{{ __('rolepermission::rolepermission.index.update_role') }}</button>
     </x-slot>
 </x-modal>

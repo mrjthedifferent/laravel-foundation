@@ -37,6 +37,7 @@ return [
         'yes' => 'Yes',
         'no' => 'No',
         'confirm_delete' => 'Are you sure you want to delete this? This action cannot be undone.',
+        'super_admin' => 'Super Admin',
     ],
 
     /*
@@ -50,6 +51,7 @@ return [
     */
     'layout' => [
         'home' => 'Home',
+        'breadcrumb' => 'Breadcrumb',
         'dashboard' => 'Dashboard',
         'logout' => 'Logout',
         'logout_confirm' => 'Are you sure you want to logout?',
@@ -75,17 +77,27 @@ return [
     |--------------------------------------------------------------------------
     */
     'navbar' => [
-        'search_placeholder' => 'Search',
-        'search_everywhere' => 'Search everywhere',
-        'search_options' => 'Search options',
-        'category' => 'Category',
-        'all' => 'All',
-        'users' => 'Users',
-        'apply' => 'Apply',
+        'search_placeholder' => 'Search or jump to…',
         'users_online' => 'Users online',
         'online_now' => 'Online now',
         'no_users_online' => 'No users online',
         'my_profile' => 'My profile',
+        'notifications' => 'Notifications',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Search palette (Ctrl+K)
+    |--------------------------------------------------------------------------
+    */
+    'search' => [
+        'label' => 'Search',
+        'pages' => 'Pages',
+        'people' => 'People',
+        'empty' => 'No results',
+        'navigate' => 'Navigate',
+        'open' => 'Open',
+        'dismiss' => 'Esc to close',
     ],
 
     /*
@@ -97,6 +109,7 @@ return [
         'search_shortcut' => 'Search (Ctrl+K)',
         'navigation' => 'Navigation',
         'main' => 'Main',
+        'toggle' => 'Collapse sidebar',
     ],
 
     /*
@@ -202,6 +215,7 @@ return [
         'service_unavailable' => 'Service Unavailable',
         'go_back' => 'Go Back',
         'return_home' => 'Return Home',
+        'description' => 'The link may be old, or the page was moved. Check the address, or head back to the dashboard.',
         'generic_failure' => 'Something went wrong. Please try again.',
     ],
 
@@ -211,6 +225,9 @@ return [
     |--------------------------------------------------------------------------
     */
     'auth' => [
+        'tagline' => 'Everything your team runs on, in one quiet place.',
+        'tagline_meta' => 'Users, roles, settings and logs for :app.',
+        'show_password' => 'Show password',
         'confirm_password' => 'Confirm Password',
         'confirm_password_notice' => 'Please confirm your password before continuing.',
         'password' => 'Password',

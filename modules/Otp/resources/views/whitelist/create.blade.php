@@ -39,11 +39,11 @@
     </x-form-section>
 
     <div class="d-flex justify-content-between align-items-center">
-        <a href="{{ route('admin.otp-whitelist.index') }}" class="btn btn-outline-secondary">
-            <i class="ph-x me-1"></i>{{ __('foundation::foundation.common.cancel') }}
+        <a href="{{ route('admin.otp-whitelist.index') }}" class="btn btn-light">
+            <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
         <x-primary-button id="submit-button" class="px-5">
-            <i class="ph-floppy-disk me-1"></i>{{ __('otp::otp.whitelist_create.save_button') }}
+            <i class="ph-floppy-disk"></i>{{ __('otp::otp.whitelist_create.save_button') }}
         </x-primary-button>
     </div>
 

@@ -16,7 +16,7 @@
 
         <thead>
             <tr>
-                <th style="width:44px">#</th>
+                <th>#</th>
                 <th>{{ __('notification::notification.push_notification_index.col_title') }}</th>
                 <th>{{ __('notification::notification.push_notification_index.col_body') }}</th>
                 <th>{{ __('notification::notification.push_notification_index.col_recipient') }}</th>
@@ -32,9 +32,9 @@
                     <td class="fs-sm text-muted">{{ Str::limit($notification->body, 60) }}</td>
                     <td>
                         @if ($notification->user)
-                            <span class="badge bg-info-subtle text-info border border-info-subtle">{{ $notification->user->name }}</span>
+                            <span class="badge bg-info">{{ $notification->user->name }}</span>
                         @else
-                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">{{ __('notification::notification.push_notification_index.all_users') }}</span>
+                            <span class="badge bg-secondary">{{ __('notification::notification.push_notification_index.all_users') }}</span>
                         @endif
                     </td>
                     <td>

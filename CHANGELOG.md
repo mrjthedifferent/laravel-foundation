@@ -4,6 +4,53 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.1.0
+
+The admin UI is redesigned: calm and refined, built on a token layer over stock Bootstrap 5.3.
+No project code has to change — every component tag, prop, route name, translation key and JS
+hook is the same — but the theme options are fewer and the markup around them is new.
+
+**Design**
+- `assets/css/foundation.css` is rewritten as a token system (`--fd-*`) mapped onto Bootstrap's
+  own variables, with a type scale, a 4px space scale, layered elevation, hairline borders and
+  a visible focus ring. Restyling the primitives reaches every page: cards, buttons, forms,
+  tables, badges, dropdowns, modals, toasts, pagination and tabs.
+- New component classes for the patterns views kept hand-rolling: `.fd-page-head`, `.fd-stat`,
+  `.fd-delta`, `.fd-icon-tile`, `.fd-overline`, `.fd-avatar`, `.fd-status`, `.fd-empty`,
+  `.fd-dl`, `.fd-feed`, `.fd-toolbar`, `.fd-table-foot`, `.fd-form-section`, `.fd-kbd`.
+  The 110 inline `style=` attributes across the module views are gone.
+
+**Shell**
+- The sidebar carries the brand, the navigation and the signed-in user. Only the menu scrolls:
+  the brand and the profile card stay put, on the same lines as the navbar and the footer.
+- The navbar is a three-track row: the mobile toggle, a centred ⌘K search trigger, then the
+  online pill, notifications and the account menu. Notifications show an unread dot instead of
+  a yellow badge.
+- One search entry point. The old navbar search box and its filter dropdown are replaced by the
+  ⌘K palette, which searches the sidebar's pages and, when the User module is enabled, people.
+- The page header's card is gone: breadcrumb, title, description and actions sit on the page.
+- Auth pages use a split layout (brand panel, form panel). Error pages are a calm centred
+  layout. The impersonation banner is a slim accent strip.
+
+**Theme options, curated**
+- Kept: colour mode (light, dark, auto), direction (LTR, RTL), accent (8 palettes or a custom
+  brand colour), sidebar light or dark, and the mini sidebar.
+- Removed: layouts 2 and 3, the navbar colour, the per-element sidebar/navbar hex overrides,
+  the "primary" sidebar, and the font picker (Inter only). A saved value for a removed option is
+  ignored, and an old palette name maps to the nearest curated one, so nothing breaks on update.
+- The theme settings page is rebuilt around the kept options, with a live preview.
+
+**Assets**
+- Font Awesome is dropped: 436 KB that loaded on every page and no view used. Phosphor is the
+  only icon set.
+- `resources/css/app.css` keeps only project-specific rules; its duplicates of the theme are
+  gone.
+
+**Upgrading**
+- Run `php artisan foundation:publish --force` (the Composer scripts already do) and rebuild
+  assets. A project that referenced `fa-*` icons, the removed theme settings, or the old
+  navbar search elements should read the redesign section of `sync/guidelines/ui-components.md`.
+
 ## 1.0.1
 
 - Fixed: a freshly installed app failed its own `pint --test`. `foundation:install` wrote the
