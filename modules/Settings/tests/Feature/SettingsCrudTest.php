@@ -150,6 +150,37 @@ class SettingsCrudTest extends TestCase
         $response->assertViewHas('setting');
     }
 
+    /**
+     * The edit page's "Options" and "Current Value" sections foreach over an
+     * existing setting's options/array values — a path test_can_view_edit_setting_page's
+     * type=text setting never exercises, since those loops only run for
+     * select/multi-select/array types with pre-existing data.
+     */
+    public function test_edit_page_renders_select_multi_select_and_array_settings_with_existing_data(): void
+    {
+        $this->actingAs($this->developer);
+
+        $select = Setting::create([
+            'key' => 'select_setting', 'group' => 'General', 'type' => 'select',
+            'options' => json_encode(['a' => 'Alpha', 'b' => 'Beta']), 'value' => 'b',
+        ]);
+        $multiSelect = Setting::create([
+            'key' => 'multi_select_setting', 'group' => 'General', 'type' => 'multi-select',
+            'options' => json_encode(['a' => 'Alpha', 'b' => 'Beta']), 'value' => 'a,b',
+        ]);
+        $array = Setting::create([
+            'key' => 'array_setting', 'group' => 'General', 'type' => 'array',
+            'value' => 'one,two,three',
+        ]);
+
+        foreach ([$select, $multiSelect, $array] as $setting) {
+            $response = $this->get(route('admin.settings.edit', $setting));
+
+            $response->assertStatus(200);
+            $response->assertViewIs('settings::edit');
+        }
+    }
+
     public function test_can_update_a_setting(): void
     {
         $this->actingAs($this->developer);

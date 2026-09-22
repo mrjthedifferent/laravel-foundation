@@ -38,60 +38,37 @@
         <x-form-section title="Identity" icon="ph-identification-card">
             <div class="row g-3">
                 <div class="col-md-6">
-                    {!! Form::label(null, 'Key', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                    {!! Form::text(null, $setting->key, [
-                        'class' => 'form-control form-control-sm bg-body-tertiary',
-                        'readonly',
-                        'disabled',
-                    ]) !!}
+                    <label class="form-label fw-semibold fs-sm">Key</label>
+                    <input type="text" class="form-control form-control-sm bg-body-tertiary" value="{{ $setting->key }}" readonly disabled>
                     <div class="form-text">The key cannot be changed</div>
                 </div>
                 <div class="col-md-6">
-                    {!! Form::label('existing_group', 'Group', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                    {!! Form::select(
-                        'existing_group',
-                        collect($groups)->mapWithKeys(fn($g) => [$g => $g])->put('__new__', '+ Add new group…')->prepend('', '')->toArray(),
-                        null,
-                        [
-                            'id' => 'existing_group',
-                            'class' => 'form-control form-control-sm select' . ($errors->has('group') ? ' is-invalid' : ''),
-                            'data-placeholder' => 'Select or type a group…',
-                        ],
-                    ) !!}
-                    {!! Form::text('group', old('group', $setting->group), [
-                        'id' => 'group',
-                        'class' => 'form-control form-control-sm mt-2 d-none' . ($errors->has('group') ? ' is-invalid' : ''),
-                        'placeholder' => 'New group name',
-                    ]) !!}
-                    @error('group')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <x-form.select
+                        class="select"
+                        name="existing_group"
+                        id="existing_group"
+                        label="Group"
+                        required
+                        :options="collect($groups)->mapWithKeys(fn($g) => [$g => $g])->put('__new__', '+ Add new group…')->prepend('', '')->toArray()"
+                        :selected="null"
+                        data-placeholder="Select or type a group…"
+                    />
+                    <x-form.input name="group" id="group" :value="old('group', $setting->group)" class="mt-2 d-none" placeholder="New group name" />
                 </div>
                 <div class="col-md-6">
-                    {!! Form::label('type', 'Type', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                    {!! Form::select(
-                        'type',
-                        collect($types)->mapWithKeys(fn($t) => [$t => ucfirst($t)])->prepend('', '')->toArray(),
-                        $setting->type,
-                        [
-                            'id' => 'type',
-                            'class' => 'form-control form-control-sm select' . ($errors->has('type') ? ' is-invalid' : ''),
-                            'data-placeholder' => 'Select type…',
-                        ],
-                    ) !!}
-                    @error('type')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <x-form.select
+                        class="select"
+                        name="type"
+                        id="type"
+                        label="Type"
+                        required
+                        :options="collect($types)->mapWithKeys(fn($t) => [$t => ucfirst($t)])->prepend('', '')->toArray()"
+                        :selected="$setting->type"
+                        data-placeholder="Select type…"
+                    />
                 </div>
                 <div class="col-md-6">
-                    {!! Form::label('description', 'Description', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                    {!! Form::text('description', old('description', $setting->description), [
-                        'class' => 'form-control form-control-sm' . ($errors->has('description') ? ' is-invalid' : ''),
-                        'placeholder' => 'Short explanation of this setting',
-                    ]) !!}
-                    @error('description')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <x-form.input name="description" label="Description" :value="old('description', $setting->description)" placeholder="Short explanation of this setting" />
                 </div>
             </div>
         </x-form-section>
@@ -134,33 +111,19 @@
             </div>
             <div class="card-body">
                 <div id="value_text_container" class="{{ $setting->type === 'text' ? '' : 'd-none' }}">
-                    {!! Form::text('value_text', old('value_text', $setting->type === 'text' ? $setting->value : ''), [
-                        'class' => 'form-control form-control-sm',
-                    ]) !!}
+                    <x-form.input name="value_text" :value="old('value_text', $setting->type === 'text' ? $setting->value : '')" />
                 </div>
                 <div id="value_textarea_container" class="{{ $setting->type === 'textarea' ? '' : 'd-none' }}">
-                    {!! Form::textarea(
-                        'value_textarea',
-                        old('value_textarea', $setting->type === 'textarea' ? $setting->value : ''),
-                        ['class' => 'form-control form-control-sm', 'rows' => 4],
-                    ) !!}
+                    <x-form.textarea name="value_textarea" :value="old('value_textarea', $setting->type === 'textarea' ? $setting->value : '')" :rows="4" />
                 </div>
                 <div id="value_encrypted_container" class="{{ $setting->type === 'encrypted' ? '' : 'd-none' }}">
-                    {!! Form::password('value_encrypted', [
-                        'class' => 'form-control form-control-sm',
-                        'placeholder' => $setting->type === 'encrypted' ? 'Leave blank to keep the current secret' : 'Secret value — stored encrypted',
-                    ]) !!}
+                    <x-form.input type="password" name="value_encrypted" :placeholder="$setting->type === 'encrypted' ? 'Leave blank to keep the current secret' : 'Secret value — stored encrypted'" />
                 </div>
                 <div id="value_integer_container" class="{{ $setting->type === 'integer' ? '' : 'd-none' }}">
-                    {!! Form::number('value_integer', old('value_integer', $setting->type === 'integer' ? $setting->value : ''), [
-                        'class' => 'form-control form-control-sm',
-                    ]) !!}
+                    <x-form.input type="number" name="value_integer" :value="old('value_integer', $setting->type === 'integer' ? $setting->value : '')" />
                 </div>
                 <div id="value_float_container" class="{{ $setting->type === 'float' ? '' : 'd-none' }}">
-                    {!! Form::number('value_float', old('value_float', $setting->type === 'float' ? $setting->value : ''), [
-                        'class' => 'form-control form-control-sm',
-                        'step' => '0.01',
-                    ]) !!}
+                    <x-form.input type="number" name="value_float" :value="old('value_float', $setting->type === 'float' ? $setting->value : '')" step="0.01" />
                 </div>
                 <div id="value_boolean_container" class="{{ $setting->type === 'boolean' ? '' : 'd-none' }}">
                     <div class="d-flex align-items-center gap-3 p-3 border rounded">
@@ -195,8 +158,7 @@
                 </div>
                 <div id="value_json_container" class="{{ $setting->type === 'json' ? '' : 'd-none' }}">
                     <div id="json-editor" class="border rounded" style="height:320px;"></div>
-                    <input type="hidden" name="value_json" id="value_json"
-                        value="{{ old('value_json', $setting->type === 'json' ? (is_string($setting->value) ? $setting->value : json_encode($setting->value)) : '{}') }}">
+                    <x-form.input type="hidden" name="value_json" id="value_json" :value="old('value_json', $setting->type === 'json' ? (is_string($setting->value) ? $setting->value : json_encode($setting->value)) : '{}')" />
                     <div class="d-flex align-items-center gap-2 mt-2">
                         <button type="button" class="btn btn-sm btn-light border" id="format-json"><i
                                 class="ph-brackets-curly me-1"></i>Format</button>
@@ -207,11 +169,7 @@
                 </div>
                 <div id="value_select_container" class="{{ $setting->type === 'select' ? '' : 'd-none' }}">
                     @if ($setting->type === 'select' && is_array($setting->options) && count($setting->options))
-                        {!! Form::select('value_select', ['' => ''] + $setting->options, $setting->value, [
-                            'id' => 'value_select',
-                            'class' => 'form-control form-control-sm select',
-                            'data-placeholder' => 'Select a value…',
-                        ]) !!}
+                        <x-form.select class="select" name="value_select" id="value_select" :options="['' => ''] + $setting->options" :selected="$setting->value" data-placeholder="Select a value…" />
                     @else
                         <p class="text-muted mb-0 fs-sm"><i class="ph-info me-1"></i>No options defined yet. Add options
                             below.</p>
@@ -219,12 +177,7 @@
                 </div>
                 <div id="value_multi-select_container" class="{{ $setting->type === 'multi-select' ? '' : 'd-none' }}">
                     @if ($setting->type === 'multi-select' && is_array($setting->options) && count($setting->options))
-                        {!! Form::select('value_multi-select[]', $setting->options, is_array($setting->value) ? $setting->value : [], [
-                            'id' => 'value_multi_select',
-                            'class' => 'form-control form-control-sm select',
-                            'multiple',
-                            'data-placeholder' => 'Select options…',
-                        ]) !!}
+                        <x-form.select class="select" name="value_multi-select[]" id="value_multi_select" multiple :options="$setting->options" :selected="is_array($setting->value) ? $setting->value : []" data-placeholder="Select options…" />
                     @else
                         <p class="text-muted mb-0 fs-sm"><i class="ph-info me-1"></i>No options defined yet. Add options
                             below.</p>
@@ -235,14 +188,14 @@
                         @if ($setting->type === 'array' && is_array($setting->value) && count($setting->value))
                             @foreach ($setting->value as $val)
                                 <div class="input-group input-group-sm mb-2 array-value-row">
-                                    {!! Form::text('value_array[]', $val, ['class' => 'form-control form-control-sm']) !!}
+                                    <x-form.input name="value_array[]" :value="$val" />
                                     <button type="button" class="btn btn-outline-danger"
                                         onclick="removeArrayValue(this)"><i class="ph-trash"></i></button>
                                 </div>
                             @endforeach
                         @else
                             <div class="input-group input-group-sm mb-2 array-value-row">
-                                {!! Form::text('value_array[]', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Value']) !!}
+                                <x-form.input name="value_array[]" placeholder="Value" />
                                 <button type="button" class="btn btn-outline-danger" onclick="removeArrayValue(this)"><i
                                         class="ph-trash"></i></button>
                             </div>
@@ -274,22 +227,16 @@
                     @if (in_array($setting->type, ['select', 'multi-select']) && is_array($setting->options) && count($setting->options))
                         @foreach ($setting->options as $optKey => $optVal)
                             <div class="row g-2 mb-2 align-items-center option-row">
-                                <div class="col-5">{!! Form::text('option_keys[]', $optKey, ['class' => 'form-control form-control-sm']) !!}</div>
-                                <div class="col-5">{!! Form::text('option_values[]', $optVal, ['class' => 'form-control form-control-sm']) !!}</div>
+                                <div class="col-5"><x-form.input name="option_keys[]" :value="$optKey" /></div>
+                                <div class="col-5"><x-form.input name="option_values[]" :value="$optVal" /></div>
                                 <div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger"
                                         onclick="removeOption(this)"><i class="ph-trash"></i></button></div>
                             </div>
                         @endforeach
                     @else
                         <div class="row g-2 mb-2 align-items-center option-row">
-                            <div class="col-5">{!! Form::text('option_keys[]', null, [
-                                'class' => 'form-control form-control-sm',
-                                'placeholder' => 'e.g. active',
-                            ]) !!}</div>
-                            <div class="col-5">{!! Form::text('option_values[]', null, [
-                                'class' => 'form-control form-control-sm',
-                                'placeholder' => 'e.g. Active',
-                            ]) !!}</div>
+                            <div class="col-5"><x-form.input name="option_keys[]" placeholder="e.g. active" /></div>
+                            <div class="col-5"><x-form.input name="option_values[]" placeholder="e.g. Active" /></div>
                             <div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger"
                                     onclick="removeOption(this)"><i class="ph-trash"></i></button></div>
                         </div>
