@@ -4,6 +4,7 @@ namespace Modules\User\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,8 +30,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User $user
- * @property-read string $file_path_url Accessor for full URL of file_path
- * @property-read string|null $back_file_path_url Accessor for full URL of back_file_path
  *
  * @method static Builder|UserDocument byType(string $type)
  * @method static Builder|UserDocument notExpired()
@@ -62,19 +61,20 @@ class UserDocument extends Model implements Auditable
     ];
 
     /**
-     * Image/file fields managed by HasImageAttribute trait
+     * File fields cleaned up (their stored file deleted) by HasImageAttribute
+     * when the model is hard-deleted.
      */
     protected array $imageFields = ['file_path', 'back_file_path'];
 
-    protected array $imageDirectories = [
-        'file_path' => 'documents/users',
-        'back_file_path' => 'documents/users',
-    ];
+    protected function filePath(): Attribute
+    {
+        return $this->imageAttribute(column: 'file_path', defaultImage: null, directory: 'documents/users');
+    }
 
-    protected array $imageDefaults = [
-        'file_path' => null,
-        'back_file_path' => null,
-    ];
+    protected function backFilePath(): Attribute
+    {
+        return $this->imageAttribute(column: 'back_file_path', defaultImage: null, directory: 'documents/users');
+    }
 
     /**
      * Get the attributes that should be cast.

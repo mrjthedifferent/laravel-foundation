@@ -91,13 +91,10 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
     ];
 
     /**
-     * Image fields managed by HasImageAttribute trait
+     * Image fields cleaned up (their stored file deleted) by HasImageAttribute
+     * when the model is hard-deleted.
      */
     protected array $imageFields = ['image'];
-
-    protected array $imageDirectories = ['image' => 'images/users'];
-
-    protected array $imageDefaults = ['image' => 'images/person.png'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -155,6 +152,11 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
             // is kept rather than built a lifecycle-event workaround for it.
             'gender' => Gender::class,
         ];
+    }
+
+    protected function image(): Attribute
+    {
+        return $this->imageAttribute(column: 'image', defaultImage: 'images/person.png', directory: 'images/users');
     }
 
     /**
