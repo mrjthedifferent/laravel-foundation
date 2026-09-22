@@ -36,6 +36,9 @@ still below it.
   `View Push Notification`.
 - `audits.created_at` and `user_login_history.logged_in_at` carried no index; both
   are scanned by date on every dashboard visit. Two additive migrations add them.
+- Card headlines were `<h6>` under the page's `<h1>`, an invalid heading outline for
+  anyone navigating by heading. They are `<h2 class="card-title">` now, and look the
+  same — `.card-title` always carried the size and weight.
 
 **Upgrading**
 
