@@ -11,6 +11,7 @@ use Illuminate\View\View;
 use Modules\User\Actions\BulkUploadUsersAction;
 use Modules\User\Actions\CreateUserAction;
 use Modules\User\Actions\ExportUsersAction;
+use Modules\User\Actions\GenerateUserBulkUploadSampleAction;
 use Modules\User\Actions\ManageUserAccountAction;
 use Modules\User\Actions\MarkContactVerifiedAction;
 use Modules\User\Actions\ResetPasswordAction;
@@ -24,9 +25,7 @@ use Modules\User\Http\Requests\UpdateStatusRequest;
 use Modules\User\Http\Requests\UpdateUserRequest;
 use Modules\User\Queries\UserQuery;
 use Mrj\Foundation\Http\Controllers\Controller;
-use Rap2hpoutre\FastExcel\FastExcel;
 use Spatie\Permission\Models\Role;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -182,22 +181,13 @@ class UserController extends Controller
     }
 
     /**
-     * The spreadsheet template for bulk upload, built on the fly so it always
-     * matches the columns BulkUserRowProcessor reads.
+     * The spreadsheet template for bulk upload.
      */
-    public function bulkUploadSample(): StreamedResponse|BinaryFileResponse|string
+    public function bulkUploadSample(GenerateUserBulkUploadSampleAction $action): StreamedResponse
     {
         $this->authorize('bulkUpload', User::class);
 
-        return (new FastExcel(collect([[
-            'name' => 'Jane Doe',
-            'email' => 'jane@example.com',
-            'phone' => '+8801712345678',
-            'role' => 'User',
-            'gender' => 'female',
-            'password' => 'change-me-123',
-            'is_active' => 1,
-        ]])))->download('users_sample.xlsx');
+        return $action->execute();
     }
 
     /**

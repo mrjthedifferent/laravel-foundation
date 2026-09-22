@@ -8,17 +8,17 @@ This application uses `nwidart/laravel-modules`. Every feature lives inside `Mod
 Modules/{Name}/
 ├── app/
 │   ├── Actions/          # Business logic — one public execute() per class
-│   ├── Data/             # Spatie LaravelData DTOs + validation rule repositories
+│   ├── Data/             # Spatie LaravelData DTOs — fields only, no validation
 │   ├── Enum/             # Module-specific backed string enums
 │   ├── Events/           # Domain events dispatched by Actions
 │   ├── Http/
 │   │   ├── Controllers/  # Ultra-thin web + API controllers
-│   │   └── Requests/     # Form Requests (delegate rules to DTOs)
+│   │   └── Requests/     # Form Requests — own their own rules()
 │   ├── Jobs/             # ShouldQueue jobs for async work
 │   ├── Models/           # Eloquent models
 │   ├── Notifications/    # Laravel Notification classes
 │   ├── Policies/         # Gate policies (one per model)
-│   ├── Providers/        # {Name}ServiceProvider, RouteServiceProvider, EventServiceProvider
+│   ├── Providers/        # {Name}ServiceProvider only — see below
 │   ├── Queries/          # Fluent query builders (final readonly, make() factory)
 │   ├── Services/         # Cross-action services (final readonly, constructor-injected)
 │   └── Transformers/     # Eloquent API Resources
@@ -40,11 +40,17 @@ Modules/{Name}/
     └── Unit/             # Action + service unit tests
 ```
 
-### The Three Required Providers
+### The One Provider a Module Needs
 
-Every module requires three provider classes:
-
-**1. `{Name}ServiceProvider`** — the main provider. It extends `Mrj\Foundation\Support\ModuleServiceProvider`, which loads the module's config, views, translations and migrations and registers the two providers below. The subclass only declares what the module contributes:
+A module needs exactly one provider class, `{Name}ServiceProvider`, extending
+`Mrj\Foundation\Support\ModuleServiceProvider`. There is no separate
+`RouteServiceProvider` or `EventServiceProvider` to generate — the base
+class loads the module's config, views, translations, migrations, and
+`routes/{web,api,console}.php` (by convention: `web.php` gets the `web`
+middleware, `api.php` gets `api` + an `api.` name prefix, `console.php` is
+just `require`d for scheduled/artisan commands), and dispatches `$listen`
+through `Event::listen()`. The subclass only declares what the module
+contributes:
 
 ```php
 class ThingServiceProvider extends ModuleServiceProvider
@@ -60,29 +66,27 @@ class ThingServiceProvider extends ModuleServiceProvider
     protected array $policies = [Thing::class => ThingPolicy::class];
 
     protected array $composers = ['thing::partials.dashboard-widget' => ThingWidgetComposer::class];
+
+    protected array $listen = [
+        ThingCreated::class => [NotifyThingCreated::class],
+    ];
 }
 ```
 
-Also available: `$commands`, `$middlewareAliases`, `$prependToGroups` and `$appendToGroups`. Override `boot()` or `register()` only for anything else, and call the parent first.
+Also available: `$commands`, `$middlewareAliases`, `$prependToGroups` and `$appendToGroups`. Override `boot()` or `register()` only for anything else, and call the parent first — for example, to bind a contract this module provides the implementation for:
+
+```php
+#[Override]
+public function register(): void
+{
+    parent::register();
+
+    $this->app->singleton(SomeContract::class, ConcreteImplementation::class);
+}
+```
 
 - Never add a module's models to a morph map, policies or middleware anywhere outside its own provider.
 - Never edit `bootstrap/app.php` or `AppServiceProvider` to wire up a module.
-
-**2. `RouteServiceProvider`** — maps web and API routes:
-
-```php
-protected function mapWebRoutes(): void
-{
-    Route::middleware('web')->group(module_path($this->name, '/routes/web.php'));
-}
-
-protected function mapApiRoutes(): void
-{
-    Route::middleware('api')->prefix('api')->name('api.')->group(module_path($this->name, '/routes/api.php'));
-}
-```
-
-**3. `EventServiceProvider`** — sets `protected static $shouldDiscoverEvents = true` for auto-discovery.
 
 ### Foundation Modules
 

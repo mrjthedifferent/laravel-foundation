@@ -100,11 +100,19 @@ final readonly class CreateThingAction
 
 ### Query Builders — Fluent Filtering
 
-```php
-final readonly class ThingQuery
-{
-    public function __construct(private Builder $query) {}
+Extend `Mrj\Foundation\Support\QueryBuilder`, which owns `paginate()`
+(capped by `foundation.pagination.max`, defaulting to
+`foundation.pagination.default`, `->withQueryString()` included) and a
+`whereLike()` helper (escapes `%`/`_` so a literal is matched literally, with
+an explicit `ESCAPE` clause — required on SQLite, which has no default `LIKE`
+escape character). The underlying Eloquent Builder is mutable regardless of
+how it's wrapped, so filters mutate `$this->query` and `return $this` rather
+than pretending to be immutable with a `new self(...)` that holds the same
+mutated Builder anyway.
 
+```php
+final class ThingQuery extends QueryBuilder
+{
     public static function make(): self
     {
         return new self(Thing::query());
@@ -112,7 +120,9 @@ final readonly class ThingQuery
 
     public function withRelations(array $relations = []): self
     {
-        return new self($this->query->with($relations));
+        $this->query->with($relations);
+
+        return $this;
     }
 
     public function filterByStatus(?bool $isActive): self
@@ -121,7 +131,9 @@ final readonly class ThingQuery
             return $this;
         }
 
-        return new self($this->query->where('is_active', $isActive));
+        $this->query->where('is_active', $isActive);
+
+        return $this;
     }
 
     public function search(?string $search): self
@@ -130,27 +142,16 @@ final readonly class ThingQuery
             return $this;
         }
 
-        return new self(
-            $this->query->where(fn ($q) => $q
-                ->where('name', 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%")
-            )
-        );
+        $this->whereLike(['name', 'email'], $search);
+
+        return $this;
     }
 
     public function orderByLatest(): self
     {
-        return new self($this->query->orderBy('id', 'desc'));
-    }
+        $this->query->orderBy('id', 'desc');
 
-    public function paginate(int $perPage = 15): LengthAwarePaginator
-    {
-        return $this->query->paginate($perPage)->withQueryString();
-    }
-
-    public function get(): Collection
-    {
-        return $this->query->get();
+        return $this;
     }
 }
 ```
@@ -162,19 +163,19 @@ $things = ThingQuery::make()
     ->filterByStatus($request->boolean('is_active'))
     ->search($request->input('search'))
     ->orderByLatest()
-    ->paginate(PaginationEnum::DEFAULT_LIST);
+    ->paginate();
 ```
 
-- Always `final readonly`.
-- Each filter returns `new self(...)` — never mutates `$this->query`.
 - Null/empty guard at the top of every filter (`if ($value === null) { return $this; }`).
-- Always call `->withQueryString()` on paginated results.
+- Override `paginate()`/`get()` only for a genuinely different shape (e.g. a
+  fixed `orderBy` every caller needs, as `ActivityLogQuery::get()` does).
 
 ---
 
-### DTOs — Validation Rule Repositories
+### DTOs carry data; Form Requests own validation
 
-DTOs (Spatie `LaravelData`) are the single source of truth for all validation rules.
+DTOs (Spatie `LaravelData`) list the fields they carry between layers —
+nothing else. Validation rules live in the Form Request, not the DTO.
 
 ```php
 class ThingData extends Data
@@ -184,8 +185,15 @@ class ThingData extends Data
         public bool $is_active = true,
         public ?array $tag_ids = [],
     ) {}
+}
+```
 
-    public static function createRules(): array
+```php
+class StoreThingRequest extends FormRequest
+{
+    public function authorize(): bool { return true; } // policy handles this in the controller
+
+    public function rules(): array
     {
         return [
             'name'      => ['required', 'string', 'max:100'],
@@ -195,17 +203,7 @@ class ThingData extends Data
         ];
     }
 
-    public static function updateRules(?int $id = null): array
-    {
-        return [
-            'name'      => ['required', 'string', 'max:100'],
-            'is_active' => ['nullable', 'boolean'],
-            'tag_ids'   => ['nullable', 'array'],
-            'tag_ids.*' => ['exists:tags,id'],
-        ];
-    }
-
-    public static function messages(...$args): array
+    public function messages(): array
     {
         return [
             'name.required' => 'The name field is required.',
@@ -214,19 +212,11 @@ class ThingData extends Data
 }
 ```
 
-Form Requests delegate entirely to the DTO:
-```php
-class StoreThingRequest extends FormRequest
-{
-    public function authorize(): bool { return true; } // policy handles this in the controller
-
-    public function rules(): array { return ThingData::createRules(); }
-
-    public function messages(): array { return ThingData::messages(); }
-}
-```
-
-In controllers: `ThingData::from($request->validated())`.
+In controllers: `ThingData::from($request->validated())`. Don't add Spatie
+Data's own validation attributes (`#[Email]`, `#[Min]`, ...) to the DTO's
+properties — they only take effect when the DTO is resolved directly as a
+controller parameter, which this convention never does, so they would sit
+there unused and misleadingly suggest the DTO validates.
 
 ---
 
@@ -253,9 +243,13 @@ class ThingPolicy
 }
 ```
 
-Register in `{Name}ServiceProvider::boot()`:
+Register via the module's `$policies` property (inherited from
+`Mrj\Foundation\Support\ModuleServiceProvider`, which calls `Gate::policy()`
+for each entry during `boot()`):
 ```php
-Gate::policy(Thing::class, ThingPolicy::class);
+protected array $policies = [
+    Thing::class => ThingPolicy::class,
+];
 ```
 
 - Policy method names match controller action names: `viewAny`, `view`, `create`, `update`, `delete`.

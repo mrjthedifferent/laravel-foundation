@@ -5,14 +5,22 @@ This project uses `nwidart/laravel-modules`. Follow these exact steps every time
 ### Step 1 — Scaffold the module
 
 ```bash
-php artisan module:make {Name} --no-interaction
+php artisan foundation:make-module Thing
 ```
 
-This creates `Modules/{Name}/` with the full directory skeleton including `module.json`, `{Name}ServiceProvider`, and `RouteServiceProvider` — all auto-generated. The module is auto-loaded by nwidart — do **not** register it in `bootstrap/providers.php`.
+Not `module:make` — that's nwidart's own generic scaffold and produces a
+different structure (a separate `RouteServiceProvider`/`EventServiceProvider`,
+among other things) than this package's convention. `foundation:make-module`
+generates `Modules/{Name}/` from this package's own stubs: `module.json`, a
+single `{Name}ServiceProvider` already extending `ModuleServiceProvider`, the
+full directory skeleton, and `config/permissions.php` / `config/settings.php`
+already in place. The module is auto-loaded by nwidart — do **not** register
+it in `bootstrap/providers.php`.
 
-### Step 2 — Put the ServiceProvider on the foundation base class
+### Step 2 — Fill in the ServiceProvider
 
-Replace the generated `Modules/Thing/app/Providers/ThingServiceProvider.php` with a subclass of `ModuleServiceProvider` that declares what the module contributes:
+The generated `Modules/Thing/app/Providers/ThingServiceProvider.php` already
+extends `ModuleServiceProvider`; add what the module actually contributes:
 
 ```php
 namespace Modules\Thing\Providers;
@@ -33,7 +41,9 @@ class ThingServiceProvider extends ModuleServiceProvider
 }
 ```
 
-Config, views, translations, migrations and the module's `EventServiceProvider` and `RouteServiceProvider` are registered by the base class.
+Config, views, translations, migrations, `routes/{web,api,console}.php` and
+`$listen` event registration are all handled by the base class — there is no
+separate `EventServiceProvider` or `RouteServiceProvider` to write.
 
 ### Step 3 — Create the Policy
 
@@ -84,7 +94,12 @@ return []; // empty unless this module owns global settings
 php artisan make:class Modules/Thing/app/Data/ThingData --no-interaction
 ```
 
-Extend `Spatie\LaravelData\Data` and add `createRules()`, `updateRules()`, `messages()`.
+Extend `Spatie\LaravelData\Data` and list the fields it carries — nothing
+else. It is built via `ThingData::from($request->validated())`, always from
+already-validated data, never resolved directly as a controller parameter;
+Spatie Data's own validation attributes (`#[Email]`, `#[Min]`, ...) would
+only take effect in that second case, so don't add them here. Rules live in
+the Form Requests (Step 9).
 
 ### Step 7 — Create Actions
 
@@ -105,6 +120,9 @@ php artisan make:class Modules/Thing/app/Queries/ThingQuery --no-interaction
 php artisan module:make-request StoreThingRequest Thing --no-interaction
 php artisan module:make-request UpdateThingRequest Thing --no-interaction
 ```
+
+Each Form Request owns its own `rules()` directly — this is where validation
+lives, not the DTO from Step 6.
 
 ### Step 10 — Create the Controller
 
