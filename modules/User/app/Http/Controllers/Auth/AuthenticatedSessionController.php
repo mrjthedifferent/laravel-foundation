@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Modules\User\Actions\TrackLoginAction;
 use Modules\User\Http\Requests\Auth\LoginRequest;
 use Mrj\Foundation\Http\Controllers\Controller;
 use Mrj\Foundation\Support\PhoneNumber;
@@ -24,7 +25,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request, TrackLoginAction $trackLogin): RedirectResponse
     {
         $login = (string) $request->input('login');
 
@@ -48,6 +49,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->authenticate();
         $request->session()->regenerate();
+
+        // Recorded here as the API's login does: the login-history page and the
+        // dashboard's sign-ins chart both read these rows.
+        $trackLogin->execute($user, $request);
 
         return redirect()->intended(route('admin.dashboard', absolute: false));
     }

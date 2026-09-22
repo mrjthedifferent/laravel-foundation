@@ -69,6 +69,11 @@ return [
         'greeting_morning' => 'Good morning',
         'greeting_afternoon' => 'Good afternoon',
         'greeting_evening' => 'Good evening',
+        'last_days' => ':days days',
+        'chart_new_users' => 'New users, last :days days',
+        'chart_summary' => ':label, :from to :to: from :first to :last, :total in total.',
+        'chart_empty' => 'Nothing to chart yet',
+        'chart_empty_text' => 'This fills in as people use the application.',
     ],
 
     /*

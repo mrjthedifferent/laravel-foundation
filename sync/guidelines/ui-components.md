@@ -472,11 +472,68 @@ Props:
 
 For a module dashboard widget with several numbers in one card, use the classes directly instead of three stat cards:
 ```blade
-<div class="col-4">
+<div class="col-6">
     <div class="fd-stat-value">{{ number_format($widget['total']) }}</div>
     <div class="fd-stat-label">{{ __('thing::thing.widget.total') }}</div>
 </div>
 ```
+
+---
+
+### The dashboard
+
+The page has three bands: headline stats, a chart beside a recent-activity feed, then one
+widget card per module. A module contributes to any of them without editing the page, and each
+contribution is permission-gated and cached the same way — returning nothing when the viewer
+may not see it.
+
+**A headline stat** — a `StatComposer` listed in `$dashboardStats` on the module's provider:
+
+```php
+final class InvoiceStatComposer extends StatComposer
+{
+    public function priority(): int { return 50; }          // lower sorts first
+
+    protected function permissions(): array { return ['View Invoice']; }
+
+    protected function key(): string { return 'invoice'; }   // cached as stat:invoice
+
+    protected function build(): array                        // scalars and arrays only
+    {
+        return [[
+            'label' => __('invoice::invoice.stat.open'),
+            'value' => number_format(Invoice::query()->whereNull('paid_at')->count()),
+            'icon' => 'ph-receipt',
+            'color' => 'warning',                            // primary|success|warning|danger|info
+            'href' => route('admin.invoices.index'),
+            'caption' => __('invoice::invoice.stat.this_month'),
+        ]];
+    }
+}
+```
+
+**The chart** — a `ChartComposer` in `$dashboardCharts`, returning a day => count series. The
+registered composer with the lowest priority that the viewer may see is the one drawn:
+
+```php
+protected function build(int $days): array
+{
+    return app(DailySeries::class)->count(Invoice::query()->toBase(), 'created_at', $days);
+}
+```
+
+`DailySeries` groups by day in SQL on every supported driver and fills the gaps with zeros, so
+the chart always has one point per day.
+
+**The chart component** — `<x-chart-area>` draws any such series as inline SVG, themed by the
+accent, with a screen-reader summary. Nothing else is needed to plot a series:
+
+```blade
+<x-chart-area :series="$series" :label="__('invoice::invoice.chart.title')" />
+```
+
+**A widget card** stays what it was: a `WidgetComposer` bound to the module's
+`partials/dashboard-widget.blade.php`. Keep out of it anything the headline stats already show.
 
 ---
 

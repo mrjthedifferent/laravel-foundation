@@ -3,6 +3,12 @@
 declare(strict_types=1);
 
 return [
+
+    'stat' => [
+        'open' => 'Open error reports',
+        'new_this_week' => ':count new this week',
+    ],
+
     'index' => [
         'breadcrumb' => 'All Errors',
         'title' => 'Error Reports',

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Mrj\Foundation\Services\Dashboard\ChartRegistry;
+use Mrj\Foundation\Services\Dashboard\StatRegistry;
 use Nwidart\Modules\Traits\PathNamespace;
 use Symfony\Component\Finder\Finder;
 
@@ -49,6 +51,12 @@ abstract class ModuleServiceProvider extends ServiceProvider
     /** @var array<string, class-string> view name => composer */
     protected array $composers = [];
 
+    /** @var list<class-string<StatComposer>> dashboard headline stats */
+    protected array $dashboardStats = [];
+
+    /** @var list<class-string<ChartComposer>> dashboard charts */
+    protected array $dashboardCharts = [];
+
     /** @var list<class-string> */
     protected array $commands = [];
 
@@ -81,6 +89,14 @@ abstract class ModuleServiceProvider extends ServiceProvider
 
         foreach ($this->composers as $view => $composer) {
             View::composer($view, $composer);
+        }
+
+        foreach ($this->dashboardStats as $statComposer) {
+            app(StatRegistry::class)->register($statComposer);
+        }
+
+        foreach ($this->dashboardCharts as $chartComposer) {
+            app(ChartRegistry::class)->register($chartComposer);
         }
 
         foreach ($this->listen as $event => $listeners) {

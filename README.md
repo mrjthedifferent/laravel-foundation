@@ -101,6 +101,13 @@ The dashboard route (`admin.dashboard`) and the sidebar's parent groups come fro
 To change the groups, `php artisan vendor:publish --tag=foundation-sidebar`; to use your own
 dashboard page, create `resources/views/dashboard.blade.php`.
 
+The dashboard shows headline stats, a chart of sign-ins and a recent-activity feed, then one
+widget per module. A module joins in without touching the page: a `StatComposer` listed in
+`$dashboardStats` adds a headline stat, a `ChartComposer` in `$dashboardCharts` supplies the
+chart's series (lowest priority wins), and a `partials/dashboard-widget.blade.php` view adds a
+card. Each is permission-gated and cached the same way, and contributes nothing when the viewer
+may not see it.
+
 ## Your own modules
 
 ```bash
@@ -170,7 +177,8 @@ The package follows [semantic versioning](https://semver.org). A breaking change
 any of these waits for the next major version:
 
 - classes and interfaces marked `@api`: `Foundation`, the base classes a project extends
-  (`Models\User`, `Support\ModuleServiceProvider`, `WidgetComposer`, `QueryBuilder`,
+  (`Models\User`, `Support\ModuleServiceProvider`, `WidgetComposer`, `StatComposer`,
+  `ChartComposer`, `QueryBuilder`,
   `ExportJob`, `Http\Controllers\Controller`, `Exceptions\Handler`), every interface in
   `Contracts`, `JsonResponseFactory`, `Roles`, `Email`, `PhoneNumber`, `FileManagerService`,
   the validation rules and `HasImageAttribute`

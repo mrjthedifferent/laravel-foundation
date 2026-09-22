@@ -121,12 +121,24 @@ return [
         'gateway_response' => 'SMS Gateway Response',
     ],
 
+    'stat' => [
+        'activity_today' => 'Activity today',
+        'this_week' => ':count this week',
+    ],
+
+    'feed' => [
+        'line' => ':subject :event by :actor',
+        'line_system' => ':subject :event',
+        'event_created' => 'created',
+        'event_updated' => 'updated',
+        'event_deleted' => 'deleted',
+        'event_restored' => 'restored',
+        'empty' => 'No activity yet',
+    ],
+
     'widget' => [
-        'title' => 'Activity & Logs',
         'view_all' => 'View all',
-        'activities_today' => 'Activities Today',
-        'sms_logs' => 'SMS Logs',
-        'recent_activity' => 'Recent Activity',
+        'recent_activity' => 'Recent activity',
     ],
 
     'flash' => [

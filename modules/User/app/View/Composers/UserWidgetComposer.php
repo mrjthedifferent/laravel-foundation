@@ -34,7 +34,6 @@ final class UserWidgetComposer extends WidgetComposer
     {
         return [
             'total_users' => User::query()->count(),
-            'active_users' => User::query()->where('is_active', true)->count(),
             // `created_at` is a timestamp, so use a half-open range, not whereDate().
             'new_today' => User::query()
                 ->where('created_at', '>=', today())

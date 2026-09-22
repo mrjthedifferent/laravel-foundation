@@ -15,7 +15,8 @@ use Modules\ActivityLog\Models\SmsLog;
 use Modules\ActivityLog\Policies\ActivityLogPolicy;
 use Modules\ActivityLog\Policies\EmailLogPolicy;
 use Modules\ActivityLog\Policies\SmsLogPolicy;
-use Modules\ActivityLog\View\Composers\ActivityLogWidgetComposer;
+use Modules\ActivityLog\View\Composers\ActivityFeedComposer;
+use Modules\ActivityLog\View\Composers\ActivityStatComposer;
 use Mrj\Foundation\Models\User;
 use Mrj\Foundation\Support\ModuleServiceProvider;
 use Opcodes\LogViewer\Facades\LogViewer;
@@ -33,8 +34,12 @@ class ActivityLogServiceProvider extends ModuleServiceProvider
         EmailLog::class => EmailLogPolicy::class,
     ];
 
+    protected array $dashboardStats = [
+        ActivityStatComposer::class,
+    ];
+
     protected array $composers = [
-        'activitylog::partials.dashboard-widget' => ActivityLogWidgetComposer::class,
+        'activitylog::partials.dashboard-feed' => ActivityFeedComposer::class,
     ];
 
     protected array $prependToGroups = [

@@ -11,16 +11,13 @@
                 @endcan
             </div>
             <div class="card-body">
+                {{-- Active users is a headline stat at the top of the page, not repeated here. --}}
                 <div class="row g-3">
-                    <div class="col-4">
+                    <div class="col-6">
                         <div class="fd-stat-value">{{ number_format($widget['total_users']) }}</div>
                         <div class="fd-stat-label">{{ __('user::user.widget.total') }}</div>
                     </div>
-                    <div class="col-4">
-                        <div class="fd-stat-value">{{ number_format($widget['active_users']) }}</div>
-                        <div class="fd-stat-label">{{ __('foundation::foundation.common.active') }}</div>
-                    </div>
-                    <div class="col-4">
+                    <div class="col-6">
                         <div class="fd-stat-value">{{ number_format($widget['new_today']) }}</div>
                         <div class="fd-stat-label">{{ __('user::user.widget.new_today') }}</div>
                     </div>

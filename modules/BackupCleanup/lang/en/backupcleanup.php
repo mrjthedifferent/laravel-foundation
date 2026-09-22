@@ -20,6 +20,12 @@ return [
         'stored_on' => 'Stored on :disk disk in :name. Total: :count file(s).',
     ],
 
+    'stat' => [
+        'last_backup' => 'Last backup',
+        'never' => 'Never',
+        'none_yet' => 'No backup has run yet',
+    ],
+
     'widget' => [
         'title' => 'Backup',
         'view_all' => 'View all',

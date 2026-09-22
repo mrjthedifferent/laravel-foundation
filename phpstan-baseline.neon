@@ -1,6 +1,12 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/View/Components/ChartArea.php
+
+		-
 			message: '#^Relation ''user'' is not found in OwenIt\\Auditing\\Models\\Audit model\.$#'
 			identifier: larastan.relationExistence
 			count: 1

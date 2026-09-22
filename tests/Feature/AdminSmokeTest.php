@@ -80,6 +80,11 @@ class AdminSmokeTest extends TestCase
 
         $this->actingAs($admin)->get(route('admin.dashboard'))->assertOk();
         $this->actingAs($admin)->get(route('admin.dashboard'))->assertOk()->assertSee('Administration');
+
+        // The headline stats, the chart series and the feed are cached too, and each
+        // window is its own entry: read every one of them back from the store.
+        $this->actingAs($admin)->get(route('admin.dashboard', ['days' => 30]))->assertOk();
+        $this->actingAs($admin)->get(route('admin.dashboard', ['days' => 30]))->assertOk();
     }
 
     public function test_super_admin_can_open_every_sidebar_page(): void

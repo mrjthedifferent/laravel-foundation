@@ -185,6 +185,14 @@ return [
         'submit' => 'Upload Users',
     ],
 
+    'stat' => [
+        'active_users' => 'Active users',
+        'sign_ins_today' => 'Sign-ins today',
+        'sign_ins_chart' => 'Sign-ins, last :days days',
+        'vs_last_week' => 'new users vs last week',
+        'vs_yesterday' => 'vs yesterday',
+    ],
+
     'widget' => [
         'title' => 'Users',
         'view_all' => 'View all',

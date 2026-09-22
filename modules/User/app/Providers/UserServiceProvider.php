@@ -11,6 +11,8 @@ use Modules\User\Models\UserDocument;
 use Modules\User\Models\UserLoginHistory;
 use Modules\User\Policies\UserPolicy;
 use Modules\User\Services\ImpersonationService;
+use Modules\User\View\Composers\SignInsChart;
+use Modules\User\View\Composers\UserStatComposer;
 use Modules\User\View\Composers\UserWidgetComposer;
 use Mrj\Foundation\Contracts\ImpersonationContext;
 use Mrj\Foundation\Support\ModuleServiceProvider;
@@ -33,6 +35,14 @@ class UserServiceProvider extends ModuleServiceProvider
 
     protected array $composers = [
         'user::partials.dashboard-widget' => UserWidgetComposer::class,
+    ];
+
+    protected array $dashboardStats = [
+        UserStatComposer::class,
+    ];
+
+    protected array $dashboardCharts = [
+        SignInsChart::class,
     ];
 
     protected array $listen = [

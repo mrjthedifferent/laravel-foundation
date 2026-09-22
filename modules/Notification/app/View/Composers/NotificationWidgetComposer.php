@@ -19,7 +19,9 @@ final class NotificationWidgetComposer extends WidgetComposer
     #[Override]
     protected function permissions(): array
     {
-        return ['View Notification'];
+        // The permission the module actually seeds: 'View Notification' was never
+        // created anywhere, so this widget only ever reached a Super Admin.
+        return ['View Push Notification'];
     }
 
     #[Override]

@@ -687,6 +687,11 @@ a.breadcrumb-item:hover { color: var(--fd-text-strong); }
 .fd-avatar-sm { width: 1.5rem; height: 1.5rem; font-size: .625rem; }
 .fd-avatar-lg { width: 3.5rem; height: 3.5rem; font-size: var(--fd-text-md); }
 
+/* Area chart: hand-drawn SVG, themed through the tokens (see <x-chart-area>) */
+.chart-area { width: 100%; height: 12rem; display: block; direction: ltr; }
+.chart-grid line { stroke: var(--fd-border); stroke-width: 1; }
+.chart-axis text { fill: var(--fd-muted); font: 500 11px var(--fd-font); }
+
 /* Keyboard hint */
 .fd-kbd {
     display: inline-flex; align-items: center; gap: .125rem;
@@ -727,8 +732,11 @@ a.breadcrumb-item:hover { color: var(--fd-text-strong); }
 .fd-stat-value { font-size: var(--fd-text-2xl); font-weight: 600; letter-spacing: -.025em; line-height: 1; color: var(--fd-text-strong); font-variant-numeric: tabular-nums; }
 .fd-stat-foot { display: flex; align-items: center; gap: .5rem; font-size: var(--fd-text-sm); color: var(--fd-muted); }
 .fd-delta { display: inline-flex; align-items: center; gap: .125rem; font-weight: 600; font-size: var(--fd-text-xs); padding: .0625rem .375rem; border-radius: 999px; font-variant-numeric: tabular-nums; }
-.fd-delta.is-up { color: var(--bs-success-text-emphasis); background: var(--bs-success-bg-subtle); }
-.fd-delta.is-down { color: var(--bs-danger-text-emphasis); background: var(--bs-danger-bg-subtle); }
+/* A shade darker than Bootstrap's emphasis pair, which lands just under 4.5:1 at this size */
+.fd-delta.is-up { color: color-mix(in srgb, var(--bs-success-text-emphasis) 85%, #000); background: var(--bs-success-bg-subtle); }
+.fd-delta.is-down { color: color-mix(in srgb, var(--bs-danger-text-emphasis) 85%, #000); background: var(--bs-danger-bg-subtle); }
+[data-bs-theme="dark"] .fd-delta.is-up { color: var(--bs-success-text-emphasis); }
+[data-bs-theme="dark"] .fd-delta.is-down { color: var(--bs-danger-text-emphasis); }
 .fd-delta.is-flat { color: var(--fd-muted); background: var(--fd-subtle); }
 
 /* Definition list: label / value rows */

@@ -13,11 +13,15 @@ class UiTest extends TestCase
 {
     public function test_dashboard_renders_in_the_app_layout(): void
     {
+        // No permissions, so every module's contribution must degrade to nothing.
         $this->actingAs(User::factory()->create(['name' => 'Ada Lovelace']))
             ->get('/admin/dashboard')
             ->assertOk()
             ->assertSee('Ada Lovelace')
-            ->assertSee(route('logout'));
+            ->assertSee(route('logout'))
+            ->assertDontSee('fd-stat-value', false)
+            ->assertDontSee('chart-area', false)
+            ->assertDontSee('fd-feed', false);
     }
 
     public function test_guest_layout_renders(): void

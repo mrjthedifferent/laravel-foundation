@@ -29,12 +29,16 @@ use Mrj\Foundation\Contracts\ImpersonationContext;
 use Mrj\Foundation\Contracts\OtpVerifier;
 use Mrj\Foundation\Models\Audit;
 use Mrj\Foundation\Models\User as FoundationUser;
+use Mrj\Foundation\Services\Dashboard\ChartRegistry;
+use Mrj\Foundation\Services\Dashboard\NewUsersChart;
+use Mrj\Foundation\Services\Dashboard\StatRegistry;
 use Mrj\Foundation\Services\LocalFileStorage;
 use Mrj\Foundation\Support\ImpersonationAwareAuditUserResolver;
 use Mrj\Foundation\Support\NullErrorReporter;
 use Mrj\Foundation\Support\NullImpersonationContext;
 use Mrj\Foundation\Support\NullOtpVerifier;
 use Mrj\Foundation\View\Components\AppLayout;
+use Mrj\Foundation\View\Components\ChartArea;
 use Mrj\Foundation\View\Components\GuestLayout;
 use Mrj\Foundation\View\Components\ModuleLayout;
 use Mrj\Foundation\View\Components\StatusBadge;
@@ -54,6 +58,16 @@ final class FoundationServiceProvider extends ServiceProvider
         $this->app->singletonIf(ErrorReporter::class, NullErrorReporter::class);
         $this->app->singletonIf(FileStorage::class, LocalFileStorage::class);
         $this->app->singletonIf(OtpVerifier::class, NullOtpVerifier::class);
+
+        // One registry per request: modules add their dashboard stats and charts as they boot.
+        $this->app->singleton(StatRegistry::class);
+        $this->app->singleton(ChartRegistry::class, function (): ChartRegistry {
+            $registry = new ChartRegistry;
+            // The fallback, drawn only where no module offers a better series.
+            $registry->register(NewUsersChart::class);
+
+            return $registry;
+        });
 
         $this->configureAuditing();
         $this->configureLogChannels();
@@ -256,6 +270,7 @@ final class FoundationServiceProvider extends ServiceProvider
         Blade::component('guest-layout', GuestLayout::class);
         Blade::component('module-layout', ModuleLayout::class);
         Blade::component('status-badge', StatusBadge::class);
+        Blade::component('chart-area', ChartArea::class);
 
         View::composer([
             'layouts.app',

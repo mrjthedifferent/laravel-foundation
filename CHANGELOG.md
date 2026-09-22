@@ -4,6 +4,50 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.2.0
+
+The dashboard is the one from the design reference: a greeting, a row of headline
+stats, a chart of sign-ins, and a live activity feed — with every module's widget
+still below it.
+
+**The page**
+- Four headline stat cards: active users, sign-ins today, activity today and the
+  last backup, plus open error reports where that module is enabled.
+- An area chart of sign-ins per day, with a 14/30-day switch (`?days=`), drawn as
+  inline SVG from the theme's own colours. No charting library, no build step.
+- A "Recent activity" feed: what changed, who changed it and when.
+- The module widgets keep their place underneath. The User and Backup widgets drop
+  the figures now shown above them, and the Activity widget is gone — its number is
+  a headline stat and its list is the feed.
+
+**For a module**
+- `Mrj\Foundation\Support\StatComposer` (`@api`) contributes a headline stat, with
+  the same permissions/cache-key/plain-array contract as `WidgetComposer`. Register
+  it in `protected array $dashboardStats` on the module's service provider.
+- `Mrj\Foundation\Support\ChartComposer` (`@api`) supplies the chart's series;
+  `protected array $dashboardCharts` registers it, and the lowest priority wins.
+- `<x-chart-area :series="…" :label="…" />` draws a day => count series.
+
+**Fixed**
+- Web sign-ins were never recorded: `TrackLoginAction` ran only for API logins, so
+  the login-history page was empty for anyone signing in through the browser.
+- The Notification widget was gated on `View Notification`, a permission nothing
+  seeds, so only a Super Admin ever saw it. It now uses the module's own
+  `View Push Notification`.
+- `audits.created_at` and `user_login_history.logged_in_at` carried no index; both
+  are scanned by date on every dashboard visit. Two additive migrations add them.
+
+**Upgrading**
+
+```bash
+composer update mrjthedifferent/laravel-foundation
+php artisan migrate
+php artisan foundation:publish --force
+```
+
+A project that overrode `modules/activitylog/partials/dashboard-widget.blade.php`
+should move that content to its own dashboard view; that partial no longer exists.
+
 ## 1.1.0
 
 The admin UI is redesigned: calm and refined, built on a token layer over stock Bootstrap 5.3.
