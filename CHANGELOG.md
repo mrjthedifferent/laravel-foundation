@@ -1,5 +1,59 @@
 # Changelog
 
+## 0.16.0
+
+Architecture, part two: contracts, and the optional-module decoupling they
+make possible. The remaining Phase 5 item — controller/convention cleanup
+(the try/catch ritual, inline `authorize()` calls, splitting the largest
+controllers, an `<x-module-layout>` component) — is substantial enough on
+its own to warrant its own release rather than further delaying this one;
+it follows as a dedicated pass.
+
+- **New contracts in `Mrj\Foundation\Contracts`**, each with a bound default:
+  - `ErrorReporter` replaces the `'error_reporter'` magic string binding
+    `Foundation::exceptions()` checked with `app()->bound()` before calling.
+    Always bound now (to a no-op `NullErrorReporter` when ErrorReport isn't
+    installed), so the check is gone.
+  - `FileStorage` replaces `FileManagerService`'s static internals.
+    `FileManagerService` itself is unchanged as a facade — every existing
+    call site keeps working — but now delegates to whatever `FileStorage`
+    is bound, so a project can swap the implementation.
+  - `SettingsRepository` unifies three settings-read paths that had grown
+    independently: `getSystemSetting()` (uncached, direct query),
+    `config('settings.{key}.value')`, and
+    `SettingsServiceProvider::cached()`. `cached()`/`cacheKey()` remain as
+    documented public static methods, now delegating to the repository.
+    Also drops a `Schema::hasTable('settings')` check that ran on every
+    request.
+  - `ImportTracker` decouples callers from `ImportDownloadManager`'s
+    Actions and Eloquent model — most notably `src/Support/ExportJob.php`,
+    a core class with no business depending on a module, the same issue
+    already fixed for `src/Models/User.php` in 0.15.0.
+  - `SmsGateway` replaces `SendSmsJob`'s inline log/generic-HTTP branching
+    with one `SmsGatewayManager`.
+  - `PushSender`, implemented by `FcmChannel`. Its per-token send loop now
+    fires concurrently per chunk via `Http::pool()` instead of one request
+    after another — actual batching, where the previous "batch" only
+    grouped tokens for logging, not how the requests went out.
+  - `OtpVerifier` and `HasSmsContact` let `User`/`Notification` depend on a
+    contract instead of importing Otp's concrete classes directly (Otp is
+    an optional module, like ErrorReport). `OtpVerifier` defaults to a
+    `NullOtpVerifier` (every attempt fails) when Otp isn't installed.
+- **Fixed**: `HasImageAttribute` (the `image`/`file_path`/`back_file_path`
+  attributes on `User` and `UserDocument`) previously overrode Eloquent's
+  `getAttribute()`/`setAttribute()` directly. `$model->image` returned the
+  transformed URL, but `$model->toArray()`/`toJson()` — which read
+  `$attributes` directly rather than calling the override — silently
+  returned the raw stored path instead. It's now a real `Attribute` cast,
+  so both paths agree. Every existing Resource class was already reading
+  the property form and is unaffected; only a direct `$model->toArray()`/
+  `toJson()` call on one of these two models sees a different (corrected)
+  value.
+- `Setting::flush()` no longer calls `Artisan::call('queue:restart')`
+  directly with a static once-per-process flag on the model; it fires a
+  `SettingsUpdated` event instead, handled by a `RestartQueueWorkers`
+  listener that owns that guard.
+
 ## 0.15.0
 
 Architecture, part one: DRY base classes and decoupling `src/` from the

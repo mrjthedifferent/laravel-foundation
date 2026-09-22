@@ -3,6 +3,29 @@
 Manual steps a project must take when moving between versions. Versions without an entry
 need only `composer update mrjthedifferent/laravel-foundation` and `php artisan migrate`.
 
+## 0.15 to 0.16 (architecture, part two)
+
+`composer update mrjthedifferent/laravel-foundation`. No migration.
+
+1. **If your own code reads `$user->toArray()['image']`,
+   `$document->toArray()['file_path']` or `['back_file_path']`, or calls
+   `toJson()` on either model directly**, the value changes from the raw
+   stored path to the full URL — matching what `$user->image` (property
+   access) already returned. Every Resource class in this package reads
+   the property form already and needs no change; this only affects code
+   that serializes one of these two models without going through a
+   Resource.
+2. **If your own code called `app('error_reporter')` directly** (rather
+   than through `Foundation::exceptions()`, which already handled this),
+   use `app(\Mrj\Foundation\Contracts\ErrorReporter::class)` instead — it
+   is always bound now, so an `app()->bound()` check is no longer needed.
+3. If you extended `Mrj\Foundation\Services\FileManagerService` expecting
+   its methods' internals, they're now one-line delegations to whatever
+   `\Mrj\Foundation\Contracts\FileStorage` is bound
+   (`Mrj\Foundation\Services\LocalFileStorage` by default) — the same
+   static call sites work unchanged, but a subclass overriding its
+   private helpers no longer has anything to override.
+
 ## 0.14 to 0.15 (architecture, part one)
 
 `composer update mrjthedifferent/laravel-foundation`. No migration.
