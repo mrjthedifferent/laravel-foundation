@@ -1,0 +1,21 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Mrj\Foundation\Database\Seeders\FoundationSeeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        // Permissions, settings and the base roles. Super Admins are made with
+        // `php artisan foundation:super-admin`, never by a seeder.
+        $this->call(FoundationSeeder::class);
+
+        // The project's own seeders follow.
+    }
+}

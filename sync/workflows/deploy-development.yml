@@ -1,0 +1,84 @@
+name: Deploy development branch
+
+on:
+  push:
+    branches:
+      - development
+
+concurrency:
+  group: deploy-development
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, fileinfo, simplexml
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --no-check-all --no-check-publish
+
+      - name: Composer install
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Check code style (Pint)
+        run: vendor/bin/pint --test
+
+      - name: Boot check (routes & config)
+        env:
+          APP_ENV: testing
+          CACHE_STORE: array
+          SESSION_DRIVER: array
+          QUEUE_CONNECTION: sync
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ":memory:"
+        run: |
+          php artisan route:cache
+          php artisan config:cache
+
+      - name: Shared files match the foundation
+        run: php artisan foundation:sync --check
+
+      - name: Run tests
+        env:
+          APP_ENV: testing
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ":memory:"
+        run: |
+          # The boot check above cached config for a different environment.
+          php artisan optimize:clear
+          php artisan test
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: development
+    if: github.ref == 'refs/heads/development'
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          command_timeout: 20m
+          script: |
+            set -euo pipefail
+            git config --global --add safe.directory "${{ secrets.DEVELOPMENT_DEPLOY_PATH }}"
+            cd "${{ secrets.DEVELOPMENT_DEPLOY_PATH }}"
+            git fetch origin development
+            git reset --hard origin/development
+            git clean -fd
+            BUILD_FRONTEND=1 bash .scripts/laravel.sh

@@ -1,0 +1,1 @@
+<x-module-layout route="admin.__SLUG__.index" :label="__('__ALIAS__::__ALIAS__.index.title')" />

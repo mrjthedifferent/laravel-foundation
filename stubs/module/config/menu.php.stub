@@ -1,0 +1,18 @@
+<?php
+
+/*
+ * Sidebar pages this module contributes. `group` names the parent (see config/sidebar.php);
+ * SidebarMenu shows a page only when its route exists and the user holds one of its permissions.
+ */
+
+return [
+    [
+        'group' => 'administration',
+        'label' => '__TITLES__',
+        'icon' => 'ph-cube',
+        'route' => 'admin.__SLUG__.index',
+        'routes' => [],
+        'permissions' => ['View __TITLE__', 'Create __TITLE__', 'Edit __TITLE__', 'Delete __TITLE__'],
+        'order' => 100,
+    ],
+];

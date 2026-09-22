@@ -1,0 +1,25 @@
+<?php
+
+namespace Modules\__NAME__\Providers;
+
+use Modules\__NAME__\Models\__NAME__;
+use Modules\__NAME__\Policies\__NAME__Policy;
+use Mrj\Foundation\Support\ModuleServiceProvider;
+
+class __NAME__ServiceProvider extends ModuleServiceProvider
+{
+    protected string $name = '__NAME__';
+
+    protected string $nameLower = '__ALIAS__';
+
+    /**
+     * The alias is stored in the database: never change one once released.
+     */
+    protected array $morphMap = [
+        '__SNAKE__' => __NAME__::class,
+    ];
+
+    protected array $policies = [
+        __NAME__::class => __NAME__Policy::class,
+    ];
+}

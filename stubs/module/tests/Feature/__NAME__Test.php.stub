@@ -1,0 +1,33 @@
+<?php
+
+namespace Modules\__NAME__\Tests\Feature;
+
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Modules\__NAME__\Models\__NAME__;
+use Spatie\Permission\Models\Permission;
+use Tests\TestCase;
+
+class __NAME__Test extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_a_permitted_user_can_list___SNAKE_PLURAL__(): void
+    {
+        Permission::updateOrCreate(['name' => 'View __TITLE__', 'guard_name' => 'web'], ['module_name' => '__TITLE__ Management']);
+
+        $user = User::factory()->create(['is_active' => true]);
+        $user->givePermissionTo('View __TITLE__');
+        __NAME__::factory()->create(['name' => 'First one']);
+
+        $this->withoutVite()->actingAs($user)->get(route('admin.__SLUG__.index'))->assertOk()->assertSee('First one');
+    }
+
+    public function test_a_user_without_the_permission_is_refused(): void
+    {
+        $this->withoutVite()
+            ->actingAs(User::factory()->create(['is_active' => true]))
+            ->get(route('admin.__SLUG__.index'))
+            ->assertForbidden();
+    }
+}

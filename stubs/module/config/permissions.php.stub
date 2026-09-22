@@ -1,0 +1,13 @@
+<?php
+
+/*
+ * Permissions this module owns, seeded by RolePermissionPermissionsSeeder.
+ * `name` is globally unique, in "Verb Noun" form.
+ */
+
+return [
+    ['module_name' => '__TITLE__ Management', 'name' => 'View __TITLE__'],
+    ['module_name' => '__TITLE__ Management', 'name' => 'Create __TITLE__'],
+    ['module_name' => '__TITLE__ Management', 'name' => 'Edit __TITLE__'],
+    ['module_name' => '__TITLE__ Management', 'name' => 'Delete __TITLE__'],
+];

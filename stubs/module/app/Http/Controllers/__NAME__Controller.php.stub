@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\__NAME__\Http\Controllers;
+
+use Illuminate\Contracts\Support\Renderable;
+use Modules\__NAME__\Models\__NAME__;
+use Mrj\Foundation\Http\Controllers\Controller;
+
+class __NAME__Controller extends Controller
+{
+    public function index(): Renderable
+    {
+        $this->authorize('viewAny', __NAME__::class);
+
+        return view('__ALIAS__::index', [
+            '__VARS__' => __NAME__::query()->latest()->paginate(perPage())->withQueryString(),
+        ]);
+    }
+}

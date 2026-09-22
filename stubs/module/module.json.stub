@@ -1,0 +1,11 @@
+{
+    "name": "__NAME__",
+    "alias": "__ALIAS__",
+    "description": "",
+    "keywords": [],
+    "priority": 20,
+    "providers": [
+        "Modules\\__NAME__\\Providers\\__NAME__ServiceProvider"
+    ],
+    "files": []
+}

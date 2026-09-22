@@ -1,0 +1,136 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4', '8.5']
+        dependencies: [highest]
+        include:
+          # Proves the constraints in composer.json actually resolve and pass,
+          # not just whatever the newest releases happen to be.
+          - php: '8.3'
+            dependencies: lowest
+    name: PHP ${{ matrix.php }} (${{ matrix.dependencies }})
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, bcmath, intl, gd, fileinfo
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: ${{ matrix.dependencies }}
+          composer-options: --prefer-dist
+
+      - name: Code style
+        if: matrix.php == '8.4' && matrix.dependencies == 'highest'
+        run: vendor/bin/pint --test
+
+      - name: Static analysis
+        if: matrix.php == '8.4' && matrix.dependencies == 'highest'
+        run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress
+
+      - name: Refactoring rules (dry-run)
+        if: matrix.php == '8.4' && matrix.dependencies == 'highest'
+        run: vendor/bin/rector process --dry-run --no-progress-bar
+
+      - name: Tests
+        run: vendor/bin/phpunit
+
+  # What a user does: `laravel new`, require the package, run the installer, and nothing else.
+  fresh-app:
+    runs-on: ubuntu-latest
+    name: Fresh Laravel app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: foundation
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, bcmath, intl, gd, fileinfo
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Create a Laravel app
+        run: composer create-project laravel/laravel app --no-interaction --prefer-dist
+
+      - name: Require the package from this checkout
+        working-directory: app
+        run: |
+          # Copied rather than symlinked, and given a version, like a Packagist install.
+          composer config repositories.foundation '{"type": "path", "url": "../foundation", "options": {"symlink": false, "versions": {"mrjthedifferent/laravel-foundation": "1.99.0"}}}'
+          composer config allow-plugins.wikimedia/composer-merge-plugin true
+          composer require mrjthedifferent/laravel-foundation --no-interaction
+
+      - name: Install the foundation
+        working-directory: app
+        run: |
+          php artisan foundation:install --no-interaction
+          # Idempotent: a second run must change nothing.
+          git init -q && git add -A && git -c user.email=ci@example.com -c user.name=ci commit -qm installed
+          php artisan foundation:install --no-interaction
+          git diff --exit-code
+
+      - name: Migrate, seed and build
+        working-directory: app
+        run: |
+          php artisan migrate:fresh --seed --force
+          npm install --no-audit --no-fund
+          npm run build
+
+      - name: The app's own tests pass
+        working-directory: app
+        run: php artisan test
+
+      - name: A Super Admin made by the console signs in and every admin page opens, twice (the second from cache)
+        working-directory: app
+        run: |
+          php artisan foundation:super-admin superadmin@example.com --name="Super Admin" --password=12345678 --no-interaction
+          php artisan serve --port=8000 > /tmp/serve.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:8000/login > /dev/null && break; sleep 1; done
+
+          jar=/tmp/cookies
+          token=$(curl -s -c $jar http://127.0.0.1:8000/login | grep -oE 'name="_token" value="[^"]+"' | head -1 | sed -E 's/.*value="([^"]+)"/\1/')
+          curl -s -b $jar -c $jar -o /dev/null --data-urlencode "_token=$token" \
+            --data-urlencode "login=superadmin@example.com" --data-urlencode "password=12345678" http://127.0.0.1:8000/login
+
+          pages=$(php artisan route:list --method=GET --json | php -r '
+            foreach (json_decode(stream_get_contents(STDIN), true) as $route) {
+              $uri = $route["uri"];
+              if (str_starts_with($uri, "admin") && ! str_contains($uri, "{")
+                && ! preg_match("/export|download|logout|leave|track-ip|sample|counts|search|statuses/", $uri)) {
+                echo "/$uri\n";
+              }
+            }')
+
+          failed=0
+          for pass in 1 2; do
+            for page in $pages; do
+              status=$(curl -s -b $jar -o /tmp/page.html -w '%{http_code}' "http://127.0.0.1:8000$page")
+              if [ "$status" != 200 ] || grep -qE '\b[a-z]+::[a-z]+\.[a-z_]+\.' /tmp/page.html; then
+                echo "::error::pass $pass: $page answered $status or showed a raw translation key"
+                failed=1
+              fi
+            done
+          done
+          echo "$(echo "$pages" | wc -l) pages checked twice"
+          [ $failed = 0 ] || { tail -50 storage/logs/laravel.log; exit 1; }

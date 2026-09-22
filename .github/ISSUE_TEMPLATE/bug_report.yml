@@ -1,0 +1,54 @@
+name: Bug report
+description: Something in the package does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Security vulnerabilities must not be reported here. Follow SECURITY.md instead.
+  - type: input
+    id: package-version
+    attributes:
+      label: Package version
+      description: "`composer show mrjthedifferent/laravel-foundation | grep versions`"
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: laravel-version
+    attributes:
+      label: Laravel version
+      placeholder: 13.0.0
+    validations:
+      required: true
+  - type: input
+    id: php-version
+    attributes:
+      label: PHP version
+      placeholder: 8.4.0
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: Include the full error message and stack trace if there is one.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Ideally starting from a fresh `php artisan foundation:install` or the skeleton. Mention any views, config or modules you have overridden.
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true

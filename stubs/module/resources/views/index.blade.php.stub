@@ -1,0 +1,28 @@
+@extends('__ALIAS__::layouts.master')
+
+@section('breadcrumb')
+    <span class="breadcrumb-item active">{{ __('__ALIAS__::__ALIAS__.index.breadcrumb') }}</span>
+@endsection
+
+@section('content')
+    <x-page-header :title="__('__ALIAS__::__ALIAS__.index.title')" icon="ph-cube" />
+
+    <x-table-view-pagination :title="__('__ALIAS__::__ALIAS__.index.title')" :data="$__VARS__" :empty-message="__('__ALIAS__::__ALIAS__.index.empty')">
+        <thead>
+            <tr>
+                <th>{{ __('foundation::foundation.common.name') }}</th>
+                <th>{{ __('foundation::foundation.common.status') }}</th>
+                <th>{{ __('foundation::foundation.common.created_at') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($__VARS__ as $__VAR__)
+                <tr>
+                    <td>{{ $__VAR__->name }}</td>
+                    <td><x-status-badge :active="$__VAR__->is_active" /></td>
+                    <td>{{ $__VAR__->created_at?->format(config('foundation.formats.date')) }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </x-table-view-pagination>
+@endsection

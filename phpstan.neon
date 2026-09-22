@@ -1,0 +1,28 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+
+    # Larastan boots a real Laravel app per worker via orchestra/testbench-core's
+    # bundled skeleton, and multiple workers writing that skeleton's shared
+    # bootstrap cache concurrently race on Windows (atomic rename fails with
+    # "Access is denied"). Single process avoids it; the codebase is small
+    # enough that this isn't a meaningful speed cost.
+    parallel:
+        maximumNumberOfProcesses: 1
+
+    paths:
+        - src
+        - modules
+        - config
+        - database
+
+    excludePaths:
+        - modules/*/lang/*
+
+    # This is a package: config/*.php IS the config directory Laravel loads at
+    # boot, so env() here is correct and intended, not the "called outside
+    # config and breaks under config:cache" mistake this rule looks for.
+    noEnvCallsOutsideOfConfig: false

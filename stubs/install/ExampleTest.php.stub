@@ -1,0 +1,17 @@
+<?php
+
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class ExampleTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_guests_are_sent_to_the_sign_in_page(): void
+    {
+        $this->get('/')->assertRedirect(route('admin.dashboard'));
+        $this->get(route('admin.dashboard'))->assertRedirect(route('login'));
+    }
+}
