@@ -1,5 +1,47 @@
 # Changelog
 
+## 0.18.0
+
+Drops `konekt/html`. Every one of the 310 `Form::` calls across the 29
+admin views that used it is replaced with a new Blade component suite:
+`<x-form.input>`, `<x-form.select>`, `<x-form.textarea>`, `<x-form.file>`,
+`<x-form.checkbox>` and `<x-form.label>`.
+
+- **New components**, each handling label + required-asterisk, old-input
+  repopulation, the `is-invalid` class and the validation-error message in
+  one call — replacing a `Form::label()` + `Form::text()`/`Form::select()`/
+  etc. pair and the `@error()` block that used to follow it:
+  ```blade
+  <x-form.input name="name" label="Name" required :value="$user->name" />
+  <x-form.select class="select" name="roles" label="Roles" multiple :options="$roles" :selected="$user->roles->pluck('id')->toArray()" />
+  ```
+  `<x-form.select>`'s `:selected` unwraps a `BackedEnum`/`UnitEnum` itself —
+  `enum_value()`, which existed only to work around `Form::model()`'s
+  inability to do that, is gone.
+- **Fixed**: old-input priority (`old()` checked before the given value,
+  except for `password`/`file` fields, matching `Form::text()`'s own
+  `getValueAttribute()`) is preserved exactly — a validation error no
+  longer means retyping the whole form, on any of the 29 migrated views.
+- **Behavior note**: a repeated single-value row (`option_keys[]`,
+  `value_array[]`) previously relied on konekt/html's per-request shift
+  queue — each successive call for the same bracketed field name popped
+  the next flashed value — to restore old input by position after a
+  validation failure. The new components have no such queue; they fall
+  back to the field's current value instead of ever printing the literal
+  string `"Array"`. In practice this only affects the one static row a
+  dynamic-add-row section starts with, since none of these forms
+  repopulate JS-added rows from old input either.
+- Every module's `layouts/master.blade.php` (a near-identical 8-line
+  `<x-app-layout>` wrapper) is now one line via `<x-module-layout>`,
+  shipped in the 0.17.0 controller-cleanup release.
+- `sync/guidelines/{ui-components,views}.md` — which taught the `Form::`
+  API directly — are rewritten for the new components, alongside a few
+  other pre-existing stale references found along the way (a deleted
+  `PaginationEnum` controller example, four already-deleted helper
+  functions still listed in a reference table).
+- A new test scans every `.blade.php` in the package for a `Form::` call
+  and fails the build if one ever returns.
+
 ## 0.17.0
 
 Architecture, part three: the controller/convention cleanup deferred from

@@ -3,6 +3,27 @@
 Manual steps a project must take when moving between versions. Versions without an entry
 need only `composer update mrjthedifferent/laravel-foundation` and `php artisan migrate`.
 
+## 0.17 to 0.18 (drop konekt/html)
+
+`composer update mrjthedifferent/laravel-foundation`. No migration.
+
+1. **`konekt/html` is no longer a dependency.** If your own project's views
+   (outside this package's own 29, which are already converted) call
+   `Form::` or `Html::`, they will break — those facades are no longer
+   registered by this package. Either require `konekt/html` directly in
+   your own `composer.json` and register `Collective\Html\HtmlServiceProvider`
+   yourself, or migrate those views to `<x-form.input>` / `<x-form.select>`
+   / `<x-form.textarea>` / `<x-form.file>` (see `ui-components.md`).
+2. **`enum_value()` is deleted.** It existed only to work around
+   `Form::model()` reading an enum-cast attribute directly and failing to
+   cast it to a string. If your own code called it, replace
+   `enum_value($model->field)` with `$model->field` directly — everywhere
+   in this package it fed a `<x-form.select>`'s `:selected` prop, which
+   unwraps a `BackedEnum`/`UnitEnum` itself now.
+3. If your own views extended or copied one of this package's 29
+   converted views, re-copy the new version — the `Form::` calls in your
+   copy will not resolve to anything once `konekt/html` is gone.
+
 ## 0.16 to 0.17 (architecture, part three)
 
 `composer update mrjthedifferent/laravel-foundation`. No migration.
