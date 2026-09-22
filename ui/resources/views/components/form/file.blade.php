@@ -15,7 +15,7 @@
     type="file"
     name="{{ $name }}"
     id="{{ $id }}"
-    {{ $attributes->merge(['class' => 'form-control form-control-sm'])->merge($required ? ['required' => true] : []) }}
+    {{ $attributes->merge(['class' => 'form-control form-control-sm'.($errors->has($errorKey) ? ' is-invalid' : '')])->merge($required ? ['required' => true] : []) }}
 >
 @if ($help)
     <div class="form-text">{{ $help }}</div>

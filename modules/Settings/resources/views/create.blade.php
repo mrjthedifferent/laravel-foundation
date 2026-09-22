@@ -24,53 +24,31 @@
                     @enderror
                 </div>
                 <div class="col-md-6">
-                    {!! Form::label('existing_group', 'Group', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                    {!! Form::select(
-                        'existing_group',
-                        collect($groups)->mapWithKeys(fn($g) => [$g => $g])->put('__new__', '+ Add new group…')->prepend('', '')->toArray(),
-                        null,
-                        [
-                            'id' => 'existing_group',
-                            'class' => 'form-control form-control-sm select' . ($errors->has('group') ? ' is-invalid' : ''),
-                            'data-placeholder' => 'Select or type a group…',
-                        ],
-                    ) !!}
-                    {!! Form::text('group', old('group'), [
-                        'id' => 'group',
-                        'class' => 'form-control form-control-sm mt-2 d-none' . ($errors->has('group') ? ' is-invalid' : ''),
-                        'placeholder' => 'New group name',
-                    ]) !!}
-                    @error('group')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <x-form.select
+                        class="select"
+                        name="existing_group"
+                        id="existing_group"
+                        label="Group"
+                        :options="collect($groups)->mapWithKeys(fn($g) => [$g => $g])->put('__new__', '+ Add new group…')->prepend('', '')->toArray()"
+                        :selected="null"
+                        data-placeholder="Select or type a group…"
+                    />
+                    <x-form.input name="group" id="group" :value="old('group')" class="mt-2 d-none" placeholder="New group name" />
                 </div>
                 <div class="col-md-6">
-                    {!! Form::label('type', 'Type', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                    {!! Form::select(
-                        'type',
-                        collect($types)->mapWithKeys(fn($t) => [$t => ucfirst($t)])->prepend('', '')->toArray(),
-                        old('type'),
-                        [
-                            'id' => 'type',
-                            'class' => 'form-control form-control-sm select' . ($errors->has('type') ? ' is-invalid' : ''),
-                            'data-placeholder' => 'Select type…',
-                            'required',
-                        ],
-                    ) !!}
-                    @error('type')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <x-form.select
+                        class="select"
+                        name="type"
+                        id="type"
+                        label="Type"
+                        required
+                        :options="collect($types)->mapWithKeys(fn($t) => [$t => ucfirst($t)])->prepend('', '')->toArray()"
+                        :selected="old('type')"
+                        data-placeholder="Select type…"
+                    />
                 </div>
                 <div class="col-md-6">
-                    {!! Form::label('description', 'Description', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                    {!! Form::text('description', old('description'), [
-                        'id' => 'description',
-                        'class' => 'form-control form-control-sm' . ($errors->has('description') ? ' is-invalid' : ''),
-                        'placeholder' => 'Short explanation of this setting',
-                    ]) !!}
-                    @error('description')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <x-form.input name="description" id="description" label="Description" :value="old('description')" placeholder="Short explanation of this setting" />
                 </div>
             </div>
         </x-form-section>
@@ -109,39 +87,19 @@
             </div>
             <div class="card-body">
                 <div id="value_text_container" class="d-none">
-                    {!! Form::text('value_text', old('value_text'), [
-                        'id' => 'value_text',
-                        'class' => 'form-control form-control-sm',
-                        'placeholder' => 'Text value',
-                    ]) !!}
+                    <x-form.input name="value_text" id="value_text" :value="old('value_text')" placeholder="Text value" />
                 </div>
                 <div id="value_textarea_container" class="d-none">
-                    {!! Form::textarea('value_textarea', old('value_textarea'), [
-                        'id' => 'value_textarea',
-                        'class' => 'form-control form-control-sm',
-                        'rows' => 4,
-                        'placeholder' => 'Textarea value',
-                    ]) !!}
+                    <x-form.textarea name="value_textarea" id="value_textarea" :value="old('value_textarea')" :rows="4" placeholder="Textarea value" />
                 </div>
                 <div id="value_encrypted_container" class="d-none">
-                    {!! Form::password('value_encrypted', [
-                        'id' => 'value_encrypted',
-                        'class' => 'form-control form-control-sm',
-                        'placeholder' => 'Secret value — stored encrypted',
-                    ]) !!}
+                    <x-form.input type="password" name="value_encrypted" id="value_encrypted" placeholder="Secret value — stored encrypted" />
                 </div>
                 <div id="value_integer_container" class="d-none">
-                    {!! Form::number('value_integer', old('value_integer', 0), [
-                        'id' => 'value_integer',
-                        'class' => 'form-control form-control-sm',
-                    ]) !!}
+                    <x-form.input type="number" name="value_integer" id="value_integer" :value="old('value_integer', 0)" />
                 </div>
                 <div id="value_float_container" class="d-none">
-                    {!! Form::number('value_float', old('value_float', '0.00'), [
-                        'id' => 'value_float',
-                        'class' => 'form-control form-control-sm',
-                        'step' => '0.01',
-                    ]) !!}
+                    <x-form.input type="number" name="value_float" id="value_float" :value="old('value_float', '0.00')" step="0.01" />
                 </div>
                 <div id="value_boolean_container" class="d-none">
                     <div class="d-flex align-items-center gap-3 p-3 border rounded">
@@ -161,7 +119,7 @@
                 </div>
                 <div id="value_json_container" class="d-none">
                     <div id="json-editor" class="border rounded" style="height:320px;"></div>
-                    {!! Form::hidden('value_json', old('value_json', '{}'), ['id' => 'value_json']) !!}
+                    <x-form.input type="hidden" name="value_json" id="value_json" :value="old('value_json', '{}')" />
                     <div class="d-flex align-items-center gap-2 mt-2">
                         <button type="button" class="btn btn-sm btn-light border" id="format-json"><i
                                 class="ph-brackets-curly me-1"></i>Format</button>
@@ -185,7 +143,7 @@
                 <div id="value_array_container" class="d-none">
                     <div id="array_values_list">
                         <div class="input-group input-group-sm mb-2 array-value-row">
-                            {!! Form::text('value_array[]', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Value']) !!}
+                            <x-form.input name="value_array[]" placeholder="Value" />
                             <button type="button" class="btn btn-outline-danger" onclick="removeArrayValue(this)"><i
                                     class="ph-trash"></i></button>
                         </div>
@@ -208,14 +166,8 @@
                 </div>
                 <div id="options_list">
                     <div class="row g-2 mb-2 align-items-center option-row">
-                        <div class="col-5">{!! Form::text('option_keys[]', null, [
-                            'class' => 'form-control form-control-sm',
-                            'placeholder' => 'e.g. active',
-                        ]) !!}</div>
-                        <div class="col-5">{!! Form::text('option_values[]', null, [
-                            'class' => 'form-control form-control-sm',
-                            'placeholder' => 'e.g. Active',
-                        ]) !!}</div>
+                        <div class="col-5"><x-form.input name="option_keys[]" placeholder="e.g. active" /></div>
+                        <div class="col-5"><x-form.input name="option_values[]" placeholder="e.g. Active" /></div>
                         <div class="col-md-2">
                             <button type="button" class="btn btn-sm btn-outline-danger remove-option"
                                 onclick="removeOption(this)"><i class="ph-trash"></i></button>

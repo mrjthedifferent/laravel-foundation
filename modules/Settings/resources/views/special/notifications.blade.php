@@ -5,7 +5,8 @@
 @endsection
 
 @section('content')
-    {!! Form::open(['route' => 'admin.settings.special.update_notifications', 'method' => 'post']) !!}
+    <form action="{{ route('admin.settings.special.update_notifications') }}" method="POST">
+        @csrf
 
     <x-page-header title="Notification Settings"
         subtitle="Control every delivery channel per notification. In-App also covers real-time (browser) delivery."
@@ -73,5 +74,5 @@
         </button>
     </div>
 
-    {!! Form::close() !!}
+    </form>
 @endsection

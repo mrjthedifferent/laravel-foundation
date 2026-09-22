@@ -19,8 +19,7 @@
         <form action="{{ route('admin.settings.special.update_privacy_policy') }}" method="POST">
             @csrf
             <div class="mb-4">
-                {!! Form::label('privacy_policy', 'Content', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                {!! Form::textarea('privacy_policy', $setting->value ?? '', ['id' => 'privacy_policy', 'class' => 'form-control form-control-sm', 'rows' => 20]) !!}
+                <x-form.textarea name="privacy_policy" id="privacy_policy" label="Content" required :value="$setting->value ?? ''" :rows="20" />
             </div>
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary px-4">

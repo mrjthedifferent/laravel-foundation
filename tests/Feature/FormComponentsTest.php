@@ -71,6 +71,30 @@ class FormComponentsTest extends TestCase
         $html = view('components.form.input', ['name' => 'email'])->with('errors', $errors)->render();
 
         $this->assertStringContainsString('The email field is required.', $html);
+        $this->assertStringContainsString('is-invalid', $html);
+    }
+
+    public function test_input_has_no_is_invalid_class_without_an_error(): void
+    {
+        $html = view('components.form.input', ['name' => 'email'])->render();
+
+        $this->assertStringNotContainsString('is-invalid', $html);
+    }
+
+    /**
+     * A repeated single-value row (option_keys[]) flashes as an array of
+     * every row submitted; this component renders one row with no index to
+     * pick from, so it must fall back to the given value instead of printing
+     * the literal string "Array".
+     */
+    public function test_input_falls_back_to_the_given_value_when_old_input_is_an_array(): void
+    {
+        Session::flash('_old_input', ['option_keys' => ['active', 'inactive']]);
+
+        $html = view('components.form.input', ['name' => 'option_keys[]', 'value' => 'fallback'])->render();
+
+        $this->assertStringContainsString('value="fallback"', $html);
+        $this->assertStringNotContainsString('Array', $html);
     }
 
     public function test_select_marks_the_matching_option_selected(): void

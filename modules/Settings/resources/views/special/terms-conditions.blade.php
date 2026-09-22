@@ -19,8 +19,7 @@
         <form action="{{ route('admin.settings.special.update_terms_conditions') }}" method="POST">
             @csrf
             <div class="mb-4">
-                {!! Form::label('terms_conditions', 'Content', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                {!! Form::textarea('terms_conditions', $setting->value ?? '', ['id' => 'terms_conditions', 'class' => 'form-control form-control-sm', 'rows' => 20]) !!}
+                <x-form.textarea name="terms_conditions" id="terms_conditions" label="Content" required :value="$setting->value ?? ''" :rows="20" />
             </div>
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary px-4">

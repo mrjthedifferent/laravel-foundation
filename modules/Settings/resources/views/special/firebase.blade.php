@@ -44,8 +44,16 @@
                     <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">Service Account Credentials</span>
                 </div>
                 <div class="card-body">
-                    {!! Form::label('firebase_credentials_json', 'Credentials JSON', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                    {!! Form::textarea('firebase_credentials_json', optional($firebaseCredentialsJson)->value ?? '', ['id' => 'firebase_credentials_json', 'class' => 'form-control form-control-sm font-monospace', 'rows' => 10, 'placeholder' => '{"type": "service_account", "project_id": "...", ...}', 'style' => 'font-size:.78rem;resize:vertical;']) !!}
+                    <x-form.textarea
+                        name="firebase_credentials_json"
+                        id="firebase_credentials_json"
+                        label="Credentials JSON"
+                        :value="optional($firebaseCredentialsJson)->value ?? ''"
+                        class="font-monospace"
+                        :rows="10"
+                        placeholder='{"type": "service_account", "project_id": "...", ...}'
+                        style="font-size:.78rem;resize:vertical;"
+                    />
                     <div class="form-text">Full contents of the Firebase service account key file. Keep this secret and never expose it publicly.</div>
                 </div>
             </div>
@@ -59,8 +67,7 @@
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-12">
-                            {!! Form::label('firebase_project_id', 'Firebase Project ID', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                            {!! Form::text('firebase_project_id', optional($firebaseProjectId)->value ?? '', ['id' => 'firebase_project_id', 'class' => 'form-control form-control-sm', 'placeholder' => 'your-firebase-project-id']) !!}
+                            <x-form.input name="firebase_project_id" id="firebase_project_id" label="Firebase Project ID" :value="optional($firebaseProjectId)->value ?? ''" placeholder="your-firebase-project-id" />
                             <div class="form-text">Found in Firebase Console → Project Settings → General</div>
                         </div>
                     </div>

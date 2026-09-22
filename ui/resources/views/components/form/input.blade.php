@@ -13,6 +13,11 @@
     // same fields konekt/html's FormBuilder skipped, for the same reason
     // (browsers don't refill either, and a password shouldn't round-trip).
     $resolved = in_array($type, ['password', 'file'], true) ? null : old($errorKey, $value);
+    // A repeated single-value row (option_keys[], value_array[]) flashes as an
+    // array of every row submitted; this component renders one row and has no
+    // index to pick from it, so it falls back to the given value rather than
+    // rendering the literal string "Array".
+    $resolved = is_array($resolved) ? $value : $resolved;
 @endphp
 @if ($label)
     <x-form.label :for="$id" :required="$required">{{ $label }}</x-form.label>
@@ -22,7 +27,7 @@
     name="{{ $name }}"
     id="{{ $id }}"
     @if (! in_array($type, ['password', 'file'], true)) value="{{ $resolved }}" @endif
-    {{ $attributes->merge(['class' => 'form-control form-control-sm'])->merge($required ? ['required' => true] : []) }}
+    {{ $attributes->merge(['class' => 'form-control form-control-sm'.($errors->has($errorKey) ? ' is-invalid' : '')])->merge($required ? ['required' => true] : []) }}
 >
 @if ($help)
     <div class="form-text">{{ $help }}</div>
