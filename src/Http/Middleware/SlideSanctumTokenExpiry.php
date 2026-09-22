@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response;
 
-class SlideSanctumTokenExpiry
+final class SlideSanctumTokenExpiry
 {
     /**
      * Bump the current personal access token's expiry forward on each

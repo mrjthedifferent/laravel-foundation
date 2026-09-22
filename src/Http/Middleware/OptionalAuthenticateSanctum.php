@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class OptionalAuthenticateSanctum
+final class OptionalAuthenticateSanctum
 {
     /**
      * Authenticate the request when a Bearer token is present, without requiring it.

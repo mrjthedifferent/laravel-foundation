@@ -10,6 +10,8 @@ namespace Mrj\Foundation\Contracts;
  * FileManagerService is the static facade most call sites use — it delegates
  * to whatever is bound here, the same relationship Laravel's own Storage
  * facade has to the filesystem manager.
+ *
+ * @api
  */
 interface FileStorage
 {

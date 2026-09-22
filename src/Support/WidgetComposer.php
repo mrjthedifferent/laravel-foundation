@@ -11,6 +11,8 @@ use Mrj\Foundation\Services\Dashboard\DashboardCache;
  * cache; this class handles the permission check, the "return null when the
  * viewer can't see it" contract the dashboard partial expects, and wrapping
  * the query in DashboardCache so every widget shares one TTL/invalidation.
+ *
+ * @api
  */
 abstract class WidgetComposer
 {
@@ -46,7 +48,9 @@ abstract class WidgetComposer
     abstract protected function key(): string;
 
     /**
-     * The data to cache and hand to the widget's view.
+     * The data to cache and hand to the widget's view: scalars and arrays only.
+     * Laravel 13 apps ship `cache.serializable_classes => false`, so a model or
+     * collection read back from a shared cache store is an incomplete object.
      *
      * @return array<string, mixed>
      */

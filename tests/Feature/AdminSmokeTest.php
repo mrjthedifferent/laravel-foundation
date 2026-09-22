@@ -22,13 +22,7 @@ class AdminSmokeTest extends TestCase
     {
         parent::setUp();
 
-        config(['sidebar.groups' => [
-            'communications' => ['label' => 'Communications', 'icon' => 'ph-bell'],
-            'administration' => ['label' => 'Administration', 'icon' => 'ph-shield'],
-            'settings' => ['label' => 'Settings', 'icon' => 'ph-gear'],
-            'imports' => ['label' => 'Import / Download Manager', 'icon' => 'ph-download', 'single' => true],
-        ]]);
-
+        // The sidebar parents come from the package's own config/sidebar.php, as in a fresh install.
         $this->seed(FoundationSeeder::class);
     }
 
@@ -65,6 +59,26 @@ class AdminSmokeTest extends TestCase
                 }
             }
         }
+    }
+
+    /**
+     * Widgets cache their data. A fresh Laravel 13 app sets `cache.serializable_classes`
+     * to false, so anything but scalars and arrays comes back as an incomplete object and
+     * the second visit to the dashboard crashes. The array store never serializes, so
+     * this uses the file store.
+     */
+    public function test_the_dashboard_renders_from_a_cache_that_refuses_objects(): void
+    {
+        config(['cache.default' => 'file', 'cache.serializable_classes' => false]);
+        app('cache')->forgetDriver('file');
+        app('cache')->store('file')->flush();
+
+        $admin = $this->admin();
+        $admin->forceFill(['must_change_password' => false])->save();
+        $admin->update(['name' => 'Audited Change']);
+
+        $this->actingAs($admin)->get(route('admin.dashboard'))->assertOk();
+        $this->actingAs($admin)->get(route('admin.dashboard'))->assertOk()->assertSee('Administration');
     }
 
     public function test_super_admin_can_open_every_sidebar_page(): void

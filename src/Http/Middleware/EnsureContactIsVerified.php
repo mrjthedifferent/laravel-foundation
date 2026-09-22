@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Passes if the authenticated user has verified either their email or their
  * phone number, so an account that signs in by phone only is not locked out.
  */
-class EnsureContactIsVerified
+final class EnsureContactIsVerified
 {
     public function handle(Request $request, Closure $next, ?string $redirectToRoute = null): Response
     {

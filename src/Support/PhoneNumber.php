@@ -14,6 +14,8 @@ namespace Mrj\Foundation\Support;
  *   8801725700009    -> +8801725700009   (country code, no +)
  *   +8801725700009   -> +8801725700009   (already E.164)
  *   008801725700009  -> +8801725700009   (00 international prefix)
+ *
+ * @api
  */
 final class PhoneNumber
 {

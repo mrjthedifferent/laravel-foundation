@@ -22,18 +22,18 @@
                     </div>
                 </div>
 
-                @if ($widget['recent_audits']->isNotEmpty())
+                @if (! empty($widget['recent_audits']))
                     <div class="border-top pt-2">
                         <div class="text-muted small fw-semibold mb-2 text-uppercase">{{ __('activitylog::activitylog.widget.recent_activity') }}</div>
                         @foreach ($widget['recent_audits'] as $audit)
                             <div class="d-flex align-items-center gap-2 mb-1">
                                 <span
-                                    class="badge bg-secondary bg-opacity-10 text-secondary text-capitalize">{{ $audit->event }}</span>
+                                    class="badge bg-secondary bg-opacity-10 text-secondary text-capitalize">{{ $audit['event'] }}</span>
                                 <span class="text-muted small text-truncate flex-grow-1">
-                                    {{ class_basename($audit->auditable_type) }}
+                                    {{ class_basename($audit['auditable_type']) }}
                                 </span>
                                 <span class="text-muted small text-nowrap">
-                                    {{ \Carbon\Carbon::parse($audit->created_at)->diffForHumans(null, true, true) }}
+                                    {{ $audit['created_at'] ? \Carbon\Carbon::parse($audit['created_at'])->diffForHumans(null, true, true) : '' }}
                                 </span>
                             </div>
                         @endforeach

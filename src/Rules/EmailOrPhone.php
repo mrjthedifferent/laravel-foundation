@@ -6,7 +6,8 @@ use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Translation\PotentiallyTranslatedString;
 
-class EmailOrPhone implements ValidationRule
+/** @api */
+final class EmailOrPhone implements ValidationRule
 {
     /**
      * Run the validation rule.

@@ -19,13 +19,13 @@ use Symfony\Component\HttpFoundation\Response;
  * for logout. A Super Admin impersonating such a user is returned to their own
  * account.
  */
-class CheckUserIsActive
+final class CheckUserIsActive
 {
     /**
      * The English text of the inactive-account message, kept for callers that compare against it.
      * What users see is its translation, foundation::foundation.auth.inactive.
      */
-    public const INACTIVE_MESSAGE = 'Your account is not active.';
+    public const string INACTIVE_MESSAGE = 'Your account is not active.';
 
     /**
      * Handle an incoming request.

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -37,12 +38,14 @@ use Mrj\Foundation\View\Components\StatusBadge;
 use Mrj\Foundation\View\Composers\ThemeComposer;
 use Override;
 
-class FoundationServiceProvider extends ServiceProvider
+/** @internal */
+final class FoundationServiceProvider extends ServiceProvider
 {
     #[Override]
     public function register(): void
     {
         $this->mergeConfigFrom(Foundation::path('config/foundation.php'), 'foundation');
+        $this->mergeConfigFrom(Foundation::path('config/sidebar.php'), 'sidebar');
 
         $this->app->singletonIf(ImpersonationContext::class, NullImpersonationContext::class);
         $this->app->singletonIf(ErrorReporter::class, NullErrorReporter::class);
@@ -111,12 +114,17 @@ class FoundationServiceProvider extends ServiceProvider
         $this->configureMorphMap();
         $this->registerViews();
         $this->registerTranslations();
+        $this->registerRoutes();
 
         $this->loadMigrationsFrom(Foundation::path('database/migrations'));
 
         $this->publishes([
             Foundation::path('config/foundation.php') => config_path('foundation.php'),
         ], 'foundation-config');
+
+        $this->publishes([
+            Foundation::path('config/sidebar.php') => config_path('sidebar.php'),
+        ], 'foundation-sidebar');
 
         if ($this->app->runningInConsole()) {
             $this->commands([InstallCommand::class, MakeModuleCommand::class, PublishCommand::class, SyncCommand::class]);
@@ -202,6 +210,19 @@ class FoundationServiceProvider extends ServiceProvider
         $this->publishes([
             Foundation::path('lang') => $this->app->langPath('vendor/foundation'),
         ], 'foundation-lang');
+    }
+
+    /**
+     * Only the dashboard: every other admin route belongs to a module. A config
+     * published before the key existed has no 'dashboard' entry, which means on.
+     */
+    private function registerRoutes(): void
+    {
+        if ($this->app->routesAreCached() || config('foundation.routing.dashboard') === false) {
+            return;
+        }
+
+        Route::middleware('web')->group(Foundation::path('routes/web.php'));
     }
 
     private function registerViews(): void

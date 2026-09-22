@@ -8,6 +8,8 @@ namespace Mrj\Foundation\Contracts;
  * Bound in NotificationServiceProvider to FcmChannel. $notifiable/$notification
  * match Laravel's own notification-channel duck-typing convention (the
  * notification must implement toFcm($notifiable)).
+ *
+ * @api
  */
 interface PushSender
 {

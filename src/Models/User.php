@@ -65,6 +65,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @method HasMany documents()
  * @method HasMany loginHistory()
  * @method HasOne latestLogin()
+ *
+ * @api
  */
 abstract class User extends Authenticatable implements \OwenIt\Auditing\Contracts\Auditable, MustVerifyEmail
 {

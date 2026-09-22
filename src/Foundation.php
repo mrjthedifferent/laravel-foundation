@@ -20,6 +20,8 @@ use Throwable;
 /**
  * Entry points a project's bootstrap/app.php and providers call, so those files
  * never name a foundation class directly and stay identical across projects.
+ *
+ * @api
  */
 final class Foundation
 {

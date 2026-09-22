@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
  *
  * Provides consistent JSON response structure across the API.
  * Replaces the global apiResponse() helper with a more robust solution.
+ *
+ * @api
  */
 final class JsonResponseFactory
 {

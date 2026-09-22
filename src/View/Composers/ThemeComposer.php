@@ -7,7 +7,8 @@ namespace Mrj\Foundation\View\Composers;
 use Illuminate\View\View;
 use Mrj\Foundation\Services\ThemeResolver;
 
-class ThemeComposer
+/** @internal */
+final class ThemeComposer
 {
     public function __construct(
         private ThemeResolver $themeResolver

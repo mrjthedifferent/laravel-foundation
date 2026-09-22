@@ -3,6 +3,31 @@
 Manual steps a project must take when moving between versions. Versions without an entry
 need only `composer update mrjthedifferent/laravel-foundation` and `php artisan migrate`.
 
+## 0.19 to 1.0
+
+`composer update mrjthedifferent/laravel-foundation -W`. No migration.
+
+1. **Run `php artisan cache:clear` once after updating.** The dashboard's activity widget
+   used to cache Eloquent models; a copy cached by 0.19 can still crash the dashboard
+   until it expires.
+2. **The package now defines `admin.dashboard` itself.** Remove your own
+   `Route::view('/dashboard', 'dashboard')->name('dashboard')` from `routes/web.php`, or,
+   to keep a route of your own, set `'dashboard' => false` under `routing` in a published
+   `config/foundation.php`.
+3. **`config/sidebar.php` is optional now**; the package ships the same default. Keep
+   yours if you changed it (a published file replaces the default list as a whole).
+4. **`Modules\User\Data\UserData::$roles` and `$is_active` default to `null`**, meaning
+   "leave unchanged" on update. If your own code relied on building `UserData` without
+   `roles` to strip a user's roles, pass `roles: []` explicitly. Creating a user without
+   `is_active` still creates an active user.
+5. **These classes are now `final`**: the four `foundation:*` commands,
+   `FoundationServiceProvider`, the five middleware in `Http\Middleware`, `Rules\EmailOrPhone`,
+   `Rules\PhoneNumber`, `FileManagerService`, `LocalFileStorage`, `PDFService`, the view
+   components and `ThemeComposer`. If you extended one, bind your own implementation of the
+   matching contract (`Contracts\FileStorage` for storage) or wrap it instead.
+6. Optional, for the installer's Vite setup: add `preserveSymlinks: true` under `resolve` in
+   `vite.config.js` if you develop against a symlinked checkout of the package.
+
 ## 0.18 to 0.19 (translations)
 
 `composer update mrjthedifferent/laravel-foundation`. No migration. Under the

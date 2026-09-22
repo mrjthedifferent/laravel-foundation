@@ -28,7 +28,7 @@
     "require": {
         "php": "^8.3",
         "google/apiclient": "^2.19",
-        "guzzlehttp/guzzle": "^7.8",
+        "guzzlehttp/guzzle": "^7.8|^8.0",
         "laravel-notification-channels/telegram": "^8.0",
         "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
@@ -111,7 +111,7 @@
             ]
         },
         "branch-alias": {
-            "dev-main": "0.11.x-dev"
+            "dev-main": "1.x-dev"
         }
     },
     "config": {

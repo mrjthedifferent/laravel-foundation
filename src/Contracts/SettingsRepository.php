@@ -10,6 +10,8 @@ namespace Mrj\Foundation\Contracts;
  * config('settings.{key}.value') (populated once at boot from the cache),
  * and SettingsServiceProvider::cached() (the cache array itself, filtered
  * ad hoc at each call site). Bound in SettingsServiceProvider.
+ *
+ * @api
  */
 interface SettingsRepository
 {

@@ -10,6 +10,8 @@ use Override;
 /**
  * Default binding for OtpVerifier when the Otp module isn't installed.
  * There is no verification code to check against, so every attempt fails.
+ *
+ * @internal
  */
 final class NullOtpVerifier implements OtpVerifier
 {

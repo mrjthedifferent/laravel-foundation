@@ -24,7 +24,7 @@ final readonly class CreateUserAction
                 'email' => $data->email,
                 'phone' => $data->phone,
                 'password' => $data->password,
-                'is_active' => $data->is_active,
+                'is_active' => $data->is_active ?? true,
                 'name' => $data->name,
                 'image' => $data->image,
                 'gender' => $data->gender,
@@ -32,7 +32,7 @@ final readonly class CreateUserAction
 
             // Assign roles and audit the pivot attachment via the package's built-in auditAttach.
             // auditAttach passes directly to the Eloquent pivot, so Role models are required (not name strings).
-            $roles = $this->roleService->getRoleModels($data->roles);
+            $roles = $this->roleService->getRoleModels($data->roles ?? []);
             $user->auditAttach('roles', $roles);
 
             event(new Registered($user));

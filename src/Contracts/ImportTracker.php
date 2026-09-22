@@ -16,6 +16,8 @@ use Modules\ImportDownloadManager\Enum\ImportType;
  * ImportType is a plain value enum (Import|Download) with no behavior of its
  * own, so it stays a shared vocabulary type here rather than being
  * duplicated — the same treatment already given to Gender on the User model.
+ *
+ * @api
  */
 interface ImportTracker
 {

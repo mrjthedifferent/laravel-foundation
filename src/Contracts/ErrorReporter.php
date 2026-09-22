@@ -11,6 +11,8 @@ use Throwable;
  * class_exists()/bound() check — Foundation::exceptions() calls this
  * unconditionally. The ErrorReport module rebinds it to a real
  * implementation when installed; otherwise the default no-op applies.
+ *
+ * @api
  */
 interface ErrorReporter
 {

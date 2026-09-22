@@ -99,6 +99,8 @@ return [
         'domain' => env('FOUNDATION_ROUTE_DOMAIN'),
         'middleware' => ['auth'],
         'api_prefix' => env('FOUNDATION_API_PREFIX', 'v1'),
+        // The package registers admin.dashboard. Set false to define it yourself.
+        'dashboard' => true,
     ],
 
     /*

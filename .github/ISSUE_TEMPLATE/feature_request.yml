@@ -1,0 +1,25 @@
+name: Feature request
+description: Suggest a change or addition to the package.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do, and why is it hard or impossible today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How you would like it to work. Note whether it could break existing projects.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Workarounds you use now, e.g. overriding a view or config (see "Customising without forking" in the README).
+    validations:
+      required: false

@@ -23,6 +23,8 @@ use Symfony\Component\Finder\Finder;
  * here rather than needing a dedicated RouteServiceProvider/EventServiceProvider
  * class per module (see loadRoutes()); a module only needs one of those if it
  * requires framework-level EventServiceProvider features like event discovery.
+ *
+ * @api
  */
 abstract class ModuleServiceProvider extends ServiceProvider
 {

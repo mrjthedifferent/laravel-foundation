@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Cache;
  * Shared TTL, versioning and invalidation for everything cached on the dashboard —
  * the persona payloads and the per-module widgets alike — so one flush clears the
  * lot and there is a single place that decides how long any of it lives.
+ *
+ * @internal
  */
 final readonly class DashboardCache
 {

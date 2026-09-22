@@ -937,12 +937,6 @@ parameters:
 			path: modules/User/app/Actions/ManageUserAccountAction.php
 
 		-
-			message: '#^Property Modules\\User\\Data\\UserData\:\:\$is_active \(bool\) on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.property
-			count: 1
-			path: modules/User/app/Actions/UpdateUserAction.php
-
-		-
 			message: '#^Call to an undefined method Laravel\\Socialite\\Contracts\\Provider\:\:stateless\(\)\.$#'
 			identifier: method.notFound
 			count: 1

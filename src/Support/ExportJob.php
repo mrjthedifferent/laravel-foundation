@@ -26,6 +26,8 @@ use Throwable;
  * Real $tries/$timeout replace the previous ini_set('memory_limit', '-1')/
  * set_time_limit(0), which had no ceiling at all; 30 minutes comfortably
  * covers a large export without leaving a runaway job unbounded.
+ *
+ * @api
  */
 abstract class ExportJob implements ShouldQueue
 {

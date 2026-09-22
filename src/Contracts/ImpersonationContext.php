@@ -10,6 +10,8 @@ use Illuminate\Contracts\Auth\Authenticatable;
  * What the core needs to know about impersonation, without depending on the
  * module that implements it. The default binding reports "never impersonating";
  * the User module rebinds this to its real service.
+ *
+ * @api
  */
 interface ImpersonationContext
 {

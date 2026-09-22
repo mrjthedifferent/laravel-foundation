@@ -2,7 +2,9 @@
 
 namespace Mrj\Foundation\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Mrj\Foundation\Contracts\ImpersonationContext;
+use Mrj\Foundation\Database\Factories\AuditFactory;
 use Override;
 use OwenIt\Auditing\Models\Audit as BaseAudit;
 
@@ -13,7 +15,18 @@ use OwenIt\Auditing\Models\Audit as BaseAudit;
  */
 class Audit extends BaseAudit
 {
+    use HasFactory;
+
     public const IMPERSONATION_TAG_PREFIX = 'impersonating:';
+
+    /**
+     * HasFactory's default guess is Database\Factories\{model}Factory in the
+     * app namespace; the package's factories live in its own namespace.
+     */
+    protected static function newFactory(): AuditFactory
+    {
+        return AuditFactory::new();
+    }
 
     #[Override]
     protected static function booted(): void

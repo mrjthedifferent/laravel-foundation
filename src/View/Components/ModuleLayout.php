@@ -15,8 +15,10 @@ use Illuminate\View\View;
  * this one line) and fills in its breadcrumb and content sections — those
  * still resolve correctly from inside the component's own template, the
  * same as they already did through the app-layout component this one wraps.
+ *
+ * @internal
  */
-class ModuleLayout extends Component
+final class ModuleLayout extends Component
 {
     public function __construct(
         public string $route,

@@ -1,5 +1,53 @@
 # Changelog
 
+## 1.0.0
+
+The first stable release: `composer require` to a working admin panel with one command,
+and a declared public API that from now on only breaks in a major version.
+
+- **`foundation:install` does the whole setup.** On a fresh `laravel new` app it now also
+  wires `bootstrap/app.php` (keeping the app's own middleware and exception rules inside
+  the foundation's), makes `App\Models\User` extend the foundation user, gives the user
+  factory active users, calls `FoundationSeeder` from `DatabaseSeeder`, redirects `/` to
+  the dashboard, replaces the stock `ExampleTest` (which expected `/` to answer 200), adds
+  the Composer scripts, the Vite `@foundation` alias and entry files, and the npm
+  packages the UI needs. It asks before removing the stock migrations, has `--dry-run`,
+  and is idempotent. A file the project has changed is never overwritten; the command
+  lists what to do by hand instead.
+- **The package registers `admin.dashboard`** (on `foundation.routing`, so it follows a
+  custom prefix) **and ships a default `config/sidebar.php`.** Without either, a new
+  project's every page threw, and its sidebar was silently empty. Turn the route off with
+  `foundation.routing.dashboard => false`; publish the sidebar with
+  `--tag=foundation-sidebar`.
+- **CI installs the package into a fresh Laravel app** on every push: runs the installer
+  twice (the second run must change nothing), migrates, seeds, builds, runs the app's own
+  tests, signs in and opens every admin page twice.
+- **Fixed: the dashboard crashed on its second visit in a fresh Laravel 13 app.** The
+  activity widget cached Eloquent models; Laravel 13 apps set
+  `cache.serializable_classes => false`, so the cached copy came back as an incomplete
+  object. Widgets now cache plain arrays only, and a test renders the dashboard from a
+  file cache that refuses objects.
+- **Fixed: deactivating a user removed all their roles**, and so did a user updating
+  their own profile through the API. `UserData` defaulted `roles` to `[]`, which the
+  update action reads as "remove every role". It also defaulted `is_active` to `true`, so
+  any update that didn't mention status reactivated the user. Both now default to `null`
+  ("not provided"). PHPStan had flagged the second; the finding sat in the baseline.
+- **Fixed: `composer require` failed on a fresh Laravel 13 app**, which now ships Guzzle 8;
+  the package allowed only `^7.8`. It accepts `^7.8|^8.0`.
+- **Public API.** Classes projects extend or call are marked `@api` (see "Public API and
+  versioning" in the README); the rest are `@internal`. Concrete classes nothing should
+  extend (the commands, service provider, middleware, validation rules, view components,
+  `FileManagerService`, `LocalFileStorage`, `PDFService`) are now `final`.
+- Factories for every model (Device, EmailLog, SmsLog, DownloadImportManager,
+  FirebaseToken, UserLoginHistory, Setting, DeviceToken, Audit), and about 115 new tests:
+  the admin user screens, the ErrorReport controller, reporter and notifier, and the
+  module actions that had none. A flaky existing factory (an invalid document type a
+  third of the time) is fixed.
+- `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue and pull request templates,
+  `.editorconfig` and Dependabot.
+- The Vite config the installer writes sets `preserveSymlinks`, so a project developing
+  against a symlinked checkout of the package can build.
+
 ## 0.19.0
 
 Translations. Every user-facing string in the package — views, flash

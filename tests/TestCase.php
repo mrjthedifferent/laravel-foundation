@@ -72,14 +72,10 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * The routes every project provides.
+     * A project route the API tests call. The dashboard comes from the package itself.
      */
     protected function defineRoutes($router): void
     {
-        Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(function (): void {
-            Route::view('/dashboard', 'dashboard')->name('dashboard');
-        });
-
         Route::middleware(['api', 'auth:sanctum'])->prefix('api')->group(function (): void {
             Route::get('/ping', fn () => ['pong' => true]);
         });

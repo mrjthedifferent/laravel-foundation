@@ -2,6 +2,7 @@
 
 namespace Mrj\Foundation\Services;
 
+/** @internal */
 final readonly class ThemeResolver
 {
     private const string HEX_PATTERN = '/^#[0-9a-fA-F]{6}$/';

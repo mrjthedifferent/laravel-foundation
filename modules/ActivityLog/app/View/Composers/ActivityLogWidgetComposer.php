@@ -39,11 +39,18 @@ final class ActivityLogWidgetComposer extends WidgetComposer
                 ->where('created_at', '<', today()->addDay())
                 ->count(),
             'sms_logs' => SmsLog::query()->count(),
+            // Plain arrays, not models: Laravel 13 apps refuse to unserialize objects from the cache.
             'recent_audits' => Audit::query()
                 ->select('event', 'auditable_type', 'created_at')
                 ->latest()
                 ->limit(5)
-                ->get(),
+                ->get()
+                ->map(fn (Audit $audit): array => [
+                    'event' => $audit->event,
+                    'auditable_type' => $audit->auditable_type,
+                    'created_at' => $audit->created_at?->toIso8601String(),
+                ])
+                ->all(),
         ];
     }
 }

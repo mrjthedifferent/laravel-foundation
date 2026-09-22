@@ -7,7 +7,8 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Mrj\Foundation\Foundation;
 
-class PublishCommand extends Command
+/** @internal */
+final class PublishCommand extends Command
 {
     protected $signature = 'foundation:publish
         {--force : Copy even when the published assets are already current}
@@ -15,7 +16,7 @@ class PublishCommand extends Command
 
     protected $description = 'Publish the foundation theme assets to public/assets';
 
-    public const STAMP_FILE = '.foundation-version';
+    public const string STAMP_FILE = '.foundation-version';
 
     public function handle(Filesystem $files): int
     {

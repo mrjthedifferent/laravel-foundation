@@ -5,6 +5,7 @@ namespace Mrj\Foundation\Traits;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Mrj\Foundation\Services\FileManagerService;
 
+/** @api */
 trait HasImageAttribute
 {
     /**

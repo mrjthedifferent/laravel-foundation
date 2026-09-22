@@ -8,7 +8,8 @@ use Mpdf\Config\FontVariables;
 use RuntimeException;
 use Throwable;
 
-class PDFService
+/** @internal */
+final class PDFService
 {
     /**
      * Return a writable temp directory for Mpdf (inside storage so web server can write).

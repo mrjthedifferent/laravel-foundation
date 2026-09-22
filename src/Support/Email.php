@@ -9,6 +9,8 @@ namespace Mrj\Foundation\Support;
  * import would never match `email@x.com` typed at login. Real-world data has
  * also carried invisible characters pasted from Excel (NBSP U+00A0, word-joiner
  * U+2060) that survive an ASCII trim() and silently break lookups.
+ *
+ * @api
  */
 final class Email
 {

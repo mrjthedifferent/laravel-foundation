@@ -60,82 +60,42 @@ php artisan serve
 Sign in at `/login` with the `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` from `.env`, then
 change the password.
 
-## Install in an existing Laravel 13 app
+## Install in a Laravel 13 app
 
-1. Require the package. Until it is listed on Packagist, add the repository first:
+```bash
+laravel new my-project && cd my-project
 
-   ```bash
-   composer config repositories.foundation vcs https://github.com/mrjthedifferent/laravel-foundation
-   composer config allow-plugins.wikimedia/composer-merge-plugin true
-   composer require mrjthedifferent/laravel-foundation
-   ```
+# Until the package is listed on Packagist:
+composer config repositories.foundation vcs https://github.com/mrjthedifferent/laravel-foundation
+composer config allow-plugins.wikimedia/composer-merge-plugin true
 
-2. Run the installer. It publishes the theme to `public/assets`, enables the core modules,
-   points the module scanner at the package and removes Laravel's stock users, cache and jobs
-   migrations, which the foundation provides.
+composer require mrjthedifferent/laravel-foundation
+php artisan foundation:install
+php artisan migrate --seed
+npm install && npm run build
+```
 
-   ```bash
-   php artisan foundation:install
-   ```
+Sign in at `/login` as `superadmin@example.com` with password `12345678` (set `SEED_ADMIN_EMAIL`
+and `SEED_ADMIN_PASSWORD` in `.env` first; outside `local` the seeder refuses to run without a
+password), then change the password.
 
-3. Make `App\Models\User` extend the foundation user, and apply the foundation in
-   `bootstrap/app.php`:
+`foundation:install` does the rest of the wiring. Run it with `--dry-run` first to see the list:
 
-   ```php
-   use Mrj\Foundation\Models\User as FoundationUser;
+- `App\Models\User` extends the foundation user; the user factory creates active users
+- `bootstrap/app.php` gets the foundation's middleware, exception handling and handler
+- `DatabaseSeeder` calls the foundation's seeder; `/` redirects to the dashboard
+- Laravel's stock users, cache and jobs migrations are removed (it asks first; the foundation
+  ships its own)
+- the Composer scripts that keep the theme and shared files current, the Vite `@foundation`
+  alias, and the four npm packages the admin UI needs
+- the module scanner points at the package, and the core modules are enabled
 
-   class User extends FoundationUser {}
-   ```
+It only replaces a file that is still exactly as Laravel generated it. A file you have changed
+is left alone, and the command prints what to add by hand. Running it again changes nothing.
 
-   ```php
-   use Mrj\Foundation\Foundation;
-
-   return Application::configure(basePath: dirname(__DIR__))
-       ->withRouting(web: __DIR__.'/../routes/web.php', api: __DIR__.'/../routes/api.php', commands: __DIR__.'/../routes/console.php', health: '/up')
-       ->withMiddleware(Foundation::middleware(function (Middleware $middleware) {
-           // your own middleware
-       }))
-       ->withExceptions(Foundation::exceptions())
-       ->withSingletons(Foundation::singletons())
-       ->create();
-   ```
-
-4. Define the dashboard route (the package ships a `dashboard` view) and list your sidebar
-   parents in `config/sidebar.php`:
-
-   ```php
-   Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-       Route::view('/dashboard', 'dashboard')->name('dashboard');
-   });
-   ```
-
-   ```php
-   return ['groups' => [
-       'communications' => ['label' => 'Communications', 'icon' => 'ph-bell'],
-       'administration' => ['label' => 'Administration', 'icon' => 'ph-shield'],
-       'settings' => ['label' => 'Settings', 'icon' => 'ph-gear'],
-       'imports' => ['label' => 'Import / Download Manager', 'icon' => 'ph-download', 'single' => true],
-   ]];
-   ```
-
-5. Seed. Call the foundation's seeder first in `DatabaseSeeder`, then run
-   `php artisan migrate --seed`:
-
-   ```php
-   $this->call(\Mrj\Foundation\Database\Seeders\FoundationSeeder::class);
-   ```
-
-6. Keep the theme and shared files current by adding these Composer scripts:
-
-   ```json
-   "post-autoload-dump": ["...", "@php artisan foundation:publish --ansi"],
-   "post-update-cmd": ["...", "@php artisan foundation:sync --ansi"]
-   ```
-
-The project's own scripts and styles are optional. To reuse the package's, alias
-`@foundation` to `vendor/mrjthedifferent/laravel-foundation/ui/resources` in `vite.config.js`
-and import `@foundation/js/app.js` and `@foundation/css/app.css`. The project then needs
-`alpinejs`, `axios`, `laravel-echo` and `pusher-js`.
+The dashboard route (`admin.dashboard`) and the sidebar's parent groups come from the package.
+To change the groups, `php artisan vendor:publish --tag=foundation-sidebar`; to use your own
+dashboard page, create `resources/views/dashboard.blade.php`.
 
 ## Your own modules
 
@@ -176,6 +136,8 @@ Also available: `$composers`, `$commands`, `$middlewareAliases`, `$prependToGrou
 | Colours, dark mode, RTL, sidebar style | Settings → Theme, or the settings seeder |
 | PDF fonts | Put a `.ttf` in `resources/fonts` and list it under `pdf.fonts` in `config/foundation.php` |
 | Files `foundation:sync` overwrites | List them under `sync.except` in `config/foundation.php` |
+| Any text, or the language | `php artisan vendor:publish --tag=foundation-lang`, or a copy of a module's file at `resources/lang/modules/{alias}/{locale}/{alias}.php`; menu, permission and setting names in `lang/{locale}.json` |
+| The admin URL prefix, domain or middleware | `routing` in `config/foundation.php` (route names stay `admin.*`) |
 
 Registration is closed by default: an administrator creates accounts.
 
@@ -183,7 +145,7 @@ Registration is closed by default: an administrator creates accounts.
 
 | Command | Purpose |
 |---|---|
-| `foundation:install` | One-time project setup |
+| `foundation:install` | Wire a Laravel app to the foundation (`--dry-run` to preview; safe to run again) |
 | `foundation:make-module {Name}` | Create a module on the foundation conventions |
 | `foundation:publish` | Copy theme assets to `public/assets` (skips when current; `--force`, `--link`) |
 | `foundation:sync` | Update shared tooling files: AI coding guidelines, `pint.json`, `.scripts/laravel.sh` (`--check` for CI) |
@@ -195,19 +157,31 @@ composer update mrjthedifferent/laravel-foundation
 php artisan migrate
 ```
 
-Read [UPGRADE.md](UPGRADE.md) before a major version, or a minor version while on `0.x`.
-Released migrations are never edited, only added to.
+Read [UPGRADE.md](UPGRADE.md) before a major version. Released migrations are never edited,
+only added to.
+
+## Public API and versioning
+
+From 1.0.0 the package follows [semantic versioning](https://semver.org). A breaking change to
+any of these waits for the next major version:
+
+- classes and interfaces marked `@api`: `Foundation`, the base classes a project extends
+  (`Models\User`, `Support\ModuleServiceProvider`, `WidgetComposer`, `QueryBuilder`,
+  `ExportJob`, `Http\Controllers\Controller`, `Exceptions\Handler`), every interface in
+  `Contracts`, `JsonResponseFactory`, `Roles`, `Email`, `PhoneNumber`, `FileManagerService`,
+  the validation rules and `HasImageAttribute`
+- the global helper functions, config keys, route names (`admin.*`, `api.*`), Blade component
+  tags, translation keys, permission names and the database schema
+- the Artisan commands and their options
+
+A module's public surface is its routes, views (overridable by path), config, permissions,
+translation keys and events; its actions, controllers, jobs and other classes are internal.
+Anything marked `@internal` may change in a minor release. Classes not meant to be extended
+are `final`.
 
 ## Contributing
 
-```bash
-composer install
-vendor/bin/pint
-vendor/bin/phpunit
-```
-
-To work on the package against a real project, add a `path` repository pointing at your
-checkout and run `php artisan foundation:publish --link`.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Security issues: [SECURITY.md](SECURITY.md).
 
 ## Credits and license
 

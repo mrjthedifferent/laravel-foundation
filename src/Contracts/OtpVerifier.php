@@ -10,6 +10,8 @@ namespace Mrj\Foundation\Contracts;
  * optional module. Bound to a NullOtpVerifier by default (always fails
  * verification, since there is nothing to verify against without the
  * module); the Otp module rebinds it to the real VerifyOtpAction.
+ *
+ * @api
  */
 interface OtpVerifier
 {

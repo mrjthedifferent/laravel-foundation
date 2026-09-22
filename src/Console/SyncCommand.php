@@ -6,7 +6,8 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Mrj\Foundation\Foundation;
 
-class SyncCommand extends Command
+/** @internal */
+final class SyncCommand extends Command
 {
     protected $signature = 'foundation:sync
         {--check : Report drift without writing; exits non-zero when a managed file differs}';

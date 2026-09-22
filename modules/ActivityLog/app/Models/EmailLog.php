@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Modules\ActivityLog\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Modules\ActivityLog\Database\Factories\EmailLogFactory;
 use Override;
 
 /**
@@ -37,6 +39,17 @@ use Override;
  */
 class EmailLog extends Model
 {
+    use HasFactory;
+
+    /**
+     * HasFactory's default guess is Database\Factories\{model}Factory in the
+     * app namespace; this package's factories live per-module instead.
+     */
+    protected static function newFactory(): EmailLogFactory
+    {
+        return EmailLogFactory::new();
+    }
+
     protected $fillable = [
         'uuid',
         'to_email',

@@ -12,8 +12,10 @@ use Override;
  * FileManagerService's static methods so it is swappable and mockable
  * through the FileStorage contract; FileManagerService itself remains as a
  * static facade over whatever implementation is bound.
+ *
+ * @internal
  */
-class LocalFileStorage implements FileStorage
+final class LocalFileStorage implements FileStorage
 {
     private function isUrl(mixed $url): bool
     {

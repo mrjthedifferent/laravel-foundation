@@ -17,6 +17,8 @@ use Nwidart\Modules\Facades\Module;
  * flags through Foundation::sidebarVisibility().
  *
  * @phpstan-type Item array{group: string, label: string, icon: string, route?: string, url?: string, target?: string, routes?: list<string>, permissions?: list<string>, order?: int}
+ *
+ * @internal
  */
 final readonly class SidebarMenu
 {

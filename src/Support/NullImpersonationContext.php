@@ -7,6 +7,7 @@ namespace Mrj\Foundation\Support;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Mrj\Foundation\Contracts\ImpersonationContext;
 
+/** @internal */
 final class NullImpersonationContext implements ImpersonationContext
 {
     public function isImpersonating(): bool

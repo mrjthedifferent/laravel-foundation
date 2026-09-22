@@ -12,6 +12,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
  * instance — so a fluent filter method here mutates $this->query and
  * `return $this` rather than wrapping a "new" instance that would hold that
  * very same mutated Builder anyway.
+ *
+ * @api
  */
 abstract class QueryBuilder
 {

@@ -2,10 +2,12 @@
 
 namespace Modules\Settings\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use JsonException;
 use Modules\Settings\Contracts\SecretCipher;
+use Modules\Settings\Database\Factories\SettingFactory;
 use Modules\Settings\Events\SettingsUpdated;
 use Mrj\Foundation\Contracts\SettingsRepository;
 use Mrj\Foundation\Services\FileManagerService;
@@ -14,7 +16,16 @@ use OwenIt\Auditing\Auditable;
 
 class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use Auditable;
+    use Auditable, HasFactory;
+
+    /**
+     * HasFactory's default guess is Database\Factories\{model}Factory in the
+     * app namespace; this package's factories live per-module instead.
+     */
+    protected static function newFactory(): SettingFactory
+    {
+        return SettingFactory::new();
+    }
 
     #[Override]
     protected static function booted()

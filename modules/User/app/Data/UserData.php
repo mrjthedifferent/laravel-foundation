@@ -29,8 +29,10 @@ class UserData extends Data
         public ?string $name = null,
         public mixed $image = null,
 
-        public ?array $roles = [],
+        // null means "not provided": an update leaves the user's roles and status alone.
+        // An empty roles array is an explicit request to remove every role.
+        public ?array $roles = null,
 
-        public bool $is_active = true,
+        public ?bool $is_active = null,
     ) {}
 }

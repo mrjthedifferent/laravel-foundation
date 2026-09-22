@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Runs on every web and API request, the same way CheckUserIsActive does,
  * so it cannot be bypassed by deep-linking past the profile page.
  */
-class EnsurePasswordIsChanged
+final class EnsurePasswordIsChanged
 {
     /**
      * Routes the user must still be able to reach: the page that lets them

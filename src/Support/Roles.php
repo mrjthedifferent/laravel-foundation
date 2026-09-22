@@ -9,6 +9,8 @@ namespace Mrj\Foundation\Support;
  * (RolePermissionDatabaseSeeder). A project that renames them sets
  * config/foundation.php's 'roles' key rather than editing role checks
  * scattered through the codebase.
+ *
+ * @api
  */
 final class Roles
 {

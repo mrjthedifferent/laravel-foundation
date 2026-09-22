@@ -10,8 +10,10 @@ use Mrj\Foundation\Contracts\FileStorage;
  * manager. Kept for the many call sites (blade views, model accessors) where
  * a static call is more convenient than constructor injection; anything that
  * wants a swappable, mockable dependency should type-hint FileStorage directly.
+ *
+ * @api
  */
-class FileManagerService
+final class FileManagerService
 {
     public static function uploadFile(mixed $file, ?string $existing_file = null, string $directory = 'files', ?string $disk = null, bool $isBase64 = false): ?string
     {

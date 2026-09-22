@@ -7,7 +7,8 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Mrj\Foundation\Foundation;
 
-class MakeModuleCommand extends Command
+/** @internal */
+final class MakeModuleCommand extends Command
 {
     protected $signature = 'foundation:make-module
         {name : Singular StudlyCase name, e.g. Invoice or ProductCategory}
