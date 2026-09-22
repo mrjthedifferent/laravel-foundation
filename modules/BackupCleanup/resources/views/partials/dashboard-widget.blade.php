@@ -3,7 +3,7 @@
         <div class="card h-100">
             <div class="card-header">
                 <span class="fd-icon-tile fd-icon-tile-sm is-info"><i class="ph-database"></i></span>
-                <h6 class="card-title">{{ __('backupcleanup::backupcleanup.widget.title') }}</h6>
+                <h2 class="card-title">{{ __('backupcleanup::backupcleanup.widget.title') }}</h2>
                 @can('View Backup')
                     <a href="{{ route('admin.backups.index') }}" class="ms-auto fs-sm">
                         {{ __('backupcleanup::backupcleanup.widget.view_all') }}

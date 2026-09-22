@@ -3,7 +3,7 @@
         <div class="card h-100">
             <div class="card-header">
                 <span class="fd-icon-tile fd-icon-tile-sm is-info"><i class="ph-bell"></i></span>
-                <h6 class="card-title">{{ __('notification::notification.widget.title') }}</h6>
+                <h2 class="card-title">{{ __('notification::notification.widget.title') }}</h2>
                 <a href="{{ route('admin.notification.index') }}" class="ms-auto fs-sm">
                     {{ __('foundation::foundation.notification.view_all') }}
                 </a>

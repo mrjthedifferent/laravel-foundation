@@ -3,7 +3,7 @@
         <div class="card h-100">
             <div class="card-header">
                 <span class="fd-icon-tile fd-icon-tile-sm is-warning"><i class="ph-shield"></i></span>
-                <h6 class="card-title">{{ __('rolepermission::rolepermission.layouts.label') }}</h6>
+                <h2 class="card-title">{{ __('rolepermission::rolepermission.layouts.label') }}</h2>
                 @can('View Role')
                     <a href="{{ route('admin.role.index') }}" class="ms-auto fs-sm">
                         {{ __('rolepermission::rolepermission.widget.view_all') }}

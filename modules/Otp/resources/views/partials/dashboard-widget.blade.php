@@ -3,7 +3,7 @@
         <div class="card h-100">
             <div class="card-header">
                 <span class="fd-icon-tile fd-icon-tile-sm is-info"><i class="ph-lock-key"></i></span>
-                <h6 class="card-title">{{ __('otp::otp.widget.title') }}</h6>
+                <h2 class="card-title">{{ __('otp::otp.widget.title') }}</h2>
             </div>
             <div class="card-body">
                 <div class="row g-3">

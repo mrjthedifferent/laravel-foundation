@@ -3,7 +3,7 @@
         <div class="card h-100">
             <div class="card-header">
                 <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-users-four"></i></span>
-                <h6 class="card-title">{{ __('user::user.widget.title') }}</h6>
+                <h2 class="card-title">{{ __('user::user.widget.title') }}</h2>
                 @can('View User')
                     <a href="{{ route('admin.users.index') }}" class="ms-auto fs-sm">
                         {{ __('user::user.widget.view_all') }}

@@ -9,10 +9,10 @@
     <div class="card">
         <div class="card-header">
             <div>
-                <h5 class="card-title">
+                <h2 class="card-title">
                     {{ __('activitylog::activitylog.show.breadcrumb') }}
                     <span class="badge bg-secondary">{{ $helper::getModelName($audit->auditable_type) }}</span>
-                </h5>
+                </h2>
                 <div class="text-muted fs-sm">{{ __('activitylog::activitylog.show.record_count', ['count' => $audits->total()]) }}</div>
             </div>
             <div class="d-flex align-items-center gap-2 ms-auto">

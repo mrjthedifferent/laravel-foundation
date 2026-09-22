@@ -3,7 +3,7 @@
         <div class="card h-100">
             <div class="card-header">
                 <span class="fd-icon-tile fd-icon-tile-sm is-neutral"><i class="ph-gear"></i></span>
-                <h6 class="card-title">{{ __('settings::settings.widget.title') }}</h6>
+                <h2 class="card-title">{{ __('settings::settings.widget.title') }}</h2>
                 @if (auth()->user()->can('Edit System Setting'))
                     <a href="{{ route('admin.settings.index') }}" class="ms-auto fs-sm">
                         {{ __('settings::settings.widget.manage') }}

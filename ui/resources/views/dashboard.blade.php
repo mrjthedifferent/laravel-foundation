@@ -54,7 +54,7 @@
                 <div class="{{ $hasFeed ? 'col-xl-8' : 'col-12' }}">
                     <div class="card h-100">
                         <div class="card-header">
-                            <h6 class="card-title">{{ $chart['label'] }}</h6>
+                            <h2 class="card-title">{{ $chart['label'] }}</h2>
                             <div class="ms-auto nav nav-pills">
                                 @foreach ($windows as $window)
                                     <a class="nav-link @if ($days === $window) active @endif"

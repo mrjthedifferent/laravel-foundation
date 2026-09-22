@@ -7,7 +7,7 @@
 <div class="card">
     <div class="card-header">
         <span class="fd-icon-tile fd-icon-tile-sm {{ $errorReport->isResolved() ? 'is-success' : 'is-danger' }}"><i class="ph-bug"></i></span>
-        <h5 class="card-title">{{ __('errorreport::errorreport.show.title') }}</h5>
+        <h2 class="card-title">{{ __('errorreport::errorreport.show.title') }}</h2>
         <div class="d-flex gap-2 ms-auto">
             @can('Resolve Error Report')
             @if (! $errorReport->isResolved())

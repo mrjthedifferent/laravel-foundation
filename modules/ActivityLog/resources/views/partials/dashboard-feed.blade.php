@@ -1,7 +1,7 @@
 @if ($widget)
     <div class="card h-100">
         <div class="card-header">
-            <h6 class="card-title">{{ __('activitylog::activitylog.widget.recent_activity') }}</h6>
+            <h2 class="card-title">{{ __('activitylog::activitylog.widget.recent_activity') }}</h2>
             @if (Route::has('admin.activity-logs.index') && auth()->user()->can('View Activity Log'))
                 <a href="{{ route('admin.activity-logs.index') }}" class="ms-auto fs-sm">
                     {{ __('activitylog::activitylog.widget.view_all') }}

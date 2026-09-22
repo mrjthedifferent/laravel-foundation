@@ -33,7 +33,7 @@
                 {{-- Colour mode --}}
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h6 class="card-title">{{ __('settings::settings.special_theme.color_mode_header') }}</h6>
+                        <h2 class="card-title">{{ __('settings::settings.special_theme.color_mode_header') }}</h2>
                     </div>
                     <div class="card-body">
                         <p class="text-muted fs-sm mb-3">{{ __('settings::settings.special_theme.color_mode_subtitle') }}</p>
@@ -60,7 +60,7 @@
                 {{-- Accent --}}
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h6 class="card-title">{{ __('settings::settings.special_theme.palette_header') }}</h6>
+                        <h2 class="card-title">{{ __('settings::settings.special_theme.palette_header') }}</h2>
                     </div>
                     <div class="card-body">
                         <p class="text-muted fs-sm mb-3">{{ __('settings::settings.special_theme.palette_subtitle') }}</p>
@@ -97,7 +97,7 @@
                 {{-- Sidebar --}}
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h6 class="card-title">{{ __('settings::settings.special_theme.sidebar_header') }}</h6>
+                        <h2 class="card-title">{{ __('settings::settings.special_theme.sidebar_header') }}</h2>
                     </div>
                     <div class="card-body">
                         <p class="text-muted fs-sm mb-3">{{ __('settings::settings.special_theme.sidebar_subtitle') }}</p>
@@ -124,7 +124,7 @@
                 {{-- Direction --}}
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h6 class="card-title">{{ __('settings::settings.special_theme.direction_header') }}</h6>
+                        <h2 class="card-title">{{ __('settings::settings.special_theme.direction_header') }}</h2>
                     </div>
                     <div class="card-body">
                         <p class="text-muted fs-sm mb-3">{{ __('settings::settings.special_theme.direction_subtitle') }}</p>
@@ -155,7 +155,7 @@
             <div class="col-xl-5">
                 <div class="card">
                     <div class="card-header">
-                        <h6 class="card-title">{{ __('settings::settings.special_theme.preview') }}</h6>
+                        <h2 class="card-title">{{ __('settings::settings.special_theme.preview') }}</h2>
                     </div>
                     <div class="card-body">
                         <div class="fd-theme-preview" id="theme-preview" data-bs-theme="light" data-color-palette="indigo">

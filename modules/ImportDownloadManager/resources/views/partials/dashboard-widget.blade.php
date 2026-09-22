@@ -3,7 +3,7 @@
         <div class="card h-100">
             <div class="card-header">
                 <span class="fd-icon-tile fd-icon-tile-sm is-neutral"><i class="ph-download-simple"></i></span>
-                <h6 class="card-title">{{ __('importdownloadmanager::importdownloadmanager.widget.title') }}</h6>
+                <h2 class="card-title">{{ __('importdownloadmanager::importdownloadmanager.widget.title') }}</h2>
                 <a href="{{ route('admin.download.import.manager.index') }}" class="ms-auto fs-sm">
                     {{ __('importdownloadmanager::importdownloadmanager.widget.view_all') }}
                 </a>

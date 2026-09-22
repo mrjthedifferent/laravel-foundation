@@ -19,7 +19,7 @@ $totalCount = isset($data) ? ($isPaginator ? $data->total() : count($data)) : 0;
 <div class="card">
     {{-- Header --}}
     <div class="card-header {{ isset($tabs) ? 'pb-0' : '' }}">
-        <h6 class="card-title">{{ $title }}</h6>
+        <h2 class="card-title">{{ $title }}</h2>
         @if($hasRows)
         <span class="badge bg-secondary-subtle text-secondary-emphasis fw-normal">{{ number_format($totalCount) }}</span>
         @endif

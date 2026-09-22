@@ -406,7 +406,7 @@
             <div class="card mt-3" id="manage-account">
                 <div class="card-header">
                     <span class="fd-icon-tile fd-icon-tile-sm is-danger"><i class="ph-warning-octagon"></i></span>
-                    <h6 class="card-title">{{ __('user::user.view.manage_account_heading') }}</h6>
+                    <h2 class="card-title">{{ __('user::user.view.manage_account_heading') }}</h2>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('admin.users.account.manage', $user->id) }}">

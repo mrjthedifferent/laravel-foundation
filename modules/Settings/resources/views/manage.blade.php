@@ -21,7 +21,7 @@
 {{-- Table card --}}
 <div class="card">
     <div class="card-header">
-        <h6 class="card-title">{{ __('settings::settings.manage.title') }}</h6>
+        <h2 class="card-title">{{ __('settings::settings.manage.title') }}</h2>
         <div class="d-flex flex-wrap gap-2 ms-auto">
             <a href="{{ route('admin.settings.sync') }}" class="btn btn-light swal-post"
                 data-text="{{ __('settings::settings.manage.sync_confirm') }}">
