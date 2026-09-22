@@ -3,10 +3,8 @@
 namespace Modules\User\Http\Controllers;
 
 use App\Models\User;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Modules\User\Actions\StartImpersonationAction;
 use Modules\User\Actions\StopImpersonationAction;
 use Mrj\Foundation\Http\Controllers\Controller;
@@ -23,13 +21,7 @@ class ImpersonationController extends Controller
     {
         $this->authorize('impersonate', $user);
 
-        try {
-            $action->execute($request->user(), $user);
-        } catch (Exception $e) {
-            Log::error('Impersonation start failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
-
-            return back()->with('error', 'Failed to sign in as this user');
-        }
+        $action->execute($request->user(), $user);
 
         return redirect()->route('admin.dashboard')
             ->with('info', "You are now signed in as {$user->name}.");
@@ -42,13 +34,7 @@ class ImpersonationController extends Controller
     {
         $this->authorize('leaveImpersonation', User::class);
 
-        try {
-            $user = $action->execute();
-        } catch (Exception $e) {
-            Log::error('Impersonation stop failed', ['error' => $e->getMessage()]);
-
-            return back()->with('error', 'Failed to return to your account');
-        }
+        $user = $action->execute();
 
         return redirect()->route('admin.users.show', $user)
             ->with('success', 'You are back in your own account.');

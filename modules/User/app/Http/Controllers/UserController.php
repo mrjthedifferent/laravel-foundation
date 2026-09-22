@@ -3,12 +3,10 @@
 namespace Modules\User\Http\Controllers;
 
 use App\Models\User;
-use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Modules\User\Actions\BulkUploadUsersAction;
 use Modules\User\Actions\CreateUserAction;
@@ -89,16 +87,10 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        try {
-            $action->execute(UserData::from($request->validated()));
+        $action->execute(UserData::from($request->validated()));
 
-            return redirect()->route('admin.users.index')
-                ->with('success', 'User created successfully');
-        } catch (Exception $e) {
-            Log::error('User creation failed', ['error' => $e->getMessage()]);
-
-            return back()->with('error', 'Failed to create user');
-        }
+        return redirect()->route('admin.users.index')
+            ->with('success', 'User created successfully');
     }
 
     /**
@@ -138,18 +130,12 @@ class UserController extends Controller
             $this->authorize('updateRoles', User::class);
         }
 
-        try {
-            $data = $request->validated();
-            $data['is_active'] ??= $user->is_active;
+        $data = $request->validated();
+        $data['is_active'] ??= $user->is_active;
 
-            $action->execute($user->id, UserData::from($data));
+        $action->execute($user->id, UserData::from($data));
 
-            return back()->with('success', 'User updated successfully');
-        } catch (Exception $e) {
-            Log::error('User update failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
-
-            return back()->with('error', 'Failed to update user');
-        }
+        return back()->with('success', 'User updated successfully');
     }
 
     /**
@@ -159,20 +145,14 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
-        try {
-            $result = $action->execute($user, AccountAction::Delete);
+        $result = $action->execute($user, AccountAction::Delete);
 
-            if (! $result) {
-                return back()->with('error', 'Failed to delete user');
-            }
-
-            return redirect()->route('admin.users.index')
-                ->with('success', 'User deleted successfully');
-        } catch (Exception $e) {
-            Log::error('User deletion failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
-
+        if (! $result) {
             return back()->with('error', 'Failed to delete user');
         }
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'User deleted successfully');
     }
 
     /**
@@ -186,26 +166,19 @@ class UserController extends Controller
             return back()->with('error', 'Account management unavailable in production');
         }
 
-        try {
-            $accountAction = AccountAction::from($request->validated('action'));
-            $result = $action->execute($user, $accountAction);
+        $accountAction = AccountAction::from($request->validated('action'));
+        $result = $action->execute($user, $accountAction);
 
-            if ($result) {
-
-                if ($accountAction === AccountAction::Reset) {
-                    return back()->with('success', 'User account reset successfully');
-                } else {
-                    return redirect()->route('admin.users.index')
-                        ->with('success', 'User account deleted successfully');
-                }
+        if ($result) {
+            if ($accountAction === AccountAction::Reset) {
+                return back()->with('success', 'User account reset successfully');
             }
 
-            return back()->with('error', 'Failed to manage user account');
-        } catch (Exception $e) {
-            Log::error('Account management failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
-
-            return back()->with('error', 'Internal server error');
+            return redirect()->route('admin.users.index')
+                ->with('success', 'User account deleted successfully');
         }
+
+        return back()->with('error', 'Failed to manage user account');
     }
 
     /**
@@ -242,15 +215,9 @@ class UserController extends Controller
             return back()->with('info', 'Phone is already verified.');
         }
 
-        try {
-            $action->execute($user, 'phone');
+        $action->execute($user, 'phone');
 
-            return back()->with('success', 'Phone verified successfully.');
-        } catch (Exception $e) {
-            Log::error('Manual phone verification failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
-
-            return back()->with('error', 'Failed to verify phone.');
-        }
+        return back()->with('success', 'Phone verified successfully.');
     }
 
     /**
@@ -268,15 +235,9 @@ class UserController extends Controller
             return back()->with('info', 'Email is already verified.');
         }
 
-        try {
-            $action->execute($user, 'email');
+        $action->execute($user, 'email');
 
-            return back()->with('success', 'Email verified successfully.');
-        } catch (Exception $e) {
-            Log::error('Manual email verification failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
-
-            return back()->with('error', 'Failed to verify email.');
-        }
+        return back()->with('success', 'Email verified successfully.');
     }
 
     /**
@@ -286,15 +247,9 @@ class UserController extends Controller
     {
         $this->authorize('resetPassword', $user);
 
-        try {
-            $action->execute($user);
+        $action->execute($user);
 
-            return back()->with('success', 'Password reset successfully');
-        } catch (Exception $e) {
-            Log::error('Password reset failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
-
-            return back()->with('error', 'Failed to reset password');
-        }
+        return back()->with('success', 'Password reset successfully');
     }
 
     /**
@@ -304,15 +259,9 @@ class UserController extends Controller
     {
         $this->authorize('updateStatus', $user);
 
-        try {
-            $action->execute($user->id, UserData::from(['is_active' => $request->validated('is_active')]));
+        $action->execute($user->id, UserData::from(['is_active' => $request->validated('is_active')]));
 
-            return back()->with('success', 'User status updated successfully');
-        } catch (Exception $e) {
-            Log::error('User status update failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
-
-            return back()->with('error', 'Failed to update user status');
-        }
+        return back()->with('success', 'User status updated successfully');
     }
 
     /**

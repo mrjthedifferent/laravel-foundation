@@ -16,6 +16,7 @@ use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -116,7 +117,33 @@ class Handler extends ExceptionHandler
             return JsonResponseFactory::serverError($this->safeServerErrorMessage($e));
         }
 
+        // Every admin controller used to wrap its Action call in a try/catch
+        // that flashed a generic "Failed to X" message and redirected back,
+        // repeated near-identically ~30 times — and swallowing the real
+        // exception before it ever reached here, so ErrorReporter and the
+        // logs never saw it. Controllers now let exceptions propagate; this
+        // is the one place that renders the same friendly fallback, for a
+        // web request whose error page a visitor would otherwise never want
+        // to see (an unhandled 500 in production). Anything Laravel already
+        // renders sensibly — validation, auth, 404s, explicit HTTP statuses
+        // — is left to parent::render(); in non-production the real error
+        // page still shows, so debugging is unaffected.
+        if (app()->isProduction() && $this->isUnhandledServerError($e)) {
+            return redirect()->back()
+                ->withInput($request->except($this->dontFlash))
+                ->with('error', 'Something went wrong. Please try again.');
+        }
+
         return parent::render($request, $e);
+    }
+
+    private function isUnhandledServerError(Throwable $e): bool
+    {
+        return ! $e instanceof HttpExceptionInterface
+            && ! $e instanceof ValidationException
+            && ! $e instanceof AuthenticationException
+            && ! $e instanceof AuthorizationException
+            && ! $e instanceof ModelNotFoundException;
     }
 
     /**

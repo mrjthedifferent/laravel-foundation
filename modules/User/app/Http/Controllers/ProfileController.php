@@ -2,7 +2,6 @@
 
 namespace Modules\User\Http\Controllers;
 
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -36,24 +35,20 @@ class ProfileController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        try {
-            // Create UserData from request + existing user data for required fields
-            $userData = UserData::from([
-                'name' => $validated['name'],
-                'image' => $validated['image'] ?? null,
-                // Preserve existing sensitive/required data
-                'email' => $user->email,
-                'gender' => $user->gender instanceof Gender ? $user->gender->value : $user->gender,
-                'roles' => $user->roles->pluck('id')->toArray(),
-                'is_active' => $user->is_active,
-            ]);
+        // Create UserData from request + existing user data for required fields
+        $userData = UserData::from([
+            'name' => $validated['name'],
+            'image' => $validated['image'] ?? null,
+            // Preserve existing sensitive/required data
+            'email' => $user->email,
+            'gender' => $user->gender instanceof Gender ? $user->gender->value : $user->gender,
+            'roles' => $user->roles->pluck('id')->toArray(),
+            'is_active' => $user->is_active,
+        ]);
 
-            $action->execute($user->id, $userData);
+        $action->execute($user->id, $userData);
 
-            return Redirect::route('admin.profile.edit')->with('success', 'Your profile updated successfully');
-        } catch (Exception $e) {
-            return Redirect::route('admin.profile.edit')->with('error', 'Failed to update profile: '.$e->getMessage());
-        }
+        return Redirect::route('admin.profile.edit')->with('success', 'Your profile updated successfully');
     }
 
     /**

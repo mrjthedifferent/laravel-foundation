@@ -3,9 +3,7 @@
 namespace Modules\User\Http\Controllers;
 
 use App\Models\User;
-use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 use Modules\User\Actions\UploadUserDocumentAction;
 use Modules\User\Data\UserDocumentData;
 use Modules\User\Http\Requests\UploadDocumentRequest;
@@ -28,17 +26,10 @@ class DocumentController extends Controller
     {
         $this->authorize('uploadDocument', $user);
 
-        try {
-            $action->execute($user, UserDocumentData::from($request->validated()));
+        $action->execute($user, UserDocumentData::from($request->validated()));
 
-            return redirect(route('admin.users.show', $user->id).'#documents')
-                ->with('success', 'Document uploaded successfully');
-        } catch (Exception $e) {
-            Log::error('Document upload failed', ['user_id' => $user->id, 'error' => $e->getMessage()]);
-
-            return redirect(route('admin.users.show', $user->id).'#documents')
-                ->with('error', 'Failed to upload document');
-        }
+        return redirect(route('admin.users.show', $user->id).'#documents')
+            ->with('success', 'Document uploaded successfully');
     }
 
     /**
@@ -50,17 +41,10 @@ class DocumentController extends Controller
     {
         $this->authorize('uploadDocument', $user); // Same permission as upload
 
-        try {
-            $document = $user->documents()->findOrFail($documentId);
-            $document->delete();
+        $document = $user->documents()->findOrFail($documentId);
+        $document->delete();
 
-            return redirect(route('admin.users.show', $user->id).'#documents')
-                ->with('success', 'Document deleted successfully');
-        } catch (Exception $e) {
-            Log::error('Document deletion failed', ['document_id' => $documentId, 'error' => $e->getMessage()]);
-
-            return redirect(route('admin.users.show', $user->id).'#documents')
-                ->with('error', 'Failed to delete document');
-        }
+        return redirect(route('admin.users.show', $user->id).'#documents')
+            ->with('success', 'Document deleted successfully');
     }
 }

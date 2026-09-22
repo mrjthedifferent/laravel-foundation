@@ -8,7 +8,6 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
@@ -24,9 +23,9 @@ use Modules\Settings\Http\Requests\UpdateSmsGatewaysRequest;
 use Modules\Settings\Http\Requests\UpdateSocialAuthRequest;
 use Modules\Settings\Http\Requests\UpdateTermsConditionsRequest;
 use Modules\Settings\Models\Setting;
-use Modules\Settings\Providers\SettingsServiceProvider;
 use Modules\Settings\Services\MailerSecretCipher;
 use Modules\Settings\Services\MicrosoftOAuthTokenService;
+use Mrj\Foundation\Contracts\SettingsRepository;
 use Mrj\Foundation\Http\Controllers\Controller;
 use Mrj\Foundation\Http\Responses\JsonResponseFactory;
 
@@ -115,38 +114,32 @@ class SpecialSettingsController extends Controller
     {
         $this->authorize('editSpecial', Setting::class);
 
-        try {
-            $validatedGateways = $request->validated('sms_gateways');
-            ksort($validatedGateways);
+        $validatedGateways = $request->validated('sms_gateways');
+        ksort($validatedGateways);
 
-            // The stored VALUE of each gateway, so a blank header/param value
-            // (masked in the form) keeps the current, already-encrypted one.
-            $storedValues = $this->storedGatewayValues();
+        // The stored VALUE of each gateway, so a blank header/param value
+        // (masked in the form) keeps the current, already-encrypted one.
+        $storedValues = $this->storedGatewayValues();
 
-            $gatewaysArray = [];
-            foreach ($validatedGateways as $gateway) {
-                // SmsGatewayData folds the keys[]/values[] arrays into maps and
-                // encrypts every header/param value.
-                $gatewaysArray[] = SmsGatewayData::fromEntry($gateway)
-                    ->toEntry($cipher, $storedValues[$gateway['TYPE'] ?? ''] ?? []);
-            }
-
-            Setting::updateOrCreate(
-                ['key' => 'sms_gateways'],
-                ['type' => 'json', 'group' => 'General', 'value' => json_encode($gatewaysArray), 'is_visible' => false]
-            );
-
-            Setting::updateOrCreate(
-                ['key' => 'sms_gateway'],
-                ['type' => 'select', 'group' => 'General', 'value' => $request->validated('sms_gateway'), 'is_visible' => false]
-            );
-
-            return redirect()->back()->with('success', 'SMS Gateways updated successfully');
-        } catch (Exception $e) {
-            Log::error('Error updating SMS Gateways: '.$e->getMessage());
-
-            return redirect()->back()->with('error', 'Error updating SMS Gateways: '.$e->getMessage());
+        $gatewaysArray = [];
+        foreach ($validatedGateways as $gateway) {
+            // SmsGatewayData folds the keys[]/values[] arrays into maps and
+            // encrypts every header/param value.
+            $gatewaysArray[] = SmsGatewayData::fromEntry($gateway)
+                ->toEntry($cipher, $storedValues[$gateway['TYPE'] ?? ''] ?? []);
         }
+
+        Setting::updateOrCreate(
+            ['key' => 'sms_gateways'],
+            ['type' => 'json', 'group' => 'General', 'value' => json_encode($gatewaysArray), 'is_visible' => false]
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'sms_gateway'],
+            ['type' => 'select', 'group' => 'General', 'value' => $request->validated('sms_gateway'), 'is_visible' => false]
+        );
+
+        return redirect()->back()->with('success', 'SMS Gateways updated successfully');
     }
 
     /**
@@ -192,59 +185,53 @@ class SpecialSettingsController extends Controller
     {
         $this->authorize('editSpecial', Setting::class);
 
-        try {
-            // validated() fills its result in rule order, and Laravel moves wildcard
-            // rules behind explicit per-index ones — so sort back into the order the
-            // form submitted, otherwise the mailer list reshuffles on every save.
-            $validatedMailers = $request->validated('email_mailers');
-            ksort($validatedMailers);
+        // validated() fills its result in rule order, and Laravel moves wildcard
+        // rules behind explicit per-index ones — so sort back into the order the
+        // form submitted, otherwise the mailer list reshuffles on every save.
+        $validatedMailers = $request->validated('email_mailers');
+        ksort($validatedMailers);
 
-            // The stored VALUE of each mailer, so a blank secret (never rendered
-            // back into the form) keeps the current, already-encrypted one.
-            $storedValues = $this->storedMailerValues();
+        // The stored VALUE of each mailer, so a blank secret (never rendered
+        // back into the form) keeps the current, already-encrypted one.
+        $storedValues = $this->storedMailerValues();
 
-            $mailersArray = [];
-            foreach ($validatedMailers as $mailer) {
-                // MailerData prunes the VALUE to the transport's own fields and
-                // encrypts its secret, keeping the stored secret when left blank.
-                $entry = MailerData::fromEntry($mailer)
-                    ->toEntry($cipher, $storedValues[$mailer['TYPE'] ?? ''] ?? []);
+        $mailersArray = [];
+        foreach ($validatedMailers as $mailer) {
+            // MailerData prunes the VALUE to the transport's own fields and
+            // encrypts its secret, keeping the stored secret when left blank.
+            $entry = MailerData::fromEntry($mailer)
+                ->toEntry($cipher, $storedValues[$mailer['TYPE'] ?? ''] ?? []);
 
-                $mailersArray[] = $entry;
+            $mailersArray[] = $entry;
 
-                // A rotated secret must take effect on the next send, not once the
-                // previously issued token happens to expire.
-                $scope = match ($entry['VALUE']['transport'] ?? null) {
-                    'microsoft_oauth' => MicrosoftOAuthTokenService::SMTP_SCOPE,
-                    'microsoft_graph' => MicrosoftOAuthTokenService::GRAPH_SCOPE,
-                    default => null,
-                };
+            // A rotated secret must take effect on the next send, not once the
+            // previously issued token happens to expire.
+            $scope = match ($entry['VALUE']['transport'] ?? null) {
+                'microsoft_oauth' => MicrosoftOAuthTokenService::SMTP_SCOPE,
+                'microsoft_graph' => MicrosoftOAuthTokenService::GRAPH_SCOPE,
+                default => null,
+            };
 
-                if ($scope !== null) {
-                    $tokens->forget(
-                        (string) ($entry['VALUE']['tenant_id'] ?? ''),
-                        (string) ($entry['VALUE']['client_id'] ?? ''),
-                        $scope,
-                    );
-                }
+            if ($scope !== null) {
+                $tokens->forget(
+                    (string) ($entry['VALUE']['tenant_id'] ?? ''),
+                    (string) ($entry['VALUE']['client_id'] ?? ''),
+                    $scope,
+                );
             }
-
-            Setting::updateOrCreate(
-                ['key' => 'email_mailers'],
-                ['type' => 'json', 'group' => 'General', 'value' => json_encode($mailersArray), 'is_visible' => false]
-            );
-
-            Setting::updateOrCreate(
-                ['key' => 'email_mailer'],
-                ['type' => 'select', 'group' => 'General', 'value' => $request->validated('email_mailer'), 'is_visible' => false]
-            );
-
-            return redirect()->back()->with('success', 'Email Mailers updated successfully');
-        } catch (Exception $e) {
-            Log::error('Error updating Email Mailers: '.$e->getMessage());
-
-            return redirect()->back()->with('error', 'Error updating Email Mailers: '.$e->getMessage());
         }
+
+        Setting::updateOrCreate(
+            ['key' => 'email_mailers'],
+            ['type' => 'json', 'group' => 'General', 'value' => json_encode($mailersArray), 'is_visible' => false]
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'email_mailer'],
+            ['type' => 'select', 'group' => 'General', 'value' => $request->validated('email_mailer'), 'is_visible' => false]
+        );
+
+        return redirect()->back()->with('success', 'Email Mailers updated successfully');
     }
 
     /**
@@ -345,33 +332,27 @@ class SpecialSettingsController extends Controller
     {
         $this->authorize('editSpecial', Setting::class);
 
-        try {
-            $keys = [
-                'firebase_credentials_json' => ['description' => 'The credentials JSON for the Firebase project'],
-                'firebase_project_id' => ['description' => 'The project ID for the Firebase project'],
-            ];
+        $keys = [
+            'firebase_credentials_json' => ['description' => 'The credentials JSON for the Firebase project'],
+            'firebase_project_id' => ['description' => 'The project ID for the Firebase project'],
+        ];
 
-            foreach ($keys as $key => $meta) {
-                // 'type' must be filled before 'value': Setting::setValueAttribute()
-                // reads the sibling 'type' attribute to decide whether to encrypt.
-                Setting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'type' => $key === 'firebase_credentials_json' ? 'encrypted' : 'text',
-                        'value' => $request->validated($key, ''),
-                        'group' => 'Firebase',
-                        'description' => $meta['description'],
-                        'is_visible' => false,
-                    ]
-                );
-            }
-
-            return redirect()->back()->with('success', 'Firebase settings updated successfully');
-        } catch (Exception $e) {
-            Log::error('Error updating Firebase settings: '.$e->getMessage());
-
-            return redirect()->back()->with('error', 'Error updating Firebase settings: '.$e->getMessage());
+        foreach ($keys as $key => $meta) {
+            // 'type' must be filled before 'value': Setting::setValueAttribute()
+            // reads the sibling 'type' attribute to decide whether to encrypt.
+            Setting::updateOrCreate(
+                ['key' => $key],
+                [
+                    'type' => $key === 'firebase_credentials_json' ? 'encrypted' : 'text',
+                    'value' => $request->validated($key, ''),
+                    'group' => 'Firebase',
+                    'description' => $meta['description'],
+                    'is_visible' => false,
+                ]
+            );
         }
+
+        return redirect()->back()->with('success', 'Firebase settings updated successfully');
     }
 
     /**
@@ -466,57 +447,51 @@ class SpecialSettingsController extends Controller
     {
         $this->authorize('editSpecial', Setting::class);
 
-        try {
-            $keys = array_merge(
-                self::socialAuthKeys()['google'],
-                self::socialAuthKeys()['github'],
-                self::socialAuthKeys()['apple']
-            );
-            $configMap = [
-                'google_client_id' => 'services.google.client_id',
-                'google_client_secret' => 'services.google.client_secret',
-                'google_redirect_uri' => 'services.google.redirect',
-                'github_client_id' => 'services.github.client_id',
-                'github_client_secret' => 'services.github.client_secret',
-                'github_redirect_uri' => 'services.github.redirect',
-                'apple_client_id' => 'services.apple.client_id',
-                'apple_client_secret' => 'services.apple.client_secret',
-                'apple_redirect_uri' => 'services.apple.redirect',
-                'apple_team_id' => 'services.apple.team_id',
-                'apple_key_id' => 'services.apple.key_id',
-                'apple_key_file' => 'services.apple.key_file',
-            ];
+        $keys = array_merge(
+            self::socialAuthKeys()['google'],
+            self::socialAuthKeys()['github'],
+            self::socialAuthKeys()['apple']
+        );
+        $configMap = [
+            'google_client_id' => 'services.google.client_id',
+            'google_client_secret' => 'services.google.client_secret',
+            'google_redirect_uri' => 'services.google.redirect',
+            'github_client_id' => 'services.github.client_id',
+            'github_client_secret' => 'services.github.client_secret',
+            'github_redirect_uri' => 'services.github.redirect',
+            'apple_client_id' => 'services.apple.client_id',
+            'apple_client_secret' => 'services.apple.client_secret',
+            'apple_redirect_uri' => 'services.apple.redirect',
+            'apple_team_id' => 'services.apple.team_id',
+            'apple_key_id' => 'services.apple.key_id',
+            'apple_key_file' => 'services.apple.key_file',
+        ];
 
-            // OAuth client secrets are stored encrypted. apple_key_file is a filesystem
-            // path to the .p8 key, not the key material itself, so it stays plain text.
-            $secretKeys = ['google_client_secret', 'github_client_secret', 'apple_client_secret'];
+        // OAuth client secrets are stored encrypted. apple_key_file is a filesystem
+        // path to the .p8 key, not the key material itself, so it stays plain text.
+        $secretKeys = ['google_client_secret', 'github_client_secret', 'apple_client_secret'];
 
-            foreach ($keys as $key) {
-                $value = $request->validated($key, '');
-                if (isset($configMap[$key])) {
-                    config([$configMap[$key] => $value]);
-                }
-                // 'type' must be filled before 'value': Setting::setValueAttribute()
-                // reads the sibling 'type' attribute to decide whether to encrypt.
-                Setting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'type' => in_array($key, $secretKeys, true) ? 'encrypted' : 'text',
-                        'value' => $value,
-                        'group' => 'Social Auth',
-                        'is_visible' => false,
-                    ]
-                );
+        foreach ($keys as $key) {
+            $value = $request->validated($key, '');
+            if (isset($configMap[$key])) {
+                config([$configMap[$key] => $value]);
             }
-
-            Cache::forget(SettingsServiceProvider::cacheKey());
-
-            return redirect()->back()->with('success', 'Social Auth settings updated successfully');
-        } catch (Exception $e) {
-            Log::error('Error updating Social Auth settings: '.$e->getMessage());
-
-            return redirect()->back()->with('error', 'Error updating Social Auth settings: '.$e->getMessage());
+            // 'type' must be filled before 'value': Setting::setValueAttribute()
+            // reads the sibling 'type' attribute to decide whether to encrypt.
+            Setting::updateOrCreate(
+                ['key' => $key],
+                [
+                    'type' => in_array($key, $secretKeys, true) ? 'encrypted' : 'text',
+                    'value' => $value,
+                    'group' => 'Social Auth',
+                    'is_visible' => false,
+                ]
+            );
         }
+
+        app(SettingsRepository::class)->forget();
+
+        return redirect()->back()->with('success', 'Social Auth settings updated successfully');
     }
 
     /**

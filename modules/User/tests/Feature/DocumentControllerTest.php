@@ -132,7 +132,9 @@ class DocumentControllerTest extends TestCase
             route('admin.users.documents.destroy', [$targetUser, $document->id])
         );
 
-        $response->assertSessionHas('error');
+        // $targetUser->documents()->findOrFail() correctly 404s: the document
+        // exists, but not scoped under this user.
+        $response->assertNotFound();
         $this->assertDatabaseHas('user_documents', ['id' => $document->id]);
     }
 

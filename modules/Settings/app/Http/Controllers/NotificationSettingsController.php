@@ -2,15 +2,12 @@
 
 namespace Modules\Settings\Http\Controllers;
 
-use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Modules\Notification\Support\NotificationToggleRegistry;
 use Modules\Settings\Models\Setting;
-use Modules\Settings\Providers\SettingsServiceProvider;
+use Mrj\Foundation\Contracts\SettingsRepository;
 use Mrj\Foundation\Http\Controllers\Controller;
 
 /**
@@ -86,37 +83,31 @@ class NotificationSettingsController extends Controller
     {
         $this->authorize('editSpecial', Setting::class);
 
-        try {
-            foreach (NotificationToggleRegistry::entries() as $entry) {
-                foreach (array_keys(self::UI_CHANNELS) as $channel) {
-                    if (! NotificationToggleRegistry::supports($entry, $channel)
-                        || NotificationToggleRegistry::isLocked($entry, $channel)) {
-                        continue;
-                    }
-
-                    $key = NotificationToggleRegistry::settingKey($entry, $channel);
-
-                    Setting::updateOrCreate(
-                        ['key' => $key],
-                        [
-                            'group' => $channel === 'mail' ? 'Email Notifications' : 'Notification Channels',
-                            'type' => 'boolean',
-                            'value' => $request->boolean($key) ? '1' : '0',
-                            'is_visible' => false,
-                            'description' => sprintf(self::DESCRIPTIONS[$channel], $entry['label']),
-                        ],
-                    );
+        foreach (NotificationToggleRegistry::entries() as $entry) {
+            foreach (array_keys(self::UI_CHANNELS) as $channel) {
+                if (! NotificationToggleRegistry::supports($entry, $channel)
+                    || NotificationToggleRegistry::isLocked($entry, $channel)) {
+                    continue;
                 }
+
+                $key = NotificationToggleRegistry::settingKey($entry, $channel);
+
+                Setting::updateOrCreate(
+                    ['key' => $key],
+                    [
+                        'group' => $channel === 'mail' ? 'Email Notifications' : 'Notification Channels',
+                        'type' => 'boolean',
+                        'value' => $request->boolean($key) ? '1' : '0',
+                        'is_visible' => false,
+                        'description' => sprintf(self::DESCRIPTIONS[$channel], $entry['label']),
+                    ],
+                );
             }
-
-            Cache::forget(SettingsServiceProvider::cacheKey());
-
-            return redirect()->route('admin.settings.special.notifications')
-                ->with('success', 'Notification settings updated successfully');
-        } catch (Exception $e) {
-            Log::error('Notification settings update failed', ['error' => $e->getMessage()]);
-
-            return back()->with('error', 'Failed to update notification settings');
         }
+
+        app(SettingsRepository::class)->forget();
+
+        return redirect()->route('admin.settings.special.notifications')
+            ->with('success', 'Notification settings updated successfully');
     }
 }

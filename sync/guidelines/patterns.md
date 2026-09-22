@@ -11,23 +11,25 @@ class ThingController extends Controller
     {
         $this->authorize('create', Thing::class);
 
-        try {
-            $action->execute(ThingData::from($request->validated()));
+        $action->execute(ThingData::from($request->validated()));
 
-            return redirect()->route('admin.things.index')
-                ->with('success', 'Thing created successfully');
-        } catch (Exception $e) {
-            Log::error('Thing creation failed', ['error' => $e->getMessage()]);
-
-            return back()->with('error', 'Failed to create thing');
-        }
+        return redirect()->route('admin.things.index')
+            ->with('success', 'Thing created successfully');
     }
 }
 ```
 
 - Authorization always via `$this->authorize()` calling a policy method; never inline `if ($user->cannot(...))` checks.
 - Actions are injected as method parameters (resolved by the service container).
-- Always wrap mutations in try/catch and log failures with `Log::error()`.
+- **Do not wrap an Action call in try/catch to flash a generic error.** Let the
+  exception propagate — `Mrj\Foundation\Exceptions\Handler` already renders a
+  friendly fallback for any web request's unhandled server error in
+  production (and the real error in every other environment, for debugging),
+  and swallowing the exception here means it never reaches that handler, the
+  logs, or `ErrorReporter`. A try/catch in a controller is still correct when
+  it does something a generic handler can't: an external service call
+  (OAuth, a "test connection" endpoint) whose failure needs a
+  specific, actionable message back to the user.
 
 ---
 
