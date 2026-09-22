@@ -42,19 +42,17 @@
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            {!! Form::label('google_client_id', 'Client ID', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                            {!! Form::text('google_client_id', optional($settings->get('google_client_id'))->value ?? '', ['id' => 'google_client_id', 'class' => 'form-control form-control-sm', 'placeholder' => '*.apps.googleusercontent.com']) !!}
+                            <x-form.input name="google_client_id" label="Client ID" :value="optional($settings->get('google_client_id'))->value ?? ''" placeholder="*.apps.googleusercontent.com" />
                         </div>
                         <div class="col-md-4">
-                            {!! Form::label('google_client_secret', 'Client Secret', ['class' => 'form-label fw-semibold fs-sm']) !!}
+                            <x-form.label for="google_client_secret">Client Secret</x-form.label>
                             <div class="input-group input-group-sm">
-                                {!! Form::password('google_client_secret', ['id' => 'google_client_secret', 'class' => 'form-control form-control-sm', 'value' => optional($settings->get('google_client_secret'))->value ?? '']) !!}
+                                <x-form.input type="password" name="google_client_secret" />
                                 <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="google_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            {!! Form::label('google_redirect_uri', 'Redirect URI', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                            {!! Form::text('google_redirect_uri', optional($settings->get('google_redirect_uri'))->value ?? '/auth/google/callback', ['id' => 'google_redirect_uri', 'class' => 'form-control form-control-sm', 'placeholder' => '/auth/google/callback']) !!}
+                            <x-form.input name="google_redirect_uri" label="Redirect URI" :value="optional($settings->get('google_redirect_uri'))->value ?? '/auth/google/callback'" placeholder="/auth/google/callback" />
                         </div>
                     </div>
                 </div>
@@ -74,19 +72,17 @@
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            {!! Form::label('github_client_id', 'Client ID', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                            {!! Form::text('github_client_id', optional($settings->get('github_client_id'))->value ?? '', ['id' => 'github_client_id', 'class' => 'form-control form-control-sm']) !!}
+                            <x-form.input name="github_client_id" label="Client ID" :value="optional($settings->get('github_client_id'))->value ?? ''" />
                         </div>
                         <div class="col-md-4">
-                            {!! Form::label('github_client_secret', 'Client Secret', ['class' => 'form-label fw-semibold fs-sm']) !!}
+                            <x-form.label for="github_client_secret">Client Secret</x-form.label>
                             <div class="input-group input-group-sm">
-                                {!! Form::password('github_client_secret', ['id' => 'github_client_secret', 'class' => 'form-control form-control-sm', 'value' => optional($settings->get('github_client_secret'))->value ?? '']) !!}
+                                <x-form.input type="password" name="github_client_secret" />
                                 <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="github_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            {!! Form::label('github_redirect_uri', 'Redirect URI', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                            {!! Form::text('github_redirect_uri', optional($settings->get('github_redirect_uri'))->value ?? '/auth/github/callback', ['id' => 'github_redirect_uri', 'class' => 'form-control form-control-sm', 'placeholder' => '/auth/github/callback']) !!}
+                            <x-form.input name="github_redirect_uri" label="Redirect URI" :value="optional($settings->get('github_redirect_uri'))->value ?? '/auth/github/callback'" placeholder="/auth/github/callback" />
                         </div>
                     </div>
                 </div>
@@ -106,31 +102,26 @@
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            {!! Form::label('apple_client_id', 'Client ID', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                            {!! Form::text('apple_client_id', optional($settings->get('apple_client_id'))->value ?? '', ['id' => 'apple_client_id', 'class' => 'form-control form-control-sm']) !!}
+                            <x-form.input name="apple_client_id" label="Client ID" :value="optional($settings->get('apple_client_id'))->value ?? ''" />
                         </div>
                         <div class="col-md-4">
-                            {!! Form::label('apple_client_secret', 'Client Secret', ['class' => 'form-label fw-semibold fs-sm']) !!}
+                            <x-form.label for="apple_client_secret">Client Secret</x-form.label>
                             <div class="input-group input-group-sm">
-                                {!! Form::password('apple_client_secret', ['id' => 'apple_client_secret', 'class' => 'form-control form-control-sm', 'value' => optional($settings->get('apple_client_secret'))->value ?? '']) !!}
+                                <x-form.input type="password" name="apple_client_secret" />
                                 <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="apple_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            {!! Form::label('apple_redirect_uri', 'Redirect URI', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                            {!! Form::text('apple_redirect_uri', optional($settings->get('apple_redirect_uri'))->value ?? '/auth/apple/callback', ['id' => 'apple_redirect_uri', 'class' => 'form-control form-control-sm', 'placeholder' => '/auth/apple/callback']) !!}
+                            <x-form.input name="apple_redirect_uri" label="Redirect URI" :value="optional($settings->get('apple_redirect_uri'))->value ?? '/auth/apple/callback'" placeholder="/auth/apple/callback" />
                         </div>
                         <div class="col-md-4">
-                            {!! Form::label('apple_team_id', 'Team ID', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                            {!! Form::text('apple_team_id', optional($settings->get('apple_team_id'))->value ?? '', ['id' => 'apple_team_id', 'class' => 'form-control form-control-sm']) !!}
+                            <x-form.input name="apple_team_id" label="Team ID" :value="optional($settings->get('apple_team_id'))->value ?? ''" />
                         </div>
                         <div class="col-md-4">
-                            {!! Form::label('apple_key_id', 'Key ID', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                            {!! Form::text('apple_key_id', optional($settings->get('apple_key_id'))->value ?? '', ['id' => 'apple_key_id', 'class' => 'form-control form-control-sm']) !!}
+                            <x-form.input name="apple_key_id" label="Key ID" :value="optional($settings->get('apple_key_id'))->value ?? ''" />
                         </div>
                         <div class="col-md-4">
-                            {!! Form::label('apple_key_file', 'Key File', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                            {!! Form::text('apple_key_file', optional($settings->get('apple_key_file'))->value ?? '', ['id' => 'apple_key_file', 'class' => 'form-control form-control-sm', 'placeholder' => 'path to .p8 file']) !!}
+                            <x-form.input name="apple_key_file" label="Key File" :value="optional($settings->get('apple_key_file'))->value ?? ''" placeholder="path to .p8 file" />
                         </div>
                     </div>
                 </div>

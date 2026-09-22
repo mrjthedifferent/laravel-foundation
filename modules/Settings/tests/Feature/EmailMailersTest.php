@@ -80,6 +80,46 @@ class EmailMailersTest extends TestCase
         $response->assertViewHas('emailMailers');
     }
 
+    /**
+     * The empty-mailers fixture in setUp() never reaches the per-mailer
+     * fields — render the page against one smtp and one microsoft_oauth
+     * mailer (the two branches with distinct fields) to exercise them.
+     */
+    public function test_page_renders_configured_smtp_and_oauth_mailers(): void
+    {
+        $cipher = new MailerSecretCipher;
+
+        Setting::updateOrCreate(
+            ['key' => 'email_mailers'],
+            ['type' => 'json', 'group' => 'General', 'is_visible' => false, 'value' => json_encode([
+                ['TYPE' => 'Gmail', 'VALUE' => [
+                    'transport' => 'smtp',
+                    'host' => 'smtp.gmail.com',
+                    'port' => 587,
+                    'encryption' => 'tls',
+                    'username' => 'me@gmail.com',
+                    'password' => $cipher->encrypt('app-password'),
+                    'from' => ['address' => 'me@gmail.com', 'name' => 'Me'],
+                ]],
+                ['TYPE' => 'Outlook365', 'VALUE' => [
+                    'transport' => 'microsoft_oauth',
+                    'tenant_id' => 'tenant-123',
+                    'client_id' => 'client-123',
+                    'client_secret' => $cipher->encrypt('super-secret'),
+                    'mailbox' => 'mail@company.com',
+                    'from' => ['address' => 'mail@company.com', 'name' => 'Company'],
+                ]],
+            ])]
+        );
+
+        $response = $this->actingAs($this->admin)->get(route('admin.settings.special.email_mailers'));
+
+        $response->assertStatus(200);
+        $response->assertSee('smtp.gmail.com');
+        $response->assertSee('tenant-123');
+        $response->assertSee('•••••••• (unchanged)');
+    }
+
     public function test_unpermitted_user_cannot_view_the_email_mailers_page(): void
     {
         $this->actingAs(User::factory()->create(['is_active' => true]))

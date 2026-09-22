@@ -75,6 +75,36 @@ class SmsGatewaysTest extends TestCase
             ->assertViewIs('settings::special.sms-gateways');
     }
 
+    /**
+     * The empty-gateways fixture in setUp() never reaches the per-gateway
+     * fields, or their nested headers/params foreach loops — render the page
+     * against a real gateway with both to exercise them.
+     */
+    public function test_page_renders_a_configured_gateway_with_headers_and_params(): void
+    {
+        $cipher = new MailerSecretCipher;
+
+        Setting::updateOrCreate(
+            ['key' => 'sms_gateways'],
+            ['type' => 'json', 'group' => 'General', 'is_visible' => false, 'value' => json_encode([
+                ['TYPE' => 'Provider', 'VALUE' => [
+                    'endpoint' => 'https://api.provider.com/send',
+                    'method' => 'POST',
+                    'mobile_key' => 'mobile',
+                    'message_key' => 'text',
+                    'headers' => ['Authorization' => $cipher->encrypt('Bearer tok')],
+                    'params' => ['api_key' => $cipher->encrypt('secret-key')],
+                ]],
+            ])]
+        );
+
+        $this->actingAs($this->admin)
+            ->get(route('admin.settings.special.sms_gateways'))
+            ->assertStatus(200)
+            ->assertSee('Authorization')
+            ->assertSee('•••• (unchanged)');
+    }
+
     public function test_unpermitted_user_cannot_update_sms_gateways(): void
     {
         $this->actingAs(User::factory()->create(['is_active' => true]))

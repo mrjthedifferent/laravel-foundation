@@ -104,8 +104,16 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
                     <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">Active Mailer</span>
                 </div>
                 <div class="card-body">
-                    {!! Form::label('email_mailer', 'Selected Email Mailer', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                    {!! Form::select('email_mailer', is_array($emailMailers->value) ? array_combine(array_column($emailMailers->value, 'TYPE'), array_column($emailMailers->value, 'TYPE')) : [], isset($emailMailer) ? $emailMailer->value : null, ['id' => 'email_mailer', 'class' => 'form-control form-control-sm select', 'data-placeholder' => 'Select Email Mailer...', 'placeholder' => 'Select Email Mailer...']) !!}
+                    <x-form.select
+                        class="select"
+                        name="email_mailer"
+                        id="email_mailer"
+                        label="Selected Email Mailer"
+                        :options="is_array($emailMailers->value) ? array_combine(array_column($emailMailers->value, 'TYPE'), array_column($emailMailers->value, 'TYPE')) : []"
+                        :selected="isset($emailMailer) ? $emailMailer->value : null"
+                        data-placeholder="Select Email Mailer..."
+                        placeholder="Select Email Mailer..."
+                    />
                     <div class="form-text">The mailer that will be used to send all system emails</div>
                 </div>
             </div>
@@ -127,36 +135,30 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
                         <div class="card-body">
                             <div class="row g-3">
                                 <div class="col-md-4">
-                                    {!! Form::label("email_mailers[{$index}][TYPE]", 'Type', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
-                                    {!! Form::text("email_mailers[{$index}][TYPE]", $mailer['TYPE'], ['class' => 'form-control form-control-sm mailer-type-input', 'required', 'placeholder' => 'e.g. Gmail']) !!}
+                                    <x-form.input name="email_mailers[{{ $index }}][TYPE]" label="Type" required :value="$mailer['TYPE']" class="mailer-type-input" placeholder="e.g. Gmail" />
                                     <div class="form-text">Unique name for this mailer</div>
                                 </div>
                                 <div class="col-md-4">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][transport]", 'Transport', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
-                                    {!! Form::select("email_mailers[{$index}][VALUE][transport]", $transportOptions, $mailer['VALUE']['transport'] ?? 'smtp', ['class' => 'form-select form-select-sm transport-select', 'required']) !!}
+                                    <x-form.select name="email_mailers[{{ $index }}][VALUE][transport]" label="Transport" required class="transport-select" :options="$transportOptions" :selected="$mailer['VALUE']['transport'] ?? 'smtp'" />
                                 </div>
 
                                 {{-- SMTP (password) credentials --}}
                                 <div class="col-md-4 transport-fields-smtp">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][host]", 'Host', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
-                                    {!! Form::text("email_mailers[{$index}][VALUE][host]", $mailer['VALUE']['host'] ?? '', ['class' => 'form-control form-control-sm', 'placeholder' => 'smtp.gmail.com']) !!}
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][host]" label="Host" required :value="$mailer['VALUE']['host'] ?? ''" placeholder="smtp.gmail.com" />
                                 </div>
                                 <div class="col-md-4 transport-fields-smtp">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][port]", 'Port', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
-                                    {!! Form::number("email_mailers[{$index}][VALUE][port]", $mailer['VALUE']['port'] ?? 587, ['class' => 'form-control form-control-sm', 'placeholder' => '587']) !!}
+                                    <x-form.input type="number" name="email_mailers[{{ $index }}][VALUE][port]" label="Port" required :value="$mailer['VALUE']['port'] ?? 587" placeholder="587" />
                                 </div>
                                 <div class="col-md-4 transport-fields-smtp">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][encryption]", 'Encryption', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                                    {!! Form::text("email_mailers[{$index}][VALUE][encryption]", $mailer['VALUE']['encryption'] ?? 'tls', ['class' => 'form-control form-control-sm', 'placeholder' => 'tls']) !!}
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][encryption]" label="Encryption" :value="$mailer['VALUE']['encryption'] ?? 'tls'" placeholder="tls" />
                                 </div>
                                 <div class="col-md-4 transport-fields-smtp">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][username]", 'Username', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                                    {!! Form::text("email_mailers[{$index}][VALUE][username]", $mailer['VALUE']['username'] ?? '', ['class' => 'form-control form-control-sm', 'placeholder' => 'you@example.com']) !!}
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][username]" label="Username" :value="$mailer['VALUE']['username'] ?? ''" placeholder="you@example.com" />
                                 </div>
                                 <div class="col-md-4 transport-fields-smtp">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][password]", 'Password', ['class' => 'form-label fw-semibold fs-sm']) !!}
+                                    <x-form.label for="email_mailers_{{ $index }}_password">Password</x-form.label>
                                     <div class="input-group input-group-sm">
-                                        {!! Form::password("email_mailers[{$index}][VALUE][password]", ['class' => 'form-control form-control-sm', 'placeholder' => !empty($mailer['VALUE']['password']) ? '•••••••• (unchanged)' : 'Enter password']) !!}
+                                        <x-form.input type="password" name="email_mailers[{{ $index }}][VALUE][password]" id="email_mailers_{{ $index }}_password" :placeholder="! empty($mailer['VALUE']['password']) ? '•••••••• (unchanged)' : 'Enter password'" />
                                         <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
                                     </div>
                                     <div class="form-text">Leave blank to keep the current password</div>
@@ -164,36 +166,31 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
 
                                 {{-- Microsoft 365 OAuth2 credentials --}}
                                 <div class="col-md-4 transport-fields-oauth">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][tenant_id]", 'Tenant ID', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
-                                    {!! Form::text("email_mailers[{$index}][VALUE][tenant_id]", $mailer['VALUE']['tenant_id'] ?? '', ['class' => 'form-control form-control-sm', 'placeholder' => '00000000-0000-0000-0000-000000000000']) !!}
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][tenant_id]" label="Tenant ID" required :value="$mailer['VALUE']['tenant_id'] ?? ''" placeholder="00000000-0000-0000-0000-000000000000" />
                                     <div class="form-text">Entra ID → Overview → Tenant ID</div>
                                 </div>
                                 <div class="col-md-4 transport-fields-oauth">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][client_id]", 'Client ID', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
-                                    {!! Form::text("email_mailers[{$index}][VALUE][client_id]", $mailer['VALUE']['client_id'] ?? '', ['class' => 'form-control form-control-sm', 'placeholder' => 'Application (client) ID']) !!}
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][client_id]" label="Client ID" required :value="$mailer['VALUE']['client_id'] ?? ''" placeholder="Application (client) ID" />
                                 </div>
                                 <div class="col-md-4 transport-fields-oauth">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][client_secret]", 'Client Secret', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
+                                    <x-form.label for="email_mailers_{{ $index }}_client_secret" required>Client Secret</x-form.label>
                                     <div class="input-group input-group-sm">
-                                        {!! Form::password("email_mailers[{$index}][VALUE][client_secret]", ['class' => 'form-control form-control-sm', 'placeholder' => !empty($mailer['VALUE']['client_secret']) ? '•••••••• (unchanged)' : 'Client secret value']) !!}
+                                        <x-form.input type="password" name="email_mailers[{{ $index }}][VALUE][client_secret]" id="email_mailers_{{ $index }}_client_secret" :placeholder="! empty($mailer['VALUE']['client_secret']) ? '•••••••• (unchanged)' : 'Client secret value'" />
                                         <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
                                     </div>
                                     <div class="form-text">The secret <em>value</em>, not the secret ID · leave blank to keep the current secret</div>
                                 </div>
                                 <div class="col-md-4 transport-fields-oauth">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][mailbox]", 'Mailbox', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
-                                    {!! Form::email("email_mailers[{$index}][VALUE][mailbox]", $mailer['VALUE']['mailbox'] ?? '', ['class' => 'form-control form-control-sm', 'placeholder' => 'noreply@yourcompany.com']) !!}
+                                    <x-form.input type="email" name="email_mailers[{{ $index }}][VALUE][mailbox]" label="Mailbox" required :value="$mailer['VALUE']['mailbox'] ?? ''" placeholder="noreply@yourcompany.com" />
                                     <div class="form-text">Mailbox granted to the service principal</div>
                                 </div>
 
                                 {{-- Shared --}}
                                 <div class="col-md-4">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][from][address]", 'From Address', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
-                                    {!! Form::email("email_mailers[{$index}][VALUE][from][address]", $mailer['VALUE']['from']['address'] ?? '', ['class' => 'form-control form-control-sm', 'required', 'placeholder' => 'noreply@yourcompany.com']) !!}
+                                    <x-form.input type="email" name="email_mailers[{{ $index }}][VALUE][from][address]" label="From Address" required :value="$mailer['VALUE']['from']['address'] ?? ''" placeholder="noreply@yourcompany.com" />
                                 </div>
                                 <div class="col-md-4">
-                                    {!! Form::label("email_mailers[{$index}][VALUE][from][name]", 'From Name', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
-                                    {!! Form::text("email_mailers[{$index}][VALUE][from][name]", $mailer['VALUE']['from']['name'] ?? '', ['class' => 'form-control form-control-sm', 'required', 'placeholder' => 'Your Company']) !!}
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][from][name]" label="From Name" required :value="$mailer['VALUE']['from']['name'] ?? ''" placeholder="Your Company" />
                                 </div>
                             </div>
                         </div>

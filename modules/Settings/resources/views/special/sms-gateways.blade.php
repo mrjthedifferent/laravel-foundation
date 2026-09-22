@@ -57,20 +57,18 @@
                         <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">Active Gateway</span>
                     </div>
                     <div class="card-body">
-                        {!! Form::label('sms_gateway', 'Selected SMS Gateway', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                        {!! Form::select(
-                            'sms_gateway',
-                            is_array($smsGateways->value)
+                        <x-form.select
+                            class="select"
+                            name="sms_gateway"
+                            id="sms_gateway"
+                            label="Selected SMS Gateway"
+                            :options="is_array($smsGateways->value)
                                 ? array_combine(array_column($smsGateways->value, 'TYPE'), array_column($smsGateways->value, 'TYPE'))
-                                : [],
-                            $smsGateway->value ?? null,
-                            [
-                                'id' => 'sms_gateway',
-                                'class' => 'form-control form-control-sm select',
-                                'data-placeholder' => 'Select SMS Gateway...',
-                                'placeholder' => 'Select SMS Gateway...',
-                            ],
-                        ) !!}
+                                : []"
+                            :selected="$smsGateway->value ?? null"
+                            data-placeholder="Select SMS Gateway..."
+                            placeholder="Select SMS Gateway..."
+                        />
                         <div class="form-text">The gateway that will be used to send all system SMS messages</div>
                     </div>
                 </div>
@@ -95,59 +93,22 @@
                                     {{-- Core fields --}}
                                     <div class="row g-3 mb-3">
                                         <div class="col-md-4">
-                                            {!! Form::label("sms_gateways[{$index}][TYPE]", 'Type', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
-                                            {!! Form::text("sms_gateways[{$index}][TYPE]", $gateway['TYPE'], [
-                                                'class' => 'form-control form-control-sm gw-type-input',
-                                                'required',
-                                            ]) !!}
+                                            <x-form.input name="sms_gateways[{{ $index }}][TYPE]" label="Type" required :value="$gateway['TYPE']" class="gw-type-input" />
                                         </div>
                                         <div class="col-md-4">
-                                            {!! Form::label("sms_gateways[{$index}][VALUE][endpoint]", 'Endpoint', [
-                                                'class' => 'form-label fw-semibold fs-sm',
-                                            ]) !!}<span class="text-danger"> *</span>
-                                            {!! Form::text("sms_gateways[{$index}][VALUE][endpoint]", $gateway['VALUE']['endpoint'] ?? '', [
-                                                'class' => 'form-control form-control-sm',
-                                                'required',
-                                                'placeholder' => 'https://api.provider.com/sms/send',
-                                            ]) !!}
+                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][endpoint]" label="Endpoint" required :value="$gateway['VALUE']['endpoint'] ?? ''" placeholder="https://api.provider.com/sms/send" />
                                         </div>
                                         <div class="col-md-4">
-                                            {!! Form::label("sms_gateways[{$index}][VALUE][method]", 'Method', ['class' => 'form-label fw-semibold fs-sm']) !!}<span class="text-danger"> *</span>
-                                            {!! Form::select(
-                                                "sms_gateways[{$index}][VALUE][method]",
-                                                ['GET' => 'GET', 'POST' => 'POST'],
-                                                $gateway['VALUE']['method'] ?? 'POST',
-                                                ['class' => 'form-control form-control-sm', 'required'],
-                                            ) !!}
+                                            <x-form.select name="sms_gateways[{{ $index }}][VALUE][method]" label="Method" required :options="['GET' => 'GET', 'POST' => 'POST']" :selected="$gateway['VALUE']['method'] ?? 'POST'" />
                                         </div>
                                         <div class="col-md-4">
-                                            {!! Form::label("sms_gateways[{$index}][VALUE][mobile_prefix]", 'Mobile Prefix', [
-                                                'class' => 'form-label fw-semibold fs-sm',
-                                            ]) !!}
-                                            {!! Form::text("sms_gateways[{$index}][VALUE][mobile_prefix]", $gateway['VALUE']['mobile_prefix'] ?? '', [
-                                                'class' => 'form-control form-control-sm',
-                                                'placeholder' => 'e.g. +60',
-                                            ]) !!}
+                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][mobile_prefix]" label="Mobile Prefix" :value="$gateway['VALUE']['mobile_prefix'] ?? ''" placeholder="e.g. +60" />
                                         </div>
                                         <div class="col-md-4">
-                                            {!! Form::label("sms_gateways[{$index}][VALUE][mobile_key]", 'Mobile Key', [
-                                                'class' => 'form-label fw-semibold fs-sm',
-                                            ]) !!}<span class="text-danger"> *</span>
-                                            {!! Form::text("sms_gateways[{$index}][VALUE][mobile_key]", $gateway['VALUE']['mobile_key'] ?? '', [
-                                                'class' => 'form-control form-control-sm',
-                                                'required',
-                                                'placeholder' => 'mobile',
-                                            ]) !!}
+                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][mobile_key]" label="Mobile Key" required :value="$gateway['VALUE']['mobile_key'] ?? ''" placeholder="mobile" />
                                         </div>
                                         <div class="col-md-4">
-                                            {!! Form::label("sms_gateways[{$index}][VALUE][message_key]", 'Message Key', [
-                                                'class' => 'form-label fw-semibold fs-sm',
-                                            ]) !!}<span class="text-danger"> *</span>
-                                            {!! Form::text("sms_gateways[{$index}][VALUE][message_key]", $gateway['VALUE']['message_key'] ?? '', [
-                                                'class' => 'form-control form-control-sm',
-                                                'required',
-                                                'placeholder' => 'message',
-                                            ]) !!}
+                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][message_key]" label="Message Key" required :value="$gateway['VALUE']['message_key'] ?? ''" placeholder="message" />
                                         </div>
                                     </div>
 
@@ -167,15 +128,8 @@
                                             @if (isset($gateway['VALUE']['headers']) && is_array($gateway['VALUE']['headers']))
                                                 @foreach ($gateway['VALUE']['headers'] as $hKey => $hVal)
                                                     <div class="row g-1 mb-1 align-items-center header-row">
-                                                        <div class="col-5">{!! Form::text("sms_gateways[{$index}][VALUE][headers][keys][]", $hKey, [
-                                                            'class' => 'form-control form-control-sm',
-                                                            'placeholder' => 'Authorization',
-                                                        ]) !!}</div>
-                                                        <div class="col-5">{!! Form::text(
-                                                            "sms_gateways[{$index}][VALUE][headers][values][]",
-                                                            '',
-                                                            ['class' => 'form-control form-control-sm', 'placeholder' => !empty($hVal) ? '•••• (unchanged)' : 'Basic …'],
-                                                        ) !!}</div>
+                                                        <div class="col-5"><x-form.input name="sms_gateways[{{ $index }}][VALUE][headers][keys][]" :value="$hKey" placeholder="Authorization" /></div>
+                                                        <div class="col-5"><x-form.input name="sms_gateways[{{ $index }}][VALUE][headers][values][]" value="" :placeholder="! empty($hVal) ? '•••• (unchanged)' : 'Basic …'" /></div>
                                                         <div class="col-md-2"><button type="button"
                                                                 class="btn btn-sm btn-outline-danger remove-kv-btn"><i
                                                                     class="ph-trash"></i></button></div>
@@ -205,14 +159,8 @@
                                             @if (isset($gateway['VALUE']['params']) && is_array($gateway['VALUE']['params']))
                                                 @foreach ($gateway['VALUE']['params'] as $pKey => $pVal)
                                                     <div class="row g-1 mb-1 align-items-center param-row">
-                                                        <div class="col-5">{!! Form::text("sms_gateways[{$index}][VALUE][params][keys][]", $pKey, [
-                                                            'class' => 'form-control form-control-sm',
-                                                            'placeholder' => 'api_key',
-                                                        ]) !!}</div>
-                                                        <div class="col-5">{!! Form::text("sms_gateways[{$index}][VALUE][params][values][]", '', [
-                                                            'class' => 'form-control form-control-sm',
-                                                            'placeholder' => !empty($pVal) ? '•••• (unchanged)' : 'value',
-                                                        ]) !!}</div>
+                                                        <div class="col-5"><x-form.input name="sms_gateways[{{ $index }}][VALUE][params][keys][]" :value="$pKey" placeholder="api_key" /></div>
+                                                        <div class="col-5"><x-form.input name="sms_gateways[{{ $index }}][VALUE][params][values][]" value="" :placeholder="! empty($pVal) ? '•••• (unchanged)' : 'value'" /></div>
                                                         <div class="col-md-2"><button type="button"
                                                                 class="btn btn-sm btn-outline-danger remove-kv-btn"><i
                                                                     class="ph-trash"></i></button></div>
