@@ -20,7 +20,7 @@ jobs:
             dependencies: lowest
     name: PHP ${{ matrix.php }} (${{ matrix.dependencies }})
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Fresh Laravel app
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: foundation
 
