@@ -3,6 +3,26 @@
 Manual steps a project must take when moving between versions. Versions without an entry
 need only `composer update mrjthedifferent/laravel-foundation` and `php artisan migrate`.
 
+## 0.16 to 0.17 (architecture, part three)
+
+`composer update mrjthedifferent/laravel-foundation`. No migration.
+
+1. **In production, an unhandled server error on a web request now flashes
+   "Something went wrong. Please try again." and redirects back**, instead
+   of a raw 500 page — the same message every admin controller's try/catch
+   used to flash individually. If your own project's exception handler
+   extends `Mrj\Foundation\Exceptions\Handler` and overrides `render()`,
+   check it still calls `parent::render()` for the case it doesn't handle
+   itself. Every other environment (including `testing`) is unaffected —
+   the real error still shows, exactly as before.
+2. **Deleting a `UserDocument` by an ID that exists but belongs to a
+   different user now 404s**, rather than flashing "Failed to delete
+   document" and leaving the record untouched. The record is still
+   untouched either way; only the response differs.
+3. If your own code referenced `Modules\User\Data\UserData`'s `#[Email]`/
+   `#[Min(6)]` attributes for anything (they never actually validated —
+   see CHANGELOG), no action needed; they're simply gone now.
+
 ## 0.15 to 0.16 (architecture, part two)
 
 `composer update mrjthedifferent/laravel-foundation`. No migration.

@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.17.0
+
+Architecture, part three: the controller/convention cleanup deferred from
+0.16.0. Deliberately **not** included — the remaining, larger-effort half of
+the plan's "Conventions" item — replacing the ~112 inline `authorize()`
+calls with `authorizeResource()`/`#[Authorize]`/`can:` middleware, and
+splitting `SpecialSettingsController` (602 lines across 6 unrelated
+settings domains) into one controller per domain. Both are real, but each
+is sizable enough, and authorization is sensitive enough, to warrant their
+own dedicated pass rather than a rushed mechanical sweep here.
+
+- **Deleted the controller try/catch ritual.** ~30 admin controller methods
+  wrapped their Action call in an identical try/catch: log the real
+  exception, flash a generic "Failed to X" message, redirect back. Beyond
+  the duplication, this swallowed the exception before it reached the
+  logs' normal path, `ErrorReporter`, or any error-monitoring integration.
+  `Mrj\Foundation\Exceptions\Handler` now renders that same fallback in one
+  place for any web request's unhandled server error — but only in
+  production; every other environment still shows the real error, so
+  local/CI debugging is unaffected. Validation, auth, 404s and explicit
+  HTTP-status exceptions are untouched. A few try/catches were
+  deliberately left alone: OAuth callbacks and three "test connection"
+  endpoints (Firebase, social providers) need a specific, actionable
+  message on failure that a generic handler can't provide, and
+  `SettingsController::import()`'s per-row try/catch accumulates per-row
+  errors rather than aborting the whole import.
+- **Fixed**: `UserData` carried `#[Email]`/`#[Min(6)]` Spatie Data
+  validation attributes that never actually ran — every call site builds
+  it via `UserData::from(array)` from already-validated data, which never
+  triggers Spatie Data's own validation pipeline (only resolving a Data
+  object directly as a controller parameter does) — contradicting its own
+  "Pure DTO" docblock. Removed.
+- **New `<x-module-layout>` component** replacing 9 near-identical
+  `layouts/master.blade.php` copies (8 lines each, differing only in one
+  breadcrumb's route and label) with a one-line usage per module.
+- Moved `UserController::bulkUploadSample()`'s inline spreadsheet-building
+  into a new `GenerateUserBulkUploadSampleAction`.
+- `sync/guidelines/{patterns,module-architecture,module-creation}.md` had
+  accumulated real drift from the last few releases — still describing
+  DTOs owning validation rules, three provider classes per module, manual
+  `Gate::policy()` registration, and scaffolding via `module:make` instead
+  of `foundation:make-module` — all actively propagated into any module a
+  project scaffolds. Corrected to match 0.15.0/0.16.0's actual
+  conventions.
+
 ## 0.16.0
 
 Architecture, part two: contracts, and the optional-module decoupling they
