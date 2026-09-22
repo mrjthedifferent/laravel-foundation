@@ -7,12 +7,10 @@
 @section('content')
 <x-search-card>
     <div class="col-md-6 mb-2">
-        {!! Form::label('name', 'Permission Name', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::text('name', request('name'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Search by name…']) !!}
+        <x-form.input name="name" label="Permission Name" :value="request('name')" placeholder="Search by name…" />
     </div>
     <div class="col-md-6 mb-2">
-        {!! Form::label('module', 'Module', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('module', ['' => 'All Modules'] + array_combine($modules->toArray(), $modules->toArray()), request('module'), ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'All Modules']) !!}
+        <x-form.select class="select" name="module" label="Module" :options="['' => 'All Modules'] + array_combine($modules->toArray(), $modules->toArray())" :selected="request('module')" data-placeholder="All Modules" />
     </div>
 </x-search-card>
 
@@ -70,20 +68,16 @@
     <form id="createPermissionForm" action="{{ route('admin.permission.store') }}" method="POST">
         @csrf
         <div class="mb-3">
-            {!! Form::label('module_name', 'Module Name', ['class' => 'form-label fw-semibold fs-sm']) !!}
-            {!! Form::select('module_name', ['' => 'Select Module'] + array_combine($modules->toArray(), $modules->toArray()) + ['new' => '+ Create New Module'], null, ['id' => 'module_name', 'class' => 'form-control form-control-sm select', 'required']) !!}
+            <x-form.select class="select" name="module_name" id="module_name" label="Module Name" required :options="['' => 'Select Module'] + array_combine($modules->toArray(), $modules->toArray()) + ['new' => '+ Create New Module']" :selected="null" />
         </div>
         <div class="mb-3 d-none" id="new-module-container">
-            {!! Form::label('new_module_name', 'New Module Name', ['class' => 'form-label fw-semibold fs-sm']) !!}
-            {!! Form::text('new_module_name', null, ['id' => 'new_module_name', 'class' => 'form-control form-control-sm']) !!}
+            <x-form.input name="new_module_name" id="new_module_name" label="New Module Name" />
         </div>
         <div class="mb-3">
-            {!! Form::label('permission_name', 'Permission Name', ['class' => 'form-label fw-semibold fs-sm']) !!}
-            {!! Form::text('permission_name', null, ['id' => 'permission_name', 'class' => 'form-control form-control-sm', 'required']) !!}
+            <x-form.input name="permission_name" id="permission_name" label="Permission Name" required />
         </div>
         <div class="mb-3">
-            {!! Form::label('description', 'Description (Optional)', ['class' => 'form-label fw-semibold fs-sm']) !!}
-            {!! Form::textarea('description', null, ['class' => 'form-control form-control-sm', 'rows' => 2]) !!}
+            <x-form.textarea name="description" label="Description (Optional)" :rows="2" />
         </div>
         <x-slot name="footer">
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>

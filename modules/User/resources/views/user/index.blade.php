@@ -7,52 +7,28 @@
 @section('content')
 <x-search-card>
     <div class="col-md-3 mb-2">
-        {!! Form::label('search', 'Search', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::text('search', request('search'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Name, email or phone…']) !!}
+        <x-form.input name="search" label="Search" :value="request('search')" placeholder="Name, email or phone…" />
     </div>
     <div class="col-md-3 mb-2">
-        {!! Form::label('role_id', 'Role', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('role_id[]', $roles, request('role_id'), [
-        'class' => 'form-control form-control-sm select',
-        'data-placeholder' => 'All Roles',
-        'multiple',
-        ]) !!}
+        <x-form.select class="select" name="role_id[]" label="Role" :options="$roles" :selected="request('role_id')" multiple data-placeholder="All Roles" />
     </div>
     <div class="col-md-3 mb-2">
-        {!! Form::label('gender', 'Gender', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('gender', ['' => 'All', 'male' => 'Male', 'female' => 'Female', 'other' => 'Other'], request('gender'), [
-        'class' => 'form-control form-control-sm select',
-        'data-placeholder' => 'All Genders',
-        ]) !!}
+        <x-form.select class="select" name="gender" label="Gender" :options="['' => 'All', 'male' => 'Male', 'female' => 'Female', 'other' => 'Other']" :selected="request('gender')" data-placeholder="All Genders" />
     </div>
     <div class="col-md-3 mb-2">
-        {!! Form::label('is_active', 'Status', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('is_active', ['' => 'All', '1' => 'Active', '0' => 'Inactive'], request('is_active'), [
-        'class' => 'form-control form-control-sm select',
-        'data-placeholder' => 'All',
-        ]) !!}
+        <x-form.select class="select" name="is_active" label="Status" :options="['' => 'All', '1' => 'Active', '0' => 'Inactive']" :selected="request('is_active')" data-placeholder="All" />
     </div>
     <div class="col-md-3 mb-2">
-        {!! Form::label('email_verified', 'Email Verified', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('email_verified', ['' => 'All', '1' => 'Verified', '0' => 'Unverified'], request('email_verified'), [
-        'class' => 'form-control form-control-sm select',
-        'data-placeholder' => 'All',
-        ]) !!}
+        <x-form.select class="select" name="email_verified" label="Email Verified" :options="['' => 'All', '1' => 'Verified', '0' => 'Unverified']" :selected="request('email_verified')" data-placeholder="All" />
     </div>
     <div class="col-md-3 mb-2">
-        {!! Form::label('phone_verified', 'Phone Verified', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('phone_verified', ['' => 'All', '1' => 'Verified', '0' => 'Unverified'], request('phone_verified'), [
-        'class' => 'form-control form-control-sm select',
-        'data-placeholder' => 'All',
-        ]) !!}
+        <x-form.select class="select" name="phone_verified" label="Phone Verified" :options="['' => 'All', '1' => 'Verified', '0' => 'Unverified']" :selected="request('phone_verified')" data-placeholder="All" />
     </div>
     <div class="col-md-3 mb-2">
-        {!! Form::label('date_from', 'Registered From', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::date('date_from', request('date_from'), ['class' => 'form-control form-control-sm']) !!}
+        <x-form.input name="date_from" label="Registered From" type="date" :value="request('date_from')" />
     </div>
     <div class="col-md-3 mb-2">
-        {!! Form::label('date_to', 'Registered To', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::date('date_to', request('date_to'), ['class' => 'form-control form-control-sm']) !!}
+        <x-form.input name="date_to" label="Registered To" type="date" :value="request('date_to')" />
     </div>
 </x-search-card>
 

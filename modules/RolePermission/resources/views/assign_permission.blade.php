@@ -6,7 +6,8 @@
 @endsection
 
 @section('content')
-{!! Form::open(['route' => ['admin.role.assign.permission', $role->id], 'id' => 'updatePermission', 'method' => 'post']) !!}
+<form action="{{ route('admin.role.assign.permission', $role->id) }}" id="updatePermission" method="POST">
+    @csrf
 
     <x-page-header
         title="Assign Permissions"
@@ -62,7 +63,7 @@
         </x-primary-button>
     </div>
 
-{!! Form::close() !!}
+</form>
 @endsection
 
 @push('scripts')

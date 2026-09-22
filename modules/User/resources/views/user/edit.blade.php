@@ -6,7 +6,9 @@
 @endsection
 
 @section('content')
-{{ Form::model($user, ['route' => ['admin.users.update', $user->id], 'method' => 'put', 'files' => true, 'id' => 'edit-user-form']) }}
+<form action="{{ route('admin.users.update', $user->id) }}" method="POST" enctype="multipart/form-data" id="edit-user-form">
+    @csrf
+    @method('PUT')
 
 <div x-data="{ imagePreview: null, onImageChange(e) { const file = e.target.files[0]; if (file && file.type.startsWith('image/')) { const reader = new FileReader(); reader.onload = ev => { this.imagePreview = ev.target.result; }; reader.readAsDataURL(file); } else { this.imagePreview = null; } } }">
     <x-page-header
@@ -28,20 +30,13 @@
     <x-form-section title="Personal Information" icon="ph-identification-card">
         <div class="row g-3">
             <div class="col-md-6">
-                {!! Form::label('name', 'Full Name <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-                {!! Form::text('name', $user->name, ['class' => 'form-control form-control-sm', 'placeholder' => 'Full name', 'required']) !!}
+                <x-form.input name="name" label="Full Name" required :value="$user->name" placeholder="Full name" />
             </div>
             <div class="col-md-3">
-                {!! Form::label('gender', 'Gender <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-                {!! Form::select('gender', ['male' => 'Male', 'female' => 'Female', 'other' => 'Other'], enum_value($user->gender), [
-                    'class' => 'form-control form-control-sm select',
-                    'data-placeholder' => 'Select gender…',
-                    'required',
-                ]) !!}
+                <x-form.select class="select" name="gender" label="Gender" required :options="['male' => 'Male', 'female' => 'Female', 'other' => 'Other']" :selected="$user->gender" data-placeholder="Select gender…" />
             </div>
             <div class="col-md-3">
-                {!! Form::label('image', 'Profile Image', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                {!! Form::file('image', ['class' => 'form-control form-control-sm', 'accept' => 'image/jpeg,image/png', 'id' => 'image-upload', '@change' => 'onImageChange($event)']) !!}
+                <x-form.file name="image" id="image-upload" label="Profile Image" accept="image/jpeg,image/png" @change="onImageChange($event)" />
                 <div class="form-text">Leave empty to keep current · JPEG or PNG, max 2 MB</div>
             </div>
         </div>
@@ -50,8 +45,7 @@
     <x-form-section title="Contact Details" icon="ph-envelope">
         <div class="row g-3">
             <div class="col-md-6">
-                {!! Form::label('email', 'Email <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-                {!! Form::email('email', $user->email, ['class' => 'form-control form-control-sm', 'placeholder' => 'email@example.com', 'required']) !!}
+                <x-form.input type="email" name="email" label="Email" required :value="$user->email" placeholder="email@example.com" />
                 @if($user->email_verified_at)
                     <div class="form-text text-success"><i class="ph-check-circle me-1"></i>Verified on {{ $user->email_verified_at->format('d M Y') }}</div>
                 @else
@@ -59,8 +53,7 @@
                 @endif
             </div>
             <div class="col-md-6">
-                {!! Form::label('phone', 'Mobile No', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                {!! Form::text('phone', $user->phone, ['class' => 'form-control form-control-sm', 'placeholder' => '+8801712345678', 'inputmode' => 'tel']) !!}
+                <x-form.input name="phone" label="Mobile No" :value="$user->phone" placeholder="+8801712345678" inputmode="tel" />
                 @if($user->phone && $user->phone_verified_at)
                     <div class="form-text text-success"><i class="ph-check-circle me-1"></i>Verified on {{ $user->phone_verified_at->format('d M Y') }}</div>
                 @elseif($user->phone)
@@ -75,22 +68,10 @@
     <x-form-section title="Access & Status" icon="ph-shield-check">
         <div class="row g-3">
             <div class="col-md-6">
-                {!! Form::label('roles', 'Roles <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-                {!! Form::select('roles[]', $roles, $user->roles->pluck('id')->toArray(), [
-                    'class' => 'form-control form-control-sm select',
-                    'multiple',
-                    'data-placeholder' => 'Select roles…',
-                    'required',
-                    'id' => 'roles',
-                ]) !!}
+                <x-form.select class="select" name="roles[]" id="roles" label="Roles" required multiple :options="$roles" :selected="$user->roles->pluck('id')->toArray()" data-placeholder="Select roles…" />
             </div>
             <div class="col-md-6">
-                {!! Form::label('is_active', 'Status <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-                {!! Form::select('is_active', integerStatus(), (int) $user->is_active, [
-                    'class' => 'form-control form-control-sm select',
-                    'data-placeholder' => 'Select status…',
-                    'required',
-                ]) !!}
+                <x-form.select class="select" name="is_active" label="Status" required :options="integerStatus()" :selected="(int) $user->is_active" data-placeholder="Select status…" />
             </div>
         </div>
     </x-form-section>
@@ -105,5 +86,5 @@
     </div>
 </div>
 
-{{ Form::close() }}
+</form>
 @endsection

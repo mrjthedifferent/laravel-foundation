@@ -316,26 +316,22 @@
                                 @csrf
                                 <div class="row g-3">
                                     <div class="col-md-4">
-                                        {!! Form::label('document_type', 'Document Type', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                                        {!! Form::select('document_type', ['' => 'Select Type'] + collect(\Modules\User\Enum\DocumentType::cases())->mapWithKeys(fn($t) => [$t->value => $t->label()])->toArray(), null, ['class' => 'form-control form-control-sm', 'required']) !!}
+                                        <x-form.select name="document_type" label="Document Type" required :options="['' => 'Select Type'] + collect(\Modules\User\Enum\DocumentType::cases())->mapWithKeys(fn($t) => [$t->value => $t->label()])->toArray()" :selected="null" />
                                     </div>
                                     <div class="col-md-4">
-                                        {!! Form::label('document_number', 'Document Number', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                                        {!! Form::text('document_number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Enter document number']) !!}
+                                        <x-form.input name="document_number" label="Document Number" placeholder="Enter document number" />
                                     </div>
                                     <div class="col-md-4">
-                                        {!! Form::label('expiry_date', 'Expiry Date', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                                        {!! Form::date('expiry_date', null, ['class' => 'form-control form-control-sm']) !!}
+                                        <x-form.input type="date" name="expiry_date" label="Expiry Date" />
                                     </div>
                                     <div class="col-md-6">
-                                        {!! Form::label('file', 'Front Side File', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                                        {!! Form::file('file', ['class' => 'form-control form-control-sm', 'required', 'accept' => 'image/*,.pdf']) !!}
+                                        <x-form.file name="file" label="Front Side File" required accept="image/*,.pdf" />
                                         <div class="form-text">Accepted: images, PDF</div>
                                     </div>
                                     <div class="col-md-6">
-                                        {!! Form::label('back_file', 'Back Side File', ['class' => 'form-label fw-semibold fs-sm']) !!}
+                                        <x-form.label for="back_file">Back Side File</x-form.label>
                                         <span class="text-muted fw-normal">(Optional)</span>
-                                        {!! Form::file('back_file', ['class' => 'form-control form-control-sm', 'accept' => 'image/*,.pdf']) !!}
+                                        <x-form.file name="back_file" accept="image/*,.pdf" />
                                     </div>
                                 </div>
                                 <div class="mt-3">

@@ -6,7 +6,8 @@
 @endsection
 
 @section('content')
-{!! Form::open(['route' => 'admin.users.bulk', 'method' => 'post', 'files' => true]) !!}
+<form action="{{ route('admin.users.bulk') }}" method="POST" enctype="multipart/form-data">
+    @csrf
 
     <x-page-header
         title="Import Users"
@@ -26,8 +27,7 @@
     <x-form-section title="File Upload" icon="ph-file-xls">
         <div class="row g-3">
             <div class="col-md-6">
-                {!! Form::label('users', 'Upload Excel File', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                {!! Form::file('users', ['class' => 'form-control form-control-sm', 'required', 'accept' => '.xlsx,.xls']) !!}
+                <x-form.file name="users" label="Upload Excel File" required accept=".xlsx,.xls" />
                 <div class="form-text">Accepted formats: .xlsx, .xls</div>
             </div>
             <div class="col-md-6">
@@ -51,5 +51,5 @@
         </x-primary-button>
     </div>
 
-{!! Form::close() !!}
+</form>
 @endsection

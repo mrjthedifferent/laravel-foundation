@@ -7,8 +7,7 @@
 @section('content')
 <x-search-card>
     <div class="col-md-12 mb-2">
-        {!! Form::label('name', 'Search', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::text('name', request('name'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Role name…']) !!}
+        <x-form.input name="name" label="Search" :value="request('name')" placeholder="Role name…" />
     </div>
 </x-search-card>
 
@@ -86,16 +85,16 @@
 
 {{-- Create Role Modal --}}
 <x-modal id="createRoleModal" title="Create Role" size="sm">
-    {{ Form::open(['route' => 'admin.role.store', 'method' => 'post', 'id' => 'createForm']) }}
-    <div class="mb-3">
-        {!! Form::label('role_name', 'Role Name <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-        {!! Form::text('role_name', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Role name', 'required']) !!}
-    </div>
-    <x-slot name="footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="submit" form="createForm" class="btn btn-primary">Create Role</button>
-    </x-slot>
-    {!! Form::close() !!}
+    <form action="{{ route('admin.role.store') }}" method="POST" id="createForm">
+        @csrf
+        <div class="mb-3">
+            <x-form.input name="role_name" label="Role Name" required placeholder="Role name" />
+        </div>
+        <x-slot name="footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" form="createForm" class="btn btn-primary">Create Role</button>
+        </x-slot>
+    </form>
 </x-modal>
 
 {{-- Edit Role Modal --}}
@@ -103,8 +102,7 @@
     <form id="updateForm" method="POST">
         @csrf @method('PUT')
         <div class="mb-3">
-            {!! Form::label('role_name', 'Role Name <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-            {!! Form::text('role_name', null, ['id' => 'edit_role_name', 'class' => 'form-control form-control-sm', 'placeholder' => 'Role name', 'required']) !!}
+            <x-form.input name="role_name" id="edit_role_name" label="Role Name" required placeholder="Role name" />
         </div>
     </form>
     <x-slot name="footer">

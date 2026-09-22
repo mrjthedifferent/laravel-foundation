@@ -6,7 +6,8 @@
 @endsection
 
 @section('content')
-{{ Form::open(['route' => 'admin.users.store', 'method' => 'post', 'files' => true, 'id' => 'create-user-form']) }}
+<form action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data" id="create-user-form">
+    @csrf
 
 <div x-data="{
     password: '',
@@ -44,20 +45,13 @@
 <x-form-section title="Personal Information" icon="ph-identification-card">
     <div class="row g-3">
         <div class="col-md-6">
-            {!! Form::label('name', 'Full Name <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-            {!! Form::text('name', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Full name', 'required']) !!}
+            <x-form.input name="name" label="Full Name" required placeholder="Full name" />
         </div>
         <div class="col-md-3">
-            {!! Form::label('gender', 'Gender <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-            {!! Form::select('gender', ['male' => 'Male', 'female' => 'Female', 'other' => 'Other'], null, [
-            'class' => 'form-control form-control-sm select',
-            'data-placeholder' => 'Select gender…',
-            'required',
-            ]) !!}
+            <x-form.select class="select" name="gender" label="Gender" required :options="['male' => 'Male', 'female' => 'Female', 'other' => 'Other']" :selected="null" data-placeholder="Select gender…" />
         </div>
         <div class="col-md-3">
-            {!! Form::label('image', 'Profile Image', ['class' => 'form-label fw-semibold fs-sm']) !!}
-            {!! Form::file('image', ['class' => 'form-control form-control-sm', 'accept' => 'image/jpeg,image/png', 'id' => 'image-upload', '@change' => 'onImageChange($event)']) !!}
+            <x-form.file name="image" id="image-upload" label="Profile Image" accept="image/jpeg,image/png" @change="onImageChange($event)" />
             <div class="form-text">JPEG or PNG, max 2 MB</div>
         </div>
         <div class="col-md-3 d-flex align-items-center">
@@ -71,18 +65,16 @@
 <x-form-section title="Contact & Credentials" icon="ph-envelope">
     <div class="row g-3">
         <div class="col-md-3">
-            {!! Form::label('email', 'Email <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-            {!! Form::email('email', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'email@example.com', 'required']) !!}
+            <x-form.input type="email" name="email" label="Email" required placeholder="email@example.com" />
         </div>
         <div class="col-md-3">
-            {!! Form::label('phone', 'Mobile No', ['class' => 'form-label fw-semibold fs-sm']) !!}
-            {!! Form::text('phone', null, ['class' => 'form-control form-control-sm', 'placeholder' => '+8801712345678', 'inputmode' => 'tel']) !!}
+            <x-form.input name="phone" label="Mobile No" placeholder="+8801712345678" inputmode="tel" />
             <div class="form-text">With country code, e.g. +8801712345678</div>
         </div>
         <div class="col-md-3">
-            {!! Form::label('password', 'Password <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
+            <x-form.label for="password" required>Password</x-form.label>
             <div class="position-relative">
-                {!! Form::password('password', ['class' => 'form-control pe-5', 'id' => 'password', 'placeholder' => 'Min. 8 characters', 'required', 'x-model' => 'password']) !!}
+                <input type="password" name="password" id="password" class="form-control pe-5" placeholder="Min. 8 characters" required x-model="password">
                 <button type="button" class="btn border-0 text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" tabindex="-1"
                         @click="togglePassword('password')">
                     <i x-show="!passwordVisible" class="ph-eye"></i>
@@ -91,13 +83,13 @@
             </div>
         </div>
         <div class="col-md-3">
-            {!! Form::label('password_confirmation', 'Confirm Password <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
+            <x-form.label for="password_confirmation" required>Confirm Password</x-form.label>
             <span class="ms-1">
                 <i x-show="passwordConfirmation && password === passwordConfirmation" class="ph-check-circle text-success"></i>
                 <i x-show="passwordConfirmation && password !== passwordConfirmation" class="ph-x-circle text-danger"></i>
             </span>
             <div class="position-relative">
-                {!! Form::password('password_confirmation', ['class' => 'form-control pe-5', 'id' => 'password_confirmation', 'placeholder' => 'Repeat password', 'required', 'x-model' => 'passwordConfirmation']) !!}
+                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control pe-5" placeholder="Repeat password" required x-model="passwordConfirmation">
                 <button type="button" class="btn border-0 text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" tabindex="-1"
                         @click="togglePassword('password_confirmation')">
                     <i x-show="!passwordConfirmVisible" class="ph-eye"></i>
@@ -111,22 +103,10 @@
 <x-form-section title="Access & Status" icon="ph-shield-check">
     <div class="row g-3">
         <div class="col-md-6">
-            {!! Form::label('roles', 'Roles <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-            {!! Form::select('roles[]', $roles, null, [
-            'class' => 'form-control form-control-sm select',
-            'multiple',
-            'data-placeholder' => 'Select roles…',
-            'required',
-            'id' => 'roles',
-            ]) !!}
+            <x-form.select class="select" name="roles[]" id="roles" label="Roles" required multiple :options="$roles" :selected="null" data-placeholder="Select roles…" />
         </div>
         <div class="col-md-6">
-            {!! Form::label('is_active', 'Status <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-            {!! Form::select('is_active', integerStatus(), 1, [
-            'class' => 'form-control form-control-sm select',
-            'data-placeholder' => 'Select status…',
-            'required',
-            ]) !!}
+            <x-form.select class="select" name="is_active" label="Status" required :options="integerStatus()" selected="1" data-placeholder="Select status…" />
         </div>
     </div>
 </x-form-section>
@@ -141,5 +121,5 @@
 </div>
 </div>
 
-{{ Form::close() }}
+</form>
 @endsection
