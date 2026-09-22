@@ -12,19 +12,13 @@ view('thing::layouts.master')                    // Modules/Thing/resources/view
 
 ### Module Layout (`layouts/master.blade.php`)
 
-Every module has its own layout that wraps `<x-app-layout>` and defines breadcrumbs:
+Every module has its own layout — one line, via `<x-module-layout>`:
 
 ```blade
-<x-app-layout>
-    <x-slot name="breadcrumbs">
-        <a href="{{ route('admin.dashboard') }}" class="breadcrumb-item">Home</a>
-        <a href="{{ route('admin.things.index') }}" class="breadcrumb-item">Things</a>
-        @yield('breadcrumb')
-    </x-slot>
-
-    @yield('content')
-</x-app-layout>
+<x-module-layout route="admin.things.index" label="Things" />
 ```
+
+A page still `@extends('thing::layouts.master')` and fills `@section('breadcrumb')` / `@section('content')` exactly as before — `route`/`label` only supply the layout's own "Home → Things" breadcrumb prefix.
 
 ---
 
@@ -59,6 +53,8 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 | `<x-dropdown-menu>` | Action dropdown in table rows |
 | `<x-dropdown-link :url="">` | Link item inside `x-dropdown-menu` |
 | `<x-modal id="" title="">` | Bootstrap modal dialog |
+| `<x-module-layout route="" label="">` | A module's `layouts/master.blade.php`, in one line |
+| `<x-form.input>`, `<x-form.select>`, `<x-form.textarea>`, `<x-form.file>`, `<x-form.checkbox>`, `<x-form.label>` | Labeled form fields — old-input, validation errors and `is-invalid` built in (see `patterns.md` / `ui-components.md` for the full API) |
 
 `<x-page-header>` supports an `$actions` slot for buttons placed on the right side:
 ```blade
@@ -86,16 +82,10 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
     {{-- Filter card --}}
     <x-search-card>
         <div class="col-md-3 mb-3">
-            {!! Form::label('search', 'Search', ['class' => 'form-label']) !!}
-            {!! Form::text('search', request()->search, ['class' => 'form-control', 'placeholder' => 'Search...']) !!}
+            <x-form.input name="search" label="Search" :value="request('search')" placeholder="Search..." />
         </div>
         <div class="col-md-3 mb-3">
-            {!! Form::label('is_active', 'Status', ['class' => 'form-label']) !!}
-            {!! Form::select('is_active', integerStatus(), request()->is_active, [
-                'class' => 'form-control select',
-                'data-placeholder' => 'Select Status...',
-                'placeholder' => 'All',
-            ]) !!}
+            <x-form.select class="select" name="is_active" label="Status" :options="integerStatus()" :selected="request('is_active')" data-placeholder="Select Status..." placeholder="All" />
         </div>
     </x-search-card>
 
@@ -169,7 +159,8 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 @endsection
 
 @section('content')
-{!! Form::open(['route' => 'admin.things.store', 'method' => 'post', 'files' => true]) !!}
+<form action="{{ route('admin.things.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
 
     <x-page-header
         title="Create New Thing"
@@ -187,21 +178,15 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
     <x-form-section title="Basic Information" icon="ph-info">
         <div class="row g-3">
             <div class="col-md-6">
-                {!! Form::label('name', 'Name', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                {!! Form::text('name', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Enter name', 'required']) !!}
+                <x-form.input name="name" label="Name" required placeholder="Enter name" />
             </div>
             <div class="col-md-6">
-                {!! Form::label('is_active', 'Status', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                {!! Form::select('is_active', integerStatus(), 1, [
-                    'class' => 'form-control form-control-sm select',
-                    'data-placeholder' => 'Select status…',
-                    'required',
-                ]) !!}
+                <x-form.select class="select" name="is_active" label="Status" required :options="integerStatus()" selected="1" data-placeholder="Select status…" />
             </div>
         </div>
     </x-form-section>
 
-{!! Form::close() !!}
+</form>
 @endsection
 ```
 
@@ -218,7 +203,9 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 @endsection
 
 @section('content')
-{!! Form::model($thing, ['route' => ['admin.things.update', $thing->id], 'method' => 'put', 'files' => true]) !!}
+<form action="{{ route('admin.things.update', $thing->id) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
 
     <x-page-header
         title="Edit: {{ $thing->name }}"
@@ -235,21 +222,17 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
     <x-form-section title="Basic Information" icon="ph-info">
         <div class="row g-3">
             <div class="col-md-6">
-                {!! Form::label('name', 'Name', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                {!! Form::text('name', null, ['class' => 'form-control form-control-sm', 'required']) !!}
-                {{-- With Form::model(), null auto-populates from $thing->name --}}
+                <x-form.input name="name" label="Name" required :value="$thing->name" />
+                {{-- Every field's current value is passed explicitly — there is
+                     no model-binding auto-population to rely on. --}}
             </div>
             <div class="col-md-6">
-                {!! Form::label('is_active', 'Status', ['class' => 'form-label fw-semibold fs-sm required']) !!}
-                {!! Form::select('is_active', integerStatus(), null, [
-                    'class' => 'form-control form-control-sm select',
-                    'required',
-                ]) !!}
+                <x-form.select class="select" name="is_active" label="Status" required :options="integerStatus()" :selected="(int) $thing->is_active" />
             </div>
         </div>
     </x-form-section>
 
-{!! Form::close() !!}
+</form>
 @endsection
 ```
 
@@ -258,12 +241,10 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 ### View Conventions
 
 **Forms:**
-- Open with `{!! Form::open([...]) !!}` / close with `{!! Form::close() !!}`.
-- Edit forms use `{!! Form::model($model, [...]) !!}` — pass `null` as value to auto-populate from the model.
-- Always include `'files' => true` when the form has file uploads.
-- Use `form-control form-control-sm` on all inputs.
-- Use `select` class + `data-placeholder` on all `<select>` elements (enables Select2).
-- Mark required fields with class `required` on the label.
+- A plain `<form>` with `@csrf` (and `@method('PUT')` for an update). Include `enctype="multipart/form-data"` when the form has file uploads.
+- Fields are `<x-form.input>` / `<x-form.select>` / `<x-form.textarea>` / `<x-form.file>` (see `patterns.md`), each explicitly given `:value`/`:selected` — there is no model-binding auto-population, so an edit form passes the model's current attribute at every field.
+- Use `class="select"` + `data-placeholder` on a `<x-form.select>` that should be a Select2 dropdown — not every select is one; match what the field actually needs.
+- Mark a required field with the component's `required` prop, not a CSS class — it adds both the `*` and the HTML `required` attribute.
 
 **Page structure:**
 - Create/edit forms must use `<x-page-header>` for the top heading and `<x-form-section>` for each card section — never write raw `<div class="card">` header markup manually.

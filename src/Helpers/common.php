@@ -123,33 +123,3 @@ if (! function_exists('form_old_key')) {
         return str_replace(['.', '[]', '[', ']'], ['_', '', '.', ''], $name);
     }
 }
-
-if (! function_exists('enum_value')) {
-
-    /**
-     * The scalar behind an enum, for anywhere a raw value is required.
-     *
-     * Written for konekt/html form binding. `Form::model()` makes the builder read the
-     * attribute itself, and it casts that to a string to decide which option is selected
-     * — which is fatal against an enum-cast column, since a backed enum cannot be cast to
-     * a string. Passing the value through here keeps such a select rendering:
-     *
-     *     {!! Form::select('type', $types, enum_value($payComponent->type), [...]) !!}
-     *
-     * Anything that is not an enum is handed back untouched, so it is always safe to
-     * wrap a bound value even when the column's cast may change later.
-     */
-    function enum_value(mixed $value): mixed
-    {
-        if ($value instanceof BackedEnum) {
-            return $value->value;
-        }
-
-        // A pure enum has no backing scalar; its name is the only stable identifier.
-        if ($value instanceof UnitEnum) {
-            return $value->name;
-        }
-
-        return $value;
-    }
-}

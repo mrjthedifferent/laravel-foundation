@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mrj\Foundation\Tests\Unit;
 
-use Illuminate\Queue\WorkerStopReason;
 use Mrj\Foundation\Support\Email;
 use Mrj\Foundation\Tests\TestCase;
 
@@ -10,16 +11,16 @@ class HelpersTest extends TestCase
 {
     public function test_helpers_are_autoloaded(): void
     {
-        foreach (['integerStatus', 'getParPagePaginate', 'enum_value', 'allPermissions', 'mailAppName'] as $function) {
+        foreach (['integerStatus', 'getParPagePaginate', 'form_old_key', 'allPermissions', 'mailAppName'] as $function) {
             $this->assertTrue(function_exists($function), "$function() is not loaded");
         }
     }
 
-    public function test_enum_value_unwraps_backed_enums_and_passes_scalars_through(): void
+    public function test_form_old_key_converts_bracketed_names_to_dot_notation(): void
     {
-        $this->assertSame(WorkerStopReason::Interrupted->value, enum_value(WorkerStopReason::Interrupted));
-        $this->assertSame('plain', enum_value('plain'));
-        $this->assertNull(enum_value(null));
+        $this->assertSame('roles', form_old_key('roles[]'));
+        $this->assertSame('sms_gateways.0.VALUE.endpoint', form_old_key('sms_gateways[0][VALUE][endpoint]'));
+        $this->assertSame('option_keys', form_old_key('option_keys[]'));
     }
 
     public function test_email_is_normalized(): void

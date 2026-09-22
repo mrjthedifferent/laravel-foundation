@@ -2,7 +2,7 @@
 
 <div class="card mb-3">
     <div class="card-body pb-1">
-        {{ Form::model($_REQUEST, ['method' => 'GET']) }}
+        <form method="GET" action="{{ url()->current() }}">
         <input type="hidden" name="per_page" value="{{ request('per_page') }}">
         @isset($wide)
             {{-- Full-width filters (e.g. the org-unit cascade) get their own row above the
@@ -23,6 +23,6 @@
                 </button>
             </div>
         </div>
-        {{ Form::close() }}
+        </form>
     </div>
 </div>

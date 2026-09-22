@@ -3,9 +3,6 @@
 namespace Mrj\Foundation\Tests;
 
 use App\Models\User;
-use Collective\Html\FormFacade;
-use Collective\Html\HtmlFacade;
-use Collective\Html\HtmlServiceProvider;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -43,19 +40,10 @@ abstract class TestCase extends Orchestra
             BackupServiceProvider::class,
             SanctumServiceProvider::class,
             AuditingServiceProvider::class,
-            HtmlServiceProvider::class,
             LaravelDataServiceProvider::class,
             SocialiteServiceProvider::class,
             LogViewerServiceProvider::class,
             FoundationServiceProvider::class,
-        ];
-    }
-
-    protected function getPackageAliases($app): array
-    {
-        return [
-            'Form' => FormFacade::class,
-            'Html' => HtmlFacade::class,
         ];
     }
 

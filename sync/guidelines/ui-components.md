@@ -47,6 +47,12 @@ $(document).ready(function () { ... });
 | Input error | `<x-input-error :messages="">` | `invalid-feedback` validation error list |
 | Truncated text | `<x-truncated-text :text="" :limit="">` | Truncated text with full-text tooltip |
 | Image | `<x-image :src="" alt="" :max-width="">` | Responsive `img-fluid` image |
+| Form input | `<x-form.input>` | Labeled text/email/number/date/password/hidden input, old-input + error handling built in |
+| Form select | `<x-form.select>` | Labeled `<select>`, single or `multiple`, unwraps enum values |
+| Form textarea | `<x-form.textarea>` | Labeled `<textarea>` |
+| Form file | `<x-form.file>` | Labeled file input |
+| Form checkbox | `<x-form.checkbox>` | Bootstrap `form-check` checkbox |
+| Form label | `<x-form.label>` | Standalone `form-label`, `required` prop adds the asterisk |
 
 ---
 
@@ -189,13 +195,11 @@ Props:
 </button>
 ```
 
-**Controller pagination:** always use `PaginationEnum`:
+**Controller pagination:** `QueryBuilder::paginate()` (see `patterns.md`) already reads `foundation.pagination.default`/`.max` — just call it with no argument, or an explicit override:
 ```php
-use Mrj\Foundation\Enum\PaginationEnum;
-
 $items = ItemQuery::make()
     ->search($request->input('search'))
-    ->paginate($request->integer('per_page') ?: PaginationEnum::DEFAULT_LIST);
+    ->paginate();
 ```
 
 ---
@@ -209,24 +213,18 @@ Props: `:reset-route` (optional, overrides the auto-detected current route for t
 ```blade
 <x-search-card>
     <div class="col-md-3 mb-2">
-        {!! Form::label('search', 'Search', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::text('search', request('search'), [
-            'class' => 'form-control form-control-sm', 'placeholder' => 'Name, email…',
-        ]) !!}
+        <x-form.input name="search" label="Search" :value="request('search')" placeholder="Name, email…" />
     </div>
     <div class="col-md-2 mb-2">
-        {!! Form::label('is_active', 'Status', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('is_active', ['' => 'All', '1' => 'Active', '0' => 'Inactive'], request('is_active'), [
-            'class' => 'form-control form-control-sm select',
-            'data-placeholder' => 'All',
-        ]) !!}
+        <x-form.select class="select" name="is_active" label="Status" :options="['' => 'All', '1' => 'Active', '0' => 'Inactive']" :selected="request('is_active')" data-placeholder="All" />
     </div>
     <div class="col-md-2 mb-2">
-        {!! Form::label('date_from', 'From', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::date('date_from', request('date_from'), ['class' => 'form-control form-control-sm']) !!}
+        <x-form.input name="date_from" label="From" type="date" :value="request('date_from')" />
     </div>
 </x-search-card>
 ```
+
+A filter form reads GET query params (`request($name)`), never `old()` — there's no validation to fail back from. `<x-form.input>`/`<x-form.select>` still work correctly here: with no flashed old input, `old($key, $value)` always falls through to the given `:value`.
 
 ---
 
@@ -244,13 +242,10 @@ Props:
 <x-form-section title="Personal Information" icon="ph-identification-card">
     <div class="row g-3">
         <div class="col-md-4">
-            {!! Form::label('first_name', 'First Name', ['class' => 'form-label fw-semibold fs-sm']) !!}
-            {!! Form::text('first_name', null, ['class' => 'form-control form-control-sm']) !!}
+            <x-form.input name="first_name" label="First Name" />
         </div>
         <div class="col-md-4">
-            {!! Form::label('email', 'Email <span class="text-danger">*</span>',
-                ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-            {!! Form::email('email', null, ['class' => 'form-control form-control-sm', 'required']) !!}
+            <x-form.input type="email" name="email" label="Email" required />
         </div>
     </div>
 </x-form-section>
@@ -333,50 +328,40 @@ Props:
 
 ### Forms
 
-**Open / close:**
+Plain HTML `<form>` — there is no `Form::open()`/`Form::close()` equivalent, and none is needed:
 ```blade
 {{-- Create --}}
-{{ Form::open(['route' => 'admin.items.store', 'method' => 'post', 'files' => true, 'id' => 'create-form']) }}
+<form action="{{ route('admin.items.store') }}" method="POST" enctype="multipart/form-data" id="create-form">
+    @csrf
+    {{-- fields --}}
+</form>
 
-{{-- Edit (auto-populates from model; pass null as value) --}}
-{{ Form::model($item, ['route' => ['admin.items.update', $item->id], 'method' => 'put', 'files' => true]) }}
-
-{{ Form::close() }}
+{{-- Edit --}}
+<form action="{{ route('admin.items.update', $item->id) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
+    {{-- fields, each with :value="$item->field" — there is no model-binding
+         auto-population, every field's current value is passed explicitly --}}
+</form>
 ```
 
-**Labels:** use `fw-semibold fs-sm` on all form labels. Mark required with raw HTML or the `required` CSS class (which appends `*` automatically via `:after`):
+**`<x-form.input>`, `<x-form.select>`, `<x-form.textarea>`, `<x-form.file>`** already render `form-control form-control-sm` (or `select` + `form-control-sm` for a select), the label (`fw-semibold fs-sm`, with a `required` prop that appends the red asterisk), old-input repopulation, the `is-invalid` class, and the `invalid-feedback` error message — one component call replaces a `Form::label()` + `Form::text()`/`Form::select()`/etc. pair and the manual `@error()` block that used to follow it:
+
 ```blade
-{{-- Option A: raw HTML asterisk --}}
-{!! Form::label('email', 'Email <span class="text-danger">*</span>',
-    ['class' => 'form-label fw-semibold fs-sm'], false) !!}
+<x-form.input name="name" label="Name" placeholder="Enter name" />
+<x-form.input type="email" name="email" label="Email" />
+<x-form.textarea name="notes" label="Notes" :rows="4" />
+<x-form.input type="date" name="published_at" label="Published At" />
+<x-form.file name="avatar" label="Avatar" accept="image/jpeg,image/png" />
 
-{{-- Option B: required CSS class (same visual result) --}}
-{!! Form::label('email', 'Email', ['class' => 'form-label fw-semibold fs-sm required']) !!}
+{{-- Select2 — add class="select" --}}
+<x-form.select class="select" name="status" label="Status" :options="integerStatus()" data-placeholder="Select status…" />
+
+{{-- Multi-select: name has no [] suffix, the multiple prop adds it --}}
+<x-form.select class="select" name="roles" label="Roles" multiple :options="$roles" :selected="$item->roles->pluck('id')->toArray()" data-placeholder="Select roles…" />
 ```
 
-**All inputs use `form-control form-control-sm`:**
-```blade
-{!! Form::text('name', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Enter name']) !!}
-{!! Form::email('email', null, ['class' => 'form-control form-control-sm']) !!}
-{!! Form::textarea('notes', null, ['class' => 'form-control form-control-sm', 'rows' => 4]) !!}
-{!! Form::date('published_at', null, ['class' => 'form-control form-control-sm']) !!}
-{!! Form::file('avatar', ['class' => 'form-control form-control-sm', 'accept' => 'image/jpeg,image/png']) !!}
-```
-
-**Select2 selects — add `select` class:**
-```blade
-{!! Form::select('status', integerStatus(), null, [
-    'class' => 'form-control form-control-sm select',
-    'data-placeholder' => 'Select status…',
-]) !!}
-
-{{-- Multi-select --}}
-{!! Form::select('roles[]', $roles, null, [
-    'class' => 'form-control form-control-sm select',
-    'multiple',
-    'data-placeholder' => 'Select roles…',
-]) !!}
-```
+Every field takes `:value` (or `:selected` for a select) explicitly — pass the model's current attribute on an edit form, `null`/omit it on a create form. A select's `:selected` unwraps a `BackedEnum`/`UnitEnum` itself, so pass the enum value directly (`:selected="$item->status"`), never `enum_value($item->status)` — that helper no longer exists.
 
 **Hint text:**
 ```blade
@@ -385,32 +370,20 @@ Props:
 <div class="form-text text-warning"><i class="ph-warning me-1"></i>Not verified</div>
 ```
 
-**Validation errors:**
-```blade
-{!! Form::text('name', null, [
-    'class' => 'form-control form-control-sm' . ($errors->has('name') ? ' is-invalid' : ''),
-]) !!}
-<x-input-error :messages="$errors->get('name')" />
-```
+Or the component's own `help` prop: `<x-form.input name="phone" label="Mobile No" help="With country code, e.g. +8801712345678" />`.
 
-**Password toggle pattern:**
+**Password fields need the eye-toggle button, which `<x-form.input>` has no slot for** — write them as a raw `<input>` alongside `<x-form.label>`:
 ```blade
-<div class="input-group input-group-sm">
-    {!! Form::password('password', ['class' => 'form-control', 'id' => 'password']) !!}
-    <button type="button" class="btn btn-outline-secondary pw-toggle"
-        data-target="password" tabindex="-1">
+<x-form.label for="password" required>Password</x-form.label>
+<div class="position-relative">
+    <input type="password" name="password" id="password" class="form-control pe-5" placeholder="Min. 8 characters" required>
+    <button type="button" class="btn border-0 text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" tabindex="-1"
+            @click="togglePassword('password')">
         <i class="ph-eye"></i>
     </button>
 </div>
 ```
-```javascript
-$(document).on('click', '.pw-toggle', function () {
-    var input = document.getElementById($(this).data('target'));
-    var icon  = $(this).find('i');
-    input.type = input.type === 'password' ? 'text' : 'password';
-    icon.toggleClass('ph-eye ph-eye-slash');
-});
-```
+A password field with no toggle button — just the blank-by-default, never-repopulated input — can still use the component directly: `<x-form.input type="password" name="value_encrypted" placeholder="Leave blank to keep the current secret" />`.
 
 **Submit row (create/edit bottom bar):**
 ```blade
@@ -684,14 +657,10 @@ $('#settings-form').on('change input', function () {
 | Function | Returns | Use |
 |---|---|---|
 | `integerStatus()` | `['1'=>'Active','0'=>'Inactive']` | Status selects |
-| `getCommonStatus()` | `['Active'=>'Active','Inactive'=>'Inactive']` | String status selects |
-| `getParPagePaginate()` | `['10','25','50','100']` | Per-page select options |
-| `getIntegerMonth()` | Month name map | Month selects |
-| `currency_number($n)` | `number_format($n, 2)` | Currency display |
-| `ajaxResponse($code, $msg, $errors, $data)` | `JsonResponse` | AJAX responses |
+| `getParPagePaginate()` | `['10'=>'10', ...]` from `foundation.pagination.options` | Per-page select options |
 | `allPermissions()` | Collection | Available in all sidebar partials |
 | `getUrlFromPath($path)` | URL string | Resolve stored paths to URLs |
-| `enum_value($v)` | Backing scalar, else `$v` unchanged | **Required** for any `Form::` field bound via `Form::model()` to an enum-cast column |
+| `form_old_key($name)` | Dot-notation key, e.g. `roles[]` → `roles` | Used internally by the `<x-form.*>` components; rarely needed directly |
 
 ---
 
@@ -710,6 +679,6 @@ $('#settings-form').on('change input', function () {
 | `@if(auth()->user()->hasRole(...))` | `@can('Permission Name')` |
 | Hard-coded hex colours in markup | Bootstrap CSS vars (`var(--bs-primary)`) |
 | Non-named routes in `href` | `route('admin.items.index')` |
-| `Form::select('field', $opts, null, …)` on an enum-cast column | `enum_value($model->field)` as the selected value |
+| Raw `<input>`/`<select>`/`<textarea>` for an ordinary field | `<x-form.input>` / `<x-form.select>` / `<x-form.textarea>` — old-input, errors and `is-invalid` come for free |
 | Skipping `$this->authorize()` in controller methods | Always call at the top of every action |
 
