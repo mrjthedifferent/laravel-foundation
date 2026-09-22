@@ -2,34 +2,20 @@
 
 namespace Modules\ActivityLog\Queries;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\ActivityLog\Models\EmailLog;
+use Mrj\Foundation\Support\QueryBuilder;
 
-final readonly class EmailLogQuery
+final class EmailLogQuery extends QueryBuilder
 {
-    private Builder $query;
-
-    public function __construct()
-    {
-        $this->query = EmailLog::query();
-    }
-
     public static function make(): self
     {
-        return new self;
+        return new self(EmailLog::query());
     }
 
     public function search(?string $term): self
     {
         if (filled($term)) {
-            $like = '%'.escapeLike($term).'%';
-
-            $this->query->where(function ($q) use ($like): void {
-                $q->whereRaw('to_email LIKE ? ESCAPE ?', [$like, '\\'])
-                    ->orWhereRaw('subject LIKE ? ESCAPE ?', [$like, '\\'])
-                    ->orWhereRaw('notification LIKE ? ESCAPE ?', [$like, '\\']);
-            });
+            $this->whereLike(['to_email', 'subject', 'notification'], $term);
         }
 
         return $this;
@@ -67,10 +53,5 @@ final readonly class EmailLogQuery
         $this->query->orderByDesc('id');
 
         return $this;
-    }
-
-    public function paginate(?int $perPage = null): LengthAwarePaginator
-    {
-        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10))->withQueryString();
     }
 }

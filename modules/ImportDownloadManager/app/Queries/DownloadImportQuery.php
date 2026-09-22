@@ -2,17 +2,14 @@
 
 namespace Modules\ImportDownloadManager\Queries;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Modules\ImportDownloadManager\Enum\ImportStatus;
 use Modules\ImportDownloadManager\Enum\ImportType;
 use Modules\ImportDownloadManager\Models\DownloadImportManager;
+use Mrj\Foundation\Support\QueryBuilder;
 
-final readonly class DownloadImportQuery
+final class DownloadImportQuery extends QueryBuilder
 {
-    public function __construct(private Builder $query) {}
-
     public static function make(): self
     {
         return new self(DownloadImportManager::query()->with('user:id,name,email'));
@@ -20,51 +17,43 @@ final readonly class DownloadImportQuery
 
     public function forUser(int $userId): self
     {
-        return new self($this->query->where('user_id', $userId));
+        $this->query->where('user_id', $userId);
+
+        return $this;
     }
 
     public function filterByStatus(?ImportStatus $status): self
     {
-        if ($status === null) {
-            return $this;
+        if ($status !== null) {
+            $this->query->where('status', $status->value);
         }
 
-        return new self($this->query->where('status', $status->value));
+        return $this;
     }
 
     public function filterByType(?ImportType $type): self
     {
-        if ($type === null) {
-            return $this;
+        if ($type !== null) {
+            $this->query->where('type', $type->value);
         }
 
-        return new self($this->query->where('type', $type->value));
+        return $this;
     }
 
     public function search(?string $term): self
     {
-        if (blank($term)) {
-            return $this;
+        if (filled($term)) {
+            $this->whereLike(['title', 'type'], $term);
         }
 
-        $like = '%'.escapeLike($term).'%';
-
-        return new self(
-            $this->query->where(function (Builder $q) use ($like): void {
-                $q->whereRaw('title LIKE ? ESCAPE ?', [$like, '\\'])
-                    ->orWhereRaw('type LIKE ? ESCAPE ?', [$like, '\\']);
-            })
-        );
+        return $this;
     }
 
     public function orderByLatest(): self
     {
-        return new self($this->query->orderByDesc('id'));
-    }
+        $this->query->orderByDesc('id');
 
-    public function paginate(?int $perPage = null): LengthAwarePaginator
-    {
-        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10))->withQueryString();
+        return $this;
     }
 
     public function findByIds(array $ids): Collection

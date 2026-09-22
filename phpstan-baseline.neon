@@ -31,6 +31,12 @@ parameters:
 			path: modules/ActivityLog/app/Http/Controllers/SmsLogController.php
 
 		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:each\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: mixed, Closure\(OwenIt\\Auditing\\Models\\Audit\)\: void given\.$#'
+			identifier: argument.type
+			count: 1
+			path: modules/ActivityLog/app/Jobs/ActivityLogExportJob.php
+
+		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
 			count: 1
@@ -47,12 +53,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: modules/ActivityLog/app/Listeners/LogEmailSent.php
-
-		-
-			message: '#^Relation ''user'' is not found in OwenIt\\Auditing\\Models\\Audit model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: modules/ActivityLog/app/Queries/ActivityLogQuery.php
 
 		-
 			message: '#^Trait Modules\\ActivityLog\\Traits\\IPTracker is used zero times and is not analysed\.$#'

@@ -2,33 +2,20 @@
 
 namespace Modules\ActivityLog\Queries;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\ActivityLog\Models\SmsLog;
+use Mrj\Foundation\Support\QueryBuilder;
 
-final readonly class SmsLogQuery
+final class SmsLogQuery extends QueryBuilder
 {
-    private Builder $query;
-
-    public function __construct()
-    {
-        $this->query = SmsLog::query();
-    }
-
     public static function make(): self
     {
-        return new self;
+        return new self(SmsLog::query());
     }
 
     public function search(?string $term): self
     {
         if (filled($term)) {
-            $like = '%'.escapeLike($term).'%';
-
-            $this->query->where(function ($q) use ($like): void {
-                $q->whereRaw('phone LIKE ? ESCAPE ?', [$like, '\\'])
-                    ->orWhereRaw('message LIKE ? ESCAPE ?', [$like, '\\']);
-            });
+            $this->whereLike(['phone', 'message'], $term);
         }
 
         return $this;
@@ -66,10 +53,5 @@ final readonly class SmsLogQuery
         $this->query->orderByDesc('id');
 
         return $this;
-    }
-
-    public function paginate(?int $perPage = null): LengthAwarePaginator
-    {
-        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10))->withQueryString();
     }
 }

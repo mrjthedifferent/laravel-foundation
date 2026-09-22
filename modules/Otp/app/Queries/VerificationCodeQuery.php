@@ -2,11 +2,9 @@
 
 namespace Modules\Otp\Queries;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Modules\Otp\Enum\ContactType;
 use Modules\Otp\Models\VerificationCode;
+use Mrj\Foundation\Support\QueryBuilder;
 
 /**
  * VerificationCode Query Builder
@@ -22,12 +20,8 @@ use Modules\Otp\Models\VerificationCode;
  *     ->orderByLatest()
  *     ->paginate();
  */
-final readonly class VerificationCodeQuery
+final class VerificationCodeQuery extends QueryBuilder
 {
-    public function __construct(
-        private Builder $query
-    ) {}
-
     public static function make(): self
     {
         return new self(VerificationCode::query());
@@ -38,11 +32,11 @@ final readonly class VerificationCodeQuery
      */
     public function filterByContactType(?ContactType $contactType): self
     {
-        if ($contactType === null) {
-            return $this;
+        if ($contactType !== null) {
+            $this->query->where('contact_type', $contactType->value);
         }
 
-        return new self($this->query->where('contact_type', $contactType->value));
+        return $this;
     }
 
     /**
@@ -50,11 +44,11 @@ final readonly class VerificationCodeQuery
      */
     public function filterByVerified(?bool $isVerified): self
     {
-        if ($isVerified === null) {
-            return $this;
+        if ($isVerified !== null) {
+            $this->query->where('is_verified', $isVerified);
         }
 
-        return new self($this->query->where('is_verified', $isVerified));
+        return $this;
     }
 
     /**
@@ -62,15 +56,13 @@ final readonly class VerificationCodeQuery
      */
     public function filterByExpired(?bool $expired): self
     {
-        if ($expired === null) {
-            return $this;
-        }
-
-        return new self(
+        if ($expired !== null) {
             $expired
                 ? $this->query->where('expires_at', '<=', now())
-                : $this->query->where('expires_at', '>', now())
-        );
+                : $this->query->where('expires_at', '>', now());
+        }
+
+        return $this;
     }
 
     /**
@@ -78,17 +70,15 @@ final readonly class VerificationCodeQuery
      */
     public function filterByDateRange(?string $from, ?string $to): self
     {
-        $query = $this->query;
-
         if ($from) {
-            $query = $query->whereDate('created_at', '>=', $from);
+            $this->query->whereDate('created_at', '>=', $from);
         }
 
         if ($to) {
-            $query = $query->whereDate('created_at', '<=', $to);
+            $this->query->whereDate('created_at', '<=', $to);
         }
 
-        return new self($query);
+        return $this;
     }
 
     /**
@@ -96,13 +86,11 @@ final readonly class VerificationCodeQuery
      */
     public function search(?string $search): self
     {
-        if (empty($search)) {
-            return $this;
+        if (filled($search)) {
+            $this->whereLike(['contact'], $search);
         }
 
-        return new self(
-            $this->query->whereRaw('contact LIKE ? ESCAPE ?', ['%'.escapeLike($search).'%', '\\'])
-        );
+        return $this;
     }
 
     /**
@@ -110,23 +98,9 @@ final readonly class VerificationCodeQuery
      */
     public function orderByLatest(): self
     {
-        return new self($this->query->orderBy('id', 'desc'));
-    }
+        $this->query->orderBy('id', 'desc');
 
-    /**
-     * Get paginated results
-     */
-    public function paginate(?int $perPage = null): LengthAwarePaginator
-    {
-        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10));
-    }
-
-    /**
-     * Get all results
-     */
-    public function get(): Collection
-    {
-        return $this->query->get();
+        return $this;
     }
 
     /**

@@ -2,37 +2,22 @@
 
 namespace Modules\ActivityLog\Queries;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
+use Mrj\Foundation\Support\QueryBuilder;
+use Override;
 use OwenIt\Auditing\Models\Audit;
 
-final readonly class ActivityLogQuery
+final class ActivityLogQuery extends QueryBuilder
 {
-    private Builder $query;
-
-    public function __construct()
-    {
-        $this->query = Audit::query();
-    }
-
     public static function make(): self
     {
-        return new self;
+        return new self(Audit::query());
     }
 
     public function search(?string $term): self
     {
         if (filled($term)) {
-            $like = '%'.escapeLike($term).'%';
-
-            $this->query->where(function ($q) use ($like): void {
-                $q->whereRaw('old_values LIKE ? ESCAPE ?', [$like, '\\'])
-                    ->orWhereRaw('new_values LIKE ? ESCAPE ?', [$like, '\\'])
-                    ->orWhereRaw('user_agent LIKE ? ESCAPE ?', [$like, '\\'])
-                    ->orWhereRaw('ip_address LIKE ? ESCAPE ?', [$like, '\\'])
-                    ->orWhereRaw('url LIKE ? ESCAPE ?', [$like, '\\']);
-            });
+            $this->whereLike(['old_values', 'new_values', 'user_agent', 'ip_address', 'url'], $term);
         }
 
         return $this;
@@ -97,11 +82,7 @@ final readonly class ActivityLogQuery
         return $this;
     }
 
-    public function paginate(?int $perPage = null): LengthAwarePaginator
-    {
-        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10))->withQueryString();
-    }
-
+    #[Override]
     public function get(): Collection
     {
         return $this->query->orderByDesc('created_at')->get();

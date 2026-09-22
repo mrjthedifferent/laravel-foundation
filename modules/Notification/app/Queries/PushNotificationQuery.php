@@ -2,15 +2,11 @@
 
 namespace Modules\Notification\Queries;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Modules\Notification\Models\PushNotification;
+use Mrj\Foundation\Support\QueryBuilder;
 
-final readonly class PushNotificationQuery
+final class PushNotificationQuery extends QueryBuilder
 {
-    public function __construct(private Builder $query) {}
-
     public static function make(): self
     {
         return new self(PushNotification::query()->with('user:id,name,email'));
@@ -19,14 +15,7 @@ final readonly class PushNotificationQuery
     public function search(?string $search): self
     {
         if (filled($search)) {
-            $like = '%'.escapeLike($search).'%';
-
-            return new self(
-                $this->query->where(function (Builder $q) use ($like): void {
-                    $q->whereRaw('title LIKE ? ESCAPE ?', [$like, '\\'])
-                        ->orWhereRaw('body LIKE ? ESCAPE ?', [$like, '\\']);
-                })
-            );
+            $this->whereLike(['title', 'body'], $search);
         }
 
         return $this;
@@ -34,17 +23,9 @@ final readonly class PushNotificationQuery
 
     public function orderByLatest(): self
     {
-        return new self($this->query->latest('id'));
-    }
+        $this->query->latest('id');
 
-    public function paginate(?int $perPage = null): LengthAwarePaginator
-    {
-        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10))->withQueryString();
-    }
-
-    public function get(): Collection
-    {
-        return $this->query->get();
+        return $this;
     }
 
     public function count(): int

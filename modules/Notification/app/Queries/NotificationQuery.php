@@ -2,10 +2,8 @@
 
 namespace Modules\Notification\Queries;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Modules\Notification\Models\Notification;
+use Mrj\Foundation\Support\QueryBuilder;
 
 /**
  * Notification Query Builder
@@ -19,12 +17,8 @@ use Modules\Notification\Models\Notification;
  *     ->orderByLatest()
  *     ->paginate();
  */
-final readonly class NotificationQuery
+final class NotificationQuery extends QueryBuilder
 {
-    public function __construct(
-        private Builder $query
-    ) {}
-
     public static function make(): self
     {
         return new self(Notification::query());
@@ -35,11 +29,11 @@ final readonly class NotificationQuery
      */
     public function forUser(object $notifiable): self
     {
-        return new self(
-            $this->query
-                ->where('notifiable_type', get_class($notifiable))
-                ->where('notifiable_id', $notifiable->id)
-        );
+        $this->query
+            ->where('notifiable_type', get_class($notifiable))
+            ->where('notifiable_id', $notifiable->id);
+
+        return $this;
     }
 
     /**
@@ -47,15 +41,13 @@ final readonly class NotificationQuery
      */
     public function filterByReadStatus(?bool $isRead): self
     {
-        if ($isRead === null) {
-            return $this;
-        }
-
-        return new self(
+        if ($isRead !== null) {
             $isRead
                 ? $this->query->whereNotNull('read_at')
-                : $this->query->whereNull('read_at')
-        );
+                : $this->query->whereNull('read_at');
+        }
+
+        return $this;
     }
 
     /**
@@ -63,11 +55,11 @@ final readonly class NotificationQuery
      */
     public function filterByType(?string $type): self
     {
-        if (blank($type)) {
-            return $this;
+        if (filled($type)) {
+            $this->query->where('type', $type);
         }
 
-        return new self($this->query->where('type', $type));
+        return $this;
     }
 
     /**
@@ -75,23 +67,9 @@ final readonly class NotificationQuery
      */
     public function orderByLatest(): self
     {
-        return new self($this->query->latest('created_at'));
-    }
+        $this->query->latest('created_at');
 
-    /**
-     * Get paginated results, preserving query string.
-     */
-    public function paginate(?int $perPage = null): LengthAwarePaginator
-    {
-        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10))->withQueryString();
-    }
-
-    /**
-     * Get all results as a collection.
-     */
-    public function get(): Collection
-    {
-        return $this->query->get();
+        return $this;
     }
 
     /**

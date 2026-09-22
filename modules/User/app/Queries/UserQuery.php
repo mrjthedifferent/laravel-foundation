@@ -3,10 +3,8 @@
 namespace Modules\User\Queries;
 
 use App\Models\User;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\LazyCollection;
+use Mrj\Foundation\Support\QueryBuilder;
 
 /**
  * User Query Builder
@@ -21,12 +19,8 @@ use Illuminate\Support\LazyCollection;
  *     ->search($searchTerm)
  *     ->paginate();
  */
-final readonly class UserQuery
+final class UserQuery extends QueryBuilder
 {
-    public function __construct(
-        private Builder $query
-    ) {}
-
     public static function make(): self
     {
         return new self(User::query());
@@ -37,7 +31,9 @@ final readonly class UserQuery
      */
     public function withRelations(array $relations = ['roles']): self
     {
-        return new self($this->query->with($relations));
+        $this->query->with($relations);
+
+        return $this;
     }
 
     /**
@@ -45,13 +41,11 @@ final readonly class UserQuery
      */
     public function filterByRole(?int $roleId): self
     {
-        if ($roleId === null) {
-            return $this;
+        if ($roleId !== null) {
+            $this->query->whereHas('roles', fn ($q) => $q->where('id', $roleId));
         }
 
-        return new self(
-            $this->query->whereHas('roles', fn ($q) => $q->where('id', $roleId))
-        );
+        return $this;
     }
 
     /**
@@ -59,11 +53,11 @@ final readonly class UserQuery
      */
     public function filterByStatus(?bool $isActive): self
     {
-        if ($isActive === null) {
-            return $this;
+        if ($isActive !== null) {
+            $this->query->where('is_active', $isActive);
         }
 
-        return new self($this->query->where('is_active', $isActive));
+        return $this;
     }
 
     /**
@@ -71,11 +65,11 @@ final readonly class UserQuery
      */
     public function filterByGender(?string $gender): self
     {
-        if (empty($gender)) {
-            return $this;
+        if (filled($gender)) {
+            $this->query->where('gender', $gender);
         }
 
-        return new self($this->query->where('gender', $gender));
+        return $this;
     }
 
     /**
@@ -94,13 +88,13 @@ final readonly class UserQuery
         $digits = ltrim((string) preg_replace('/\D/', '', $search), '0');
         $digitsLike = '%'.escapeLike($digits).'%';
 
-        return new self(
-            $this->query->where(function ($q) use ($like, $operator, $digits, $digitsLike): void {
-                $q->whereRaw("name {$operator} ? ESCAPE ?", [$like, '\\'])
-                    ->orWhereRaw("email {$operator} ? ESCAPE ?", [$like, '\\'])
-                    ->when(strlen($digits) >= 3, fn ($q) => $q->orWhereRaw('phone LIKE ? ESCAPE ?', [$digitsLike, '\\']));
-            })
-        );
+        $this->query->where(function ($q) use ($like, $operator, $digits, $digitsLike): void {
+            $q->whereRaw("name {$operator} ? ESCAPE ?", [$like, '\\'])
+                ->orWhereRaw("email {$operator} ? ESCAPE ?", [$like, '\\'])
+                ->when(strlen($digits) >= 3, fn ($q) => $q->orWhereRaw('phone LIKE ? ESCAPE ?', [$digitsLike, '\\']));
+        });
+
+        return $this;
     }
 
     /**
@@ -108,17 +102,15 @@ final readonly class UserQuery
      */
     public function filterByDateRange(string $column, ?string $from, ?string $to): self
     {
-        $query = $this->query;
-
         if ($from) {
-            $query = $query->whereDate($column, '>=', $from);
+            $this->query->whereDate($column, '>=', $from);
         }
 
         if ($to) {
-            $query = $query->whereDate($column, '<=', $to);
+            $this->query->whereDate($column, '<=', $to);
         }
 
-        return new self($query);
+        return $this;
     }
 
     /**
@@ -126,15 +118,13 @@ final readonly class UserQuery
      */
     public function phoneVerified(?bool $verified = true): self
     {
-        if ($verified === null) {
-            return $this;
-        }
-
-        return new self(
+        if ($verified !== null) {
             $verified
                 ? $this->query->whereNotNull('phone_verified_at')
-                : $this->query->whereNull('phone_verified_at')
-        );
+                : $this->query->whereNull('phone_verified_at');
+        }
+
+        return $this;
     }
 
     /**
@@ -142,15 +132,13 @@ final readonly class UserQuery
      */
     public function emailVerified(?bool $verified = true): self
     {
-        if ($verified === null) {
-            return $this;
-        }
-
-        return new self(
+        if ($verified !== null) {
             $verified
                 ? $this->query->whereNotNull('email_verified_at')
-                : $this->query->whereNull('email_verified_at')
-        );
+                : $this->query->whereNull('email_verified_at');
+        }
+
+        return $this;
     }
 
     /**
@@ -158,7 +146,9 @@ final readonly class UserQuery
      */
     public function orderByLatest(): self
     {
-        return new self($this->query->orderBy('id', 'desc'));
+        $this->query->orderBy('id', 'desc');
+
+        return $this;
     }
 
     /**
@@ -166,7 +156,9 @@ final readonly class UserQuery
      */
     public function orderByName(string $direction = 'asc'): self
     {
-        return new self($this->query->orderBy('name', $direction));
+        $this->query->orderBy('name', $direction);
+
+        return $this;
     }
 
     /**
@@ -174,23 +166,9 @@ final readonly class UserQuery
      */
     public function limit(int $limit): self
     {
-        return new self($this->query->limit($limit));
-    }
+        $this->query->limit($limit);
 
-    /**
-     * Get paginated results
-     */
-    public function paginate(?int $perPage = null): LengthAwarePaginator
-    {
-        return $this->query->paginate($perPage ?? (int) config('foundation.pagination.default', 10))->withQueryString();
-    }
-
-    /**
-     * Get all results
-     */
-    public function get(): Collection
-    {
-        return $this->query->get();
+        return $this;
     }
 
     /**
