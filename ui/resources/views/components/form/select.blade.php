@@ -36,7 +36,7 @@
     name="{{ $name }}"
     id="{{ $id }}"
     @if ($multiple) multiple @endif
-    {{ $attributes->merge(['class' => 'form-control form-control-sm select'])->merge($required ? ['required' => true] : []) }}
+    {{ $attributes->merge(['class' => 'form-control form-control-sm'])->merge($required ? ['required' => true] : []) }}
 >
     @foreach ($options as $optionValue => $optionLabel)
         <option value="{{ $optionValue }}" @if (in_array((string) $optionValue, $currentValues, true)) selected @endif>{{ $optionLabel }}</option>

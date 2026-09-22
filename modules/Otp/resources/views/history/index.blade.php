@@ -7,24 +7,19 @@
 @section('content')
 <x-search-card>
     <div class="col-md-3 mb-2">
-        {!! Form::label('search', 'Search', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::text('search', request('search'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Email / phone…']) !!}
+        <x-form.input name="search" label="Search" :value="request('search')" placeholder="Email / phone…" />
     </div>
     <div class="col-md-3 mb-2">
-        {!! Form::label('contact_type', 'Contact Type', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('contact_type', $contactTypes, request('contact_type'), ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'All Types']) !!}
+        <x-form.select class="select" name="contact_type" label="Contact Type" :options="$contactTypes" :selected="request('contact_type')" data-placeholder="All Types" />
     </div>
     <div class="col-md-2 mb-2">
-        {!! Form::label('date_from', 'Date From', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::date('date_from', request('date_from'), ['class' => 'form-control form-control-sm']) !!}
+        <x-form.input name="date_from" label="Date From" type="date" :value="request('date_from')" />
     </div>
     <div class="col-md-2 mb-2">
-        {!! Form::label('date_to', 'Date To', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::date('date_to', request('date_to'), ['class' => 'form-control form-control-sm']) !!}
+        <x-form.input name="date_to" label="Date To" type="date" :value="request('date_to')" />
     </div>
     <div class="col-md-2 mb-2">
-        {!! Form::label('is_verified', 'Status', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('is_verified', ['' => 'All', 1 => 'Verified', 0 => 'Not Verified'], request('is_verified'), ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'All']) !!}
+        <x-form.select class="select" name="is_verified" label="Status" :options="['' => 'All', 1 => 'Verified', 0 => 'Not Verified']" :selected="request('is_verified')" data-placeholder="All" />
     </div>
 </x-search-card>
 

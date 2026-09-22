@@ -6,7 +6,8 @@
 @endsection
 
 @section('content')
-{{ Form::open(['route' => 'admin.push.notification.store', 'method' => 'post', 'files' => true]) }}
+<form action="{{ route('admin.push.notification.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
 
 <x-page-header
     title="Send Push Notification"
@@ -18,14 +19,16 @@
 <x-form-section title="Recipient" icon="ph-user">
     <div class="row g-3">
         <div class="col-md-12">
-            {!! Form::label('user_id', 'Select User <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-            {!! Form::select('user_id', $users->mapWithKeys(fn($u) => [$u->id => $u->name.' ('.$u->email.')']), old('user_id'), [
-            'class' => 'form-control form-control-sm select',
-            'id' => 'user_id',
-            'data-placeholder' => 'Search user by name or email…',
-            'required',
-            ]) !!}
-            @error('user_id')<div class="text-danger fs-xs mt-1">{{ $message }}</div>@enderror
+            <x-form.select
+                class="select"
+                name="user_id"
+                id="user_id"
+                label="Select User"
+                required
+                :options="$users->mapWithKeys(fn($u) => [$u->id => $u->name.' ('.$u->email.')'])"
+                :selected="old('user_id')"
+                data-placeholder="Search user by name or email…"
+            />
         </div>
     </div>
 </x-form-section>
@@ -33,28 +36,19 @@
 <x-form-section title="Content" icon="ph-article">
     <div class="row g-3">
         <div class="col-md-6">
-            {!! Form::label('title', 'Title <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-            {!! Form::text('title', old('title'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Notification title', 'required']) !!}
-            @error('title')<div class="text-danger fs-xs mt-1">{{ $message }}</div>@enderror
+            <x-form.input name="title" label="Title" required :value="old('title')" placeholder="Notification title" />
         </div>
         <div class="col-md-6">
-            {!! Form::label('url', 'URL', ['class' => 'form-label fw-semibold fs-sm']) !!}
-            {!! Form::text('url', old('url'), ['class' => 'form-control form-control-sm', 'placeholder' => 'https://…']) !!}
-            @error('url')<div class="text-danger fs-xs mt-1">{{ $message }}</div>@enderror
+            <x-form.input name="url" label="URL" :value="old('url')" placeholder="https://…" />
         </div>
         <div class="col-md-12">
-            {!! Form::label('body', 'Body <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-            {!! Form::textarea('body', old('body'), ['class' => 'form-control form-control-sm', 'rows' => 3, 'placeholder' => 'Notification message…', 'required']) !!}
-            @error('body')<div class="text-danger fs-xs mt-1">{{ $message }}</div>@enderror
+            <x-form.textarea name="body" label="Body" required :value="old('body')" :rows="3" placeholder="Notification message…" />
         </div>
         <div class="col-md-12">
-            {!! Form::label('description', 'Internal Description', ['class' => 'form-label fw-semibold fs-sm']) !!}
-            {!! Form::textarea('description', old('description'), ['class' => 'form-control form-control-sm', 'rows' => 2, 'placeholder' => 'Optional internal note…']) !!}
+            <x-form.textarea name="description" label="Internal Description" :value="old('description')" :rows="2" placeholder="Optional internal note…" />
         </div>
         <div class="col-md-12">
-            {!! Form::label('image', 'Image', ['class' => 'form-label fw-semibold fs-sm']) !!}
-            {!! Form::file('image', ['class' => 'form-control form-control-sm', 'accept' => 'image/*']) !!}
-            @error('image')<div class="text-danger fs-xs mt-1">{{ $message }}</div>@enderror
+            <x-form.file name="image" label="Image" accept="image/*" />
         </div>
     </div>
 </x-form-section>
@@ -68,5 +62,5 @@
     </x-primary-button>
 </div>
 
-{!! Form::close() !!}
+</form>
 @endsection

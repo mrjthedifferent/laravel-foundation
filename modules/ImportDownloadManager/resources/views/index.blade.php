@@ -11,16 +11,13 @@ use Modules\ImportDownloadManager\Enum\ImportType;
 @section('content')
 <x-search-card>
     <div class="col-md-4 mb-2">
-        {!! Form::label('search', 'Search', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::text('search', request('search'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Title, type…']) !!}
+        <x-form.input name="search" label="Search" :value="request('search')" placeholder="Title, type…" />
     </div>
     <div class="col-md-4 mb-2">
-        {!! Form::label('type', 'Type', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('type', $types, request('type'), ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'All Types']) !!}
+        <x-form.select class="select" name="type" label="Type" :options="$types" :selected="request('type')" data-placeholder="All Types" />
     </div>
     <div class="col-md-4 mb-2">
-        {!! Form::label('status', 'Status', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('status', $statuses, request('status'), ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'All Statuses']) !!}
+        <x-form.select class="select" name="status" label="Status" :options="$statuses" :selected="request('status')" data-placeholder="All Statuses" />
     </div>
 </x-search-card>
 

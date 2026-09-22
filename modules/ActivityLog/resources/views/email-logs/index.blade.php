@@ -10,20 +10,16 @@
 @section('content')
 <x-search-card>
     <div class="col-md-3 mb-2">
-        {!! Form::label('search', 'Search', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::text('search', request('search'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Recipient, subject…']) !!}
+        <x-form.input name="search" label="Search" :value="request('search')" placeholder="Recipient, subject…" />
     </div>
     <div class="col-md-3 mb-2">
-        {!! Form::label('date_from', 'Date From', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::date('date_from', request('date_from'), ['class' => 'form-control form-control-sm']) !!}
+        <x-form.input name="date_from" label="Date From" type="date" :value="request('date_from')" />
     </div>
     <div class="col-md-3 mb-2">
-        {!! Form::label('date_to', 'Date To', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::date('date_to', request('date_to'), ['class' => 'form-control form-control-sm']) !!}
+        <x-form.input name="date_to" label="Date To" type="date" :value="request('date_to')" />
     </div>
     <div class="col-md-3 mb-2">
-        {!! Form::label('status', 'Status', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('status', ['' => 'All Statuses', 'sent' => 'Sent', 'pending' => 'Pending', 'failed' => 'Failed'], request('status'), ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'All']) !!}
+        <x-form.select class="select" name="status" label="Status" :options="['' => 'All Statuses', 'sent' => 'Sent', 'pending' => 'Pending', 'failed' => 'Failed']" :selected="request('status')" data-placeholder="All" />
     </div>
 </x-search-card>
 

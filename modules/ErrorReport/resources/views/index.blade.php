@@ -6,16 +6,13 @@
 @section('content')
 <x-search-card>
     <div class="col-md-4 mb-2">
-        {!! Form::label('search', 'Search', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::text('search', request('search'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Message, file, path…']) !!}
+        <x-form.input name="search" label="Search" :value="request('search')" placeholder="Message, file, path…" />
     </div>
     <div class="col-md-4 mb-2">
-        {!! Form::label('exception_class', 'Exception', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::text('exception_class', request('exception_class'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Exception class']) !!}
+        <x-form.input name="exception_class" label="Exception" :value="request('exception_class')" placeholder="Exception class" />
     </div>
      <div class="col-md-4 mb-2">
-        {!! Form::label('resolved', 'Status', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('resolved', ['' => 'All', '0' => 'Unresolved', '1' => 'Resolved'], request('resolved'), ['class' => 'form-control form-control-sm']) !!}
+        <x-form.select name="resolved" label="Status" :options="['' => 'All', '0' => 'Unresolved', '1' => 'Resolved']" :selected="request('resolved')" />
     </div>
 </x-search-card>
 

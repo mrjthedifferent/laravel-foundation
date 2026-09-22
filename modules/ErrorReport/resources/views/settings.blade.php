@@ -85,12 +85,14 @@
                                 <span class="fw-bold fs-sm">Throttle</span>
                             </div>
                             <div class="card-body">
-                                {!! Form::label('error_report_throttle_minutes', 'Minutes before re-notifying', ['class' => 'form-label fs-sm']) !!}
-                                {!! Form::number(
-                                    'error_report_throttle_minutes',
-                                    optional($settings['error_report_throttle_minutes'] ?? null)->value ?? 60,
-                                    ['class' => 'form-control form-control-sm', 'min' => 1, 'max' => 10080],
-                                ) !!}
+                                <x-form.input
+                                    type="number"
+                                    name="error_report_throttle_minutes"
+                                    label="Minutes before re-notifying"
+                                    :value="optional($settings['error_report_throttle_minutes'] ?? null)->value ?? 60"
+                                    min="1"
+                                    max="10080"
+                                />
                                 <div class="form-text">Same error will not be reported again within this period (max 10080 =
                                     1 week).</div>
                             </div>
@@ -104,14 +106,12 @@
                                 <span class="fw-bold fs-sm">Email</span>
                             </div>
                             <div class="card-body">
-                                {!! Form::label('error_report_email_recipients', 'Recipients (comma-separated)', [
-                                    'class' => 'form-label fs-sm',
-                                ]) !!}
-                                {!! Form::text(
-                                    'error_report_email_recipients',
-                                    optional($settings['error_report_email_recipients'] ?? null)->value ?? '',
-                                    ['class' => 'form-control form-control-sm', 'placeholder' => 'admin@example.com, dev@example.com'],
-                                ) !!}
+                                <x-form.input
+                                    name="error_report_email_recipients"
+                                    label="Recipients (comma-separated)"
+                                    :value="optional($settings['error_report_email_recipients'] ?? null)->value ?? ''"
+                                    placeholder="admin@example.com, dev@example.com"
+                                />
                                 <div class="form-text">Fallback: development_support_email from General Settings.</div>
                             </div>
                         </div>
@@ -138,12 +138,13 @@
                                         webhook URL.</span>
                                     </x-alert>
                                 </div>
-                                {!! Form::label('error_report_slack_webhook', 'Webhook URL', ['class' => 'form-label fs-sm']) !!}
-                                {!! Form::url(
-                                    'error_report_slack_webhook',
-                                    optional($settings['error_report_slack_webhook'] ?? null)->value ?? '',
-                                    ['class' => 'form-control form-control-sm', 'placeholder' => 'https://hooks.slack.com/...'],
-                                ) !!}
+                                <x-form.input
+                                    type="url"
+                                    name="error_report_slack_webhook"
+                                    label="Webhook URL"
+                                    :value="optional($settings['error_report_slack_webhook'] ?? null)->value ?? ''"
+                                    placeholder="https://hooks.slack.com/..."
+                                />
                             </div>
                         </div>
                     </div>
@@ -170,18 +171,18 @@
                                         first, then check getUpdates for the group chat ID (often negative).</span>
                                     </x-alert>
                                 </div>
-                                {!! Form::label('error_report_telegram_bot_token', 'Bot Token', ['class' => 'form-label fs-sm']) !!}
-                                {!! Form::text(
-                                    'error_report_telegram_bot_token',
-                                    optional($settings['error_report_telegram_bot_token'] ?? null)->value ?? '',
-                                    ['class' => 'form-control form-control-sm', 'placeholder' => 'From @BotFather'],
-                                ) !!}
-                                {!! Form::label('error_report_telegram_chat_id', 'Chat ID', ['class' => 'form-label fs-sm mt-2']) !!}
-                                {!! Form::text(
-                                    'error_report_telegram_chat_id',
-                                    optional($settings['error_report_telegram_chat_id'] ?? null)->value ?? '',
-                                    ['class' => 'form-control form-control-sm', 'placeholder' => 'Chat or group ID'],
-                                ) !!}
+                                <x-form.input
+                                    name="error_report_telegram_bot_token"
+                                    label="Bot Token"
+                                    :value="optional($settings['error_report_telegram_bot_token'] ?? null)->value ?? ''"
+                                    placeholder="From @BotFather"
+                                />
+                                <x-form.label for="error_report_telegram_chat_id" class="mt-2">Chat ID</x-form.label>
+                                <x-form.input
+                                    name="error_report_telegram_chat_id"
+                                    :value="optional($settings['error_report_telegram_chat_id'] ?? null)->value ?? ''"
+                                    placeholder="Chat or group ID"
+                                />
                             </div>
                         </div>
                     </div>
@@ -195,15 +196,14 @@
                             <div class="card-body">
                                 @php $dontReport = optional($settings['error_report_dont_report'] ?? null)->value ?? []; @endphp
                                 @php $dontReportStr = is_array($dontReport) ? implode("\n", $dontReport) : (is_string($dontReport) ? $dontReport : ''); @endphp
-                                {!! Form::label('error_report_dont_report', 'Exception class names (one per line)', [
-                                    'class' => 'form-label fs-sm',
-                                ]) !!}
-                                {!! Form::textarea('error_report_dont_report', $dontReportStr, [
-                                    'class' => 'form-control font-monospace',
-                                    'rows' => 5,
-                                    'placeholder' =>
-                                        "Illuminate\Auth\AuthenticationException\nSymfony\Component\HttpKernel\Exception\NotFoundHttpException",
-                                ]) !!}
+                                <x-form.textarea
+                                    name="error_report_dont_report"
+                                    label="Exception class names (one per line)"
+                                    :value="$dontReportStr"
+                                    class="font-monospace"
+                                    :rows="5"
+                                    placeholder="Illuminate\Auth\AuthenticationException&#10;Symfony\Component\HttpKernel\Exception\NotFoundHttpException"
+                                />
                                 <div class="form-text">These exceptions will not trigger notifications.</div>
                             </div>
                         </div>

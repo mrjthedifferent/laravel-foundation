@@ -7,28 +7,22 @@
 @section('content')
 <x-search-card>
     <div class="col-md-2 mb-2">
-        {!! Form::label('search', 'Search', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::text('search', request('search'), ['class' => 'form-control form-control-sm', 'placeholder' => 'Values, IP, URL…']) !!}
+        <x-form.input name="search" label="Search" :value="request('search')" placeholder="Values, IP, URL…" />
     </div>
     <div class="col-md-2 mb-2">
-        {!! Form::label('date_from', 'Date From', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::date('date_from', request('date_from'), ['class' => 'form-control form-control-sm']) !!}
+        <x-form.input name="date_from" label="Date From" type="date" :value="request('date_from')" />
     </div>
     <div class="col-md-2 mb-2">
-        {!! Form::label('date_to', 'Date To', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::date('date_to', request('date_to'), ['class' => 'form-control form-control-sm']) !!}
+        <x-form.input name="date_to" label="Date To" type="date" :value="request('date_to')" />
     </div>
     <div class="col-md-2 mb-2">
-        {!! Form::label('event', 'Event', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('event', ['' => 'All Events'] + array_combine($eventTypes, array_map('ucfirst', $eventTypes)), request('event'), ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'All Events']) !!}
+        <x-form.select class="select" name="event" label="Event" :options="['' => 'All Events'] + array_combine($eventTypes, array_map('ucfirst', $eventTypes))" :selected="request('event')" data-placeholder="All Events" />
     </div>
     <div class="col-md-2 mb-2">
-        {!! Form::label('auditable_type', 'Entity', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('auditable_type', ['' => 'All Entities'] + array_combine($auditableTypes, array_map(fn($t) => ActivityLogHelper::getModelName($t), $auditableTypes)), request('auditable_type'), ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'All Entities']) !!}
+        <x-form.select class="select" name="auditable_type" label="Entity" :options="['' => 'All Entities'] + array_combine($auditableTypes, array_map(fn($t) => ActivityLogHelper::getModelName($t), $auditableTypes))" :selected="request('auditable_type')" data-placeholder="All Entities" />
     </div>
     <div class="col-md-2 mb-2">
-        {!! Form::label('user_id', 'Action By', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('user_id', ['' => 'All Users'] + $users->mapWithKeys(fn($u) => [$u->id => $u->name])->toArray(), request('user_id'), ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'All Users']) !!}
+        <x-form.select class="select" name="user_id" label="Action By" :options="['' => 'All Users'] + $users->mapWithKeys(fn($u) => [$u->id => $u->name])->toArray()" :selected="request('user_id')" data-placeholder="All Users" />
     </div>
 </x-search-card>
 

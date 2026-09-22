@@ -11,12 +11,10 @@
 @section('content')
 <x-search-card>
     <div class="col-md-6 mb-2">
-        {!! Form::label('type', 'Type', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('type', $typeOptions, request('type'), ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'All Types']) !!}
+        <x-form.select class="select" name="type" label="Type" :options="$typeOptions" :selected="request('type')" data-placeholder="All Types" />
     </div>
     <div class="col-md-6 mb-2">
-        {!! Form::label('read', 'Status', ['class' => 'form-label fs-sm']) !!}
-        {!! Form::select('read', ['' => 'All', 'true' => 'Read', 'false' => 'Unread'], request('read'), ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'All']) !!}
+        <x-form.select class="select" name="read" label="Status" :options="['' => 'All', 'true' => 'Read', 'false' => 'Unread']" :selected="request('read')" data-placeholder="All" />
     </div>
 </x-search-card>
 

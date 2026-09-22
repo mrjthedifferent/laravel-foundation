@@ -6,7 +6,9 @@
 @endsection
 
 @section('content')
-{{ Form::model($whitelist, ['route' => ['admin.otp-whitelist.update', $whitelist->id], 'method' => 'put']) }}
+<form action="{{ route('admin.otp-whitelist.update', $whitelist->id) }}" method="POST">
+    @csrf
+    @method('PUT')
 
     <x-page-header
         title="Edit Whitelist Entry #{{ $whitelist->id }}"
@@ -19,25 +21,20 @@
         @php $otpDigits = (int) config('settings.otp_digit_length.value', 6); @endphp
         <div class="row g-3">
             <div class="col-md-6">
-                {!! Form::label('recipient_type', 'Recipient Type <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-                {!! Form::select('recipient_type', ['email' => 'Email', 'phone' => 'Phone'], null, ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'Select Type', 'required']) !!}
+                <x-form.select class="select" name="recipient_type" label="Recipient Type" required :options="['email' => 'Email', 'phone' => 'Phone']" :selected="$whitelist->recipient_type" data-placeholder="Select Type" />
             </div>
             <div class="col-md-6">
-                {!! Form::label('recipient', 'Recipient <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-                {!! Form::text('recipient', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Email address or phone number', 'required']) !!}
+                <x-form.input name="recipient" label="Recipient" required :value="$whitelist->recipient" placeholder="Email address or phone number" />
             </div>
             <div class="col-md-6">
-                {!! Form::label('fixed_otp', 'Fixed OTP <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-                {!! Form::text('fixed_otp', null, ['class' => 'form-control form-control-sm', 'placeholder' => $otpDigits.'-digit OTP', 'maxlength' => (string)$otpDigits, 'required', 'id' => 'fixed_otp', 'data-otp-digits' => $otpDigits]) !!}
+                <x-form.input name="fixed_otp" id="fixed_otp" label="Fixed OTP" required :value="$whitelist->fixed_otp" placeholder="{{ $otpDigits }}-digit OTP" maxlength="{{ $otpDigits }}" data-otp-digits="{{ $otpDigits }}" />
                 <div class="form-text">Must be exactly {{ $otpDigits }} digits (0–9)</div>
             </div>
             <div class="col-md-6">
-                {!! Form::label('is_active', 'Status <span class="text-danger">*</span>', ['class' => 'form-label fw-semibold fs-sm'], false) !!}
-                {!! Form::select('is_active', integerStatus(), null, ['class' => 'form-control form-control-sm select', 'data-placeholder' => 'Select Status', 'required']) !!}
+                <x-form.select class="select" name="is_active" label="Status" required :options="integerStatus()" :selected="(int) $whitelist->is_active" data-placeholder="Select Status" />
             </div>
             <div class="col-md-12">
-                {!! Form::label('description', 'Description', ['class' => 'form-label fw-semibold fs-sm']) !!}
-                {!! Form::textarea('description', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'Optional note…', 'rows' => 2]) !!}
+                <x-form.textarea name="description" label="Description" :value="$whitelist->description" placeholder="Optional note…" :rows="2" />
             </div>
         </div>
     </x-form-section>
@@ -51,7 +48,7 @@
         </x-primary-button>
     </div>
 
-{!! Form::close() !!}
+</form>
 @endsection
 
 @push('scripts')
