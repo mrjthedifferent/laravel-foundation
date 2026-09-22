@@ -5,21 +5,24 @@ namespace Mrj\Foundation\Support;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
-use Override;
 use Symfony\Component\Finder\Finder;
 
 /**
  * Base provider for a module, in the foundation or in a project. A module
  * declares what it contributes as properties; everything that used to be
- * hand-maintained in the app (morph map, policies, middleware) lives with the
- * module that owns it.
+ * hand-maintained in the app (morph map, policies, middleware, routes, event
+ * listeners) lives with the module that owns it.
  *
- * The module's EventServiceProvider and RouteServiceProvider are registered
- * automatically when they exist beside the subclass.
+ * routes/{web,api,console}.php and event listeners are handled by convention
+ * here rather than needing a dedicated RouteServiceProvider/EventServiceProvider
+ * class per module (see loadRoutes()); a module only needs one of those if it
+ * requires framework-level EventServiceProvider features like event discovery.
  */
 abstract class ModuleServiceProvider extends ServiceProvider
 {
@@ -57,17 +60,8 @@ abstract class ModuleServiceProvider extends ServiceProvider
     /** @var array<string, list<class-string>> group => middleware */
     protected array $appendToGroups = [];
 
-    #[Override]
-    public function register(): void
-    {
-        $namespace = substr(static::class, 0, (int) strrpos(static::class, '\\'));
-
-        foreach (['EventServiceProvider', 'RouteServiceProvider'] as $provider) {
-            if (class_exists($namespace.'\\'.$provider)) {
-                $this->app->register($namespace.'\\'.$provider);
-            }
-        }
-    }
+    /** @var array<class-string, list<class-string>> event => listeners */
+    protected array $listen = [];
 
     public function boot(): void
     {
@@ -76,6 +70,7 @@ abstract class ModuleServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
         $this->commands($this->commands);
+        $this->loadRoutes();
 
         Relation::morphMap($this->morphMap);
 
@@ -87,7 +82,38 @@ abstract class ModuleServiceProvider extends ServiceProvider
             View::composer($view, $composer);
         }
 
+        foreach ($this->listen as $event => $listeners) {
+            foreach ($listeners as $listener) {
+                Event::listen($event, $listener);
+            }
+        }
+
         $this->registerMiddleware();
+    }
+
+    /**
+     * routes/web.php under the 'web' middleware, routes/api.php under 'api'
+     * (prefixed and named 'api.', matching Laravel's own convention), and
+     * routes/console.php (Schedule::command() calls) — each loaded only if
+     * the module actually has the file.
+     */
+    protected function loadRoutes(): void
+    {
+        $webRoutes = module_path($this->name, 'routes/web.php');
+        $apiRoutes = module_path($this->name, 'routes/api.php');
+        $consoleRoutes = module_path($this->name, 'routes/console.php');
+
+        if (is_file($webRoutes)) {
+            Route::middleware('web')->group($webRoutes);
+        }
+
+        if (is_file($apiRoutes)) {
+            Route::middleware('api')->prefix('api')->name('api.')->group($apiRoutes);
+        }
+
+        if (is_file($consoleRoutes)) {
+            require $consoleRoutes;
+        }
     }
 
     /**

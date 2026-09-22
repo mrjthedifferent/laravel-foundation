@@ -5,9 +5,9 @@ namespace Mrj\Foundation\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -50,6 +50,20 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
+ * Relations registered dynamically via resolveRelationUsing() by the module
+ * that owns each related model — see each module's ServiceProvider::boot().
+ * @property-read Collection<int, FirebaseToken> $firebaseTokens
+ * @property-read Collection<int, Device> $devices
+ * @property-read Collection<int, UserDocument> $documents
+ * @property-read Collection<int, UserLoginHistory> $loginHistory
+ * @property-read UserLoginHistory|null $latestLogin
+ *
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany firebaseTokens()
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany devices()
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany documents()
+ * @method \Illuminate\Database\Eloquent\Relations\HasMany loginHistory()
+ * @method \Illuminate\Database\Eloquent\Relations\HasOne latestLogin()
  */
 abstract class User extends Authenticatable implements \OwenIt\Auditing\Contracts\Auditable, MustVerifyEmail
 {
@@ -134,6 +148,10 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
             'password' => 'hashed',
             'must_change_password' => 'boolean',
             'is_active' => 'boolean',
+            // Unlike the relations above, a cast has no resolveRelationUsing()
+            // equivalent for a module to register from outside; the User module
+            // is not optional the way Otp/ErrorReport are, so this one import
+            // is kept rather than built a lifecycle-event workaround for it.
             'gender' => Gender::class,
         ];
     }
@@ -185,34 +203,9 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
         return $phone === null ? $query->whereRaw('1 = 0') : $query->where($this->qualifyColumn('phone'), $phone);
     }
 
-    public function firebaseTokens(): HasMany
-    {
-        return $this->hasMany(FirebaseToken::class);
-    }
-
     public function deviceTokens(): HasMany
     {
         return $this->hasMany(DeviceToken::class);
-    }
-
-    public function devices(): HasMany
-    {
-        return $this->hasMany(Device::class);
-    }
-
-    public function documents(): HasMany
-    {
-        return $this->hasMany(UserDocument::class);
-    }
-
-    public function loginHistory(): HasMany
-    {
-        return $this->hasMany(UserLoginHistory::class);
-    }
-
-    public function latestLogin(): HasOne
-    {
-        return $this->hasOne(UserLoginHistory::class)->latestOfMany('logged_in_at');
     }
 
     /**

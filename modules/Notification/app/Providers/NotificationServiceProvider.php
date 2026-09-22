@@ -2,15 +2,19 @@
 
 namespace Modules\Notification\Providers;
 
+use Illuminate\Notifications\Events\NotificationSending;
 use Illuminate\Support\Facades\Notification as LaravelNotification;
 use Modules\Notification\Channels\DatabaseChannel;
 use Modules\Notification\Channels\FcmChannel;
 use Modules\Notification\Channels\SmsChannel;
+use Modules\Notification\Listeners\GateNotificationChannels;
+use Modules\Notification\Models\FirebaseToken;
 use Modules\Notification\Models\Notification;
 use Modules\Notification\Models\PushNotification;
 use Modules\Notification\Policies\NotificationPolicy;
 use Modules\Notification\Policies\PushNotificationPolicy;
 use Modules\Notification\View\Composers\NotificationWidgetComposer;
+use Mrj\Foundation\Models\User;
 use Mrj\Foundation\Support\ModuleServiceProvider;
 use Override;
 
@@ -34,6 +38,10 @@ class NotificationServiceProvider extends ModuleServiceProvider
         'notification::partials.dashboard-widget' => NotificationWidgetComposer::class,
     ];
 
+    protected array $listen = [
+        NotificationSending::class => [GateNotificationChannels::class],
+    ];
+
     #[Override]
     public function boot(): void
     {
@@ -42,5 +50,7 @@ class NotificationServiceProvider extends ModuleServiceProvider
         LaravelNotification::extend('database', fn ($app) => new DatabaseChannel);
         LaravelNotification::extend('sms', fn ($app) => new SmsChannel);
         LaravelNotification::extend('fcm', fn ($app) => new FcmChannel);
+
+        User::resolveRelationUsing('firebaseTokens', fn (User $user) => $user->hasMany(FirebaseToken::class));
     }
 }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Modules\User\Providers;
 
 use App\Models\User;
+use Modules\User\Events\UserRolesChanged;
+use Modules\User\Listeners\NotifyUserRolesChanged;
 use Modules\User\Models\UserDocument;
 use Modules\User\Models\UserLoginHistory;
 use Modules\User\Policies\UserPolicy;
@@ -33,11 +35,25 @@ class UserServiceProvider extends ModuleServiceProvider
         'user::partials.dashboard-widget' => UserWidgetComposer::class,
     ];
 
+    protected array $listen = [
+        UserRolesChanged::class => [NotifyUserRolesChanged::class],
+    ];
+
     #[Override]
     public function register(): void
     {
         parent::register();
 
         $this->app->singleton(ImpersonationContext::class, ImpersonationService::class);
+    }
+
+    #[Override]
+    public function boot(): void
+    {
+        parent::boot();
+
+        User::resolveRelationUsing('documents', fn (User $user) => $user->hasMany(UserDocument::class));
+        User::resolveRelationUsing('loginHistory', fn (User $user) => $user->hasMany(UserLoginHistory::class));
+        User::resolveRelationUsing('latestLogin', fn (User $user) => $user->hasOne(UserLoginHistory::class)->latestOfMany('logged_in_at'));
     }
 }
