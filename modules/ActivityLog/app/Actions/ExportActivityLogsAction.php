@@ -6,18 +6,18 @@ namespace Modules\ActivityLog\Actions;
 
 use App\Models\User;
 use Modules\ActivityLog\Jobs\ActivityLogExportJob;
-use Modules\ImportDownloadManager\Actions\CreateImportRecordAction;
 use Modules\ImportDownloadManager\Enum\ImportType;
+use Mrj\Foundation\Contracts\ImportTracker;
 
 final readonly class ExportActivityLogsAction
 {
     public function __construct(
-        private CreateImportRecordAction $createImportRecordAction,
+        private ImportTracker $importTracker,
     ) {}
 
     public function execute(User $user, array $filters): void
     {
-        $importManagerId = $this->createImportRecordAction->execute(
+        $importManagerId = $this->importTracker->start(
             $user,
             'Activity Logs Export',
             ImportType::Download,

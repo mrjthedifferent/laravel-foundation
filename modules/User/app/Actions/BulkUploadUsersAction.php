@@ -6,19 +6,19 @@ namespace Modules\User\Actions;
 
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
-use Modules\ImportDownloadManager\Actions\CreateImportRecordAction;
 use Modules\ImportDownloadManager\Enum\ImportType;
 use Modules\User\Jobs\UserBulkUploadJob;
+use Mrj\Foundation\Contracts\ImportTracker;
 
 final readonly class BulkUploadUsersAction
 {
     public function __construct(
-        private CreateImportRecordAction $createImportRecordAction,
+        private ImportTracker $importTracker,
     ) {}
 
     public function execute(User $user, UploadedFile $file): void
     {
-        $importManagerId = $this->createImportRecordAction->execute(
+        $importManagerId = $this->importTracker->start(
             $user,
             'Users Upload',
             ImportType::Import,

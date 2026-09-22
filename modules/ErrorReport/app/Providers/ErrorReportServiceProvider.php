@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Gate;
 use Modules\ErrorReport\Models\ErrorReport;
 use Modules\ErrorReport\Policies\ErrorReportPolicy;
 use Modules\ErrorReport\Services\ErrorReporterService;
+use Mrj\Foundation\Contracts\ErrorReporter;
 use Mrj\Foundation\Support\ModuleServiceProvider;
 use Override;
 
@@ -32,7 +33,7 @@ class ErrorReportServiceProvider extends ModuleServiceProvider
     {
         parent::register();
 
-        // Foundation::exceptions() reports every exception to this binding when it exists.
-        $this->app->singleton('error_reporter', fn ($app) => $app->make(ErrorReporterService::class));
+        // Foundation::exceptions() reports every exception through this contract.
+        $this->app->singleton(ErrorReporter::class, fn ($app) => $app->make(ErrorReporterService::class));
     }
 }

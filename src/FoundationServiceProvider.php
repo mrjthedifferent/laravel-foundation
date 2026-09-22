@@ -20,9 +20,13 @@ use Mrj\Foundation\Console\InstallCommand;
 use Mrj\Foundation\Console\MakeModuleCommand;
 use Mrj\Foundation\Console\PublishCommand;
 use Mrj\Foundation\Console\SyncCommand;
+use Mrj\Foundation\Contracts\ErrorReporter;
+use Mrj\Foundation\Contracts\FileStorage;
 use Mrj\Foundation\Contracts\ImpersonationContext;
 use Mrj\Foundation\Models\Audit;
+use Mrj\Foundation\Services\LocalFileStorage;
 use Mrj\Foundation\Support\ImpersonationAwareAuditUserResolver;
+use Mrj\Foundation\Support\NullErrorReporter;
 use Mrj\Foundation\Support\NullImpersonationContext;
 use Mrj\Foundation\View\Components\AppLayout;
 use Mrj\Foundation\View\Components\GuestLayout;
@@ -38,6 +42,8 @@ class FoundationServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(Foundation::path('config/foundation.php'), 'foundation');
 
         $this->app->singletonIf(ImpersonationContext::class, NullImpersonationContext::class);
+        $this->app->singletonIf(ErrorReporter::class, NullErrorReporter::class);
+        $this->app->singletonIf(FileStorage::class, LocalFileStorage::class);
 
         $this->configureAuditing();
         $this->configureLogChannels();

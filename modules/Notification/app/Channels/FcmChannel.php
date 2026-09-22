@@ -7,6 +7,7 @@ use Google_Client;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Mrj\Foundation\Contracts\SettingsRepository;
 use Throwable;
 
 class FcmChannel
@@ -114,7 +115,7 @@ class FcmChannel
             return $cached;
         }
 
-        $credentialsJson = config('settings.firebase_credentials_json.value');
+        $credentialsJson = app(SettingsRepository::class)->get('firebase_credentials_json');
         if (empty($credentialsJson)) {
             Log::channel('daily_notification')->error('Firebase credentials JSON is not configured.');
 

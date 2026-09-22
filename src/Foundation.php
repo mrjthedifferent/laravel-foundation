@@ -7,6 +7,7 @@ use Composer\InstalledVersions;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Mrj\Foundation\Contracts\ErrorReporter;
 use Mrj\Foundation\Exceptions\Handler;
 use Mrj\Foundation\Http\Middleware\CheckUserIsActive;
 use Mrj\Foundation\Http\Middleware\EnsureContactIsVerified;
@@ -73,9 +74,7 @@ final class Foundation
     {
         return function (Exceptions $exceptions) use ($project): void {
             $exceptions->reportable(function (Throwable $e): void {
-                if (app()->bound('error_reporter')) {
-                    app('error_reporter')->capture($e);
-                }
+                app(ErrorReporter::class)->capture($e);
             });
 
             if ($project !== null) {

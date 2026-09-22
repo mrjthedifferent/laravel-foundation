@@ -3,19 +3,21 @@
 namespace Modules\Settings\Providers;
 
 use Exception;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Schema;
 use Modules\Settings\Contracts\SecretCipher;
 use Modules\Settings\Data\MailerData;
+use Modules\Settings\Events\SettingsUpdated;
+use Modules\Settings\Listeners\RestartQueueWorkers;
 use Modules\Settings\Mail\Transport\MicrosoftGraphTransport;
 use Modules\Settings\Mail\Transport\MicrosoftOAuthTransport;
 use Modules\Settings\Models\Setting;
 use Modules\Settings\Policies\SettingPolicy;
 use Modules\Settings\Services\MailerSecretCipher;
 use Modules\Settings\Services\MicrosoftOAuthTokenService;
+use Modules\Settings\Support\EloquentSettingsRepository;
 use Modules\Settings\View\Composers\SettingsWidgetComposer;
+use Mrj\Foundation\Contracts\SettingsRepository;
 use Mrj\Foundation\Support\ModuleServiceProvider;
 use Override;
 
@@ -31,6 +33,7 @@ class SettingsServiceProvider extends ModuleServiceProvider
         parent::register();
 
         $this->app->bind(SecretCipher::class, MailerSecretCipher::class);
+        $this->app->singleton(SettingsRepository::class, EloquentSettingsRepository::class);
     }
 
     protected array $morphMap = [
@@ -43,6 +46,10 @@ class SettingsServiceProvider extends ModuleServiceProvider
 
     protected array $composers = [
         'settings::partials.dashboard-widget' => SettingsWidgetComposer::class,
+    ];
+
+    protected array $listen = [
+        SettingsUpdated::class => [RestartQueueWorkers::class],
     ];
 
     protected array $configMap = [
@@ -105,34 +112,38 @@ class SettingsServiceProvider extends ModuleServiceProvider
         ));
     }
 
+    /**
+     * Relies on the try/catch below rather than a Schema::hasTable() probe
+     * (a query on every single request otherwise): a fresh install's very
+     * first boot, before migrations run, simply finds no settings and hits
+     * this catch, exactly as it would for any other database error.
+     */
     private function updateConfigsFromSettings(): void
     {
         try {
-            if (Schema::hasTable('settings')) {
-                $settings = self::cached();
+            $settings = app(SettingsRepository::class)->all();
 
-                $activeMailer = collect($settings)->firstWhere('key', 'email_mailer')['value'] ?? null;
+            $activeMailer = collect($settings)->firstWhere('key', 'email_mailer')['value'] ?? null;
 
-                foreach ($settings as $setting) {
-                    if ($setting['key'] === 'email_mailers') {
-                        $this->updateMailers($setting, $activeMailer);
+            foreach ($settings as $setting) {
+                if ($setting['key'] === 'email_mailers') {
+                    $this->updateMailers($setting, $activeMailer);
 
-                        continue;
-                    }
-
-                    if (isset($this->configMap[$setting['key']])) {
-                        config([$this->configMap[$setting['key']] => $setting['value']]);
-                    }
-
-                    config([
-                        'settings.'.$setting['key'] => [
-                            'group' => $setting['group'],
-                            'type' => $setting['type'],
-                            'value' => $setting['value'],
-                            'description' => $setting['description'],
-                        ],
-                    ]);
+                    continue;
                 }
+
+                if (isset($this->configMap[$setting['key']])) {
+                    config([$this->configMap[$setting['key']] => $setting['value']]);
+                }
+
+                config([
+                    'settings.'.$setting['key'] => [
+                        'group' => $setting['group'],
+                        'type' => $setting['type'],
+                        'value' => $setting['value'],
+                        'description' => $setting['description'],
+                    ],
+                ]);
             }
         } catch (Exception $e) {
             Log::error('Error updating configs from settings: '.$e->getMessage());
@@ -149,37 +160,15 @@ class SettingsServiceProvider extends ModuleServiceProvider
     }
 
     /**
-     * Every setting as a plain array, cached.
-     *
-     * Deliberately not an Eloquent collection: Laravel 13 refuses to unserialize
-     * cached PHP objects unless they are allow-listed in cache.serializable_classes.
+     * Every setting as a plain array, cached. Kept as a public static method
+     * for backward compatibility; SettingsRepository is the underlying
+     * implementation and the type-hint to use in new code.
      *
      * @return list<array{key: string, value: mixed, group: ?string, type: ?string, description: ?string}>
      */
     public static function cached(): array
     {
-        $settings = Cache::get(self::cacheKey());
-
-        // A cache written before 0.11 holds Setting models. Laravel 13 hands those
-        // back as __PHP_Incomplete_Class rather than unserializing them, so an app
-        // upgrading with a warm cache would otherwise break on boot.
-        if (is_array($settings)) {
-            return $settings;
-        }
-
-        $settings = Setting::all()
-            ->map(fn (Setting $setting): array => [
-                'key' => $setting->key,
-                'value' => $setting->value,
-                'group' => $setting->group,
-                'type' => $setting->type,
-                'description' => $setting->description,
-            ])
-            ->all();
-
-        Cache::forever(self::cacheKey(), $settings);
-
-        return $settings;
+        return app(SettingsRepository::class)->all();
     }
 
     /**

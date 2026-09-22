@@ -9,9 +9,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Modules\ImportDownloadManager\Actions\UpdateImportRecordAction;
-use Modules\ImportDownloadManager\Enum\ImportStatus;
 use Mpdf\Mpdf;
+use Mrj\Foundation\Contracts\ImportTracker;
 use Mrj\Foundation\Services\PDFService;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Throwable;
@@ -47,12 +46,12 @@ abstract class ExportJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Processing);
+            app(ImportTracker::class)->processing($this->importDownloadManagerId);
 
             $exportData = $this->buildData();
 
             if ($exportData === []) {
-                app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Failed, $this->emptyMessage());
+                app(ImportTracker::class)->fail($this->importDownloadManagerId, $this->emptyMessage());
 
                 return;
             }
@@ -91,16 +90,16 @@ abstract class ExportJob implements ShouldQueue
                 (new FastExcel($exportData))->export($fullPath);
             }
 
-            app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Completed, 'completed', $filePath);
+            app(ImportTracker::class)->complete($this->importDownloadManagerId, 'completed', $filePath);
         } catch (Throwable $e) {
-            app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Failed, $e->getMessage());
+            app(ImportTracker::class)->fail($this->importDownloadManagerId, $e->getMessage());
             Log::error($this->title().' export failed', ['error' => $e->getMessage()]);
         }
     }
 
     public function failed(Throwable $exception): void
     {
-        app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Failed, $exception->getMessage());
+        app(ImportTracker::class)->fail($this->importDownloadManagerId, $exception->getMessage());
         Log::error($this->title().' export job failed', ['error' => $exception->getMessage()]);
     }
 

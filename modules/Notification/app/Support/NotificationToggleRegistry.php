@@ -3,7 +3,7 @@
 namespace Modules\Notification\Support;
 
 use Modules\Notification\Notifications\AppNotification;
-use Modules\Settings\Providers\SettingsServiceProvider;
+use Mrj\Foundation\Contracts\SettingsRepository;
 use Nwidart\Modules\Facades\Module;
 
 /**
@@ -125,7 +125,7 @@ final readonly class NotificationToggleRegistry
      */
     public static function isEnabled(string $settingKey): ?bool
     {
-        $value = collect(SettingsServiceProvider::cached())->firstWhere('key', $settingKey)['value'] ?? null;
+        $value = app(SettingsRepository::class)->get($settingKey);
 
         return $value === null ? null : (bool) $value;
     }

@@ -5,18 +5,21 @@ namespace Modules\ErrorReport\Services;
 use Illuminate\Support\Facades\Request;
 use Modules\ErrorReport\Jobs\NotifyErrorJob;
 use Modules\ErrorReport\Models\ErrorReport;
+use Mrj\Foundation\Contracts\ErrorReporter;
+use Override;
 use Throwable;
 
-final readonly class ErrorReporterService
+final readonly class ErrorReporterService implements ErrorReporter
 {
-    public function capture(Throwable $e): ?ErrorReport
+    #[Override]
+    public function capture(Throwable $e): void
     {
         if (! $this->isEnabled()) {
-            return null;
+            return;
         }
 
         if ($this->shouldNotReport($e)) {
-            return null;
+            return;
         }
 
         $fingerprint = $this->buildFingerprint($e);
@@ -56,8 +59,6 @@ final readonly class ErrorReporterService
         }
 
         NotifyErrorJob::dispatch($report);
-
-        return $report;
     }
 
     private function isEnabled(): bool

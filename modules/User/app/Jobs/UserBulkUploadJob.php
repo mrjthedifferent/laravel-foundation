@@ -11,10 +11,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Modules\ImportDownloadManager\Actions\UpdateImportRecordAction;
-use Modules\ImportDownloadManager\Enum\ImportStatus;
-use Modules\ImportDownloadManager\Models\DownloadImportManager;
 use Modules\User\Services\BulkUserRowProcessor;
+use Mrj\Foundation\Contracts\ImportTracker;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Throwable;
 
@@ -32,17 +30,16 @@ class UserBulkUploadJob implements ShouldQueue
         set_time_limit(0);
 
         try {
-            app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Processing);
+            app(ImportTracker::class)->processing($this->importDownloadManagerId);
 
-            $record = DownloadImportManager::findOrFail($this->importDownloadManagerId);
-            $filePath = Storage::disk(config('foundation.storage.disk'))->path($record->url);
+            $url = app(ImportTracker::class)->filePath($this->importDownloadManagerId);
+            $filePath = Storage::disk(config('foundation.storage.disk'))->path($url);
 
             $collection = (new FastExcel)->import($filePath)->toArray();
 
             if (! $collection) {
-                app(UpdateImportRecordAction::class)->execute(
+                app(ImportTracker::class)->fail(
                     $this->importDownloadManagerId,
-                    ImportStatus::Failed,
                     'No data found in the uploaded file.'
                 );
 
@@ -66,16 +63,16 @@ class UserBulkUploadJob implements ShouldQueue
             // Plain text: the record's remarks are rendered with a raw echo, so no
             // HTML may be built here, only line breaks the view converts safely.
             $remarks = count($errors) > 0 ? implode("\n", $errors) : 'Completed successfully';
-            app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Completed, $remarks);
+            app(ImportTracker::class)->complete($this->importDownloadManagerId, $remarks);
         } catch (Exception $e) {
             Log::error('User bulk upload failed', ['error' => $e->getMessage()]);
-            app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Failed, $e->getMessage());
+            app(ImportTracker::class)->fail($this->importDownloadManagerId, $e->getMessage());
         }
     }
 
     public function failed(Throwable $exception): void
     {
-        app(UpdateImportRecordAction::class)->execute($this->importDownloadManagerId, ImportStatus::Failed, 'Job failed: '.$exception->getMessage());
+        app(ImportTracker::class)->fail($this->importDownloadManagerId, 'Job failed: '.$exception->getMessage());
         Log::error('User bulk upload job failed', ['error' => $exception->getMessage()]);
     }
 }

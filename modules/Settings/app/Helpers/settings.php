@@ -1,6 +1,6 @@
 <?php
 
-use Modules\Settings\Models\Setting;
+use Mrj\Foundation\Contracts\SettingsRepository;
 
 if (! function_exists('getSystemSetting')) {
     /**
@@ -9,6 +9,6 @@ if (! function_exists('getSystemSetting')) {
      */
     function getSystemSetting($key)
     {
-        return Setting::where('key', $key)->first()->value ?? null;
+        return app(SettingsRepository::class)->fresh($key);
     }
 }

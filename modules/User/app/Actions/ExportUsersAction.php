@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Modules\User\Actions;
 
 use App\Models\User;
-use Modules\ImportDownloadManager\Actions\CreateImportRecordAction;
 use Modules\ImportDownloadManager\Enum\ImportType;
 use Modules\User\Jobs\UserExportJob;
+use Mrj\Foundation\Contracts\ImportTracker;
 
 final readonly class ExportUsersAction
 {
     public function __construct(
-        private CreateImportRecordAction $createImportRecordAction,
+        private ImportTracker $importTracker,
     ) {}
 
     /**
@@ -20,7 +20,7 @@ final readonly class ExportUsersAction
      */
     public function execute(User $user, array $filters): void
     {
-        $importManagerId = $this->createImportRecordAction->execute(
+        $importManagerId = $this->importTracker->start(
             $user,
             'Users Export',
             ImportType::Download,

@@ -2,146 +2,47 @@
 
 namespace Mrj\Foundation\Services;
 
-use Illuminate\Support\Facades\Storage;
+use Mrj\Foundation\Contracts\FileStorage;
 
+/**
+ * A static facade over whatever FileStorage is bound in the container —
+ * the same relationship Laravel's own Storage facade has to the filesystem
+ * manager. Kept for the many call sites (blade views, model accessors) where
+ * a static call is more convenient than constructor injection; anything that
+ * wants a swappable, mockable dependency should type-hint FileStorage directly.
+ */
 class FileManagerService
 {
-    private static function isUrl($url): bool
+    public static function uploadFile(mixed $file, ?string $existing_file = null, string $directory = 'files', ?string $disk = null, bool $isBase64 = false): ?string
     {
-        return filter_var($url, FILTER_VALIDATE_URL);
+        return app(FileStorage::class)->uploadFile($file, $existing_file, $directory, $disk, $isBase64);
     }
 
-    private static function getStoragePath($url, ?string $disk = null): string
-    {
-        $disk ??= config('foundation.storage.disk', 'public');
-
-        return str_replace(Storage::disk($disk)->url(''), '', $url);
-    }
-
-    /**
-     * Upload an image to local storage and return the file path.
-     */
-    public static function uploadFile($file, ?string $existing_file = null, string $directory = 'files', ?string $disk = null, bool $isBase64 = false): ?string
-    {
-        $disk ??= config('foundation.storage.disk', 'public');
-
-        if (! $file) {
-            return null;
-        }
-
-        if (self::isUrl($file)) {
-            return self::getStoragePath($file, $disk);
-        }
-
-        if (is_string($file) && ! $isBase64) {
-            return $file;
-        }
-
-        if ($isBase64) {
-            $filename = md5(uniqid()).'.png';
-            $path = $directory.'/'.$filename;
-
-            $file = base64_decode(
-                preg_replace('#^data:image/\w+;base64,#i', '', $file)
-            );
-
-            Storage::disk($disk)->put($path, $file);
-        } else {
-            $path = Storage::disk($disk)->putFile($directory, $file);
-        }
-
-        if ($existing_file) {
-            self::deleteFile($existing_file, $disk);
-        }
-
-        return $path;
-    }
-
-    /**
-     * Get the file path from local storage.
-     */
     public static function getImage(?string $filePath, ?string $disk = null, ?string $default = 'images/default.png'): ?string
     {
-        $disk ??= config('foundation.storage.disk', 'public');
-
-        if (! $default && ! $filePath) {
-            return null;
-        }
-        if (self::isUrl($filePath)) {
-            return $filePath;
-        }
-
-        return $filePath ? Storage::disk($disk)->url($filePath) : url($default);
+        return app(FileStorage::class)->getImage($filePath, $disk, $default);
     }
 
-    /**
-     * Get the file path from local storage.
-     */
     public static function getFile(?string $filePath, ?string $disk = null, bool $getPath = false): ?string
     {
-        $disk ??= config('foundation.storage.disk', 'public');
-
-        if ($getPath) {
-            return $filePath ? Storage::disk($disk)->path($filePath) : null;
-        }
-
-        return $filePath ? Storage::disk($disk)->url($filePath) : null;
+        return app(FileStorage::class)->getFile($filePath, $disk, $getPath);
     }
 
-    /**
-     * Delete an image from local storage.
-     */
     public static function deleteFile(?string $filePath, ?string $disk = null): bool
     {
-        $disk ??= config('foundation.storage.disk', 'public');
-
-        if (! $filePath) {
-            return true;
-        }
-
-        $relative = self::toDiskRelativePath($filePath, $disk);
-        if ($relative === null || $relative === '') {
-            return true;
-        }
-
-        return Storage::disk($disk)->delete($relative);
+        return app(FileStorage::class)->deleteFile($filePath, $disk);
     }
 
     /**
-     * Resolve a stored value (relative path or full URL) to a path relative to the disk root.
-     */
-    private static function toDiskRelativePath(string $filePath, string $disk): ?string
-    {
-        if (self::isUrl($filePath)) {
-            $prefix = Storage::disk($disk)->url('');
-            $stripped = str_replace($prefix, '', $filePath);
-            if ($stripped !== $filePath && $stripped !== '') {
-                return ltrim($stripped, '/');
-            }
-
-            if (preg_match('#/storage/([^?]+)#', $filePath, $matches)) {
-                return $matches[1];
-            }
-
-            return null;
-        }
-
-        return $filePath;
-    }
-
-    /**
-     * List all files in a directory for a given disk.
+     * @return list<string>
      */
     public static function listFiles(string $directory, ?string $disk = null): array
     {
-        return Storage::disk($disk ?? config('foundation.storage.disk', 'public'))->files($directory);
+        return app(FileStorage::class)->listFiles($directory, $disk);
     }
 
-    /**
-     * Check if a file exists in a given disk.
-     */
     public static function fileExists(string $filePath, ?string $disk = null): bool
     {
-        return Storage::disk($disk ?? config('foundation.storage.disk', 'public'))->exists($filePath);
+        return app(FileStorage::class)->fileExists($filePath, $disk);
     }
 }

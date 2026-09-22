@@ -3,16 +3,14 @@
 namespace Modules\Settings\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use JsonException;
 use Modules\Settings\Contracts\SecretCipher;
-use Modules\Settings\Providers\SettingsServiceProvider;
+use Modules\Settings\Events\SettingsUpdated;
+use Mrj\Foundation\Contracts\SettingsRepository;
 use Mrj\Foundation\Services\FileManagerService;
 use Override;
 use OwenIt\Auditing\Auditable;
-use Throwable;
 
 class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
@@ -31,36 +29,14 @@ class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
     }
 
     /**
-     * Drop the cache AND signal long-running queue workers to restart.
-     *
-     * SettingsServiceProvider copies settings into config() once, at boot. Forgetting the cache
-     * cannot change the in-memory config of a process that has already booted, so a worker that
-     * started before a setting was edited kept serving the old value until the next deploy — a
-     * notification switched off in the UI carried on sending from the queue. queue:restart just
-     * stamps a timestamp workers check between jobs, so it is cheap and safe to call repeatedly.
+     * Drop the cache and let RestartQueueWorkers (listening for
+     * SettingsUpdated) decide whether to signal queue workers to restart.
      */
-    private static bool $queueRestartSignalled = false;
-
     private static function flush(): void
     {
-        Cache::forget(SettingsServiceProvider::cacheKey());
+        app(SettingsRepository::class)->forget();
 
-        // Once per process: the notification settings page writes a row per notification per
-        // channel, and restarting on each would boot the command hundreds of times in one
-        // request. The signal is a single timestamp, so one call covers the whole save.
-        if (self::$queueRestartSignalled) {
-            return;
-        }
-
-        self::$queueRestartSignalled = true;
-
-        try {
-            Artisan::call('queue:restart');
-        } catch (Throwable $e) {
-            Log::warning('Settings saved but queue:restart failed; workers may serve stale settings.', [
-                'error' => $e->getMessage(),
-            ]);
-        }
+        event(new SettingsUpdated);
     }
 
     /**
