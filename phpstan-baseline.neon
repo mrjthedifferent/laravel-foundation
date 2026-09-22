@@ -37,12 +37,6 @@ parameters:
 			path: modules/ActivityLog/app/Jobs/ActivityLogExportJob.php
 
 		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/ActivityLog/app/Jobs/ActivityLogExportJob.php
-
-		-
 			message: '#^Instanceof between Symfony\\Component\\Mime\\Email and Symfony\\Component\\Mime\\Email will always evaluate to true\.$#'
 			identifier: instanceof.alwaysTrue
 			count: 1
@@ -59,6 +53,24 @@ parameters:
 			identifier: trait.unused
 			count: 1
 			path: modules/ActivityLog/app/Traits/IPTracker.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$remarks\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ActivityLog/tests/Feature/ActivityLogExportJobTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/ActivityLog/tests/Feature/ActivityLogExportJobTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/ActivityLog/tests/Feature/ActivityLogExportJobTest.php
 
 		-
 			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
@@ -1027,12 +1039,6 @@ parameters:
 			path: modules/User/app/Jobs/UserExportJob.php
 
 		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/User/app/Jobs/UserExportJob.php
-
-		-
 			message: '#^Call to function property_exists\(\) with \$this\(Modules\\User\\Models\\UserDocument\) and ''imageDefaults'' will always evaluate to true\.$#'
 			identifier: function.alreadyNarrowedType
 			count: 1
@@ -1225,6 +1231,24 @@ parameters:
 			path: modules/User/tests/Feature/DocumentControllerTest.php
 
 		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$remarks\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/tests/Feature/UserExportJobTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 2
+			path: modules/User/tests/Feature/UserExportJobTest.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/User/tests/Feature/UserExportJobTest.php
+
+		-
 			message: '#^Instanceof between App\\Models\\User and Mrj\\Foundation\\Models\\User will always evaluate to true\.$#'
 			identifier: instanceof.alwaysTrue
 			count: 1
@@ -1277,6 +1301,12 @@ parameters:
 			identifier: property.phpDocType
 			count: 1
 			path: src/Models/User.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Support/ExportJob.php
 
 		-
 			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
