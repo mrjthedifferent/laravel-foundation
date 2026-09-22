@@ -6,7 +6,10 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Modules\ErrorReport\Services\ErrorReporterService;
+use Modules\ImportDownloadManager\Enum\ImportStatus;
 use Modules\ImportDownloadManager\Enum\ImportType;
+use Modules\ImportDownloadManager\Models\DownloadImportManager;
 use Modules\Settings\Models\Setting;
 use Mrj\Foundation\Contracts\ErrorReporter;
 use Mrj\Foundation\Contracts\FileStorage;
@@ -22,7 +25,7 @@ class ContractBindingsTest extends TestCase
     public function test_error_reporter_is_bound_to_the_real_implementation_when_error_report_module_is_installed(): void
     {
         $this->assertInstanceOf(
-            \Modules\ErrorReport\Services\ErrorReporterService::class,
+            ErrorReporterService::class,
             app(ErrorReporter::class)
         );
 
@@ -64,8 +67,8 @@ class ContractBindingsTest extends TestCase
         $tracker->complete($id, 'done', 'exports/file.xlsx');
 
         $this->assertSame(
-            \Modules\ImportDownloadManager\Enum\ImportStatus::Completed,
-            \Modules\ImportDownloadManager\Models\DownloadImportManager::find($id)->status
+            ImportStatus::Completed,
+            DownloadImportManager::find($id)->status
         );
     }
 }

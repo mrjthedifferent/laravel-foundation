@@ -23,11 +23,13 @@ use Mrj\Foundation\Console\SyncCommand;
 use Mrj\Foundation\Contracts\ErrorReporter;
 use Mrj\Foundation\Contracts\FileStorage;
 use Mrj\Foundation\Contracts\ImpersonationContext;
+use Mrj\Foundation\Contracts\OtpVerifier;
 use Mrj\Foundation\Models\Audit;
 use Mrj\Foundation\Services\LocalFileStorage;
 use Mrj\Foundation\Support\ImpersonationAwareAuditUserResolver;
 use Mrj\Foundation\Support\NullErrorReporter;
 use Mrj\Foundation\Support\NullImpersonationContext;
+use Mrj\Foundation\Support\NullOtpVerifier;
 use Mrj\Foundation\View\Components\AppLayout;
 use Mrj\Foundation\View\Components\GuestLayout;
 use Mrj\Foundation\View\Components\StatusBadge;
@@ -44,6 +46,7 @@ class FoundationServiceProvider extends ServiceProvider
         $this->app->singletonIf(ImpersonationContext::class, NullImpersonationContext::class);
         $this->app->singletonIf(ErrorReporter::class, NullErrorReporter::class);
         $this->app->singletonIf(FileStorage::class, LocalFileStorage::class);
+        $this->app->singletonIf(OtpVerifier::class, NullOtpVerifier::class);
 
         $this->configureAuditing();
         $this->configureLogChannels();

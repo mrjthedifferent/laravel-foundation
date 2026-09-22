@@ -7,19 +7,22 @@ use Google_Client;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Mrj\Foundation\Contracts\PushSender;
 use Mrj\Foundation\Contracts\SettingsRepository;
+use Override;
 use Throwable;
 
-class FcmChannel
+class FcmChannel implements PushSender
 {
     /** FCM v1 send endpoint template */
     private const string FCM_URL = 'https://fcm.googleapis.com/v1/projects/%s/messages:send';
 
-    /** Maximum tokens per FCM send call */
+    /** Maximum tokens sent concurrently per chunk */
     private const int TOKEN_BATCH_SIZE = 500;
 
     private const int REQUEST_TIMEOUT = 30;
 
+    #[Override]
     public function send(object $notifiable, object $notification): bool
     {
         if (! method_exists($notification, 'toFcm')) {
@@ -54,31 +57,37 @@ class FcmChannel
         $responses = [];
         $errors = [];
 
+        // Sent concurrently per chunk via Http::pool(), rather than one request
+        // after another — the previous sequential loop only ever "batched" in
+        // the sense of grouping tokens for logging, not in how the requests
+        // actually went out.
         foreach (array_chunk($tokens, self::TOKEN_BATCH_SIZE) as $chunk) {
-            foreach ($chunk as $token) {
-                $body = [
-                    'message' => array_filter([
-                        'token' => $token,
-                        'notification' => $notificationPayload,
-                        'data' => $dataPayload,
-                    ]),
-                ];
+            $chunkResponses = Http::pool(fn ($pool) => collect($chunk)->map(
+                fn ($token) => $pool->withHeaders($headers)
+                    ->timeout(self::REQUEST_TIMEOUT)
+                    ->post($url, [
+                        'message' => array_filter([
+                            'token' => $token,
+                            'notification' => $notificationPayload,
+                            'data' => $dataPayload,
+                        ]),
+                    ])
+            )->all());
 
-                try {
-                    $response = Http::withHeaders($headers)
-                        ->timeout(self::REQUEST_TIMEOUT)
-                        ->post($url, $body);
+            foreach ($chunkResponses as $response) {
+                if ($response instanceof Throwable) {
+                    $errors[] = $response->getMessage();
 
-                    if ($response->failed()) {
-                        $errors[] = 'HTTP '.$response->status().': '.$response->body();
-
-                        continue;
-                    }
-
-                    $responses[] = $response->json();
-                } catch (Throwable $e) {
-                    $errors[] = $e->getMessage();
+                    continue;
                 }
+
+                if ($response->failed()) {
+                    $errors[] = 'HTTP '.$response->status().': '.$response->body();
+
+                    continue;
+                }
+
+                $responses[] = $response->json();
             }
         }
 

@@ -250,6 +250,12 @@ parameters:
 			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$url\.$#'
 			identifier: property.notFound
 			count: 1
+			path: modules/ImportDownloadManager/app/Support/EloquentImportTracker.php
+
+		-
+			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
 			path: modules/ImportDownloadManager/app/Support/ImportFileDisk.php
 
 		-
@@ -531,7 +537,7 @@ parameters:
 		-
 			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$contact\.$#'
 			identifier: property.notFound
-			count: 1
+			count: 2
 			path: modules/Otp/app/Models/VerificationCode.php
 
 		-
@@ -741,36 +747,6 @@ parameters:
 		-
 			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$description\.$#'
 			identifier: property.notFound
-			count: 1
-			path: modules/Settings/app/Providers/SettingsServiceProvider.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$group\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Settings/app/Providers/SettingsServiceProvider.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$key\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Settings/app/Providers/SettingsServiceProvider.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$type\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Settings/app/Providers/SettingsServiceProvider.php
-
-		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Modules\\Settings\\Models\\Setting\>\:\:map\(\) contains unresolvable type\.$#'
-			identifier: argument.unresolvableType
-			count: 1
-			path: modules/Settings/app/Providers/SettingsServiceProvider.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$description\.$#'
-			identifier: property.notFound
 			count: 2
 			path: modules/Settings/app/Services/SettingsImportExportService.php
 
@@ -815,6 +791,36 @@ parameters:
 			identifier: booleanAnd.rightAlwaysTrue
 			count: 1
 			path: modules/Settings/app/Services/SettingsImportExportService.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Support/EloquentSettingsRepository.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$group\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Support/EloquentSettingsRepository.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Support/EloquentSettingsRepository.php
+
+		-
+			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: modules/Settings/app/Support/EloquentSettingsRepository.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Modules\\Settings\\Models\\Setting\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: modules/Settings/app/Support/EloquentSettingsRepository.php
 
 		-
 			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
@@ -1021,12 +1027,6 @@ parameters:
 			path: modules/User/app/Http/Requests/ResetPasswordRequest.php
 
 		-
-			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/User/app/Jobs/UserBulkUploadJob.php
-
-		-
 			message: '#^Cannot access property \$value on string\.$#'
 			identifier: property.nonObject
 			count: 1
@@ -1037,24 +1037,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: modules/User/app/Jobs/UserExportJob.php
-
-		-
-			message: '#^Call to function property_exists\(\) with \$this\(Modules\\User\\Models\\UserDocument\) and ''imageDefaults'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: modules/User/app/Models/UserDocument.php
-
-		-
-			message: '#^Call to function property_exists\(\) with \$this\(Modules\\User\\Models\\UserDocument\) and ''imageDirectories'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: modules/User/app/Models/UserDocument.php
-
-		-
-			message: '#^Call to function property_exists\(\) with \$this\(Modules\\User\\Models\\UserDocument\) and ''imageFields'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: modules/User/app/Models/UserDocument.php
 
 		-
 			message: '#^PHPDoc type array\<int, string\> of property Modules\\User\\Models\\UserDocument\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
@@ -1273,24 +1255,6 @@ parameters:
 			path: src/Http/Responses/JsonResponseFactory.php
 
 		-
-			message: '#^Call to function property_exists\(\) with \$this\(Mrj\\Foundation\\Models\\User\) and ''imageDefaults'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: src/Models/User.php
-
-		-
-			message: '#^Call to function property_exists\(\) with \$this\(Mrj\\Foundation\\Models\\User\) and ''imageDirectories'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: src/Models/User.php
-
-		-
-			message: '#^Call to function property_exists\(\) with \$this\(Mrj\\Foundation\\Models\\User\) and ''imageFields'' will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: src/Models/User.php
-
-		-
 			message: '#^PHPDoc type array\<int, string\> of property Mrj\\Foundation\\Models\\User\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
 			identifier: property.phpDocType
 			count: 1
@@ -1307,12 +1271,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Support/ExportJob.php
-
-		-
-			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: src/Traits/HasImageAttribute.php
 
 		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'

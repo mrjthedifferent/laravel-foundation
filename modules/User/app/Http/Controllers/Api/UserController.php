@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Laravel\Sanctum\PersonalAccessToken;
 use Laravel\Socialite\Facades\Socialite;
-use Modules\Otp\Actions\VerifyOtpAction;
 use Modules\Otp\Enum\ContactType;
 use Modules\User\Actions\ApiResetPasswordAction;
 use Modules\User\Actions\ChangePasswordAction;
@@ -35,6 +34,7 @@ use Modules\User\Http\Requests\ResetPasswordRequest;
 use Modules\User\Http\Requests\UpdateProfileRequest;
 use Modules\User\Http\Requests\VerifyLoginOtpRequest;
 use Modules\User\Transformers\UserResource;
+use Mrj\Foundation\Contracts\OtpVerifier;
 use Mrj\Foundation\Http\Responses\JsonResponseFactory;
 use Spatie\Permission\Models\Role;
 
@@ -95,7 +95,7 @@ class UserController extends Controller
     public function register(
         RegisterRequest $request,
         CreateUserAction $action,
-        VerifyOtpAction $verifyOtp,
+        OtpVerifier $verifyOtp,
         TrackLoginAction $trackLoginAction,
         MarkContactVerifiedAction $markVerified
     ): JsonResponse {
@@ -131,7 +131,7 @@ class UserController extends Controller
     public function update(
         UpdateProfileRequest $request,
         UpdateUserAction $action,
-        VerifyOtpAction $verifyOtp,
+        OtpVerifier $verifyOtp,
         MarkContactVerifiedAction $markVerified
     ): JsonResponse {
         $data = $request->validated();
@@ -155,7 +155,7 @@ class UserController extends Controller
      */
     public function resetPassword(
         ResetPasswordRequest $request,
-        VerifyOtpAction $verifyOtp,
+        OtpVerifier $verifyOtp,
         ApiResetPasswordAction $resetAction
     ): JsonResponse {
         if (! $verifyOtp->execute($request->validated('contact'), $request->validated('code'))) {
@@ -177,7 +177,7 @@ class UserController extends Controller
      */
     public function loginWithOtp(
         VerifyLoginOtpRequest $request,
-        VerifyOtpAction $verifyOtp,
+        OtpVerifier $verifyOtp,
         OtpLoginAction $otpLogin,
         TrackLoginAction $trackLoginAction
     ): JsonResponse {

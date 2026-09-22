@@ -13,7 +13,10 @@ use Modules\Notification\Models\Notification;
 use Modules\Notification\Models\PushNotification;
 use Modules\Notification\Policies\NotificationPolicy;
 use Modules\Notification\Policies\PushNotificationPolicy;
+use Modules\Notification\Support\SmsGatewayManager;
 use Modules\Notification\View\Composers\NotificationWidgetComposer;
+use Mrj\Foundation\Contracts\PushSender;
+use Mrj\Foundation\Contracts\SmsGateway;
 use Mrj\Foundation\Models\User;
 use Mrj\Foundation\Support\ModuleServiceProvider;
 use Override;
@@ -23,6 +26,15 @@ class NotificationServiceProvider extends ModuleServiceProvider
     protected string $name = 'Notification';
 
     protected string $nameLower = 'notification';
+
+    #[Override]
+    public function register(): void
+    {
+        parent::register();
+
+        $this->app->singleton(SmsGateway::class, SmsGatewayManager::class);
+        $this->app->singleton(PushSender::class, FcmChannel::class);
+    }
 
     protected array $morphMap = [
         'push_notification' => PushNotification::class,

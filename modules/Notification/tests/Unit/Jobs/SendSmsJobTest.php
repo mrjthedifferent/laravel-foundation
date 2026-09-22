@@ -38,7 +38,8 @@ class SendSmsJobTest extends TestCase
 
         Http::fake(['api.provider.com/*' => Http::response([], 200)]);
 
-        (new SendSmsJob('Hello there', '+8801711111111'))->handle();
+        $job = new SendSmsJob('Hello there', '+8801711111111');
+        app()->call([$job, 'handle']);
 
         Http::assertSent(function ($request) {
             // The gateway must receive decrypted, not encrypted, values. The job

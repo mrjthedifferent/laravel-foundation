@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Modules\Otp\Database\Factories\VerificationCodeFactory;
 use Modules\Otp\Enum\ContactType;
+use Mrj\Foundation\Contracts\HasSmsContact;
 use Override;
 
-class VerificationCode extends Model
+class VerificationCode extends Model implements HasSmsContact
 {
     use HasFactory, Notifiable;
 
@@ -45,6 +46,12 @@ class VerificationCode extends Model
     }
 
     public function routeNotificationForMail(): string
+    {
+        return $this->contact;
+    }
+
+    #[Override]
+    public function getSmsContact(): ?string
     {
         return $this->contact;
     }

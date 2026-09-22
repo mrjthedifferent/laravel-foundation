@@ -3,6 +3,8 @@
 namespace Modules\Otp\Actions;
 
 use Modules\Otp\Models\VerificationCode;
+use Mrj\Foundation\Contracts\OtpVerifier;
+use Override;
 
 /**
  * Verify an OTP code for a contact and mark it as used on success.
@@ -14,8 +16,9 @@ use Modules\Otp\Models\VerificationCode;
  * Usage:
  *   $ok = app(VerifyOtpAction::class)->execute('user@example.com', '123456');
  */
-final readonly class VerifyOtpAction
+final readonly class VerifyOtpAction implements OtpVerifier
 {
+    #[Override]
     public function execute(string $contact, string $code, bool $isCheck = false): bool
     {
         // Look up the latest active code for this contact (independent of the

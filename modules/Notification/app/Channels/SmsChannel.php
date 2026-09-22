@@ -5,7 +5,7 @@ namespace Modules\Notification\Channels;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Modules\Notification\Jobs\SendSmsJob;
-use Modules\Otp\Models\VerificationCode;
+use Mrj\Foundation\Contracts\HasSmsContact;
 
 class SmsChannel
 {
@@ -18,7 +18,7 @@ class SmsChannel
         $message = $notification->toSms($notifiable);
 
         $contact = match (true) {
-            $notifiable instanceof VerificationCode => $notifiable->contact ?? null,
+            $notifiable instanceof HasSmsContact => $notifiable->getSmsContact(),
             $notifiable instanceof User => $notifiable->phone ?? null,
             default => null,
         };
