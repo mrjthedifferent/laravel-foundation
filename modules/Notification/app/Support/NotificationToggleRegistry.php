@@ -32,6 +32,18 @@ final readonly class NotificationToggleRegistry
     ];
 
     /**
+     * English description template per channel (sprintf with the entry label).
+     *
+     * @var array<string, string>
+     */
+    private const array DESCRIPTIONS = [
+        'mail' => 'Send the "%s" email automatically',
+        'database' => 'Deliver the "%s" in-app notification',
+        'fcm' => 'Send the "%s" push notification',
+        'sms' => 'Send the "%s" SMS',
+    ];
+
+    /**
      * @return array<int, array<string, mixed>>
      */
     public static function entries(): array
@@ -54,13 +66,6 @@ final readonly class NotificationToggleRegistry
      */
     public static function settingsFor(array $entries): array
     {
-        $descriptions = [
-            'mail' => 'Send the "%s" email automatically',
-            'database' => 'Deliver the "%s" in-app notification',
-            'fcm' => 'Send the "%s" push notification',
-            'sms' => 'Send the "%s" SMS',
-        ];
-
         $settings = [];
 
         foreach ($entries as $entry) {
@@ -74,13 +79,29 @@ final readonly class NotificationToggleRegistry
                     'group' => $channel === 'mail' ? 'Email Notifications' : 'Notification Channels',
                     'value' => '1',
                     'type' => 'boolean',
-                    'description' => sprintf($descriptions[$channel], $entry['label']),
+                    'description' => self::description($entry, $channel),
                     'is_visible' => false,
                 ];
             }
         }
 
         return $settings;
+    }
+
+    /**
+     * The stored description of a toggle's setting row, e.g. 'Send the "Password Reset"
+     * email automatically'.
+     *
+     * Always English, whatever the current locale: it is persisted to the settings table
+     * (by the seeder and by the notification settings page), so it must not depend on who
+     * happened to save it. The settings pages translate it at display time with
+     * display_label($setting->description), which a project maps in a lang/{locale}.json file.
+     *
+     * @param  array<string, mixed>  $entry
+     */
+    public static function description(array $entry, string $channel): string
+    {
+        return sprintf(self::DESCRIPTIONS[$channel], $entry['label']);
     }
 
     /**

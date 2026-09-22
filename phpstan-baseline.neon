@@ -1033,7 +1033,7 @@ parameters:
 			path: modules/User/app/Jobs/UserExportJob.php
 
 		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: array\{SL\: int\<1, max\>, Name\: string, Email\: string, Phone\: string, Gender\: string, Role\: string, ''Account Status''\: ''Active''\|''Inactive'', ''Registration Date''\: non\-falsy\-string\}, Closure\(App\\Models\\User\)\: array\{SL\: int\<1, max\>, Name\: string, Email\: string, Phone\: string, Gender\: string, Role\: string, ''Account Status''\: ''Active''\|''Inactive'', ''Registration Date''\: non\-falsy\-string\} given\.$#'
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: non\-empty\-array\<string, array\|int\<1, max\>\|string\>, Closure\(App\\Models\\User\)\: non\-empty\-array\<string, array\|int\<1, max\>\|string\> given\.$#'
 			identifier: argument.type
 			count: 1
 			path: modules/User/app/Jobs/UserExportJob.php

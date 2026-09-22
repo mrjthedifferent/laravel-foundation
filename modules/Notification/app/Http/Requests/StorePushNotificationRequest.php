@@ -30,10 +30,10 @@ class StorePushNotificationRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'The notification title is required.',
-            'body.required' => 'The notification body is required.',
-            'user_id.required' => 'Please select a user to notify.',
-            'user_id.exists' => 'The selected user does not exist.',
+            'title.required' => __('notification::notification.errors.push_title_required'),
+            'body.required' => __('notification::notification.errors.push_body_required'),
+            'user_id.required' => __('notification::notification.errors.user_id_required'),
+            'user_id.exists' => __('notification::notification.errors.user_id_invalid'),
         ];
     }
 }

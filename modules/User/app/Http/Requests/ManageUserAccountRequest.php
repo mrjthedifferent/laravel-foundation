@@ -42,9 +42,9 @@ class ManageUserAccountRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'action.required' => 'Action type is required',
-            'action.enum' => 'Action must be either reset or delete',
-            'user_id.exists' => 'User not found',
+            'action.required' => __('user::user.errors.action_required'),
+            'action.enum' => __('user::user.errors.action_invalid'),
+            'user_id.exists' => __('user::user.errors.user_not_found'),
         ];
     }
 

@@ -60,13 +60,13 @@ class RegisterRequest extends FormRequest
         $otpLength = (int) config('settings.otp_digit_length.value', 6);
 
         return [
-            'email.unique' => 'The email has already been taken',
-            'phone.unique' => 'The mobile number has already been taken',
-            'phone_code.required_with' => 'Phone verification code is required when phone is provided',
-            'email_code.required_with' => 'Email verification code is required when email is provided',
-            'phone_code.size' => "Phone verification code must be {$otpLength} digits",
-            'email_code.size' => "Email verification code must be {$otpLength} digits",
-            'role.in' => 'The selected role is invalid',
+            'email.unique' => __('user::user.errors.email_unique'),
+            'phone.unique' => __('user::user.errors.phone_unique'),
+            'phone_code.required_with' => __('user::user.errors.phone_code_required_with'),
+            'email_code.required_with' => __('user::user.errors.email_code_required_with'),
+            'phone_code.size' => __('user::user.errors.phone_code_size', ['digits' => $otpLength]),
+            'email_code.size' => __('user::user.errors.email_code_size', ['digits' => $otpLength]),
+            'role.in' => __('user::user.errors.role_invalid'),
         ];
     }
 }

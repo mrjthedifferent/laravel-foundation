@@ -40,27 +40,27 @@ final readonly class BulkUserRowProcessor
         }
 
         if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return "Email: {$email} is invalid at row: {$rowNo}";
+            return __('user::user.errors.row_email_invalid', ['email' => $email, 'row' => $rowNo]);
         }
 
         if (in_array($email, $existingEmails, true)) {
-            return "Email: {$email} already exists at row: {$rowNo}";
+            return __('user::user.errors.row_email_exists', ['email' => $email, 'row' => $rowNo]);
         }
 
         $phone = PhoneNumber::toE164(trim((string) ($row['phone'] ?? '')) ?: null);
 
         if ($phone !== null && User::query()->where('phone', $phone)->exists()) {
-            return "Phone: {$phone} already exists at row: {$rowNo}";
+            return __('user::user.errors.row_phone_exists', ['phone' => $phone, 'row' => $rowNo]);
         }
 
         if (empty($row['role'])) {
-            return "Role is required at row: {$rowNo}";
+            return __('user::user.errors.row_role_required', ['row' => $rowNo]);
         }
 
         $roleIds = Role::whereIn('name', explode(',', (string) $row['role']))->pluck('id')->toArray();
 
         if (empty($roleIds)) {
-            return "Role is invalid at row: {$rowNo}";
+            return __('user::user.errors.row_role_invalid', ['row' => $rowNo]);
         }
 
         try {
@@ -79,7 +79,7 @@ final readonly class BulkUserRowProcessor
 
             return null;
         } catch (Exception $e) {
-            return $e->getMessage()." at row: {$rowNo}";
+            return __('user::user.errors.row_generic', ['message' => $e->getMessage(), 'row' => $rowNo]);
         }
     }
 }

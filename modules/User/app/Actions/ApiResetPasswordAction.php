@@ -34,8 +34,8 @@ final readonly class ApiResetPasswordAction
         event(new PasswordReset($user));
 
         $user->notify(new AppNotification(
-            title: 'Password Changed',
-            body: 'Your password has been changed. If you did not change your password, please contact support immediately.',
+            title: __('user::user.notifications.password_changed_title'),
+            body: __('user::user.notifications.password_changed_body'),
             channels: ['database', 'fcm'],
         ));
     }

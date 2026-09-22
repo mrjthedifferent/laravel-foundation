@@ -12,10 +12,10 @@ enum ImportStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Pending => 'Pending',
-            self::Processing => 'Processing',
-            self::Completed => 'Completed',
-            self::Failed => 'Failed',
+            self::Pending => __('importdownloadmanager::importdownloadmanager.enums.status.pending'),
+            self::Processing => __('importdownloadmanager::importdownloadmanager.enums.status.processing'),
+            self::Completed => __('importdownloadmanager::importdownloadmanager.enums.status.completed'),
+            self::Failed => __('importdownloadmanager::importdownloadmanager.enums.status.failed'),
         };
     }
 

@@ -47,8 +47,8 @@ class LoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id.required' => 'Email or phone number is required',
-            'password.required' => 'Password is required',
+            'id.required' => __('user::user.errors.login_id_required'),
+            'password.required' => __('user::user.errors.login_password_required'),
         ];
     }
 }

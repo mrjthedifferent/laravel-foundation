@@ -25,8 +25,8 @@ class SendTestEmailRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => 'An email address is required.',
-            'email.email' => 'Please provide a valid email address.',
+            'email.required' => __('settings::settings.errors.email_required'),
+            'email.email' => __('settings::settings.errors.email_invalid'),
         ];
     }
 }

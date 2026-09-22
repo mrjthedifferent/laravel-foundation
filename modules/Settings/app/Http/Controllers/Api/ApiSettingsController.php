@@ -42,7 +42,7 @@ class ApiSettingsController extends Controller
             $settings['google_maps_api_key_web'],
         );
 
-        return JsonResponseFactory::success('Settings Retrieved..', $settings);
+        return JsonResponseFactory::success(__('settings::settings.flash.api_settings_retrieved'), $settings);
     }
 
     /**
@@ -53,7 +53,7 @@ class ApiSettingsController extends Controller
         $setting = Setting::where('key', 'privacy_policy')->first();
 
         if (! $setting) {
-            return JsonResponseFactory::notFound('Privacy Policy not found');
+            return JsonResponseFactory::notFound(__('settings::settings.errors.api_privacy_policy_not_found'));
         }
 
         $data = [
@@ -61,7 +61,7 @@ class ApiSettingsController extends Controller
             'updated_at' => $setting->updated_at,
         ];
 
-        return JsonResponseFactory::success('Privacy Policy retrieved successfully', $data);
+        return JsonResponseFactory::success(__('settings::settings.flash.api_privacy_policy_retrieved'), $data);
     }
 
     /**
@@ -72,7 +72,7 @@ class ApiSettingsController extends Controller
         $setting = Setting::where('key', 'terms_conditions')->first();
 
         if (! $setting) {
-            return JsonResponseFactory::notFound('Terms & Conditions not found');
+            return JsonResponseFactory::notFound(__('settings::settings.errors.api_terms_conditions_not_found'));
         }
 
         $data = [
@@ -80,6 +80,6 @@ class ApiSettingsController extends Controller
             'updated_at' => $setting->updated_at,
         ];
 
-        return JsonResponseFactory::success('Terms & Conditions retrieved successfully', $data);
+        return JsonResponseFactory::success(__('settings::settings.flash.api_terms_conditions_retrieved'), $data);
     }
 }

@@ -14,12 +14,12 @@
                         <div class="d-inline-flex bg-primary bg-opacity-10 text-primary lh-1 rounded-pill p-3 mb-3 mt-1">
                             <i class="ph-lock-key-open ph-2x"></i>
                         </div>
-                        <h5 class="mb-0">{{ __('Set new password') }}</h5>
-                        <span class="d-block text-muted">{{ __('Enter your account details below') }}</span>
+                        <h5 class="mb-0">{{ __('foundation::foundation.auth.set_new_password') }}</h5>
+                        <span class="d-block text-muted">{{ __('foundation::foundation.auth.enter_account_details') }}</span>
                     </div>
 
                     <div class="mb-3">
-                        <label for="email" class="form-label">{{ __('Email') }}</label>
+                        <label for="email" class="form-label">{{ __('foundation::foundation.auth.email') }}</label>
                         <div class="form-control-feedback form-control-feedback-start">
                             <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
                                    name="email" value="{{ old('email', $email ?? '') }}"
@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="password" class="form-label">{{ __('New Password') }}</label>
+                        <label for="password" class="form-label">{{ __('foundation::foundation.auth.new_password') }}</label>
                         <div class="form-control-feedback form-control-feedback-start">
                             <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
                                    name="password" required autocomplete="new-password"
@@ -54,7 +54,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="password-confirm" class="form-label">{{ __('Confirm Password') }}</label>
+                        <label for="password-confirm" class="form-label">{{ __('foundation::foundation.auth.confirm_password') }}</label>
                         <div class="form-control-feedback form-control-feedback-start">
                             <input id="password-confirm" type="password" class="form-control"
                                    name="password_confirmation" required autocomplete="new-password"
@@ -67,12 +67,12 @@
 
                     <button type="submit" class="btn btn-primary w-100">
                         <i class="ph-lock-key-open me-2"></i>
-                        {{ __('Reset Password') }}
+                        {{ __('foundation::foundation.auth.reset_password_button') }}
                     </button>
 
                     <div class="text-center mt-3">
                         <a href="{{ route('login') }}" class="text-muted">
-                            <i class="ph-arrow-left me-1"></i>{{ __('Back to login') }}
+                            <i class="ph-arrow-left me-1"></i>{{ __('foundation::foundation.auth.back_to_login') }}
                         </a>
                     </div>
                 </div>

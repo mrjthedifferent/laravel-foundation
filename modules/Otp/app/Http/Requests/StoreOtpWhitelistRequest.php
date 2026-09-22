@@ -35,13 +35,13 @@ class StoreOtpWhitelistRequest extends FormRequest
         $digits = (int) config('settings.otp_digit_length.value', 6);
 
         return [
-            'recipient_type.required' => 'The recipient type is required.',
-            'recipient_type.in' => 'The recipient type must be email or phone.',
-            'recipient.required' => 'The recipient is required.',
-            'recipient.email' => 'Please provide a valid email address.',
-            'fixed_otp.required' => 'The fixed OTP is required.',
-            'fixed_otp.size' => "The fixed OTP must be exactly {$digits} digits.",
-            'fixed_otp.regex' => 'The fixed OTP must contain only digits.',
+            'recipient_type.required' => __('otp::otp.validation.recipient_type_required'),
+            'recipient_type.in' => __('otp::otp.validation.recipient_type_in'),
+            'recipient.required' => __('otp::otp.validation.recipient_required'),
+            'recipient.email' => __('otp::otp.validation.email_invalid'),
+            'fixed_otp.required' => __('otp::otp.validation.fixed_otp_required'),
+            'fixed_otp.size' => __('otp::otp.validation.fixed_otp_size', ['digits' => $digits]),
+            'fixed_otp.regex' => __('otp::otp.validation.fixed_otp_regex'),
         ];
     }
 

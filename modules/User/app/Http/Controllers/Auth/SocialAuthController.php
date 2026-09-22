@@ -37,7 +37,7 @@ class SocialAuthController extends Controller
                 $socialUser = Socialite::driver($provider)->user();
             }
         } catch (Exception $e) {
-            return redirect()->route('login')->with('error', 'Authentication failed. Please try again.');
+            return redirect()->route('login')->with('error', __('user::user.auth.social_failed'));
         }
 
         $user = $action->execute($provider, $socialUser);
@@ -45,11 +45,11 @@ class SocialAuthController extends Controller
         // Closed registration: social login never creates accounts. If no
         // matching account exists, reject the login.
         if (! $user) {
-            return redirect()->route('login')->with('error', 'No account is associated with this login. Please contact an administrator.');
+            return redirect()->route('login')->with('error', __('user::user.auth.social_no_account'));
         }
 
         if (! $user->is_active) {
-            return redirect()->route('login')->with('error', 'Your account is not active. Please contact support.');
+            return redirect()->route('login')->with('error', __('user::user.auth.social_account_not_active'));
         }
 
         if ($message = $user->accessDenialMessage()) {

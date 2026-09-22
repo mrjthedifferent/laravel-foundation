@@ -57,14 +57,14 @@ class ResetPasswordRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'contact_type.required' => 'Contact type is required',
-            'contact_type.in' => 'Contact type must be either email or phone',
-            'contact.required' => 'Contact information is required',
-            'password.required' => 'New password is required',
-            'password.confirmed' => 'Password confirmation does not match',
-            'password.min' => 'Password must be at least 6 characters',
-            'code.required' => 'Verification code is required',
-            'code.size' => 'Verification code must be '.(int) config('settings.otp_digit_length.value', 6).' digits',
+            'contact_type.required' => __('user::user.errors.contact_type_required'),
+            'contact_type.in' => __('user::user.errors.contact_type_invalid'),
+            'contact.required' => __('user::user.errors.contact_required'),
+            'password.required' => __('user::user.errors.new_password_required'),
+            'password.confirmed' => __('user::user.errors.password_confirmation_mismatch'),
+            'password.min' => __('user::user.errors.password_min'),
+            'code.required' => __('user::user.errors.verification_code_required'),
+            'code.size' => __('user::user.errors.verification_code_size', ['digits' => (int) config('settings.otp_digit_length.value', 6)]),
         ];
     }
 }

@@ -46,14 +46,14 @@ class UploadDocumentRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'document_type.required' => 'Document type is required',
-            'document_type.in' => 'Invalid document type selected',
-            'file.required' => 'Document file is required',
-            'file.mimes' => 'Document must be a PDF or image file (jpg, jpeg, png)',
-            'file.max' => 'Document file size must not exceed 5MB',
-            'back_file.mimes' => 'Back document must be a PDF or image file (jpg, jpeg, png)',
-            'back_file.max' => 'Back document file size must not exceed 5MB',
-            'expiry_date.after' => 'Expiry date must be in the future',
+            'document_type.required' => __('user::user.errors.document_type_required'),
+            'document_type.in' => __('user::user.errors.document_type_invalid'),
+            'file.required' => __('user::user.errors.document_file_required'),
+            'file.mimes' => __('user::user.errors.document_file_mimes'),
+            'file.max' => __('user::user.errors.document_file_max'),
+            'back_file.mimes' => __('user::user.errors.document_back_file_mimes'),
+            'back_file.max' => __('user::user.errors.document_back_file_max'),
+            'expiry_date.after' => __('user::user.errors.document_expiry_after'),
         ];
     }
 }

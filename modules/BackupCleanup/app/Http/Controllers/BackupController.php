@@ -41,7 +41,7 @@ class BackupController extends Controller
         RunBackupJob::dispatch();
 
         return redirect()->route('admin.backups.index')
-            ->with('success', 'Backup has been queued and will complete shortly.');
+            ->with('success', __('backupcleanup::backupcleanup.flash.queued'));
     }
 
     /**
@@ -58,7 +58,7 @@ class BackupController extends Controller
 
         if (! $disk->exists($filePath)) {
             return redirect()->route('admin.backups.index')
-                ->with('error', 'Backup file not found.');
+                ->with('error', __('backupcleanup::backupcleanup.flash.file_not_found'));
         }
 
         return $disk->download($filePath, $filename);
@@ -75,7 +75,7 @@ class BackupController extends Controller
             $this->deleteBackupAction->execute($filename);
 
             return redirect()->route('admin.backups.index')
-                ->with('success', 'Backup file deleted successfully.');
+                ->with('success', __('backupcleanup::backupcleanup.flash.deleted'));
         } catch (RuntimeException $e) {
             return redirect()->route('admin.backups.index')
                 ->with('error', $e->getMessage());
@@ -92,6 +92,6 @@ class BackupController extends Controller
         RunCleanupJob::dispatch();
 
         return redirect()->route('admin.backups.index')
-            ->with('success', 'Backup cleanup has been queued and will complete shortly.');
+            ->with('success', __('backupcleanup::backupcleanup.flash.cleanup_queued'));
     }
 }

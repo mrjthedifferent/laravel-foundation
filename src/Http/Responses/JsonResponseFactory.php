@@ -124,25 +124,25 @@ final class JsonResponseFactory
     /**
      * Return an unauthorized response (401)
      */
-    public static function unauthorized(string $message = 'Unauthorized'): JsonResponse
+    public static function unauthorized(?string $message = null): JsonResponse
     {
-        return self::error($message, null, 401);
+        return self::error($message ?? __('foundation::foundation.api.unauthorized'), null, 401);
     }
 
     /**
      * Return a forbidden response (403)
      */
-    public static function forbidden(string $message = 'Forbidden'): JsonResponse
+    public static function forbidden(?string $message = null): JsonResponse
     {
-        return self::error($message, null, 403);
+        return self::error($message ?? __('foundation::foundation.api.forbidden'), null, 403);
     }
 
     /**
      * Return a not found response (404)
      */
-    public static function notFound(string $message = 'Resource not found'): JsonResponse
+    public static function notFound(?string $message = null): JsonResponse
     {
-        return self::error($message, null, 404);
+        return self::error($message ?? __('foundation::foundation.api.resource_not_found'), null, 404);
     }
 
     /**
@@ -156,8 +156,8 @@ final class JsonResponseFactory
     /**
      * Return a server error response (500)
      */
-    public static function serverError(string $message = 'Internal server error'): JsonResponse
+    public static function serverError(?string $message = null): JsonResponse
     {
-        return self::error($message, null, 500);
+        return self::error($message ?? __('foundation::foundation.api.server_error'), null, 500);
     }
 }

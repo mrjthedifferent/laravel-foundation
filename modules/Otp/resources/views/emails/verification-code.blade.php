@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification Code</title>
+    <title>{{ __('otp::otp.email_verification.title') }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -84,17 +84,14 @@
             @endif
         </div>
         <div class="content">
-            <h1>Verification Code</h1>
-            <p>Thank you for using {{ $appName }}. Please use the following verification code
-                to
-                complete your
-                verification:</p>
+            <h1>{{ __('otp::otp.email_verification.heading') }}</h1>
+            <p>{{ __('otp::otp.email_verification.intro', ['app' => $appName]) }}</p>
             <div class="code">{{ $code }}</div>
-            <p>This code is valid for 30 minutes.</p>
+            <p>{{ __('otp::otp.email_verification.validity') }}</p>
         </div>
         <div class="footer">
-            <p>If you did not request this code, please ignore this email.</p>
-            <p>&copy; {{ date('Y') }} {{ $appName }}. All rights reserved.</p>
+            <p>{{ __('otp::otp.email_verification.ignore_notice') }}</p>
+            <p>&copy; {{ date('Y') }} {{ $appName }}. {{ __('otp::otp.email_verification.rights_reserved') }}</p>
         </div>
     </div>
 </body>

@@ -16,10 +16,10 @@
             <div class="col-md-auto ms-auto mb-2 d-flex gap-2 align-items-end">
                 <a href="{{ $resetRoute ?? (function() { try { return route(Route::currentRouteName(), Route::current()?->parameters() ?? []); } catch (\Throwable) { return url()->current(); } })() }}"
                    class="btn btn-sm btn-outline-secondary">
-                    <i class="ph-arrow-counter-clockwise me-1"></i>Reset
+                    <i class="ph-arrow-counter-clockwise me-1"></i>{{ __('foundation::foundation.common.reset') }}
                 </a>
                 <button type="submit" class="btn btn-sm btn-primary">
-                    <i class="ph-funnel me-1"></i>Filter
+                    <i class="ph-funnel me-1"></i>{{ __('foundation::foundation.common.filter') }}
                 </button>
             </div>
         </div>

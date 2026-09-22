@@ -110,6 +110,7 @@ class FoundationServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
         $this->configureMorphMap();
         $this->registerViews();
+        $this->registerTranslations();
 
         $this->loadMigrationsFrom(Foundation::path('database/migrations'));
 
@@ -186,6 +187,21 @@ class FoundationServiceProvider extends ServiceProvider
         if (config('foundation.enforce_morph_map') === true) {
             Relation::requireMorphMap();
         }
+    }
+
+    /**
+     * Shared UI chrome (layouts, error pages, form components) and the handful
+     * of user-facing strings in src/ itself. A project overrides one string by
+     * publishing this tag and editing resources/lang/vendor/foundation/en/foundation.php
+     * — Laravel merges that file over the package's own automatically.
+     */
+    private function registerTranslations(): void
+    {
+        $this->loadTranslationsFrom(Foundation::path('lang'), 'foundation');
+
+        $this->publishes([
+            Foundation::path('lang') => $this->app->langPath('vendor/foundation'),
+        ], 'foundation-lang');
     }
 
     private function registerViews(): void

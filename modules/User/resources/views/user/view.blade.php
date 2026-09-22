@@ -1,7 +1,7 @@
 @extends('user::layouts.master')
 
 @section('breadcrumb')
-    <span class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">User List</a></span>
+    <span class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">{{ __('user::user.index.breadcrumb') }}</a></span>
     <span class="breadcrumb-item active">{{ $user->name }}</span>
 @endsection
 
@@ -20,7 +20,7 @@
                                 @if ($user->email)
                                     <i class="ph-envelope me-1"></i> {{ $user->email }}
                                     @if ($user->email_verified_at)
-                                        <i class="ph-check-circle text-success ms-1" title="Email Verified"></i>
+                                        <i class="ph-check-circle text-success ms-1" title="{{ __('user::user.view.col_email_verified') }}"></i>
                                     @endif
                                 @endif
                                 @if ($user->phone)
@@ -29,7 +29,7 @@
                                     @endif
                                     <i class="ph-phone me-1"></i> {{ $user->phone }}
                                     @if ($user->phone_verified_at)
-                                        <i class="ph-check-circle text-success ms-1" title="Phone Verified"></i>
+                                        <i class="ph-check-circle text-success ms-1" title="{{ __('user::user.view.col_phone_verified') }}"></i>
                                     @endif
                                 @endif
                             </p>
@@ -45,21 +45,21 @@
                 <div class="col-md-4 text-end mt-3 mt-md-0">
                     @can('Edit User')
                         <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-primary me-2">
-                            <i class="ph-pencil-simple me-1"></i> Edit User
+                            <i class="ph-pencil-simple me-1"></i> {{ __('user::user.view.edit_user') }}
                         </a>
                     @endcan
                     @can('User Password Reset')
                         <a href="{{ route('admin.user.password.reset', $user->id) }}"
                             class="btn btn-sm btn-outline-warning swal-confirm"
-                            data-text="Are you sure you want to reset this user's password?">
-                            <i class="ph-key me-1"></i> Reset Password
+                            data-text="{{ __('user::user.view.reset_password_confirm') }}">
+                            <i class="ph-key me-1"></i> {{ __('user::user.view.reset_password') }}
                         </a>
                     @endcan
                     @can('impersonate', $user)
                         <a href="{{ route('admin.users.impersonate', $user->id) }}"
                             class="btn btn-sm btn-outline-dark ms-2 swal-post"
-                            data-text="Sign in as {{ $user->name }}? You can return to your account from the banner at the top.">
-                            <i class="ph-user-switch me-1"></i> Impersonate
+                            data-text="{{ __('user::user.view.impersonate_confirm', ['name' => $user->name]) }}">
+                            <i class="ph-user-switch me-1"></i> {{ __('user::user.view.impersonate') }}
                         </a>
                     @endcan
                 </div>
@@ -74,20 +74,20 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="personal-tab" data-bs-toggle="tab"
                         data-bs-target="#personal" type="button" role="tab" aria-selected="true">
-                        <i class="ph-user me-1"></i> Personal Info
+                        <i class="ph-user me-1"></i> {{ __('user::user.view.tab_personal') }}
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="documents-tab" data-bs-toggle="tab"
                         data-bs-target="#documents" type="button" role="tab" aria-selected="false">
-                        <i class="ph-files me-1"></i> Documents
+                        <i class="ph-files me-1"></i> {{ __('user::user.view.tab_documents') }}
                         <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle ms-1">{{ $user->documents->count() }}</span>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="login-history-tab" data-bs-toggle="tab"
                         data-bs-target="#login-history" type="button" role="tab" aria-selected="false">
-                        <i class="ph-clock-counter-clockwise me-1"></i> Login History
+                        <i class="ph-clock-counter-clockwise me-1"></i> {{ __('user::user.view.tab_login_history') }}
                     </button>
                 </li>
             </ul>
@@ -101,51 +101,51 @@
                             <table class="table table-nowrap mb-0">
                                 <tbody>
                                     <tr>
-                                        <th class="text-muted" width="140">ID</th>
+                                        <th class="text-muted" width="140">{{ __('user::user.view.col_id') }}</th>
                                         <td>{{ $user->id }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted">UUID</th>
+                                        <th class="text-muted">{{ __('user::user.view.col_uuid') }}</th>
                                         <td><small class="font-monospace">{{ $user->uuid ?? 'N/A' }}</small></td>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted">Full Name</th>
+                                        <th class="text-muted">{{ __('user::user.view.col_full_name') }}</th>
                                         <td>{{ $user->name }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted">Email</th>
+                                        <th class="text-muted">{{ __('user::user.view.col_email') }}</th>
                                         <td>
                                             {{ $user->email ?? 'N/A' }}
                                             @if ($user->email && $user->email_verified_at)
-                                                <i class="ph-check-circle text-success ms-1" title="Verified"></i>
+                                                <i class="ph-check-circle text-success ms-1" title="{{ __('user::user.common.verified') }}"></i>
                                             @elseif ($user->email)
-                                                <i class="ph-x-circle text-warning ms-1" title="Not Verified"></i>
+                                                <i class="ph-x-circle text-warning ms-1" title="{{ __('user::user.view.not_verified_badge') }}"></i>
                                             @endif
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted">Gender</th>
+                                        <th class="text-muted">{{ __('user::user.view.col_gender') }}</th>
                                         <td>{{ ucfirst($user->gender?->value ?? 'N/A') }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted">Roles</th>
+                                        <th class="text-muted">{{ __('user::user.view.col_roles') }}</th>
                                         <td>
                                             @forelse ($user->roles as $role)
                                                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle me-1">{{ $role->name }}</span>
                                             @empty
-                                                <span class="text-muted">No roles assigned</span>
+                                                <span class="text-muted">{{ __('user::user.view.no_roles') }}</span>
                                             @endforelse
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted">Status</th>
+                                        <th class="text-muted">{{ __('foundation::foundation.common.status') }}</th>
                                         <td>
                                             <x-status-badge :active="$user->is_active" />
                                         </td>
                                     </tr>
                                     @if ($user->provider)
                                         <tr>
-                                            <th class="text-muted">Social Login</th>
+                                            <th class="text-muted">{{ __('user::user.view.col_social_login') }}</th>
                                             <td><span class="badge bg-info-subtle text-info border border-info-subtle">{{ ucfirst($user->provider) }}</span></td>
                                         </tr>
                                     @endif
@@ -156,19 +156,19 @@
                             <table class="table table-nowrap mb-0">
                                 <tbody>
                                     <tr>
-                                        <th class="text-muted" width="160">Last Login</th>
+                                        <th class="text-muted" width="160">{{ __('user::user.view.col_last_login') }}</th>
                                         <td>
                                             @if ($user->latestLogin)
                                                 {{ $user->latestLogin->logged_in_at->format('d M Y h:i A') }}
                                                 <br>
                                                 <small class="text-muted">{{ $user->latestLogin->logged_in_at->diffForHumans() }}</small>
                                             @else
-                                                <span class="text-muted">Never logged in</span>
+                                                <span class="text-muted">{{ __('user::user.view.never_logged_in') }}</span>
                                             @endif
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted">Created</th>
+                                        <th class="text-muted">{{ __('user::user.view.col_created') }}</th>
                                         <td>
                                             {{ $user->created_at->format('d M Y h:i A') }}
                                             <br>
@@ -176,7 +176,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted">Updated</th>
+                                        <th class="text-muted">{{ __('user::user.view.col_updated') }}</th>
                                         <td>
                                             {{ $user->updated_at->format('d M Y h:i A') }}
                                             <br>
@@ -184,21 +184,21 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted">Email Verified</th>
+                                        <th class="text-muted">{{ __('user::user.view.col_email_verified') }}</th>
                                         <td>
                                             @if ($user->email_verified_at)
-                                                <span class="badge bg-success-subtle text-success border border-success-subtle">Verified</span>
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle">{{ __('user::user.common.verified') }}</span>
                                                 <br>
                                                 <small class="text-muted">{{ $user->email_verified_at->format('d M Y') }}</small>
                                             @else
-                                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Not Verified</span>
+                                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">{{ __('user::user.view.not_verified_badge') }}</span>
                                                 @can('Verify User Contact')
                                                     @if ($user->email)
                                                         <form method="POST" action="{{ route('admin.users.verify.email', $user) }}" class="d-inline ms-2">
                                                             @csrf
                                                             <button type="submit" class="btn btn-sm btn-outline-success swal-confirm"
-                                                                data-text="Manually mark this user's email as verified?">
-                                                                <i class="ph-check-circle me-1"></i>Verify Email
+                                                                data-text="{{ __('user::user.view.verify_email_confirm') }}">
+                                                                <i class="ph-check-circle me-1"></i>{{ __('user::user.view.verify_email') }}
                                                             </button>
                                                         </form>
                                                     @endif
@@ -207,25 +207,25 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted">Phone</th>
+                                        <th class="text-muted">{{ __('user::user.view.col_phone') }}</th>
                                         <td>{{ $user->phone ?? '—' }}</td>
                                     </tr>
                                     @if ($user->phone)
                                     <tr>
-                                        <th class="text-muted">Phone Verified</th>
+                                        <th class="text-muted">{{ __('user::user.view.col_phone_verified') }}</th>
                                         <td>
                                             @if ($user->phone_verified_at)
-                                                <span class="badge bg-success-subtle text-success border border-success-subtle">Verified</span>
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle">{{ __('user::user.common.verified') }}</span>
                                                 <br>
                                                 <small class="text-muted">{{ $user->phone_verified_at->format('d M Y') }}</small>
                                             @else
-                                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Not Verified</span>
+                                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">{{ __('user::user.view.not_verified_badge') }}</span>
                                                 @can('Verify User Contact')
                                                     <form method="POST" action="{{ route('admin.users.verify.phone', $user) }}" class="d-inline ms-2">
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-outline-success swal-confirm"
-                                                            data-text="Manually mark this user's phone as verified?">
-                                                            <i class="ph-check-circle me-1"></i>Verify Phone
+                                                            data-text="{{ __('user::user.view.verify_phone_confirm') }}">
+                                                            <i class="ph-check-circle me-1"></i>{{ __('user::user.view.verify_phone') }}
                                                         </button>
                                                     </form>
                                                 @endcan
@@ -246,13 +246,13 @@
                             <thead class="table-active">
                                 <tr>
                                     <th>#</th>
-                                    <th>Type</th>
-                                    <th>Number</th>
-                                    <th>Files</th>
-                                    <th>Expiry Date</th>
-                                    <th>Uploaded At</th>
+                                    <th>{{ __('user::user.view.col_type') }}</th>
+                                    <th>{{ __('user::user.view.col_number') }}</th>
+                                    <th>{{ __('user::user.view.col_files') }}</th>
+                                    <th>{{ __('user::user.view.col_expiry_date') }}</th>
+                                    <th>{{ __('user::user.view.col_uploaded_at') }}</th>
                                     @can('Edit User')
-                                        <th class="text-end">Action</th>
+                                        <th class="text-end">{{ __('foundation::foundation.common.action') }}</th>
                                     @endcan
                                 </tr>
                             </thead>
@@ -265,19 +265,19 @@
                                         <td>
                                             <a href="{{ \Mrj\Foundation\Services\FileManagerService::getFile($document->file_path) }}"
                                                 target="_blank" class="btn btn-sm btn-outline-info me-1">
-                                                <i class="ph-eye me-1"></i> Front
+                                                <i class="ph-eye me-1"></i> {{ __('user::user.view.doc_front') }}
                                             </a>
                                             @if ($document->back_file_path)
                                                 <a href="{{ \Mrj\Foundation\Services\FileManagerService::getFile($document->back_file_path) }}"
                                                     target="_blank" class="btn btn-sm btn-outline-info">
-                                                    <i class="ph-eye me-1"></i> Back
+                                                    <i class="ph-eye me-1"></i> {{ __('user::user.view.doc_back') }}
                                                 </a>
                                             @endif
                                         </td>
                                         <td>
                                             {{ $document->expiry_date ? $document->expiry_date->format('d M Y') : 'N/A' }}
                                             @if ($document->expiry_date && $document->expiry_date->isPast())
-                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle ms-1">Expired</span>
+                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle ms-1">{{ __('user::user.view.expired_badge') }}</span>
                                             @endif
                                         </td>
                                         <td>{{ $document->created_at->format('d M Y') }}</td>
@@ -286,8 +286,8 @@
                                                 <x-dropdown-menu>
                                                     <button type="button" class="dropdown-item text-danger swal-delete"
                                                         data-url="{{ route('admin.users.documents.destroy', [$user->id, $document->id]) }}"
-                                                        data-text="Are you sure you want to delete this document?">
-                                                        <i class="ph-trash me-2"></i> Delete
+                                                        data-text="{{ __('user::user.view.delete_document_confirm') }}">
+                                                        <i class="ph-trash me-2"></i> {{ __('foundation::foundation.common.delete') }}
                                                     </button>
                                                 </x-dropdown-menu>
                                             </td>
@@ -297,7 +297,7 @@
                                     <tr>
                                         <td colspan="7" class="text-center text-muted py-4">
                                             <i class="ph-folder-open d-block mb-2 opacity-25 fs-4"></i>
-                                            No documents uploaded yet
+                                            {{ __('user::user.view.no_documents') }}
                                         </td>
                                     </tr>
                                 @endforelse
@@ -309,34 +309,34 @@
                     @can('Edit User')
                         <div class="border-top pt-4">
                             <div class="fw-semibold fs-sm mb-3">
-                                <i class="ph-upload me-1 text-primary"></i> Upload New Document
+                                <i class="ph-upload me-1 text-primary"></i> {{ __('user::user.view.upload_document_heading') }}
                             </div>
                             <form action="{{ route('admin.users.documents.store', $user->id) }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <div class="row g-3">
                                     <div class="col-md-4">
-                                        <x-form.select name="document_type" label="Document Type" required :options="['' => 'Select Type'] + collect(\Modules\User\Enum\DocumentType::cases())->mapWithKeys(fn($t) => [$t->value => $t->label()])->toArray()" :selected="null" />
+                                        <x-form.select name="document_type" label="{{ __('user::user.view.document_type_label') }}" required :options="['' => __('user::user.view.select_document_type')] + collect(\Modules\User\Enum\DocumentType::cases())->mapWithKeys(fn($t) => [$t->value => $t->label()])->toArray()" :selected="null" />
                                     </div>
                                     <div class="col-md-4">
-                                        <x-form.input name="document_number" label="Document Number" placeholder="Enter document number" />
+                                        <x-form.input name="document_number" label="{{ __('user::user.view.document_number_label') }}" placeholder="{{ __('user::user.view.document_number_placeholder') }}" />
                                     </div>
                                     <div class="col-md-4">
-                                        <x-form.input type="date" name="expiry_date" label="Expiry Date" />
+                                        <x-form.input type="date" name="expiry_date" label="{{ __('user::user.view.col_expiry_date') }}" />
                                     </div>
                                     <div class="col-md-6">
-                                        <x-form.file name="file" label="Front Side File" required accept="image/*,.pdf" />
-                                        <div class="form-text">Accepted: images, PDF</div>
+                                        <x-form.file name="file" label="{{ __('user::user.view.front_side_file_label') }}" required accept="image/*,.pdf" />
+                                        <div class="form-text">{{ __('user::user.view.accepted_files_hint') }}</div>
                                     </div>
                                     <div class="col-md-6">
-                                        <x-form.label for="back_file">Back Side File</x-form.label>
-                                        <span class="text-muted fw-normal">(Optional)</span>
+                                        <x-form.label for="back_file">{{ __('user::user.view.back_side_file_label') }}</x-form.label>
+                                        <span class="text-muted fw-normal">{{ __('user::user.view.optional_label') }}</span>
                                         <x-form.file name="back_file" accept="image/*,.pdf" />
                                     </div>
                                 </div>
                                 <div class="mt-3">
                                     <x-primary-button type="submit">
-                                        <i class="ph-upload me-1"></i> Upload Document
+                                        <i class="ph-upload me-1"></i> {{ __('user::user.view.upload_document_submit') }}
                                     </x-primary-button>
                                 </div>
                             </form>
@@ -351,12 +351,12 @@
                             <thead class="table-active">
                                 <tr>
                                     <th>#</th>
-                                    <th>Device</th>
-                                    <th>Browser</th>
-                                    <th>Platform</th>
-                                    <th>IP Address</th>
-                                    <th>Logged In</th>
-                                    <th>Logged Out</th>
+                                    <th>{{ __('user::user.view.col_device') }}</th>
+                                    <th>{{ __('user::user.view.col_browser') }}</th>
+                                    <th>{{ __('user::user.view.col_platform') }}</th>
+                                    <th>{{ __('user::user.view.col_ip_address') }}</th>
+                                    <th>{{ __('user::user.view.col_logged_in') }}</th>
+                                    <th>{{ __('user::user.view.col_logged_out') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -393,7 +393,7 @@
                                     <tr>
                                         <td colspan="7" class="text-center text-muted py-4">
                                             <i class="ph-clock-counter-clockwise d-block mb-2 opacity-25 fs-4"></i>
-                                            No login history recorded
+                                            {{ __('user::user.view.no_login_history') }}
                                         </td>
                                     </tr>
                                 @endforelse
@@ -415,7 +415,7 @@
             <div class="card border-danger mt-3" id="manage-account">
                 <div class="card-header bg-danger text-white d-flex align-items-center gap-2">
                     <i class="ph-warning-octagon"></i>
-                    <span class="fw-semibold">Manage Account</span>
+                    <span class="fw-semibold">{{ __('user::user.view.manage_account_heading') }}</span>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('admin.users.account.manage', $user->id) }}">
@@ -428,34 +428,34 @@
                                             id="actionReset" value="reset" checked
                                             onchange="updateManageWarning()">
                                         <label class="form-check-label" for="actionReset">
-                                            <i class="ph-arrow-counter-clockwise text-warning me-1"></i> Reset Account
+                                            <i class="ph-arrow-counter-clockwise text-warning me-1"></i> {{ __('user::user.view.reset_account_label') }}
                                         </label>
-                                        <div class="text-muted fs-xs ms-4">Clears profile data, keeps login credentials</div>
+                                        <div class="text-muted fs-xs ms-4">{{ __('user::user.view.reset_account_hint') }}</div>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="action"
                                             id="actionDelete" value="delete"
                                             onchange="updateManageWarning()">
                                         <label class="form-check-label" for="actionDelete">
-                                            <i class="ph-trash text-danger me-1"></i> Delete Account
+                                            <i class="ph-trash text-danger me-1"></i> {{ __('user::user.view.delete_account_label') }}
                                         </label>
-                                        <div class="text-muted fs-xs ms-4">Permanently removes the user and all data</div>
+                                        <div class="text-muted fs-xs ms-4">{{ __('user::user.view.delete_account_hint') }}</div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div id="manageResetWarning" class="alert alert-warning mb-0">
-                                    <strong>Warning:</strong> This will clear all user data but retain login credentials.
+                                    <strong>{{ __('user::user.view.warning_label') }}</strong> {{ __('user::user.view.reset_warning_text') }}
                                 </div>
                                 <div id="manageDeleteWarning" class="alert alert-danger mb-0 d-none">
-                                    <strong>Danger:</strong> This will permanently delete the user and all data. This action cannot be undone.
+                                    <strong>{{ __('user::user.view.danger_label') }}</strong> {{ __('user::user.view.delete_warning_text') }}
                                 </div>
                             </div>
                         </div>
                         <div class="mt-3">
                             <button type="submit" id="manageConfirmButton" class="btn btn-warning swal-confirm"
-                                    data-text="This action cannot be undone. Are you sure you want to proceed?">
-                                <i class="ph-arrow-counter-clockwise me-1"></i> Confirm Reset
+                                    data-text="{{ __('user::user.view.manage_account_confirm') }}">
+                                <i class="ph-arrow-counter-clockwise me-1"></i> {{ __('user::user.view.confirm_reset') }}
                             </button>
                         </div>
                     </form>
@@ -499,10 +499,10 @@
                 document.getElementById('manageDeleteWarning').classList.toggle('d-none', !isDelete);
                 const btn = document.getElementById('manageConfirmButton');
                 if (isDelete) {
-                    btn.innerHTML = '<i class="ph-trash me-1"></i> Confirm Delete';
+                    btn.innerHTML = '<i class="ph-trash me-1"></i> {{ __('user::user.view.confirm_delete') }}';
                     btn.className = 'btn btn-danger';
                 } else {
-                    btn.innerHTML = '<i class="ph-arrow-counter-clockwise me-1"></i> Confirm Reset';
+                    btn.innerHTML = '<i class="ph-arrow-counter-clockwise me-1"></i> {{ __('user::user.view.confirm_reset') }}';
                     btn.className = 'btn btn-warning';
                 }
             }

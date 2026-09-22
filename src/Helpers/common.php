@@ -123,3 +123,23 @@ if (! function_exists('form_old_key')) {
         return str_replace(['.', '[]', '[', ']'], ['_', '', '.', ''], $name);
     }
 }
+
+if (! function_exists('display_label')) {
+
+    /**
+     * A label that comes from config or the database (a menu item, permission,
+     * setting group), translated through lang/{locale}.json when a translation
+     * exists. Unlike __() it never returns an array: a value that happens to
+     * equal a lang file name ("auth", "validation") comes back unchanged.
+     */
+    function display_label(?string $value): string
+    {
+        if ($value === null || $value === '') {
+            return '';
+        }
+
+        $line = __($value);
+
+        return is_string($line) ? $line : $value;
+    }
+}

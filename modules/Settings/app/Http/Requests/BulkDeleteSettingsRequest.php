@@ -26,7 +26,7 @@ class BulkDeleteSettingsRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'ids.required' => 'No settings selected.',
+            'ids.required' => __('settings::settings.errors.bulk_ids_required'),
         ];
     }
 }

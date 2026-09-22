@@ -38,7 +38,7 @@ class NotificationController extends Controller
 
         if ($request->wantsJson() || $request->is('api/*')) {
             return JsonResponseFactory::paginated(
-                'Notifications fetched successfully',
+                __('notification::notification.api.notifications_fetched'),
                 $notifications,
                 fn ($notification) => new NotificationResource($notification)
             );
@@ -56,7 +56,7 @@ class NotificationController extends Controller
         $notification->markAsRead();
 
         if ($request->wantsJson() || $request->is('api/*')) {
-            return JsonResponseFactory::success('Notification fetched successfully', new NotificationResource($notification));
+            return JsonResponseFactory::success(__('notification::notification.api.notification_fetched'), new NotificationResource($notification));
         }
 
         $isModal = $request->boolean('isModal');
@@ -74,11 +74,11 @@ class NotificationController extends Controller
         $notification->delete();
 
         if ($request->wantsJson() || $request->is('api/*')) {
-            return JsonResponseFactory::success('Notification deleted successfully');
+            return JsonResponseFactory::success(__('notification::notification.api.notification_deleted'));
         }
 
         return redirect()->route('admin.notification.index')
-            ->with('success', 'Notification deleted successfully');
+            ->with('success', __('notification::notification.flash.deleted'));
     }
 
     public function markAsRead(Request $request, string $id): RedirectResponse|JsonResponse
@@ -90,10 +90,10 @@ class NotificationController extends Controller
         $notification->markAsRead();
 
         if ($request->wantsJson() || $request->is('api/*')) {
-            return JsonResponseFactory::success('Notification marked as read', new NotificationResource($notification));
+            return JsonResponseFactory::success(__('notification::notification.api.notification_marked_as_read'), new NotificationResource($notification));
         }
 
-        return redirect()->back()->with('success', 'Notification marked as read.');
+        return redirect()->back()->with('success', __('notification::notification.flash.marked_as_read'));
     }
 
     public function markAsUnread(Request $request, string $id): RedirectResponse|JsonResponse
@@ -105,10 +105,10 @@ class NotificationController extends Controller
         $notification->markAsUnread();
 
         if ($request->wantsJson() || $request->is('api/*')) {
-            return JsonResponseFactory::success('Notification marked as unread', new NotificationResource($notification));
+            return JsonResponseFactory::success(__('notification::notification.api.notification_marked_as_unread'), new NotificationResource($notification));
         }
 
-        return redirect()->back()->with('success', 'Notification marked as unread.');
+        return redirect()->back()->with('success', __('notification::notification.flash.marked_as_unread'));
     }
 
     public function markAllAsRead(Request $request): RedirectResponse|JsonResponse
@@ -124,10 +124,10 @@ class NotificationController extends Controller
             ->update(['read_at' => now()]);
 
         if ($request->wantsJson() || $request->is('api/*')) {
-            return JsonResponseFactory::success('All notifications marked as read');
+            return JsonResponseFactory::success(__('notification::notification.api.all_marked_as_read'));
         }
 
-        return redirect()->back()->with('success', 'All notifications marked as read.');
+        return redirect()->back()->with('success', __('notification::notification.flash.all_marked_as_read'));
     }
 
     public function counts(): JsonResponse
@@ -136,7 +136,7 @@ class NotificationController extends Controller
 
         $baseQuery = NotificationQuery::make()->forUser(Auth::user());
 
-        return JsonResponseFactory::success('Notification counts fetched successfully', [
+        return JsonResponseFactory::success(__('notification::notification.api.counts_fetched'), [
             'total' => $baseQuery->count(),
             'unread' => $baseQuery->filterByReadStatus(false)->count(),
         ]);

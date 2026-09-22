@@ -25,7 +25,7 @@
     @if ($letterhead)
         <div class="letterhead">
             {{-- mPDF ignores max-height from the stylesheet, so the height must be set on the image itself. --}}
-            @if ($logoUrl)<img src="{{ $logoUrl }}" alt="logo" style="height: 46px; width: auto;"><br>@endif
+            @if ($logoUrl)<img src="{{ $logoUrl }}" alt="{{ __('foundation::foundation.exports.logo_alt') }}" style="height: 46px; width: auto;"><br>@endif
             <span class="company">{{ $companyName }}</span>
         </div>
     @endif
@@ -92,6 +92,6 @@
         </table>
     @endif
 
-    <div class="footer">Generated {{ now()->format('d-M-Y h:i:s A') }} &nbsp; Page {PAGENO} of {nbpg}</div>
+    <div class="footer">{!! __('foundation::foundation.exports.footer', ['date' => now()->format('d-M-Y h:i:s A')]) !!}</div>
 </body>
 </html>

@@ -45,9 +45,9 @@ class BulkUploadRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'users.required' => 'Please select a file to upload',
-            'users.file' => 'The upload must be a valid file',
-            'users.mimes' => 'Only Excel files (.xlsx, .xls) are supported',
+            'users.required' => __('user::user.errors.bulk_file_required'),
+            'users.file' => __('user::user.errors.bulk_file_invalid'),
+            'users.mimes' => __('user::user.errors.bulk_file_mimes'),
         ];
     }
 }

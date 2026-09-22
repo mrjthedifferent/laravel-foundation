@@ -15,10 +15,40 @@ view('thing::layouts.master')                    // Modules/Thing/resources/view
 Every module has its own layout — one line, via `<x-module-layout>`:
 
 ```blade
-<x-module-layout route="admin.things.index" label="Things" />
+<x-module-layout route="admin.things.index" :label="__('thing::thing.index.title')" />
 ```
 
 A page still `@extends('thing::layouts.master')` and fills `@section('breadcrumb')` / `@section('content')` exactly as before — `route`/`label` only supply the layout's own "Home → Things" breadcrumb prefix.
+
+---
+
+### Translations
+
+No user-facing English is written directly in a view, controller, action or Form Request `messages()`. It lives in the module's lang file and is read with `__()`:
+
+```php
+// Modules/Thing/lang/en/thing.php — loaded automatically under the `thing` namespace
+return [
+    'index' => ['title' => 'Things', 'empty' => 'No things yet', 'delete_confirm' => 'Delete :name?'],
+    'create' => ['title' => 'Create Thing'],
+    'flash' => ['created' => 'Thing created successfully', 'deleted' => 'Thing deleted successfully'],
+];
+```
+
+```blade
+<h6>{{ __('thing::thing.index.title') }}</h6>
+<x-form.input name="name" :label="__('foundation::foundation.common.name')" />
+<a class="swal-confirm" data-text="{{ __('thing::thing.index.delete_confirm', ['name' => $thing->name]) }}">
+<script> const msg = @js(__('thing::thing.index.empty')); </script>   {{-- inside JS: @js, never {{ }} --}}
+```
+
+- One file per module, `lang/en/{alias}.php`, one section per view plus `flash` and `errors`.
+- Generic words (Name, Status, Action, Edit, Delete, Save, Cancel, Close, Search, Filter, Reset, Active, Inactive, Created At, …) come from `foundation::foundation.common.*` — use them only for an exact match; anything more specific ("Delete Thing") stays in the module file.
+- Put variables in a `:placeholder`, never concatenate around a translated string.
+- **Identifiers stay English.** Permission names (`@can('View Thing')`), setting keys, route names and stored values are never translated. Labels that come from config or the database — sidebar `label`s, permission and setting names, stored titles — are displayed through `{{ display_label($value) }}`, so a project can translate them in `lang/{locale}.json` keyed by the English text without touching the identifier. Never `{{ __($value) }}` on data: a value equal to a lang file name (`auth`, `validation`) returns an array and breaks the page. (Enum `label()` methods, whose strings are fixed literals, use `__('Active')` directly.)
+- Log messages are not translated.
+
+A project changes any string without editing the package: `php artisan vendor:publish --tag=foundation-lang` for the shared file (keys it leaves out fall back to the package's), and a full copy of a module's file at `resources/lang/modules/{alias}/en/{alias}.php` for a module (that directory replaces the module's own, so copy the whole file). Adding a language is the same files under another locale directory.
 
 ---
 
@@ -26,8 +56,8 @@ A page still `@extends('thing::layouts.master')` and fills `@section('breadcrumb
 
 Flash with `success` or `error` keys — SweetAlert2 renders them automatically:
 ```php
-return redirect()->route('admin.things.index')->with('success', 'Thing created successfully');
-return back()->with('error', 'Failed to create thing');
+return redirect()->route('admin.things.index')->with('success', __('thing::thing.flash.created'));
+return back()->with('error', __('thing::thing.flash.create_failed'));
 ```
 
 Never write custom alert HTML — the layout handles all flash messages.
@@ -75,66 +105,60 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 @extends('thing::layouts.master')
 
 @section('breadcrumb')
-    <span class="breadcrumb-item active">Thing List</span>
+    <span class="breadcrumb-item active">{{ __('thing::thing.index.title') }}</span>
 @endsection
 
 @section('content')
     {{-- Filter card --}}
     <x-search-card>
         <div class="col-md-3 mb-3">
-            <x-form.input name="search" label="Search" :value="request('search')" placeholder="Search..." />
+            <x-form.input name="search" :label="__('foundation::foundation.common.search')" :value="request('search')" :placeholder="__('thing::thing.index.search_placeholder')" />
         </div>
         <div class="col-md-3 mb-3">
-            <x-form.select class="select" name="is_active" label="Status" :options="integerStatus()" :selected="request('is_active')" data-placeholder="Select Status..." placeholder="All" />
+            <x-form.select class="select" name="is_active" :label="__('foundation::foundation.common.status')" :options="integerStatus()" :selected="request('is_active')" />
         </div>
     </x-search-card>
 
     {{-- Table --}}
-    <x-table-view-pagination title="Thing List" :data="$things">
+    <x-table-view-pagination :title="__('thing::thing.index.title')" :data="$things" :empty-message="__('thing::thing.index.empty')">
         <x-slot name="actions">
             @can('Create Thing')
                 <a href="{{ route('admin.things.create') }}" class="btn btn-primary w-sm">
-                    <i class="ph-plus me-1"></i> Add Thing
+                    <i class="ph-plus me-1"></i> {{ __('thing::thing.index.add') }}
                 </a>
             @endcan
         </x-slot>
 
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Status</th>
-                <th class="text-end">Action</th>
+                <th>{{ __('foundation::foundation.common.name') }}</th>
+                <th>{{ __('foundation::foundation.common.status') }}</th>
+                <th class="text-end">{{ __('foundation::foundation.common.action') }}</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($things as $thing)
                 <tr>
                     <td>{{ $thing->name }}</td>
-                    <td>
-                        @if ($thing->is_active)
-                            <span class="badge bg-success">Active</span>
-                        @else
-                            <span class="badge bg-danger">Inactive</span>
-                        @endif
-                    </td>
+                    <td><x-status-badge :active="$thing->is_active" /></td>
                     <td class="text-end">
                         <x-dropdown-menu>
                             @can('View Thing')
                                 <x-dropdown-link :url="route('admin.things.show', $thing->id)">
-                                    <i class="ph-eye me-2"></i> View
+                                    <i class="ph-eye me-2"></i> {{ __('foundation::foundation.common.view') }}
                                 </x-dropdown-link>
                             @endcan
                             @can('Edit Thing')
                                 <x-dropdown-link :url="route('admin.things.edit', $thing->id)">
-                                    <i class="ph-pencil-simple me-2"></i> Edit
+                                    <i class="ph-pencil-simple me-2"></i> {{ __('foundation::foundation.common.edit') }}
                                 </x-dropdown-link>
                             @endcan
                             @can('Delete Thing')
                                 <x-dropdown-link
                                     :url="route('admin.things.destroy', $thing->id)"
                                     class="text-danger swal-confirm"
-                                    data-text="Are you sure you want to delete this thing?">
-                                    <i class="ph-trash me-2"></i> Delete
+                                    data-text="{{ __('thing::thing.index.delete_confirm', ['name' => $thing->name]) }}">
+                                    <i class="ph-trash me-2"></i> {{ __('foundation::foundation.common.delete') }}
                                 </x-dropdown-link>
                             @endcan
                         </x-dropdown-menu>
@@ -154,8 +178,8 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 @extends('thing::layouts.master')
 
 @section('breadcrumb')
-    <a href="{{ route('admin.things.index') }}" class="breadcrumb-item">Thing List</a>
-    <span class="breadcrumb-item active">Create Thing</span>
+    <a href="{{ route('admin.things.index') }}" class="breadcrumb-item">{{ __('thing::thing.index.title') }}</a>
+    <span class="breadcrumb-item active">{{ __('thing::thing.create.title') }}</span>
 @endsection
 
 @section('content')
@@ -163,25 +187,24 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
     @csrf
 
     <x-page-header
-        title="Create New Thing"
-        subtitle="Fill in the details below"
+        :title="__('thing::thing.create.title')"
         icon="ph-plus"
         :back-url="route('admin.things.index')"
-        back-label="Back to List">
+        :back-label="__('thing::thing.form.back')">
         <x-slot name="actions">
             <button type="submit" class="btn btn-primary px-5">
-                <i class="ph-floppy-disk me-1"></i>Create Thing
+                <i class="ph-floppy-disk me-1"></i>{{ __('thing::thing.create.submit') }}
             </button>
         </x-slot>
     </x-page-header>
 
-    <x-form-section title="Basic Information" icon="ph-info">
+    <x-form-section :title="__('thing::thing.form.basic_information')" icon="ph-info">
         <div class="row g-3">
             <div class="col-md-6">
-                <x-form.input name="name" label="Name" required placeholder="Enter name" />
+                <x-form.input name="name" :label="__('foundation::foundation.common.name')" required />
             </div>
             <div class="col-md-6">
-                <x-form.select class="select" name="is_active" label="Status" required :options="integerStatus()" selected="1" data-placeholder="Select status…" />
+                <x-form.select class="select" name="is_active" :label="__('foundation::foundation.common.status')" required :options="integerStatus()" selected="1" />
             </div>
         </div>
     </x-form-section>
@@ -198,7 +221,7 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 @extends('thing::layouts.master')
 
 @section('breadcrumb')
-    <a href="{{ route('admin.things.index') }}" class="breadcrumb-item">Thing List</a>
+    <a href="{{ route('admin.things.index') }}" class="breadcrumb-item">{{ __('thing::thing.index.title') }}</a>
     <span class="breadcrumb-item active">{{ $thing->name }}</span>
 @endsection
 
@@ -208,26 +231,26 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
     @method('PUT')
 
     <x-page-header
-        title="Edit: {{ $thing->name }}"
+        :title="__('thing::thing.edit.title', ['name' => $thing->name])"
         icon="ph-pencil-simple"
         :back-url="route('admin.things.index')"
-        back-label="Back to List">
+        :back-label="__('thing::thing.form.back')">
         <x-slot name="actions">
             <button type="submit" class="btn btn-primary px-5">
-                <i class="ph-floppy-disk me-1"></i>Update Thing
+                <i class="ph-floppy-disk me-1"></i>{{ __('thing::thing.edit.submit') }}
             </button>
         </x-slot>
     </x-page-header>
 
-    <x-form-section title="Basic Information" icon="ph-info">
+    <x-form-section :title="__('thing::thing.form.basic_information')" icon="ph-info">
         <div class="row g-3">
             <div class="col-md-6">
-                <x-form.input name="name" label="Name" required :value="$thing->name" />
+                <x-form.input name="name" :label="__('foundation::foundation.common.name')" required :value="$thing->name" />
                 {{-- Every field's current value is passed explicitly — there is
                      no model-binding auto-population to rely on. --}}
             </div>
             <div class="col-md-6">
-                <x-form.select class="select" name="is_active" label="Status" required :options="integerStatus()" :selected="(int) $thing->is_active" />
+                <x-form.select class="select" name="is_active" :label="__('foundation::foundation.common.status')" required :options="integerStatus()" :selected="(int) $thing->is_active" />
             </div>
         </div>
     </x-form-section>
@@ -254,7 +277,7 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 
 **Authorization:** Gate all action buttons and links with `@can('Permission Name') ... @endcan`.
 
-**Status badges:** `<span class="badge bg-success">Active</span>` / `<span class="badge bg-danger">Inactive</span>`.
+**Status badges:** `<x-status-badge :active="$thing->is_active" />` — already translated; don't hand-write the badge markup.
 
 **Scripts:** Add page-specific JS with `@push('scripts') <script>...</script> @endpush` at the bottom of the view.
 

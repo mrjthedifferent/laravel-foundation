@@ -21,6 +21,10 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CheckUserIsActive
 {
+    /**
+     * The English text of the inactive-account message, kept for callers that compare against it.
+     * What users see is its translation, foundation::foundation.auth.inactive.
+     */
     public const INACTIVE_MESSAGE = 'Your account is not active.';
 
     /**
@@ -59,7 +63,7 @@ class CheckUserIsActive
             $impersonation->stop();
 
             return redirect()->to(Route::has('admin.users.index') ? route('admin.users.index') : url('/'))
-                ->with('error', "Impersonation ended: {$user->name} can no longer access the system.");
+                ->with('error', __('foundation::foundation.auth.impersonation_ended', ['name' => $user->name]));
         }
 
         Auth::logout();
@@ -73,7 +77,7 @@ class CheckUserIsActive
     private function denialMessage(mixed $user): ?string
     {
         if ($user->is_active !== true) {
-            return self::INACTIVE_MESSAGE;
+            return __('foundation::foundation.auth.inactive');
         }
 
         return $user instanceof User ? $user->accessDenialMessage() : null;

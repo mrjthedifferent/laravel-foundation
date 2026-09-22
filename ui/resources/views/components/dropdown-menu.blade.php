@@ -1,4 +1,4 @@
-@props(['label' => 'Actions'])
+@props(['label' => null])
 
 <div class="d-inline-flex">
     <div class="dropdown">
@@ -6,7 +6,7 @@
                 class="btn btn-sm btn-outline-secondary px-2 py-1"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-                title="{{ $label }}">
+                title="{{ $label ?? __('foundation::foundation.common.actions') }}">
             <i class="ph-dots-three-vertical"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-end shadow-sm">

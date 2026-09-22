@@ -1,17 +1,17 @@
 @extends('settings::layouts.master')
 
 @section('breadcrumb')
-    <span class="breadcrumb-item active">Email Mailers</span>
+    <span class="breadcrumb-item active">{{ __('settings::settings.special_email_mailers.breadcrumb') }}</span>
 @endsection
 
 @php
     $transportOptions = [
-        'smtp' => 'SMTP (username & password)',
-        'microsoft_oauth' => 'Microsoft 365 / Outlook (SMTP OAuth2)',
-        'microsoft_graph' => 'Microsoft 365 / Outlook (Graph API)',
-        'sendmail' => 'Sendmail',
-        'log' => 'Log (write to log file)',
-        'array' => 'Array (discard)',
+        'smtp' => __('settings::settings.special_email_mailers.transport_smtp'),
+        'microsoft_oauth' => __('settings::settings.special_email_mailers.transport_microsoft_oauth'),
+        'microsoft_graph' => __('settings::settings.special_email_mailers.transport_microsoft_graph'),
+        'sendmail' => __('settings::settings.special_email_mailers.transport_sendmail'),
+        'log' => __('settings::settings.special_email_mailers.transport_log'),
+        'array' => __('settings::settings.special_email_mailers.transport_array'),
     ];
 @endphp
 
@@ -25,15 +25,15 @@
                 <i class="ph-envelope"></i>
             </div>
             <div>
-                <div class="fw-bold">Email Mailers</div>
-                <div class="text-muted fs-xs">Configure SMTP mailer providers</div>
+                <div class="fw-bold">{{ __('settings::settings.special_email_mailers.title') }}</div>
+                <div class="text-muted fs-xs">{{ __('settings::settings.special_email_mailers.subtitle') }}</div>
             </div>
         </div>
         <div class="d-flex align-items-center gap-2">
             <input type="email" id="test_email_address" class="form-control form-control-sm"
                    placeholder="test@example.com" style="width:200px;">
             <button type="button" id="sendEmailBtn" class="btn btn-sm btn-outline-primary">
-                <i class="ph-paper-plane-tilt me-1"></i>Send Test
+                <i class="ph-paper-plane-tilt me-1"></i>{{ __('settings::settings.special_email_mailers.send_test') }}
             </button>
         </div>
     </div>
@@ -43,50 +43,34 @@
         {{-- Provider quick-ref --}}
         <details class="mb-4">
             <summary class="d-flex align-items-center gap-2 p-3 rounded border bg-body-tertiary fw-semibold fs-sm cursor-pointer" style="list-style:none;">
-                <i class="ph-question text-primary"></i> Common provider settings (click to expand)
+                <i class="ph-question text-primary"></i> {{ __('settings::settings.special_email_mailers.quickref_summary') }}
             </summary>
             <div class="border border-top-0 rounded-bottom p-3 fs-sm">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <div class="fw-semibold mb-1">Gmail</div>
+                        <div class="fw-semibold mb-1">{{ __('settings::settings.special_email_mailers.gmail_heading') }}</div>
                         <ul class="mb-0 ps-3 text-muted">
-                            <li>Transport: <code>smtp</code></li>
-                            <li>Host: <code>smtp.gmail.com</code> · Port: <code>587</code> · Encryption: <code>tls</code></li>
-                            <li>Username: your Gmail address</li>
-                            <li>Password: <a href="https://myaccount.google.com/apppasswords" target="_blank">App Password</a> (not your Gmail password)</li>
+                            {!! __('settings::settings.special_email_mailers.gmail_block') !!}
                         </ul>
                     </div>
                     <div class="col-md-8">
-                        <div class="fw-semibold mb-1">Microsoft 365 / Outlook (OAuth2)</div>
+                        <div class="fw-semibold mb-1">{{ __('settings::settings.special_email_mailers.ms365_heading') }}</div>
                         <p class="text-muted mb-2">
-                            Microsoft is retiring SMTP basic authentication for Exchange Online — disabled by default
-                            for existing tenants at the end of December 2026. Use the
-                            <code>microsoft_oauth</code> transport, which authenticates with a token instead of a
-                            mailbox password. A password is never entered.
+                            {!! __('settings::settings.special_email_mailers.ms365_intro') !!}
                         </p>
                         <ul class="mb-2 ps-3 text-muted">
-                            <li>Register an app in <strong>Microsoft Entra ID → App registrations</strong> (single tenant), then copy the <strong>Tenant ID</strong>, <strong>Client ID</strong> and a new <strong>Client Secret</strong>.</li>
-                            <li><strong>API permissions</strong> → <em>APIs my organization uses</em> → <strong>Office 365 Exchange Online</strong> → <strong>Application permissions</strong> → <code>SMTP.SendAsApp</code>, then <strong>Grant admin consent</strong>.</li>
-                            <li>Run once per sending mailbox in Exchange Online PowerShell — the Object ID must come from <strong>Enterprise applications</strong>, not App registrations:</li>
+                            {!! __('settings::settings.special_email_mailers.ms365_steps') !!}
                         </ul>
 <pre class="bg-body-tertiary border rounded p-2 mb-2 fs-xs mb-0"><code>Connect-ExchangeOnline -Organization &lt;TENANT_ID&gt;
 New-ServicePrincipal -AppId &lt;CLIENT_ID&gt; -ObjectId &lt;ENTERPRISE_APP_OBJECT_ID&gt;
 Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&gt; -AccessRights FullAccess</code></pre>
                         <div class="text-muted">
-                            Keep <strong>From Address</strong> equal to the mailbox, otherwise Exchange replies
-                            <code>550 5.7.60 SendAsDenied</code> unless the service principal also has a
-                            <code>SendAs</code> grant.
-                            <a href="https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth" target="_blank">Microsoft docs</a>
+                            {!! __('settings::settings.special_email_mailers.ms365_from_note') !!}
                         </div>
                         <div class="alert alert-info d-flex gap-2 mt-3 mb-0 py-2 px-3 fs-sm">
                             <i class="ph-info flex-shrink-0 mt-1"></i>
                             <div>
-                                <strong>No PowerShell access, or Security Defaults blocking SMTP?</strong>
-                                Use the <code>Microsoft 365 / Outlook (Graph API)</code> transport instead. It takes the
-                                same Tenant ID, Client ID, Client Secret and Mailbox, but needs only the Microsoft Graph
-                                <code>Mail.Send</code> <em>application</em> permission (admin consented) — no
-                                <code>New-ServicePrincipal</code> / <code>Add-MailboxPermission</code> steps and no SMTP
-                                basic auth.
+                                {!! __('settings::settings.special_email_mailers.ms365_graph_alert') !!}
                             </div>
                         </div>
                     </div>
@@ -101,20 +85,20 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
             <div class="card mb-4">
                 <div class="card-header py-2 d-flex align-items-center gap-2 bg-body-tertiary border-bottom">
                     <i class="ph-check-circle text-primary"></i>
-                    <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">Active Mailer</span>
+                    <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">{{ __('settings::settings.special_email_mailers.active_mailer_header') }}</span>
                 </div>
                 <div class="card-body">
                     <x-form.select
                         class="select"
                         name="email_mailer"
                         id="email_mailer"
-                        label="Selected Email Mailer"
+                        label="{{ __('settings::settings.special_email_mailers.selected_mailer_label') }}"
                         :options="is_array($emailMailers->value) ? array_combine(array_column($emailMailers->value, 'TYPE'), array_column($emailMailers->value, 'TYPE')) : []"
                         :selected="isset($emailMailer) ? $emailMailer->value : null"
-                        data-placeholder="Select Email Mailer..."
-                        placeholder="Select Email Mailer..."
+                        data-placeholder="{{ __('settings::settings.special_email_mailers.select_mailer_placeholder') }}"
+                        placeholder="{{ __('settings::settings.special_email_mailers.select_mailer_placeholder') }}"
                     />
-                    <div class="form-text">The mailer that will be used to send all system emails</div>
+                    <div class="form-text">{{ __('settings::settings.special_email_mailers.active_mailer_help') }}</div>
                 </div>
             </div>
 
@@ -129,68 +113,68 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
                                 <span class="fw-semibold fs-sm">{{ $mailer['TYPE'] }}</span>
                             </div>
                             <button type="button" class="btn btn-sm btn-outline-danger remove-mailer-btn">
-                                <i class="ph-trash me-1"></i>Remove
+                                <i class="ph-trash me-1"></i>{{ __('settings::settings.common.remove') }}
                             </button>
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
                                 <div class="col-md-4">
-                                    <x-form.input name="email_mailers[{{ $index }}][TYPE]" label="Type" required :value="$mailer['TYPE']" class="mailer-type-input" placeholder="e.g. Gmail" />
-                                    <div class="form-text">Unique name for this mailer</div>
+                                    <x-form.input name="email_mailers[{{ $index }}][TYPE]" label="{{ __('settings::settings.special_email_mailers.field_type') }}" required :value="$mailer['TYPE']" class="mailer-type-input" placeholder="e.g. Gmail" />
+                                    <div class="form-text">{{ __('settings::settings.special_email_mailers.type_help') }}</div>
                                 </div>
                                 <div class="col-md-4">
-                                    <x-form.select name="email_mailers[{{ $index }}][VALUE][transport]" label="Transport" required class="transport-select" :options="$transportOptions" :selected="$mailer['VALUE']['transport'] ?? 'smtp'" />
+                                    <x-form.select name="email_mailers[{{ $index }}][VALUE][transport]" label="{{ __('settings::settings.special_email_mailers.field_transport') }}" required class="transport-select" :options="$transportOptions" :selected="$mailer['VALUE']['transport'] ?? 'smtp'" />
                                 </div>
 
                                 {{-- SMTP (password) credentials --}}
                                 <div class="col-md-4 transport-fields-smtp">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][host]" label="Host" required :value="$mailer['VALUE']['host'] ?? ''" placeholder="smtp.gmail.com" />
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][host]" label="{{ __('settings::settings.special_email_mailers.field_host') }}" required :value="$mailer['VALUE']['host'] ?? ''" placeholder="smtp.gmail.com" />
                                 </div>
                                 <div class="col-md-4 transport-fields-smtp">
-                                    <x-form.input type="number" name="email_mailers[{{ $index }}][VALUE][port]" label="Port" required :value="$mailer['VALUE']['port'] ?? 587" placeholder="587" />
+                                    <x-form.input type="number" name="email_mailers[{{ $index }}][VALUE][port]" label="{{ __('settings::settings.special_email_mailers.field_port') }}" required :value="$mailer['VALUE']['port'] ?? 587" placeholder="587" />
                                 </div>
                                 <div class="col-md-4 transport-fields-smtp">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][encryption]" label="Encryption" :value="$mailer['VALUE']['encryption'] ?? 'tls'" placeholder="tls" />
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][encryption]" label="{{ __('settings::settings.special_email_mailers.field_encryption') }}" :value="$mailer['VALUE']['encryption'] ?? 'tls'" placeholder="tls" />
                                 </div>
                                 <div class="col-md-4 transport-fields-smtp">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][username]" label="Username" :value="$mailer['VALUE']['username'] ?? ''" placeholder="you@example.com" />
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][username]" label="{{ __('settings::settings.special_email_mailers.field_username') }}" :value="$mailer['VALUE']['username'] ?? ''" placeholder="you@example.com" />
                                 </div>
                                 <div class="col-md-4 transport-fields-smtp">
-                                    <x-form.label for="email_mailers_{{ $index }}_password">Password</x-form.label>
+                                    <x-form.label for="email_mailers_{{ $index }}_password">{{ __('settings::settings.special_email_mailers.field_password') }}</x-form.label>
                                     <div class="input-group input-group-sm">
-                                        <x-form.input type="password" name="email_mailers[{{ $index }}][VALUE][password]" id="email_mailers_{{ $index }}_password" :placeholder="! empty($mailer['VALUE']['password']) ? '•••••••• (unchanged)' : 'Enter password'" />
+                                        <x-form.input type="password" name="email_mailers[{{ $index }}][VALUE][password]" id="email_mailers_{{ $index }}_password" :placeholder="! empty($mailer['VALUE']['password']) ? '•••••••• (unchanged)' : __('settings::settings.special_email_mailers.enter_password')" />
                                         <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
                                     </div>
-                                    <div class="form-text">Leave blank to keep the current password</div>
+                                    <div class="form-text">{{ __('settings::settings.special_email_mailers.password_help') }}</div>
                                 </div>
 
                                 {{-- Microsoft 365 OAuth2 credentials --}}
                                 <div class="col-md-4 transport-fields-oauth">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][tenant_id]" label="Tenant ID" required :value="$mailer['VALUE']['tenant_id'] ?? ''" placeholder="00000000-0000-0000-0000-000000000000" />
-                                    <div class="form-text">Entra ID → Overview → Tenant ID</div>
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][tenant_id]" label="{{ __('settings::settings.special_email_mailers.field_tenant_id') }}" required :value="$mailer['VALUE']['tenant_id'] ?? ''" placeholder="00000000-0000-0000-0000-000000000000" />
+                                    <div class="form-text">{{ __('settings::settings.special_email_mailers.tenant_id_help') }}</div>
                                 </div>
                                 <div class="col-md-4 transport-fields-oauth">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][client_id]" label="Client ID" required :value="$mailer['VALUE']['client_id'] ?? ''" placeholder="Application (client) ID" />
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][client_id]" label="{{ __('settings::settings.special_email_mailers.field_client_id') }}" required :value="$mailer['VALUE']['client_id'] ?? ''" placeholder="{{ __('settings::settings.special_email_mailers.client_id_placeholder') }}" />
                                 </div>
                                 <div class="col-md-4 transport-fields-oauth">
-                                    <x-form.label for="email_mailers_{{ $index }}_client_secret" required>Client Secret</x-form.label>
+                                    <x-form.label for="email_mailers_{{ $index }}_client_secret" required>{{ __('settings::settings.special_email_mailers.field_client_secret') }}</x-form.label>
                                     <div class="input-group input-group-sm">
-                                        <x-form.input type="password" name="email_mailers[{{ $index }}][VALUE][client_secret]" id="email_mailers_{{ $index }}_client_secret" :placeholder="! empty($mailer['VALUE']['client_secret']) ? '•••••••• (unchanged)' : 'Client secret value'" />
+                                        <x-form.input type="password" name="email_mailers[{{ $index }}][VALUE][client_secret]" id="email_mailers_{{ $index }}_client_secret" :placeholder="! empty($mailer['VALUE']['client_secret']) ? '•••••••• (unchanged)' : __('settings::settings.special_email_mailers.enter_client_secret')" />
                                         <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
                                     </div>
-                                    <div class="form-text">The secret <em>value</em>, not the secret ID · leave blank to keep the current secret</div>
+                                    <div class="form-text">{!! __('settings::settings.special_email_mailers.client_secret_help') !!}</div>
                                 </div>
                                 <div class="col-md-4 transport-fields-oauth">
-                                    <x-form.input type="email" name="email_mailers[{{ $index }}][VALUE][mailbox]" label="Mailbox" required :value="$mailer['VALUE']['mailbox'] ?? ''" placeholder="noreply@yourcompany.com" />
-                                    <div class="form-text">Mailbox granted to the service principal</div>
+                                    <x-form.input type="email" name="email_mailers[{{ $index }}][VALUE][mailbox]" label="{{ __('settings::settings.special_email_mailers.field_mailbox') }}" required :value="$mailer['VALUE']['mailbox'] ?? ''" placeholder="noreply@yourcompany.com" />
+                                    <div class="form-text">{{ __('settings::settings.special_email_mailers.mailbox_help') }}</div>
                                 </div>
 
                                 {{-- Shared --}}
                                 <div class="col-md-4">
-                                    <x-form.input type="email" name="email_mailers[{{ $index }}][VALUE][from][address]" label="From Address" required :value="$mailer['VALUE']['from']['address'] ?? ''" placeholder="noreply@yourcompany.com" />
+                                    <x-form.input type="email" name="email_mailers[{{ $index }}][VALUE][from][address]" label="{{ __('settings::settings.special_email_mailers.field_from_address') }}" required :value="$mailer['VALUE']['from']['address'] ?? ''" placeholder="noreply@yourcompany.com" />
                                 </div>
                                 <div class="col-md-4">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][from][name]" label="From Name" required :value="$mailer['VALUE']['from']['name'] ?? ''" placeholder="Your Company" />
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][from][name]" label="{{ __('settings::settings.special_email_mailers.field_from_name') }}" required :value="$mailer['VALUE']['from']['name'] ?? ''" placeholder="{{ __('settings::settings.special_email_mailers.from_name_placeholder') }}" />
                                 </div>
                             </div>
                         </div>
@@ -201,10 +185,10 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
 
             <div class="d-flex align-items-center justify-content-between mt-2">
                 <button type="button" class="btn btn-sm btn-outline-primary" id="addMailerBtn">
-                    <i class="ph-plus me-1"></i>Add Mailer
+                    <i class="ph-plus me-1"></i>{{ __('settings::settings.special_email_mailers.add_mailer') }}
                 </button>
                 <button type="submit" class="btn btn-primary px-4">
-                    <i class="ph-floppy-disk me-1"></i>Save Mailers
+                    <i class="ph-floppy-disk me-1"></i>{{ __('settings::settings.special_email_mailers.save_mailers') }}
                 </button>
             </div>
         </form>
@@ -253,9 +237,9 @@ document.addEventListener('click', function (e) {
     var btn = e.target.closest('.remove-mailer-btn');
     if (!btn) return;
     window.showConfirm({
-        title: 'Remove this mailer?',
+        title: '{{ __('settings::settings.special_email_mailers.remove_mailer_confirm') }}',
         icon: 'warning',
-        confirmText: 'Remove',
+        confirmText: '{{ __('settings::settings.common.remove') }}',
         confirmClass: 'btn btn-danger',
         onConfirm: function() { btn.closest('.card').remove(); }
     });
@@ -270,19 +254,19 @@ document.getElementById('addMailerBtn').addEventListener('click', function () {
         <div class="card-header py-2 d-flex align-items-center justify-content-between bg-body-tertiary border-bottom">
             <div class="d-flex align-items-center gap-2">
                 <i class="ph-envelope-simple text-primary"></i>
-                <span class="fw-semibold fs-sm">New Mailer</span>
+                <span class="fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.new_mailer') }}</span>
             </div>
-            <button type="button" class="btn btn-sm btn-outline-danger remove-mailer-btn"><i class="ph-trash me-1"></i>Remove</button>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-mailer-btn"><i class="ph-trash me-1"></i>{{ __('settings::settings.common.remove') }}</button>
         </div>
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-md-4">
-                    <label class="form-label fw-semibold fs-sm">Type <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_type') }} <span class="text-danger">*</span></label>
                     <input type="text" name="email_mailers[${idx}][TYPE]" class="form-control form-control-sm mailer-type-input" required placeholder="e.g. Outlook365">
-                    <div class="form-text">Unique name for this mailer</div>
+                    <div class="form-text">{{ __('settings::settings.special_email_mailers.type_help') }}</div>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label fw-semibold fs-sm">Transport <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_transport') }} <span class="text-danger">*</span></label>
                     <select name="email_mailers[${idx}][VALUE][transport]" class="form-select form-select-sm transport-select" required>
                         @foreach ($transportOptions as $value => $label)
                         <option value="{{ $value }}">{{ $label }}</option>
@@ -291,23 +275,23 @@ document.getElementById('addMailerBtn').addEventListener('click', function () {
                 </div>
 
                 <div class="col-md-4 transport-fields-smtp">
-                    <label class="form-label fw-semibold fs-sm">Host <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_host') }} <span class="text-danger">*</span></label>
                     <input type="text" name="email_mailers[${idx}][VALUE][host]" class="form-control form-control-sm" placeholder="smtp.gmail.com">
                 </div>
                 <div class="col-md-4 transport-fields-smtp">
-                    <label class="form-label fw-semibold fs-sm">Port <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_port') }} <span class="text-danger">*</span></label>
                     <input type="number" name="email_mailers[${idx}][VALUE][port]" class="form-control form-control-sm" value="587">
                 </div>
                 <div class="col-md-4 transport-fields-smtp">
-                    <label class="form-label fw-semibold fs-sm">Encryption</label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_encryption') }}</label>
                     <input type="text" name="email_mailers[${idx}][VALUE][encryption]" class="form-control form-control-sm" value="tls">
                 </div>
                 <div class="col-md-4 transport-fields-smtp">
-                    <label class="form-label fw-semibold fs-sm">Username</label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_username') }}</label>
                     <input type="text" name="email_mailers[${idx}][VALUE][username]" class="form-control form-control-sm" placeholder="you@example.com">
                 </div>
                 <div class="col-md-4 transport-fields-smtp">
-                    <label class="form-label fw-semibold fs-sm">Password</label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_password') }}</label>
                     <div class="input-group input-group-sm">
                         <input type="password" name="email_mailers[${idx}][VALUE][password]" class="form-control form-control-sm">
                         <button type="button" class="btn btn-outline-secondary toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
@@ -315,35 +299,35 @@ document.getElementById('addMailerBtn').addEventListener('click', function () {
                 </div>
 
                 <div class="col-md-4 transport-fields-oauth d-none">
-                    <label class="form-label fw-semibold fs-sm">Tenant ID <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_tenant_id') }} <span class="text-danger">*</span></label>
                     <input type="text" name="email_mailers[${idx}][VALUE][tenant_id]" class="form-control form-control-sm" placeholder="00000000-0000-0000-0000-000000000000">
-                    <div class="form-text">Entra ID &rarr; Overview &rarr; Tenant ID</div>
+                    <div class="form-text">{{ __('settings::settings.special_email_mailers.tenant_id_help') }}</div>
                 </div>
                 <div class="col-md-4 transport-fields-oauth d-none">
-                    <label class="form-label fw-semibold fs-sm">Client ID <span class="text-danger">*</span></label>
-                    <input type="text" name="email_mailers[${idx}][VALUE][client_id]" class="form-control form-control-sm" placeholder="Application (client) ID">
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_client_id') }} <span class="text-danger">*</span></label>
+                    <input type="text" name="email_mailers[${idx}][VALUE][client_id]" class="form-control form-control-sm" placeholder="{{ __('settings::settings.special_email_mailers.client_id_placeholder') }}">
                 </div>
                 <div class="col-md-4 transport-fields-oauth d-none">
-                    <label class="form-label fw-semibold fs-sm">Client Secret <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_client_secret') }} <span class="text-danger">*</span></label>
                     <div class="input-group input-group-sm">
                         <input type="password" name="email_mailers[${idx}][VALUE][client_secret]" class="form-control form-control-sm">
                         <button type="button" class="btn btn-outline-secondary toggle-pw" tabindex="-1"><i class="ph-eye"></i></button>
                     </div>
-                    <div class="form-text">The secret <em>value</em>, not the secret ID</div>
+                    <div class="form-text">{!! __('settings::settings.special_email_mailers.client_secret_short_help') !!}</div>
                 </div>
                 <div class="col-md-4 transport-fields-oauth d-none">
-                    <label class="form-label fw-semibold fs-sm">Mailbox <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_mailbox') }} <span class="text-danger">*</span></label>
                     <input type="email" name="email_mailers[${idx}][VALUE][mailbox]" class="form-control form-control-sm" placeholder="noreply@yourcompany.com">
-                    <div class="form-text">Mailbox granted to the service principal</div>
+                    <div class="form-text">{{ __('settings::settings.special_email_mailers.mailbox_help') }}</div>
                 </div>
 
                 <div class="col-md-4">
-                    <label class="form-label fw-semibold fs-sm">From Address <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_from_address') }} <span class="text-danger">*</span></label>
                     <input type="email" name="email_mailers[${idx}][VALUE][from][address]" class="form-control form-control-sm" required placeholder="noreply@yourcompany.com">
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label fw-semibold fs-sm">From Name <span class="text-danger">*</span></label>
-                    <input type="text" name="email_mailers[${idx}][VALUE][from][name]" class="form-control form-control-sm" required placeholder="Your Company">
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_email_mailers.field_from_name') }} <span class="text-danger">*</span></label>
+                    <input type="text" name="email_mailers[${idx}][VALUE][from][name]" class="form-control form-control-sm" required placeholder="{{ __('settings::settings.special_email_mailers.from_name_placeholder') }}">
                 </div>
             </div>
         </div>
@@ -355,18 +339,18 @@ document.getElementById('addMailerBtn').addEventListener('click', function () {
 document.getElementById('sendEmailBtn').addEventListener('click', function () {
     var email = document.getElementById('test_email_address').value.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        window.showConfirm({ icon: 'error', title: 'Invalid email', text: 'Please enter a valid email address.', confirmClass: 'btn btn-danger', showCancelButton: false, confirmText: 'OK' });
+        window.showConfirm({ icon: 'error', title: '{{ __('settings::settings.special_email_mailers.test_email_invalid_title') }}', text: '{{ __('settings::settings.special_email_mailers.test_email_invalid_text') }}', confirmClass: 'btn btn-danger', showCancelButton: false, confirmText: '{{ __('settings::settings.common.ok') }}' });
         return;
     }
     var btn = this, orig = btn.innerHTML;
     btn.disabled = true;
-    btn.innerHTML = '<i class="ph-circle-notch ph-spin me-1"></i>Sending…';
+    btn.innerHTML = '<i class="ph-circle-notch ph-spin me-1"></i>{{ __('settings::settings.common.sending') }}';
     $.post('{{ route("admin.settings.special.send_test_email") }}', { email: email, _token: '{{ csrf_token() }}' })
         .done(function (r) {
-            window.toast('success', 'Sent', r.message);
+            window.toast('success', '{{ __('settings::settings.special_email_mailers.test_email_sent_title') }}', r.message);
         })
         .fail(function (r) {
-            window.showConfirm({ icon: 'error', title: 'Failed', text: r.responseJSON ? r.responseJSON.message : 'An error occurred.', confirmClass: 'btn btn-danger', showCancelButton: false, confirmText: 'OK' });
+            window.showConfirm({ icon: 'error', title: '{{ __('settings::settings.special_email_mailers.test_email_failed_title') }}', text: r.responseJSON ? r.responseJSON.message : '{{ __('settings::settings.common.error_occurred') }}', confirmClass: 'btn btn-danger', showCancelButton: false, confirmText: '{{ __('settings::settings.common.ok') }}' });
         })
         .always(function () { btn.disabled = false; btn.innerHTML = orig; });
 });

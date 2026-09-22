@@ -1,6 +1,6 @@
 @extends('activitylog::layouts.master')
 @section('breadcrumb')
-<span class="breadcrumb-item active">Email Logs</span>
+<span class="breadcrumb-item active">{{ __('activitylog::activitylog.email_logs_index.breadcrumb') }}</span>
 @endsection
 
 @php
@@ -10,29 +10,29 @@
 @section('content')
 <x-search-card>
     <div class="col-md-3 mb-2">
-        <x-form.input name="search" label="Search" :value="request('search')" placeholder="Recipient, subject…" />
+        <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('activitylog::activitylog.email_logs_index.search_placeholder') }}" />
     </div>
     <div class="col-md-3 mb-2">
-        <x-form.input name="date_from" label="Date From" type="date" :value="request('date_from')" />
+        <x-form.input name="date_from" label="{{ __('activitylog::activitylog.email_logs_index.date_from') }}" type="date" :value="request('date_from')" />
     </div>
     <div class="col-md-3 mb-2">
-        <x-form.input name="date_to" label="Date To" type="date" :value="request('date_to')" />
+        <x-form.input name="date_to" label="{{ __('activitylog::activitylog.email_logs_index.date_to') }}" type="date" :value="request('date_to')" />
     </div>
     <div class="col-md-3 mb-2">
-        <x-form.select class="select" name="status" label="Status" :options="['' => 'All Statuses', 'sent' => 'Sent', 'pending' => 'Pending', 'failed' => 'Failed']" :selected="request('status')" data-placeholder="All" />
+        <x-form.select class="select" name="status" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('activitylog::activitylog.email_logs_index.all_statuses'), 'sent' => __('activitylog::activitylog.email_logs_index.sent'), 'pending' => __('activitylog::activitylog.email_logs_index.pending'), 'failed' => __('activitylog::activitylog.email_logs_index.failed')]" :selected="request('status')" data-placeholder="{{ __('activitylog::activitylog.email_logs_index.all') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="Email Logs" :data="$emailLogs">
+<x-table-view-pagination title="{{ __('activitylog::activitylog.email_logs_index.breadcrumb') }}" :data="$emailLogs">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>To</th>
-            <th>Subject</th>
-            <th>Notification</th>
-            <th>Status</th>
-            <th>Sent At</th>
-            <th class="text-end">Action</th>
+            <th>{{ __('activitylog::activitylog.email_logs_index.col_id') }}</th>
+            <th>{{ __('activitylog::activitylog.email_logs_index.col_to') }}</th>
+            <th>{{ __('activitylog::activitylog.email_logs_index.col_subject') }}</th>
+            <th>{{ __('activitylog::activitylog.email_logs_index.col_notification') }}</th>
+            <th>{{ __('foundation::foundation.common.status') }}</th>
+            <th>{{ __('activitylog::activitylog.email_logs_index.col_sent_at') }}</th>
+            <th class="text-end">{{ __('foundation::foundation.common.action') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -64,15 +64,15 @@
             <td class="text-end">
                 <x-dropdown-menu>
                     <x-dropdown-link :url="route('admin.email-logs.show', $log->id)">
-                        <i class="ph-eye me-2"></i> View
+                        <i class="ph-eye me-2"></i> {{ __('foundation::foundation.common.view') }}
                     </x-dropdown-link>
                     @can('Delete Email Log')
                     <div class="dropdown-divider"></div>
                     <button type="button"
                         class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.email-logs.destroy', $log->id) }}"
-                        data-text="Are you sure you want to delete this log?">
-                        <i class="ph-trash me-2"></i> Delete
+                        data-text="{{ __('activitylog::activitylog.email_logs_index.delete_confirm') }}">
+                        <i class="ph-trash me-2"></i> {{ __('foundation::foundation.common.delete') }}
                     </button>
                     @endcan
                 </x-dropdown-menu>

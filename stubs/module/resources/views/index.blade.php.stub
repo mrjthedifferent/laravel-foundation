@@ -1,18 +1,18 @@
 @extends('__ALIAS__::layouts.master')
 
 @section('breadcrumb')
-    <span class="breadcrumb-item active">List</span>
+    <span class="breadcrumb-item active">{{ __('__ALIAS__::__ALIAS__.index.breadcrumb') }}</span>
 @endsection
 
 @section('content')
-    <x-page-header title="__TITLES__" icon="ph-cube" />
+    <x-page-header :title="__('__ALIAS__::__ALIAS__.index.title')" icon="ph-cube" />
 
-    <x-table-view-pagination title="__TITLES__" :data="$__VARS__" empty-message="No __LOWER_TITLES__ yet">
+    <x-table-view-pagination :title="__('__ALIAS__::__ALIAS__.index.title')" :data="$__VARS__" :empty-message="__('__ALIAS__::__ALIAS__.index.empty')">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Created</th>
+                <th>{{ __('foundation::foundation.common.name') }}</th>
+                <th>{{ __('foundation::foundation.common.status') }}</th>
+                <th>{{ __('foundation::foundation.common.created_at') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -20,7 +20,7 @@
                 <tr>
                     <td>{{ $__VAR__->name }}</td>
                     <td><x-status-badge :active="$__VAR__->is_active" /></td>
-                    <td>{{ $__VAR__->created_at?->format('d M Y') }}</td>
+                    <td>{{ $__VAR__->created_at?->format(config('foundation.formats.date')) }}</td>
                 </tr>
             @endforeach
         </tbody>

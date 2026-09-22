@@ -1,1 +1,1 @@
-<x-module-layout route="admin.backups.index" label="Backup Management" />
+<x-module-layout route="admin.backups.index" :label="__('backupcleanup::backupcleanup.index.breadcrumb')" />

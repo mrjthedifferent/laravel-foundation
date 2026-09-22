@@ -55,7 +55,7 @@ class UserController extends Controller
     {
         $user = $request->user()->load('roles', 'documents');
 
-        return JsonResponseFactory::success('User details', UserResource::make($user));
+        return JsonResponseFactory::success(__('user::user.flash.user_details'), UserResource::make($user));
     }
 
     /**
@@ -72,18 +72,18 @@ class UserController extends Controller
         );
 
         if (! $user) {
-            return JsonResponseFactory::unauthorized('Invalid credentials');
+            return JsonResponseFactory::unauthorized(__('user::user.errors.invalid_credentials'));
         }
 
         if (! $user->is_active) {
-            return JsonResponseFactory::forbidden('Account is not active. Contact support.');
+            return JsonResponseFactory::forbidden(__('user::user.errors.account_not_active'));
         }
 
         $token = $user->createToken('authToken', ['*'], now()->addMinutes(apiTokenIdleExpirationMinutes()))->plainTextToken;
 
         $trackLoginAction->execute($user, $request);
 
-        return JsonResponseFactory::success('Login successful', [
+        return JsonResponseFactory::success(__('user::user.flash.login_successful'), [
             'token' => $token,
             'user' => UserResource::make($user->load('roles')),
         ]);
@@ -104,7 +104,7 @@ class UserController extends Controller
 
         if ($email = $request->validated('email')) {
             if (! $verifyOtp->execute($email, $request->validated('email_code'))) {
-                return JsonResponseFactory::error('Invalid email verification code', null, 400);
+                return JsonResponseFactory::error(__('user::user.errors.invalid_email_verification_code'), null, 400);
             }
         }
 
@@ -119,7 +119,7 @@ class UserController extends Controller
 
         $trackLoginAction->execute($user, $request);
 
-        return JsonResponseFactory::success('Registration successful', [
+        return JsonResponseFactory::success(__('user::user.flash.registration_successful'), [
             'token' => $token,
             'user' => UserResource::make($user->load('roles')),
         ]);
@@ -137,7 +137,7 @@ class UserController extends Controller
         $data = $request->validated();
 
         if (! empty($data['email']) && ! $verifyOtp->execute($data['email'], $data['email_code'] ?? '')) {
-            return JsonResponseFactory::error('Email not verified', null, 400);
+            return JsonResponseFactory::error(__('user::user.errors.email_not_verified'), null, 400);
         }
 
         $user = $action->execute($request->user()->id, UserData::from($data));
@@ -147,7 +147,7 @@ class UserController extends Controller
             $markVerified->execute($user, 'email');
         }
 
-        return JsonResponseFactory::success('Profile updated successfully', UserResource::make($user->fresh('roles')));
+        return JsonResponseFactory::success(__('user::user.flash.profile_updated'), UserResource::make($user->fresh('roles')));
     }
 
     /**
@@ -159,17 +159,17 @@ class UserController extends Controller
         ApiResetPasswordAction $resetAction
     ): JsonResponse {
         if (! $verifyOtp->execute($request->validated('contact'), $request->validated('code'))) {
-            return JsonResponseFactory::error('Invalid verification code', null, 400);
+            return JsonResponseFactory::error(__('user::user.errors.invalid_verification_code'), null, 400);
         }
 
         $user = User::where($request->validated('contact_type'), $request->validated('contact'))->first();
         if (! $user) {
-            return JsonResponseFactory::notFound('User not found');
+            return JsonResponseFactory::notFound(__('user::user.errors.user_not_found'));
         }
 
         $resetAction->execute($user, $request->validated('contact_type'), $request->validated('password'));
 
-        return JsonResponseFactory::success('Password reset successful');
+        return JsonResponseFactory::success(__('user::user.flash.password_reset_successful'));
     }
 
     /**
@@ -186,20 +186,20 @@ class UserController extends Controller
         $contactType = ContactType::detect($contact);
 
         if (! $verifyOtp->execute($contact, $data['code'])) {
-            return JsonResponseFactory::error('Invalid or expired verification code.', null, 400);
+            return JsonResponseFactory::error(__('user::user.errors.invalid_or_expired_code'), null, 400);
         }
 
         $user = $otpLogin->execute($contact, $contactType, $data['role'] ?? null);
 
         if (! $user->is_active) {
-            return JsonResponseFactory::forbidden('Account is not active. Contact support.');
+            return JsonResponseFactory::forbidden(__('user::user.errors.account_not_active'));
         }
 
         $token = $user->createToken('authToken', ['*'], now()->addMinutes(apiTokenIdleExpirationMinutes()))->plainTextToken;
 
         $trackLoginAction->execute($user, $request);
 
-        return JsonResponseFactory::success('Login successful', [
+        return JsonResponseFactory::success(__('user::user.flash.login_successful'), [
             'token' => $token,
             'user' => UserResource::make($user->load('roles')),
         ]);
@@ -213,14 +213,14 @@ class UserController extends Controller
         $user = $request->user();
 
         if (! $user) {
-            return JsonResponseFactory::unauthorized('User not authenticated');
+            return JsonResponseFactory::unauthorized(__('user::user.errors.user_not_authenticated'));
         }
 
         $user->firebaseTokens()->delete();
 
         $this->revokeCurrentToken($user);
 
-        return JsonResponseFactory::success('Logout successful');
+        return JsonResponseFactory::success(__('user::user.flash.logout_successful'));
     }
 
     /**
@@ -242,24 +242,24 @@ class UserController extends Controller
             Gate::authorize('manageAccount', $user);
 
             if (app()->environment('production')) {
-                return JsonResponseFactory::forbidden('Account management unavailable in production');
+                return JsonResponseFactory::forbidden(__('user::user.errors.account_management_unavailable'));
             }
         }
 
         if (! Hash::check($request->validated('password'), $request->user()->password)) {
-            return JsonResponseFactory::unauthorized('Invalid password');
+            return JsonResponseFactory::unauthorized(__('user::user.errors.invalid_password'));
         }
 
         $accountAction = AccountAction::from($request->validated('action'));
         $result = $action->execute($user, $accountAction);
 
         if (! $result) {
-            return JsonResponseFactory::serverError('Failed to manage account');
+            return JsonResponseFactory::serverError(__('user::user.errors.manage_account_failed_api'));
         }
 
         $message = $accountAction === AccountAction::Reset
-            ? 'Account reset successfully'
-            : 'Account deleted successfully';
+            ? __('user::user.flash.account_reset_api')
+            : __('user::user.flash.account_deleted_api');
 
         if ($accountAction === AccountAction::Delete && (int) $userId === $request->user()->id) {
             $request->user()->tokens()->delete();
@@ -276,12 +276,12 @@ class UserController extends Controller
         ChangePasswordAction $action
     ): JsonResponse {
         if (! Hash::check($request->validated('current_password'), $request->user()->password)) {
-            return JsonResponseFactory::error('Current password is incorrect', null, 400);
+            return JsonResponseFactory::error(__('user::user.errors.current_password_incorrect'), null, 400);
         }
 
         $action->execute($request->user(), $request->validated('password'));
 
-        return JsonResponseFactory::success('Password changed successfully');
+        return JsonResponseFactory::success(__('user::user.flash.password_changed_successfully'));
     }
 
     /**
@@ -304,20 +304,20 @@ class UserController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            return JsonResponseFactory::unauthorized('Social authentication failed. Check credentials.');
+            return JsonResponseFactory::unauthorized(__('user::user.errors.social_auth_failed'));
         }
 
         $user = $action->execute($data['provider'], $socialUser, $data['role']);
 
         if (! $user->is_active) {
-            return JsonResponseFactory::forbidden('Account is not active. Contact support.');
+            return JsonResponseFactory::forbidden(__('user::user.errors.account_not_active'));
         }
 
         $token = $user->createToken('authToken', ['*'], now()->addMinutes(apiTokenIdleExpirationMinutes()))->plainTextToken;
 
         $trackLoginAction->execute($user, $request);
 
-        return JsonResponseFactory::success('Authentication successful', [
+        return JsonResponseFactory::success(__('user::user.flash.authentication_successful'), [
             'token' => $token,
             'user' => UserResource::make($user->load('roles')),
         ]);

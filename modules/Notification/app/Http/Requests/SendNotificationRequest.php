@@ -33,10 +33,10 @@ class SendNotificationRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'A notification title is required.',
-            'body.required' => 'A notification body is required.',
-            'channels.required' => 'At least one channel is required.',
-            'channels.*.in' => 'Each channel must be one of: database, fcm.',
+            'title.required' => __('notification::notification.errors.title_required'),
+            'body.required' => __('notification::notification.errors.body_required'),
+            'channels.required' => __('notification::notification.errors.channels_required'),
+            'channels.*.in' => __('notification::notification.errors.channels_invalid'),
         ];
     }
 }

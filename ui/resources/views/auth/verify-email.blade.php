@@ -9,14 +9,14 @@
                         <div class="d-inline-flex bg-warning bg-opacity-10 text-warning lh-1 rounded-pill p-3 mb-3 mt-1">
                             <i class="ph-envelope-simple ph-2x"></i>
                         </div>
-                        <h5 class="mb-0">{{ __('Verify your contact') }}</h5>
-                        <span class="d-block text-muted">{{ __('A verification step is required') }}</span>
+                        <h5 class="mb-0">{{ __('foundation::foundation.auth.verify_contact') }}</h5>
+                        <span class="d-block text-muted">{{ __('foundation::foundation.auth.verification_required') }}</span>
                     </div>
 
                     @if (session('success') === 'Verification link sent successfully')
                         <div class="alert alert-success d-flex align-items-center" role="alert">
                             <i class="ph-check-circle me-2"></i>
-                            {{ __('A fresh verification link has been sent to your email address.') }}
+                            {{ __('foundation::foundation.auth.verification_link_sent') }}
                         </div>
                     @endif
 
@@ -29,21 +29,21 @@
 
                     @if (auth()->user()->email)
                         <p class="text-muted text-center mb-3">
-                            {{ __('Before proceeding, please check your email') }}
+                            {{ __('foundation::foundation.auth.check_email_before') }}
                             <strong>{{ auth()->user()->email }}</strong>
-                            {{ __('for a verification link.') }}
+                            {{ __('foundation::foundation.auth.for_verification_link') }}
                         </p>
 
                         <form method="POST" action="{{ route('verification.send') }}">
                             @csrf
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="ph-paper-plane-tilt me-2"></i>
-                                {{ __('Resend Verification Email') }}
+                                {{ __('foundation::foundation.auth.resend_verification') }}
                             </button>
                         </form>
                     @else
                         <p class="text-muted text-center mb-3">
-                            {{ __('Your account has no email address. Please contact support or verify via phone.') }}
+                            {{ __('foundation::foundation.auth.no_email_address') }}
                         </p>
                     @endif
 
@@ -51,7 +51,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="btn btn-link text-muted p-0">
-                                <i class="ph-sign-out me-1"></i>{{ __('Log out') }}
+                                <i class="ph-sign-out me-1"></i>{{ __('foundation::foundation.auth.log_out') }}
                             </button>
                         </form>
                     </div>

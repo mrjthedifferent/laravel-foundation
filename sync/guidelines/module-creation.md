@@ -137,9 +137,15 @@ php artisan module:make-controller ThingController Thing --no-interaction
 use Illuminate\Support\Facades\Route;
 use Modules\Thing\Http\Controllers\ThingController;
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('things', ThingController::class);
-});
+// Prefix, domain and middleware come from config('foundation.routing'), so the admin
+// panel can be moved without touching modules. Route names always start with 'admin.'.
+Route::middleware(config('foundation.routing.middleware'))
+    ->domain(config('foundation.routing.domain'))
+    ->prefix(config('foundation.routing.prefix'))
+    ->name('admin.')
+    ->group(function (): void {
+        Route::resource('things', ThingController::class);
+    });
 ```
 
 **`Modules/Thing/routes/api.php`**
@@ -155,16 +161,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
 **`Modules/Thing/resources/views/layouts/master.blade.php`**
 ```blade
-<x-app-layout>
-    <x-slot name="breadcrumbs">
-        <a href="{{ route('admin.dashboard') }}" class="breadcrumb-item">Home</a>
-        <a href="{{ route('admin.things.index') }}" class="breadcrumb-item">Things</a>
-        @yield('breadcrumb')
-    </x-slot>
-
-    @yield('content')
-</x-app-layout>
+<x-module-layout route="admin.things.index" :label="__('thing::thing.index.title')" />
 ```
+
+### Step 12b — Put the module's text in its lang file
+
+`foundation:make-module` creates `Modules/Thing/lang/en/thing.php`. Every heading, label, button, confirm message, flash message and custom validation message goes there and is read with `__('thing::thing.section.key')` — see "Translations" in `views.md` for the rules (generic words from `foundation::foundation.common`, identifiers like permission names stay English).
 
 ### Step 13 — Declare the sidebar pages
 

@@ -15,12 +15,12 @@
                             <span class="fs-4 fw-semibold">{{ mailAppName() }}</span>
                             @endif
                         </div>
-                        <h5 class="mb-0">Login to your account</h5>
-                        <span class="d-block text-muted">Enter your credentials below</span>
+                        <h5 class="mb-0">{{ __('foundation::foundation.auth.login_heading') }}</h5>
+                        <span class="d-block text-muted">{{ __('foundation::foundation.auth.login_subheading') }}</span>
                     </div>
 
                     <div class="mb-3">
-                        <label for="login" class="form-label">{{ __('Email or Phone') }}</label>
+                        <label for="login" class="form-label">{{ __('foundation::foundation.auth.email_or_phone') }}</label>
                         <div class="form-control-feedback form-control-feedback-start">
                             <input id="login" type="text" class="form-control @error('login') is-invalid @enderror" name="login" value="{{ old('login') }}" required autocomplete="username" autofocus placeholder="email@example.com or +880123456789">
                             <div class="form-control-feedback-icon">
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="password" class="form-label">{{ __('Password') }}</label>
+                        <label for="password" class="form-label">{{ __('foundation::foundation.auth.password') }}</label>
                         <div class="form-control-feedback form-control-feedback-start position-relative">
                             <input id="password" type="password" class="form-control pe-5 @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="•••••••••••">
                             <div class="form-control-feedback-icon">
@@ -57,19 +57,19 @@
                             <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                             <label class="form-check-label" for="remember">
-                                {{ __('Remember Me') }}
+                                {{ __('foundation::foundation.auth.remember_me') }}
                             </label>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <button type="submit" class="btn btn-primary w-100"> {{ __('Login') }}</button>
+                        <button type="submit" class="btn btn-primary w-100"> {{ __('foundation::foundation.auth.login_button') }}</button>
                     </div>
 
                     <div class="text-center">
                         @if (Route::has('password.request'))
                         <a href="{{ route('password.request') }}">
-                            {{ __('Forgot Your Password?') }}
+                            {{ __('foundation::foundation.auth.forgot_password_link') }}
                         </a>
                         @endif
                     </div>
@@ -85,7 +85,7 @@
 
                     @if ((bool) config('settings.social_auth_enabled.value', false) && $socialProviders->isNotEmpty())
                         <div class="text-center mt-3">
-                            <span class="d-block text-muted mb-2">Or login with</span>
+                            <span class="d-block text-muted mb-2">{{ __('foundation::foundation.auth.or_login_with') }}</span>
                             <div class="d-flex justify-content-center gap-2">
                                 @foreach ($socialProviders as $provider => $meta)
                                     <a href="{{ route('social.redirect', $provider) }}" class="btn {{ $meta['class'] }} btn-icon">

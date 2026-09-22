@@ -38,7 +38,7 @@ class ErrorReportController extends Controller
         $action->execute($errorReport);
 
         return redirect()->route('admin.error-reports.index')
-            ->with('success', 'Error report marked as resolved.');
+            ->with('success', __('errorreport::errorreport.flash.resolved'));
     }
 
     public function destroy(ErrorReport $errorReport, DeleteErrorReportAction $action): RedirectResponse
@@ -48,6 +48,6 @@ class ErrorReportController extends Controller
         $action->execute($errorReport);
 
         return redirect()->route('admin.error-reports.index')
-            ->with('success', 'Error report deleted.');
+            ->with('success', __('errorreport::errorreport.flash.deleted'));
     }
 }

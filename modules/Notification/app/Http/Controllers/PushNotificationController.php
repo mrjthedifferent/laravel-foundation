@@ -48,6 +48,6 @@ class PushNotificationController extends Controller
         $action->execute($request->validated());
 
         return redirect()->route('admin.push.notification.index')
-            ->with('success', 'Push notification queued successfully.');
+            ->with('success', __('notification::notification.flash.push_queued'));
     }
 }

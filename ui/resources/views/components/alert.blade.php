@@ -21,6 +21,6 @@
     <i class="{{ $resolvedIcon }} me-2 fs-base"></i>
     <div class="flex-fill">{{ $slot }}</div>
     @if ($dismissible)
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('foundation::foundation.common.close') }}"></button>
     @endif
 </div>

@@ -47,7 +47,7 @@ class UpdateProfileRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email_code.required_with' => 'Email verification code is required when email is provided',
+            'email_code.required_with' => __('user::user.errors.email_code_required_with'),
         ];
     }
 }

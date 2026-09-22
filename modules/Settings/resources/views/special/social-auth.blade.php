@@ -1,7 +1,7 @@
 @extends('settings::layouts.master')
 
 @section('breadcrumb')
-    <span class="breadcrumb-item active">Social Auth</span>
+    <span class="breadcrumb-item active">{{ __('settings::settings.special_social_auth.breadcrumb') }}</span>
 @endsection
 
 @section('content')
@@ -13,8 +13,8 @@
             <i class="ph-users-three"></i>
         </div>
         <div>
-            <div class="fw-bold">Social Auth Settings</div>
-            <div class="text-muted fs-xs">OAuth credentials for Google, GitHub &amp; Apple sign-in</div>
+            <div class="fw-bold">{{ __('settings::settings.special_social_auth.title') }}</div>
+            <div class="text-muted fs-xs">{{ __('settings::settings.special_social_auth.subtitle') }}</div>
         </div>
     </div>
 
@@ -22,7 +22,7 @@
 
         {{-- Info tip --}}
         <x-alert type="primary" icon="ph-info" class="mb-4">
-            <span class="fs-sm">Configure OAuth credentials for each provider. Save your settings first, then use the <strong>Test</strong> button to verify the configuration works.</span>
+            <span class="fs-sm">{!! __('settings::settings.special_social_auth.info_tip') !!}</span>
         </x-alert>
 
         <form action="{{ route('admin.settings.special.update_social_auth') }}" method="POST">
@@ -36,23 +36,23 @@
                         <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">Google</span>
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-primary test-provider-btn" data-provider="google">
-                        <i class="ph-plug me-1"></i>Test
+                        <i class="ph-plug me-1"></i>{{ __('settings::settings.special_social_auth.test') }}
                     </button>
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <x-form.input name="google_client_id" label="Client ID" :value="optional($settings->get('google_client_id'))->value ?? ''" placeholder="*.apps.googleusercontent.com" />
+                            <x-form.input name="google_client_id" label="{{ __('settings::settings.special_social_auth.client_id_label') }}" :value="optional($settings->get('google_client_id'))->value ?? ''" placeholder="*.apps.googleusercontent.com" />
                         </div>
                         <div class="col-md-4">
-                            <x-form.label for="google_client_secret">Client Secret</x-form.label>
+                            <x-form.label for="google_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
                             <div class="input-group input-group-sm">
                                 <x-form.input type="password" name="google_client_secret" />
                                 <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="google_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <x-form.input name="google_redirect_uri" label="Redirect URI" :value="optional($settings->get('google_redirect_uri'))->value ?? '/auth/google/callback'" placeholder="/auth/google/callback" />
+                            <x-form.input name="google_redirect_uri" label="{{ __('settings::settings.special_social_auth.redirect_uri_label') }}" :value="optional($settings->get('google_redirect_uri'))->value ?? '/auth/google/callback'" placeholder="/auth/google/callback" />
                         </div>
                     </div>
                 </div>
@@ -66,23 +66,23 @@
                         <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">GitHub</span>
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-primary test-provider-btn" data-provider="github">
-                        <i class="ph-plug me-1"></i>Test
+                        <i class="ph-plug me-1"></i>{{ __('settings::settings.special_social_auth.test') }}
                     </button>
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <x-form.input name="github_client_id" label="Client ID" :value="optional($settings->get('github_client_id'))->value ?? ''" />
+                            <x-form.input name="github_client_id" label="{{ __('settings::settings.special_social_auth.client_id_label') }}" :value="optional($settings->get('github_client_id'))->value ?? ''" />
                         </div>
                         <div class="col-md-4">
-                            <x-form.label for="github_client_secret">Client Secret</x-form.label>
+                            <x-form.label for="github_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
                             <div class="input-group input-group-sm">
                                 <x-form.input type="password" name="github_client_secret" />
                                 <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="github_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <x-form.input name="github_redirect_uri" label="Redirect URI" :value="optional($settings->get('github_redirect_uri'))->value ?? '/auth/github/callback'" placeholder="/auth/github/callback" />
+                            <x-form.input name="github_redirect_uri" label="{{ __('settings::settings.special_social_auth.redirect_uri_label') }}" :value="optional($settings->get('github_redirect_uri'))->value ?? '/auth/github/callback'" placeholder="/auth/github/callback" />
                         </div>
                     </div>
                 </div>
@@ -96,32 +96,32 @@
                         <span class="fw-bold text-uppercase fs-xs" style="letter-spacing:.05em;">Apple</span>
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-primary test-provider-btn" data-provider="apple">
-                        <i class="ph-plug me-1"></i>Test
+                        <i class="ph-plug me-1"></i>{{ __('settings::settings.special_social_auth.test') }}
                     </button>
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <x-form.input name="apple_client_id" label="Client ID" :value="optional($settings->get('apple_client_id'))->value ?? ''" />
+                            <x-form.input name="apple_client_id" label="{{ __('settings::settings.special_social_auth.client_id_label') }}" :value="optional($settings->get('apple_client_id'))->value ?? ''" />
                         </div>
                         <div class="col-md-4">
-                            <x-form.label for="apple_client_secret">Client Secret</x-form.label>
+                            <x-form.label for="apple_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
                             <div class="input-group input-group-sm">
                                 <x-form.input type="password" name="apple_client_secret" />
                                 <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="apple_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <x-form.input name="apple_redirect_uri" label="Redirect URI" :value="optional($settings->get('apple_redirect_uri'))->value ?? '/auth/apple/callback'" placeholder="/auth/apple/callback" />
+                            <x-form.input name="apple_redirect_uri" label="{{ __('settings::settings.special_social_auth.redirect_uri_label') }}" :value="optional($settings->get('apple_redirect_uri'))->value ?? '/auth/apple/callback'" placeholder="/auth/apple/callback" />
                         </div>
                         <div class="col-md-4">
-                            <x-form.input name="apple_team_id" label="Team ID" :value="optional($settings->get('apple_team_id'))->value ?? ''" />
+                            <x-form.input name="apple_team_id" label="{{ __('settings::settings.special_social_auth.team_id_label') }}" :value="optional($settings->get('apple_team_id'))->value ?? ''" />
                         </div>
                         <div class="col-md-4">
-                            <x-form.input name="apple_key_id" label="Key ID" :value="optional($settings->get('apple_key_id'))->value ?? ''" />
+                            <x-form.input name="apple_key_id" label="{{ __('settings::settings.special_social_auth.key_id_label') }}" :value="optional($settings->get('apple_key_id'))->value ?? ''" />
                         </div>
                         <div class="col-md-4">
-                            <x-form.input name="apple_key_file" label="Key File" :value="optional($settings->get('apple_key_file'))->value ?? ''" placeholder="path to .p8 file" />
+                            <x-form.input name="apple_key_file" label="{{ __('settings::settings.special_social_auth.key_file_label') }}" :value="optional($settings->get('apple_key_file'))->value ?? ''" placeholder="{{ __('settings::settings.special_social_auth.key_file_placeholder') }}" />
                         </div>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
 
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary px-4">
-                    <i class="ph-floppy-disk me-1"></i>Save Social Auth Settings
+                    <i class="ph-floppy-disk me-1"></i>{{ __('settings::settings.special_social_auth.submit') }}
                 </button>
             </div>
         </form>
@@ -170,7 +170,7 @@ document.querySelectorAll('.test-provider-btn').forEach(function (btn) {
         });
         var originalHtml = this.innerHTML;
         this.disabled = true;
-        this.innerHTML = '<i class="ph-circle-notch ph-spin me-1"></i>Testing…';
+        this.innerHTML = '<i class="ph-circle-notch ph-spin me-1"></i>{{ __('settings::settings.common.testing') }}';
         var self = this;
 
         fetch(routeMap[provider], {
@@ -181,10 +181,10 @@ document.querySelectorAll('.test-provider-btn').forEach(function (btn) {
         .then(r => r.json().then(d => ({ ok: r.ok, data: d })))
         .then(({ data }) => {
             data.success
-                ? window.toast('success', labelMap[provider] + ' OK', data.message || 'An error occurred.')
-                : window.showConfirm({ icon: 'error', title: labelMap[provider] + ' Failed', text: data.message || 'An error occurred.', confirmClass: 'btn btn-danger', showCancelButton: false, confirmText: 'OK' });
+                ? window.toast('success', labelMap[provider] + ' OK', data.message || '{{ __('settings::settings.common.error_occurred') }}')
+                : window.showConfirm({ icon: 'error', title: labelMap[provider] + ' Failed', text: data.message || '{{ __('settings::settings.common.error_occurred') }}', confirmClass: 'btn btn-danger', showCancelButton: false, confirmText: '{{ __('settings::settings.common.ok') }}' });
         })
-        .catch(err => window.showConfirm({ icon: 'error', title: 'Error', text: err.message || 'Request failed.', confirmClass: 'btn btn-danger', showCancelButton: false, confirmText: 'OK' }))
+        .catch(err => window.showConfirm({ icon: 'error', title: '{{ __('settings::settings.common.error_title') }}', text: err.message || '{{ __('settings::settings.common.request_failed') }}', confirmClass: 'btn btn-danger', showCancelButton: false, confirmText: '{{ __('settings::settings.common.ok') }}' }))
         .finally(() => { self.disabled = false; self.innerHTML = originalHtml; });
     });
 });

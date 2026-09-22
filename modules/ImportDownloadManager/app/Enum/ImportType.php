@@ -10,8 +10,8 @@ enum ImportType: string
     public function label(): string
     {
         return match ($this) {
-            self::Import => 'Import',
-            self::Download => 'Download',
+            self::Import => __('importdownloadmanager::importdownloadmanager.enums.type.import'),
+            self::Download => __('importdownloadmanager::importdownloadmanager.enums.type.download'),
         };
     }
 

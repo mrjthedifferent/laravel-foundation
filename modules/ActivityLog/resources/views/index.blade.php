@@ -1,32 +1,32 @@
 @php use Modules\ActivityLog\Helpers\ActivityLogHelper; @endphp
 @extends('activitylog::layouts.master')
 @section('breadcrumb')
-<span class="breadcrumb-item active">Activity Logs</span>
+<span class="breadcrumb-item active">{{ __('activitylog::activitylog.index.breadcrumb') }}</span>
 @endsection
 
 @section('content')
 <x-search-card>
     <div class="col-md-2 mb-2">
-        <x-form.input name="search" label="Search" :value="request('search')" placeholder="Values, IP, URL…" />
+        <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('activitylog::activitylog.index.search_placeholder') }}" />
     </div>
     <div class="col-md-2 mb-2">
-        <x-form.input name="date_from" label="Date From" type="date" :value="request('date_from')" />
+        <x-form.input name="date_from" label="{{ __('activitylog::activitylog.index.date_from') }}" type="date" :value="request('date_from')" />
     </div>
     <div class="col-md-2 mb-2">
-        <x-form.input name="date_to" label="Date To" type="date" :value="request('date_to')" />
+        <x-form.input name="date_to" label="{{ __('activitylog::activitylog.index.date_to') }}" type="date" :value="request('date_to')" />
     </div>
     <div class="col-md-2 mb-2">
-        <x-form.select class="select" name="event" label="Event" :options="['' => 'All Events'] + array_combine($eventTypes, array_map('ucfirst', $eventTypes))" :selected="request('event')" data-placeholder="All Events" />
+        <x-form.select class="select" name="event" label="{{ __('activitylog::activitylog.index.event') }}" :options="['' => __('activitylog::activitylog.index.all_events')] + array_combine($eventTypes, array_map('ucfirst', $eventTypes))" :selected="request('event')" data-placeholder="{{ __('activitylog::activitylog.index.all_events') }}" />
     </div>
     <div class="col-md-2 mb-2">
-        <x-form.select class="select" name="auditable_type" label="Entity" :options="['' => 'All Entities'] + array_combine($auditableTypes, array_map(fn($t) => ActivityLogHelper::getModelName($t), $auditableTypes))" :selected="request('auditable_type')" data-placeholder="All Entities" />
+        <x-form.select class="select" name="auditable_type" label="{{ __('activitylog::activitylog.index.entity') }}" :options="['' => __('activitylog::activitylog.index.all_entities')] + array_combine($auditableTypes, array_map(fn($t) => ActivityLogHelper::getModelName($t), $auditableTypes))" :selected="request('auditable_type')" data-placeholder="{{ __('activitylog::activitylog.index.all_entities') }}" />
     </div>
     <div class="col-md-2 mb-2">
-        <x-form.select class="select" name="user_id" label="Action By" :options="['' => 'All Users'] + $users->mapWithKeys(fn($u) => [$u->id => $u->name])->toArray()" :selected="request('user_id')" data-placeholder="All Users" />
+        <x-form.select class="select" name="user_id" label="{{ __('activitylog::activitylog.index.action_by') }}" :options="['' => __('activitylog::activitylog.index.all_users')] + $users->mapWithKeys(fn($u) => [$u->id => $u->name])->toArray()" :selected="request('user_id')" data-placeholder="{{ __('activitylog::activitylog.index.all_users') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="Activity Logs" :data="$audits">
+<x-table-view-pagination title="{{ __('activitylog::activitylog.index.breadcrumb') }}" :data="$audits">
     <x-slot name="actions">
         <x-table-actions>
         </x-table-actions>
@@ -38,18 +38,18 @@
             <x-table-export-item :href="route('admin.activity-logs.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'csv']))"
                 class="swal-confirm"
                 icon="ph-file-csv"
-                title="CSV"
-                data-text="Do you want to export activity logs to CSV? Large exports may take some time to process." />
+                title="{{ __('activitylog::activitylog.index.export_csv') }}"
+                data-text="{{ __('activitylog::activitylog.index.export_csv_confirm') }}" />
             <x-table-export-item :href="route('admin.activity-logs.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'xlsx']))"
                 class="swal-confirm"
                 icon="ph-file-xls"
-                title="Excel"
-                data-text="Do you want to export activity logs to Excel? Large exports may take some time to process." />
+                title="{{ __('activitylog::activitylog.index.export_excel') }}"
+                data-text="{{ __('activitylog::activitylog.index.export_excel_confirm') }}" />
             <x-table-export-item :href="route('admin.activity-logs.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'pdf']))"
                 class="swal-confirm"
                 icon="ph-file-pdf"
-                title="PDF"
-                data-text="Do you want to export activity logs to PDF? Large exports may take some time to process." />
+                title="{{ __('activitylog::activitylog.index.export_pdf') }}"
+                data-text="{{ __('activitylog::activitylog.index.export_pdf_confirm') }}" />
         </x-table-export-dropdown>
         @endcan
     </x-slot>
@@ -57,13 +57,13 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Event</th>
-            <th>Description</th>
-            <th>Action By</th>
-            <th>IP Address</th>
-            <th>URL</th>
-            <th>Time</th>
-            <th class="text-end">Action</th>
+            <th>{{ __('activitylog::activitylog.index.event') }}</th>
+            <th>{{ __('foundation::foundation.common.description') }}</th>
+            <th>{{ __('activitylog::activitylog.index.action_by') }}</th>
+            <th>{{ __('activitylog::activitylog.index.col_ip_address') }}</th>
+            <th>{{ __('activitylog::activitylog.index.col_url') }}</th>
+            <th>{{ __('activitylog::activitylog.index.col_time') }}</th>
+            <th class="text-end">{{ __('foundation::foundation.common.action') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -163,7 +163,7 @@
                 @can('view', $audit->user)
                 <a href="{{ route('admin.users.show', $audit->user_id) }}"
                     class="d-flex align-items-center gap-2 text-decoration-none user-link"
-                    title="View user profile">
+                    title="{{ __('activitylog::activitylog.index.view_user_profile_tooltip') }}">
                     <img src="{{ $audit->user->image }}"
                         alt="{{ $audit->user->name }}"
                         class="rounded-circle"
@@ -192,18 +192,18 @@
                 @endcan
                 @else
                 <span class="text-muted small">
-                    <i class="ph-user-circle me-1"></i>Deleted User #{{ $audit->user_id }}
+                    <i class="ph-user-circle me-1"></i>{{ __('activitylog::activitylog.index.deleted_user', ['id' => $audit->user_id]) }}
                 </span>
                 @endif
                 @else
                 <span class="text-muted small">
-                    <i class="ph-robot me-1"></i>System
+                    <i class="ph-robot me-1"></i>{{ __('activitylog::activitylog.index.system') }}
                 </span>
                 @endif
                 @if ($impersonatedId = ActivityLogHelper::impersonatedUserId($audit->tags))
                 <span class="badge bg-warning-subtle text-warning border border-warning-subtle fs-xs mt-1"
-                    title="Done while impersonating this user">
-                    <i class="ph-user-switch me-1"></i>as {{ ($impersonatedUsers ?? collect())[$impersonatedId] ?? 'User #'.$impersonatedId }}
+                    title="{{ __('activitylog::activitylog.index.impersonating_title') }}">
+                    <i class="ph-user-switch me-1"></i>{{ __('activitylog::activitylog.index.as_user', ['name' => ($impersonatedUsers ?? collect())[$impersonatedId] ?? __('activitylog::activitylog.index.user_number', ['id' => $impersonatedId])]) }}
                 </span>
                 @endif
             </td>
@@ -232,21 +232,21 @@
                 <x-dropdown-menu>
                     @can('View Activity Log')
                     <x-dropdown-link :url="route('admin.activity-logs.show', $audit->id)">
-                        <i class="ph-eye me-2"></i> View Content History
+                        <i class="ph-eye me-2"></i> {{ __('activitylog::activitylog.index.view_content_history') }}
                     </x-dropdown-link>
                     @endcan
                     @if ($audit->user_id && $audit->user)
                     @can('view', $audit->user)
                     <x-dropdown-link :url="route('admin.users.show', $audit->user_id)">
-                        <i class="ph-user me-2"></i> View User Profile
+                        <i class="ph-user me-2"></i> {{ __('activitylog::activitylog.index.view_user_profile') }}
                     </x-dropdown-link>
                     @endcan
                     @endif
                     @can('Delete Activity Log')
                     <button type="button" class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.activity-logs.destroy', $audit->id) }}"
-                        data-text="Are you sure you want to delete this log?">
-                        <i class="ph-trash me-2"></i> Delete Log
+                        data-text="{{ __('activitylog::activitylog.index.delete_log_confirm') }}">
+                        <i class="ph-trash me-2"></i> {{ __('activitylog::activitylog.index.delete_log') }}
                     </button>
                     @endcan
                 </x-dropdown-menu>
@@ -256,7 +256,7 @@
     </tbody>
 </x-table-view-pagination>
 
-<x-modal id="track-ip-modal" title="IP Information">
+<x-modal id="track-ip-modal" title="{{ __('activitylog::activitylog.index.ip_information') }}">
     <div class="row">
         <div class="col-md-12" id="ip-details"></div>
     </div>
@@ -275,7 +275,7 @@
             e.preventDefault();
             const ip = $(this).text().trim();
             $('#track-ip-modal').modal('show');
-            $('#ip-details').html('<div class="text-center"><div class="spinner-border" role="status"></div><p>Loading IP information...</p></div>');
+            $('#ip-details').html('<div class="text-center"><div class="spinner-border" role="status"></div><p>' + @js(__('activitylog::activitylog.index.loading_ip')) + '</p></div>');
             $.ajax({
                 url: "{{ route('admin.track-ip') }}",
                 type: 'GET',
@@ -286,7 +286,7 @@
                     $('#ip-details').html(data);
                 },
                 error: function() {
-                    $('#ip-details').html('<div class="alert alert-danger">Failed to load IP information.</div>');
+                    $('#ip-details').html('<div class="alert alert-danger">' + @js(__('activitylog::activitylog.index.failed_ip')) + '</div>');
                 }
             });
         });

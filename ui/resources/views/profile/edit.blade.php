@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="breadcrumbs">
-        <a href="{{ route('admin.dashboard') }}" class="breadcrumb-item">Home</a>
-        <span class="breadcrumb-item active">Profile</span>
+        <a href="{{ route('admin.dashboard') }}" class="breadcrumb-item">{{ __('foundation::foundation.layout.home') }}</a>
+        <span class="breadcrumb-item active">{{ __('foundation::foundation.profile.breadcrumb') }}</span>
     </x-slot>
 
     <div class="py-12">

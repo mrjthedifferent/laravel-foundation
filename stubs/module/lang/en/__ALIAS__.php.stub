@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * UI text for this module; a view reads it with the key "__ALIAS__::__ALIAS__.index.title".
+ * Words already in foundation::foundation.common (Name, Status, Delete, ...)
+ * are used from there instead of being repeated here.
+ */
+
+return [
+    'index' => [
+        'title' => '__TITLES__',
+        'breadcrumb' => 'List',
+        'empty' => 'No __LOWER_TITLES__ yet',
+    ],
+
+    'flash' => [
+        //
+    ],
+];

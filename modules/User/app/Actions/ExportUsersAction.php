@@ -22,7 +22,7 @@ final readonly class ExportUsersAction
     {
         $importManagerId = $this->importTracker->start(
             $user,
-            'Users Export',
+            __('user::user.flash.export_title'),
             ImportType::Download,
         );
 

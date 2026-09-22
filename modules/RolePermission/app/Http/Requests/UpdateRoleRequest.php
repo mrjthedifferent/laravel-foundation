@@ -28,8 +28,8 @@ class UpdateRoleRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'role_name.required' => 'The role name is required.',
-            'role_name.unique' => 'This role name is already taken.',
+            'role_name.required' => __('rolepermission::rolepermission.validation.role_name_required'),
+            'role_name.unique' => __('rolepermission::rolepermission.validation.role_name_unique'),
         ];
     }
 }

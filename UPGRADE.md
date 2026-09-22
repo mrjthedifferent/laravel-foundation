@@ -3,6 +3,36 @@
 Manual steps a project must take when moving between versions. Versions without an entry
 need only `composer update mrjthedifferent/laravel-foundation` and `php artisan migrate`.
 
+## 0.18 to 0.19 (translations)
+
+`composer update mrjthedifferent/laravel-foundation`. No migration. Under the
+default `en` locale every visible string is unchanged.
+
+1. **If you overrode a foundation view** (a copy under
+   `resources/views/modules/{alias}/…` or `resources/views/…`), it keeps its
+   literal English and keeps working — but it won't follow a locale change.
+   Compare it with the package's new version and switch its text to the
+   `__()` keys if you want it translated.
+2. **If your own code reads flash messages or JSON `message` fields and
+   compares them to English text**, it still matches under `en`, but will not
+   once `APP_LOCALE` changes. Compare against the translation
+   (`__('user::user.flash.created')`) instead, or better, the status code.
+3. **`StatusBadge`**: if you subclassed `Mrj\Foundation\View\Components\StatusBadge`
+   and relied on its `'Active'`/`'Inactive'` constructor defaults, those
+   defaults are now `null` and resolved to the translated labels.
+4. **A module generated with `foundation:make-module` on 0.14–0.18** has a
+   controller importing the deleted `Mrj\Foundation\Enum\PaginationEnum` and
+   crashes on its index page. Replace `PaginationEnum::DEFAULT_PAGINATE` with
+   `perPage()` and remove the import; see `stubs/module/` for the current
+   routes and layout.
+
+To run the admin panel in another language, set `APP_LOCALE`, publish the
+shared strings (`php artisan vendor:publish --tag=foundation-lang`) and
+translate the copy under `lang/vendor/foundation/{locale}/`, add
+`resources/lang/modules/{alias}/{locale}/{alias}.php` per module, and put
+config/database labels (menu items, permission names, setting groups) in
+`lang/{locale}.json` keyed by their English text.
+
 ## 0.17 to 0.18 (drop konekt/html)
 
 `composer update mrjthedifferent/laravel-foundation`. No migration.

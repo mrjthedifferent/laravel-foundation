@@ -27,10 +27,10 @@ class ImportSettingsRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'settings_file.required' => 'Please select a JSON file to import.',
-            'settings_file.mimes' => 'The import file must be a JSON file.',
-            'import_mode.required' => 'Please select an import mode.',
-            'import_mode.in' => 'Import mode must be either merge or overwrite.',
+            'settings_file.required' => __('settings::settings.errors.import_file_required'),
+            'settings_file.mimes' => __('settings::settings.errors.import_file_mimes'),
+            'import_mode.required' => __('settings::settings.errors.import_mode_required'),
+            'import_mode.in' => __('settings::settings.errors.import_mode_in'),
         ];
     }
 }

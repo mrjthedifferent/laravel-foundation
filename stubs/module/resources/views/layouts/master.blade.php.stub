@@ -1,9 +1,1 @@
-<x-app-layout>
-    <x-slot name="breadcrumbs">
-        <a href="{{ route('admin.dashboard') }}" class="breadcrumb-item d-none d-sm-inline-flex">Home</a>
-        <a href="{{ route('admin.__SLUG__.index') }}" class="breadcrumb-item d-none d-sm-inline-flex">__TITLES__</a>
-        @yield('breadcrumb')
-    </x-slot>
-
-    @yield('content')
-</x-app-layout>
+<x-module-layout route="admin.__SLUG__.index" :label="__('__ALIAS__::__ALIAS__.index.title')" />

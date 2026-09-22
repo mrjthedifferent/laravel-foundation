@@ -31,11 +31,11 @@ class BulkUpdateSettingsRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'action.required' => 'An action is required.',
-            'action.in' => 'Action must be visibility or group.',
-            'ids.required' => 'No settings selected.',
-            'visibility.required_if' => 'Visibility value is required.',
-            'group.required_if' => 'Group name is required.',
+            'action.required' => __('settings::settings.errors.bulk_action_required'),
+            'action.in' => __('settings::settings.errors.bulk_action_in'),
+            'ids.required' => __('settings::settings.errors.bulk_ids_required'),
+            'visibility.required_if' => __('settings::settings.errors.bulk_visibility_required'),
+            'group.required_if' => __('settings::settings.errors.bulk_group_required'),
         ];
     }
 }

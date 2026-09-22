@@ -46,7 +46,7 @@ class SettingsController extends Controller
 
         $action->saveAll($request);
 
-        return redirect()->back()->with('success', 'Settings updated successfully');
+        return redirect()->back()->with('success', __('settings::settings.flash.settings_updated'));
     }
 
     /**
@@ -70,7 +70,7 @@ class SettingsController extends Controller
 
         $action->execute();
 
-        return redirect()->route('admin.settings.manage')->with('success', 'Settings synced successfully.');
+        return redirect()->route('admin.settings.manage')->with('success', __('settings::settings.flash.settings_synced'));
     }
 
     /**
@@ -100,7 +100,7 @@ class SettingsController extends Controller
             $request->input('option_values', [])
         );
 
-        return redirect()->route('admin.settings.manage')->with('success', 'Setting created successfully');
+        return redirect()->route('admin.settings.manage')->with('success', __('settings::settings.flash.setting_created'));
     }
 
     /**
@@ -131,7 +131,7 @@ class SettingsController extends Controller
             $request->input('option_values', [])
         );
 
-        return redirect()->route('admin.settings.manage')->with('success', 'Setting updated successfully');
+        return redirect()->route('admin.settings.manage')->with('success', __('settings::settings.flash.setting_updated'));
     }
 
     /**
@@ -143,7 +143,7 @@ class SettingsController extends Controller
 
         $setting->delete();
 
-        return redirect()->route('admin.settings.manage')->with('success', 'Setting deleted successfully');
+        return redirect()->route('admin.settings.manage')->with('success', __('settings::settings.flash.setting_deleted'));
     }
 
     /**
@@ -203,18 +203,18 @@ class SettingsController extends Controller
         if (json_last_error() !== JSON_ERROR_NONE) {
             Log::error('JSON parsing error: '.json_last_error_msg().', content sample: '.substr($jsonContent, 0, 100));
 
-            return redirect()->back()->with('error', 'Invalid JSON file: '.json_last_error_msg().'. Please check the file format.');
+            return redirect()->back()->with('error', __('settings::settings.errors.invalid_json_file', ['error' => json_last_error_msg()]));
         }
 
         if (! is_array($settings) || empty($settings)) {
-            return redirect()->back()->with('error', 'The JSON file must contain an array of settings.');
+            return redirect()->back()->with('error', __('settings::settings.errors.json_must_be_array'));
         }
 
         if (! isset($settings[0]['key'])) {
             if (isset($settings['data']) && is_array($settings['data'])) {
                 $settings = $settings['data'];
             } else {
-                return redirect()->back()->with('error', 'The JSON file does not contain valid settings format. Each setting must have at least a "key" property.');
+                return redirect()->back()->with('error', __('settings::settings.errors.invalid_settings_format'));
             }
         }
 
@@ -226,7 +226,7 @@ class SettingsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->with('error', 'Invalid settings format: '.$validator->errors()->first());
+            return redirect()->back()->with('error', __('settings::settings.errors.invalid_settings_validation', ['error' => $validator->errors()->first()]));
         }
 
         $imported = 0;
@@ -251,17 +251,17 @@ class SettingsController extends Controller
                     $imported++;
                 }
             } catch (Exception $e) {
-                $errors[] = "Error importing setting '{$settingData['key']}': ".$e->getMessage();
+                $errors[] = __('settings::settings.errors.import_row_error', ['key' => $settingData['key'], 'message' => $e->getMessage()]);
                 Log::error("Settings import error for key {$settingData['key']}: ".$e->getMessage());
             }
         }
 
-        $message = "Successfully imported {$imported} settings.";
+        $message = __('settings::settings.flash.import_success', ['count' => $imported]);
         if ($skipped > 0) {
-            $message .= " Skipped {$skipped} existing settings.";
+            $message .= ' '.__('settings::settings.flash.import_skipped', ['count' => $skipped]);
         }
         if (! empty($errors)) {
-            $message .= ' Encountered '.count($errors).' errors.';
+            $message .= ' '.__('settings::settings.flash.import_errors_count', ['count' => count($errors)]);
         }
 
         return redirect()->route('admin.settings.manage')
@@ -280,7 +280,7 @@ class SettingsController extends Controller
         $ids = $request->validated('ids');
 
         if (empty($ids)) {
-            return redirect()->back()->with('error', 'No settings selected');
+            return redirect()->back()->with('error', __('settings::settings.flash.no_settings_selected'));
         }
 
         $settings = Setting::whereIn('id', $ids)->get();
@@ -295,8 +295,8 @@ class SettingsController extends Controller
             }
 
             $message = $visibility
-                ? "Made {$count} settings visible"
-                : "Made {$count} settings invisible";
+                ? __('settings::settings.flash.made_visible', ['count' => $count])
+                : __('settings::settings.flash.made_invisible', ['count' => $count]);
         } else {
             $group = $request->validated('group');
 
@@ -305,7 +305,7 @@ class SettingsController extends Controller
                 $setting->save();
             }
 
-            $message = "Moved {$count} settings to the \"{$group}\" group";
+            $message = __('settings::settings.flash.moved_to_group', ['count' => $count, 'group' => $group]);
         }
 
         return redirect()->back()->with('success', $message);
@@ -321,12 +321,12 @@ class SettingsController extends Controller
         $ids = $request->validated('ids');
 
         if (empty($ids)) {
-            return redirect()->back()->with('error', 'No settings selected');
+            return redirect()->back()->with('error', __('settings::settings.flash.no_settings_selected'));
         }
 
         $count = Setting::whereIn('id', $ids)->count();
         Setting::whereIn('id', $ids)->delete();
 
-        return redirect()->back()->with('success', "{$count} settings deleted successfully");
+        return redirect()->back()->with('success', __('settings::settings.flash.settings_deleted', ['count' => $count]));
     }
 }

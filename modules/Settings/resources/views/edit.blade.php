@@ -1,8 +1,8 @@
 @extends('settings::layouts.master')
 
 @section('breadcrumb')
-    <a href="{{ route('admin.settings.manage') }}" class="breadcrumb-item">Manage Settings</a>
-    <span class="breadcrumb-item active">Edit Setting</span>
+    <a href="{{ route('admin.settings.manage') }}" class="breadcrumb-item">{{ __('settings::settings.edit.breadcrumb_manage') }}</a>
+    <span class="breadcrumb-item active">{{ __('settings::settings.edit.breadcrumb_active') }}</span>
 @endsection
 
 @section('content')
@@ -26,7 +26,7 @@
             $tc = $typeColors[$setting->type] ?? 'secondary';
         @endphp
 
-        <x-page-header title="Edit Setting" icon="ph-pencil-simple-line" :back-url="route('admin.settings.manage')" back-label="Back">
+        <x-page-header title="{{ __('settings::settings.edit.title') }}" icon="ph-pencil-simple-line" :back-url="route('admin.settings.manage')" back-label="{{ __('settings::settings.edit.back') }}">
             <x-slot name="actions">
                 <code
                     class="bg-primary bg-opacity-10 text-body rounded px-2 py-1 fs-xs fw-semibold">{{ $setting->key }}</code>
@@ -35,52 +35,52 @@
         </x-page-header>
 
         {{-- Section 1: Identity --}}
-        <x-form-section title="Identity" icon="ph-identification-card">
+        <x-form-section title="{{ __('settings::settings.edit.section_identity') }}" icon="ph-identification-card">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-semibold fs-sm">Key</label>
+                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.edit.key_label') }}</label>
                     <input type="text" class="form-control form-control-sm bg-body-tertiary" value="{{ $setting->key }}" readonly disabled>
-                    <div class="form-text">The key cannot be changed</div>
+                    <div class="form-text">{{ __('settings::settings.edit.key_help') }}</div>
                 </div>
                 <div class="col-md-6">
                     <x-form.select
                         class="select"
                         name="existing_group"
                         id="existing_group"
-                        label="Group"
+                        label="{{ __('settings::settings.edit.group_label') }}"
                         required
-                        :options="collect($groups)->mapWithKeys(fn($g) => [$g => $g])->put('__new__', '+ Add new group…')->prepend('', '')->toArray()"
+                        :options="collect($groups)->mapWithKeys(fn($g) => [$g => $g])->put('__new__', __('settings::settings.edit.group_new_option'))->prepend('', '')->toArray()"
                         :selected="null"
-                        data-placeholder="Select or type a group…"
+                        data-placeholder="{{ __('settings::settings.edit.group_select_placeholder') }}"
                     />
-                    <x-form.input name="group" id="group" :value="old('group', $setting->group)" class="mt-2 d-none" placeholder="New group name" />
+                    <x-form.input name="group" id="group" :value="old('group', $setting->group)" class="mt-2 d-none" placeholder="{{ __('settings::settings.edit.group_new_placeholder') }}" />
                 </div>
                 <div class="col-md-6">
                     <x-form.select
                         class="select"
                         name="type"
                         id="type"
-                        label="Type"
+                        label="{{ __('settings::settings.edit.type_label') }}"
                         required
                         :options="collect($types)->mapWithKeys(fn($t) => [$t => ucfirst($t)])->prepend('', '')->toArray()"
                         :selected="$setting->type"
-                        data-placeholder="Select type…"
+                        data-placeholder="{{ __('settings::settings.edit.type_select_placeholder') }}"
                     />
                 </div>
                 <div class="col-md-6">
-                    <x-form.input name="description" label="Description" :value="old('description', $setting->description)" placeholder="Short explanation of this setting" />
+                    <x-form.input name="description" label="{{ __('foundation::foundation.common.description') }}" :value="old('description', $setting->description)" placeholder="{{ __('settings::settings.edit.description_placeholder') }}" />
                 </div>
             </div>
         </x-form-section>
 
         {{-- Section 2: Flags --}}
-        <x-form-section title="Flags" icon="ph-toggle-right">
+        <x-form-section title="{{ __('settings::settings.edit.section_flags') }}" icon="ph-toggle-right">
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="d-flex align-items-center justify-content-between p-3 rounded border">
                         <div>
-                            <div class="fw-semibold fs-sm">Visible in Settings Page</div>
-                            <div class="text-muted fs-xs">Show this field to editors</div>
+                            <div class="fw-semibold fs-sm">{{ __('settings::settings.edit.visible_title') }}</div>
+                            <div class="text-muted fs-xs">{{ __('settings::settings.edit.visible_desc') }}</div>
                         </div>
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" id="is_visible" name="is_visible"
@@ -91,8 +91,8 @@
                 <div class="col-md-6">
                     <div class="d-flex align-items-center justify-content-between p-3 rounded border">
                         <div>
-                            <div class="fw-semibold fs-sm">Required</div>
-                            <div class="text-muted fs-xs">Must have a value</div>
+                            <div class="fw-semibold fs-sm">{{ __('settings::settings.edit.required_title') }}</div>
+                            <div class="text-muted fs-xs">{{ __('settings::settings.edit.required_desc') }}</div>
                         </div>
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" id="is_required" name="is_required"
@@ -107,7 +107,7 @@
         <div id="value_container" class="card mb-3">
             <div class="card-header py-2 d-flex align-items-center gap-2 bg-body-tertiary border-bottom">
                 <i class="ph-pencil-line text-primary"></i>
-                <span class="fw-semibold text-uppercase fs-xs">Current Value</span>
+                <span class="fw-semibold text-uppercase fs-xs">{{ __('settings::settings.edit.value_header') }}</span>
             </div>
             <div class="card-body">
                 <div id="value_text_container" class="{{ $setting->type === 'text' ? '' : 'd-none' }}">
@@ -117,7 +117,7 @@
                     <x-form.textarea name="value_textarea" :value="old('value_textarea', $setting->type === 'textarea' ? $setting->value : '')" :rows="4" />
                 </div>
                 <div id="value_encrypted_container" class="{{ $setting->type === 'encrypted' ? '' : 'd-none' }}">
-                    <x-form.input type="password" name="value_encrypted" :placeholder="$setting->type === 'encrypted' ? 'Leave blank to keep the current secret' : 'Secret value — stored encrypted'" />
+                    <x-form.input type="password" name="value_encrypted" :placeholder="$setting->type === 'encrypted' ? __('settings::settings.edit.value_encrypted_placeholder_set') : __('settings::settings.edit.value_encrypted_placeholder_unset')" />
                 </div>
                 <div id="value_integer_container" class="{{ $setting->type === 'integer' ? '' : 'd-none' }}">
                     <x-form.input type="number" name="value_integer" :value="old('value_integer', $setting->type === 'integer' ? $setting->value : '')" />
@@ -131,18 +131,18 @@
                             <input class="form-check-input" type="checkbox" id="value_boolean" name="value_boolean"
                                 {{ $setting->type === 'boolean' && $setting->value ? 'checked' : '' }}>
                         </div>
-                        <label class="form-check-label fw-medium" for="value_boolean">Enabled</label>
+                        <label class="form-check-label fw-medium" for="value_boolean">{{ __('settings::settings.edit.value_boolean_label') }}</label>
                     </div>
                 </div>
                 <div id="value_file_container" class="{{ $setting->type === 'file' ? '' : 'd-none' }}">
                     @if ($setting->type === 'file' && $setting->value)
                         <a href="{{ $setting->value }}" target="_blank"
                             class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 mb-2">
-                            <i class="ph-file-arrow-down"></i> View Current File
+                            <i class="ph-file-arrow-down"></i> {{ __('settings::settings.edit.view_current_file') }}
                         </a>
                     @endif
                     <input type="file" class="form-control form-control-sm" name="value_file">
-                    <div class="form-text">Leave empty to keep current file</div>
+                    <div class="form-text">{{ __('settings::settings.edit.leave_empty_file') }}</div>
                 </div>
                 <div id="value_image_container" class="{{ $setting->type === 'image' ? '' : 'd-none' }}">
                     @if ($setting->type === 'image' && $setting->value)
@@ -154,33 +154,31 @@
                     @endif
                     <input type="file" class="form-control form-control-sm" name="value_image" id="value_image_input"
                         accept="image/*">
-                    <div class="form-text">Leave empty to keep current image</div>
+                    <div class="form-text">{{ __('settings::settings.edit.leave_empty_image') }}</div>
                 </div>
                 <div id="value_json_container" class="{{ $setting->type === 'json' ? '' : 'd-none' }}">
                     <div id="json-editor" class="border rounded" style="height:320px;"></div>
                     <x-form.input type="hidden" name="value_json" id="value_json" :value="old('value_json', $setting->type === 'json' ? (is_string($setting->value) ? $setting->value : json_encode($setting->value)) : '{}')" />
                     <div class="d-flex align-items-center gap-2 mt-2">
                         <button type="button" class="btn btn-sm btn-light border" id="format-json"><i
-                                class="ph-brackets-curly me-1"></i>Format</button>
+                                class="ph-brackets-curly me-1"></i>{{ __('settings::settings.edit.json_format') }}</button>
                         <button type="button" class="btn btn-sm btn-light border" id="validate-json"><i
-                                class="ph-check me-1"></i>Validate</button>
+                                class="ph-check me-1"></i>{{ __('settings::settings.edit.json_validate') }}</button>
                         <span id="json-validation-result" class="ms-1 fs-sm"></span>
                     </div>
                 </div>
                 <div id="value_select_container" class="{{ $setting->type === 'select' ? '' : 'd-none' }}">
                     @if ($setting->type === 'select' && is_array($setting->options) && count($setting->options))
-                        <x-form.select class="select" name="value_select" id="value_select" :options="['' => ''] + $setting->options" :selected="$setting->value" data-placeholder="Select a value…" />
+                        <x-form.select class="select" name="value_select" id="value_select" :options="['' => ''] + $setting->options" :selected="$setting->value" data-placeholder="{{ __('settings::settings.edit.select_value_placeholder') }}" />
                     @else
-                        <p class="text-muted mb-0 fs-sm"><i class="ph-info me-1"></i>No options defined yet. Add options
-                            below.</p>
+                        <p class="text-muted mb-0 fs-sm"><i class="ph-info me-1"></i>{{ __('settings::settings.edit.no_options_defined') }}</p>
                     @endif
                 </div>
                 <div id="value_multi-select_container" class="{{ $setting->type === 'multi-select' ? '' : 'd-none' }}">
                     @if ($setting->type === 'multi-select' && is_array($setting->options) && count($setting->options))
-                        <x-form.select class="select" name="value_multi-select[]" id="value_multi_select" multiple :options="$setting->options" :selected="is_array($setting->value) ? $setting->value : []" data-placeholder="Select options…" />
+                        <x-form.select class="select" name="value_multi-select[]" id="value_multi_select" multiple :options="$setting->options" :selected="is_array($setting->value) ? $setting->value : []" data-placeholder="{{ __('settings::settings.edit.select_options_placeholder') }}" />
                     @else
-                        <p class="text-muted mb-0 fs-sm"><i class="ph-info me-1"></i>No options defined yet. Add options
-                            below.</p>
+                        <p class="text-muted mb-0 fs-sm"><i class="ph-info me-1"></i>{{ __('settings::settings.edit.no_options_defined') }}</p>
                     @endif
                 </div>
                 <div id="value_array_container" class="{{ $setting->type === 'array' ? '' : 'd-none' }}">
@@ -195,14 +193,14 @@
                             @endforeach
                         @else
                             <div class="input-group input-group-sm mb-2 array-value-row">
-                                <x-form.input name="value_array[]" placeholder="Value" />
+                                <x-form.input name="value_array[]" placeholder="{{ __('settings::settings.edit.array_value_placeholder') }}" />
                                 <button type="button" class="btn btn-outline-danger" onclick="removeArrayValue(this)"><i
                                         class="ph-trash"></i></button>
                             </div>
                         @endif
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addArrayValue()">
-                        <i class="ph-plus me-1"></i>Add value
+                        <i class="ph-plus me-1"></i>{{ __('settings::settings.edit.add_value') }}
                     </button>
                 </div>
             </div>
@@ -214,14 +212,14 @@
             <div class="card-header py-2 d-flex align-items-center justify-content-between bg-body-tertiary border-bottom">
                 <div class="d-flex align-items-center gap-2">
                     <i class="ph-list-bullets text-primary"></i>
-                    <span class="fw-semibold text-uppercase fs-xs">Options</span>
+                    <span class="fw-semibold text-uppercase fs-xs">{{ __('settings::settings.edit.section_options') }}</span>
                 </div>
-                <span class="text-muted fs-xs">Define key → label pairs</span>
+                <span class="text-muted fs-xs">{{ __('settings::settings.edit.options_badge') }}</span>
             </div>
             <div class="card-body">
                 <div class="row g-0 mb-2 px-1">
-                    <div class="col-5"><span class="text-muted fw-bold text-uppercase fs-xs">Key</span></div>
-                    <div class="col-5"><span class="text-muted fw-bold text-uppercase fs-xs">Label</span></div>
+                    <div class="col-5"><span class="text-muted fw-bold text-uppercase fs-xs">{{ __('settings::settings.edit.options_col_key') }}</span></div>
+                    <div class="col-5"><span class="text-muted fw-bold text-uppercase fs-xs">{{ __('settings::settings.edit.options_col_label') }}</span></div>
                 </div>
                 <div id="options_list">
                     @if (in_array($setting->type, ['select', 'multi-select']) && is_array($setting->options) && count($setting->options))
@@ -235,15 +233,15 @@
                         @endforeach
                     @else
                         <div class="row g-2 mb-2 align-items-center option-row">
-                            <div class="col-5"><x-form.input name="option_keys[]" placeholder="e.g. active" /></div>
-                            <div class="col-5"><x-form.input name="option_values[]" placeholder="e.g. Active" /></div>
+                            <div class="col-5"><x-form.input name="option_keys[]" placeholder="{{ __('settings::settings.edit.option_key_placeholder') }}" /></div>
+                            <div class="col-5"><x-form.input name="option_values[]" placeholder="{{ __('settings::settings.edit.option_value_placeholder') }}" /></div>
                             <div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger"
                                     onclick="removeOption(this)"><i class="ph-trash"></i></button></div>
                         </div>
                     @endif
                 </div>
                 <button type="button" class="btn btn-sm btn-outline-primary mt-1" onclick="addOption()">
-                    <i class="ph-plus me-1"></i>Add Option
+                    <i class="ph-plus me-1"></i>{{ __('settings::settings.edit.add_option') }}
                 </button>
             </div>
         </div>
@@ -251,10 +249,10 @@
         {{-- Footer actions --}}
         <div class="d-flex justify-content-between align-items-center">
             <a href="{{ route('admin.settings.manage') }}" class="btn btn-outline-secondary">
-                <i class="ph-x me-1"></i>Cancel
+                <i class="ph-x me-1"></i>{{ __('foundation::foundation.common.cancel') }}
             </a>
             <button type="submit" class="btn btn-primary px-4">
-                <i class="ph-floppy-disk me-1"></i>Update Setting
+                <i class="ph-floppy-disk me-1"></i>{{ __('settings::settings.edit.submit') }}
             </button>
         </div>
 
@@ -282,7 +280,7 @@
 
             $('#existing_group').select2({
                 width: '100%',
-                placeholder: 'Select or type a group…',
+                placeholder: '{{ __('settings::settings.edit.group_select_placeholder') }}',
                 allowClear: true
             });
             $('#existing_group').on('change', function() {
@@ -296,7 +294,7 @@
 
             $('#type').select2({
                 width: '100%',
-                placeholder: 'Select type…',
+                placeholder: '{{ __('settings::settings.edit.type_select_placeholder') }}',
                 allowClear: false
             });
             $('#type').on('change', function() {
@@ -306,13 +304,13 @@
             @if ($setting->type === 'select')
                 $('#value_select').select2({
                     width: '100%',
-                    placeholder: 'Select a value…',
+                    placeholder: '{{ __('settings::settings.edit.select_value_placeholder') }}',
                     allowClear: true
                 });
             @elseif ($setting->type === 'multi-select')
                 $('#value_multi_select').select2({
                     width: '100%',
-                    placeholder: 'Select options…',
+                    placeholder: '{{ __('settings::settings.edit.select_options_placeholder') }}',
                     allowClear: false
                 });
             @endif
@@ -371,7 +369,7 @@
                         document.getElementById('value_json').value = JSON.stringify(JSON.parse(editor
                             .getValue()));
                         document.getElementById('json-validation-result').innerHTML =
-                            '<span class="text-success"><i class="ph-check me-1"></i>Valid</span>';
+                            '<span class="text-success"><i class="ph-check me-1"></i>{{ __('settings::settings.edit.json_valid') }}</span>';
                     } catch (e) {
                         document.getElementById('json-validation-result').innerHTML =
                             '<span class="text-danger">' + e.message + '</span>';
@@ -384,11 +382,11 @@
                 } catch (e) {
                     window.showConfirm?.({
                         icon: 'error',
-                        title: 'Invalid JSON',
+                        title: '{{ __('settings::settings.edit.invalid_json_title') }}',
                         text: e.message,
                         confirmClass: 'btn btn-danger',
                         showCancelButton: false,
-                        confirmText: 'OK'
+                        confirmText: '{{ __('settings::settings.common.ok') }}'
                     });
                 }
             });
@@ -396,7 +394,7 @@
                 try {
                     JSON.parse(editor.getValue());
                     document.getElementById('json-validation-result').innerHTML =
-                        '<span class="text-success"><i class="ph-check me-1"></i>Valid JSON</span>';
+                        '<span class="text-success"><i class="ph-check me-1"></i>{{ __('settings::settings.edit.json_valid_json') }}</span>';
                 } catch (e) {
                     document.getElementById('json-validation-result').innerHTML = '<span class="text-danger">' + e
                         .message + '</span>';
@@ -409,11 +407,11 @@
                     e.preventDefault();
                     window.showConfirm?.({
                         icon: 'error',
-                        title: 'Invalid JSON',
+                        title: '{{ __('settings::settings.edit.invalid_json_title') }}',
                         text: err.message,
                         confirmClass: 'btn btn-danger',
                         showCancelButton: false,
-                        confirmText: 'OK'
+                        confirmText: '{{ __('settings::settings.common.ok') }}'
                     });
                 }
             });
@@ -422,8 +420,8 @@
 
         function addOption() {
             var row = '<div class="row g-2 mb-2 align-items-center option-row">' +
-                '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_keys[]" placeholder="e.g. active"></div>' +
-                '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_values[]" placeholder="e.g. Active"></div>' +
+                '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_keys[]" placeholder="{{ __('settings::settings.edit.option_key_placeholder') }}"></div>' +
+                '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_values[]" placeholder="{{ __('settings::settings.edit.option_value_placeholder') }}"></div>' +
                 '<div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger" onclick="removeOption(this)"><i class="ph-trash"></i></button></div></div>';
             document.getElementById('options_list').insertAdjacentHTML('beforeend', row);
         }
@@ -434,7 +432,7 @@
 
         function addArrayValue() {
             var row =
-                '<div class="input-group input-group-sm mb-2 array-value-row"><input type="text" class="form-control" name="value_array[]" placeholder="Value"><button type="button" class="btn btn-outline-danger" onclick="removeArrayValue(this)"><i class="ph-trash"></i></button></div>';
+                '<div class="input-group input-group-sm mb-2 array-value-row"><input type="text" class="form-control" name="value_array[]" placeholder="{{ __('settings::settings.edit.array_value_placeholder') }}"><button type="button" class="btn btn-outline-danger" onclick="removeArrayValue(this)"><i class="ph-trash"></i></button></div>';
             document.getElementById('array_values_list').insertAdjacentHTML('beforeend', row);
         }
 

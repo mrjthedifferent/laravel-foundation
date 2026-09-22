@@ -42,7 +42,7 @@
      x-init="$watch('query', () => search())">
     <input type="text"
            class="form-control bg-transparent rounded-pill border-white border-opacity-25"
-           placeholder="Search"
+           placeholder="{{ __('foundation::foundation.search.placeholder') }}"
            data-bs-toggle="dropdown"
            x-model.debounce.300ms="query">
     <div class="form-control-feedback-icon">
@@ -53,18 +53,18 @@
             <div class="text-center w-32px me-3">
                 <i class="ph-magnifying-glass"></i>
             </div>
-            <span>Search <span class="fw-bold">"in"</span> everywhere</span>
+            <span>{!! __('foundation::foundation.search.everywhere') !!}</span>
         </button>
 
         <div x-show="loading" x-transition class="dropdown-item text-muted">
             <div class="text-center w-32px me-3 d-inline-block"><i class="ph-spinner spinner"></i></div>
-            <span>Searching...</span>
+            <span>{{ __('foundation::foundation.search.searching') }}</span>
         </div>
         <div x-show="informMessage === 'min-chars'" x-transition>
             <button type="button" class="dropdown-item">
                 <div class="text-center w-100">
                     <i class="ph-x-circle fs-3 text-danger"></i>
-                    <p class="text-muted text-center mb-0">Please write at least 3 characters...</p>
+                    <p class="text-muted text-center mb-0">{{ __('foundation::foundation.search.min_chars') }}</p>
                 </div>
             </button>
         </div>
@@ -74,9 +74,9 @@
             <template x-if="results && results.users && results.users.length">
                 <div>
                     <div class="dropdown-header">
-                        Users
+                        {{ __('foundation::foundation.search.users') }}
                         <a :href="`${usersIndexUrl}?search=${encodeURIComponent(query)}`" class="float-end">
-                            See all
+                            {{ __('foundation::foundation.search.see_all') }}
                             <i class="ph-arrow-circle-right ms-1"></i>
                         </a>
                     </div>

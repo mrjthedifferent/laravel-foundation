@@ -46,6 +46,6 @@ class EmailLogController extends Controller
         $action->execute($id);
 
         return redirect()->route('admin.email-logs.index')
-            ->with('success', 'Email log deleted successfully.');
+            ->with('success', __('activitylog::activitylog.flash.email_log_deleted'));
     }
 }

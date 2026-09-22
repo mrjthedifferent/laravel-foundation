@@ -20,7 +20,7 @@ final readonly class BulkUploadUsersAction
     {
         $importManagerId = $this->importTracker->start(
             $user,
-            'Users Upload',
+            __('user::user.flash.bulk_upload_title'),
             ImportType::Import,
             file: $file,
             directory: 'uploads/users',

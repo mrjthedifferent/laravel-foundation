@@ -29,7 +29,7 @@ class EnsureContactIsVerified
         }
 
         if ($request->expectsJson()) {
-            return JsonResponseFactory::forbidden('Your contact is not verified.');
+            return JsonResponseFactory::forbidden(__('foundation::foundation.auth.contact_not_verified'));
         }
 
         return redirect()->guest(route($redirectToRoute ?: 'verification.notice'));

@@ -48,10 +48,10 @@ class OtpWhitelistController extends Controller
         $entry = $action->execute($request->validated());
 
         if ($entry === null) {
-            return redirect()->back()->withInput()->with('error', 'This recipient is already whitelisted.');
+            return redirect()->back()->withInput()->with('error', __('otp::otp.flash.whitelist_duplicate'));
         }
 
-        return redirect()->route('admin.otp-whitelist.index')->with('success', 'Whitelist entry created successfully.');
+        return redirect()->route('admin.otp-whitelist.index')->with('success', __('otp::otp.flash.whitelist_created'));
     }
 
     /**
@@ -84,10 +84,10 @@ class OtpWhitelistController extends Controller
         $updated = $action->execute($otpWhitelist, $request->validated());
 
         if (! $updated) {
-            return redirect()->back()->withInput()->with('error', 'Another entry already exists for this recipient.');
+            return redirect()->back()->withInput()->with('error', __('otp::otp.flash.whitelist_update_conflict'));
         }
 
-        return redirect()->route('admin.otp-whitelist.index')->with('success', 'Whitelist entry updated successfully.');
+        return redirect()->route('admin.otp-whitelist.index')->with('success', __('otp::otp.flash.whitelist_updated'));
     }
 
     /**
@@ -99,6 +99,6 @@ class OtpWhitelistController extends Controller
 
         $otpWhitelist->delete();
 
-        return redirect()->route('admin.otp-whitelist.index')->with('success', 'Whitelist entry deleted successfully.');
+        return redirect()->route('admin.otp-whitelist.index')->with('success', __('otp::otp.flash.whitelist_deleted'));
     }
 }

@@ -50,10 +50,10 @@ $btnStyle = ($themeSidebarColor === 'light' && empty($themeSidebarColorCustom)) 
         <!-- Sidebar header -->
         <div class="sidebar-section">
             <div class="sidebar-section-body d-flex justify-content-center">
-                <h5 class="sidebar-resize-hide flex-grow-1 my-auto">Navigation </h5>
+                <h5 class="sidebar-resize-hide flex-grow-1 my-auto">{{ __('foundation::foundation.sidebar.navigation') }}</h5>
 
                 <div>
-                    <button type="button" class="btn {{ $btnStyle }} btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-search-trigger sidebar-resize-hide d-none d-lg-inline-flex" id="sidebarSearchBtn" data-bs-popup="tooltip" data-bs-placement="bottom" data-toggle="tooltip" data-placement="top" title="Search (Ctrl+K)">
+                    <button type="button" class="btn {{ $btnStyle }} btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-search-trigger sidebar-resize-hide d-none d-lg-inline-flex" id="sidebarSearchBtn" data-bs-popup="tooltip" data-bs-placement="bottom" data-toggle="tooltip" data-placement="top" title="{{ __('foundation::foundation.sidebar.search_shortcut') }}">
                         <i class="ph-magnifying-glass"></i>
                     </button>
 
@@ -75,7 +75,7 @@ $btnStyle = ($themeSidebarColor === 'light' && empty($themeSidebarColorCustom)) 
 
                 <!-- Main -->
                 <li class="nav-item-header pt-0">
-                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">Main</div>
+                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">{{ __('foundation::foundation.sidebar.main') }}</div>
                     <i class="ph-dots-three sidebar-resize-show"></i>
                 </li>
 
@@ -83,7 +83,7 @@ $btnStyle = ($themeSidebarColor === 'light' && empty($themeSidebarColorCustom)) 
                     <a href="{{ route('admin.dashboard') }}"
                         class="nav-link @if($current_route === 'admin.dashboard') active @endif">
                         <i class="ph-house"></i>
-                        <span>Dashboard</span>
+                        <span>{{ __('foundation::foundation.layout.dashboard') }}</span>
                     </a>
                 </li>
 

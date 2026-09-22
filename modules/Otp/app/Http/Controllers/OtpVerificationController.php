@@ -36,24 +36,24 @@ class OtpVerificationController extends Controller
             : $data['contact'];
 
         if (($data['is_registration'] ?? false) && $this->accountExists($contactType, $contact)) {
-            return JsonResponseFactory::error('An account with this '.$contactType->value.' already exists.', null, 400);
+            return JsonResponseFactory::error(__('otp::otp.errors.account_exists', ['type' => $contactType->value]), null, 400);
         }
 
         $existing = VerificationCode::active()->contact($contact)->latest()->first();
 
         if ($existing && $existing->created_at->diffInSeconds(now()) < 60) {
-            return JsonResponseFactory::error('Please wait 60 seconds before requesting another code.', null, 429);
+            return JsonResponseFactory::error(__('otp::otp.errors.wait_before_retry'), null, 429);
         }
 
         $maxAttempts = (int) config('settings.max_verification_attempts.value', 5);
 
         if (VerificationCode::active()->contact($contact)->count() >= $maxAttempts) {
-            return JsonResponseFactory::error('Maximum verification code limit reached. Please try again later.', null, 429);
+            return JsonResponseFactory::error(__('otp::otp.errors.max_attempts_reached'), null, 429);
         }
 
         $verificationCode = $this->sendOtp->execute($contact, $contactType);
 
-        return JsonResponseFactory::success('Verification code sent.', VerificationCodeResource::make($verificationCode));
+        return JsonResponseFactory::success(__('otp::otp.success.code_sent'), VerificationCodeResource::make($verificationCode));
     }
 
     /**
@@ -66,10 +66,10 @@ class OtpVerificationController extends Controller
         $contact = PhoneNumber::normalizeContact($data['contact']);
 
         if (! $this->verifyOtp->execute($contact, $data['code'], true)) {
-            return JsonResponseFactory::error('Invalid or expired verification code.', null, 400);
+            return JsonResponseFactory::error(__('otp::otp.errors.invalid_or_expired_code'), null, 400);
         }
 
-        return JsonResponseFactory::success('Verification code is valid.', true);
+        return JsonResponseFactory::success(__('otp::otp.success.code_valid'), true);
     }
 
     /**

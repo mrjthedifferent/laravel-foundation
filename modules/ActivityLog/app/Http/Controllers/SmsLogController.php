@@ -38,6 +38,6 @@ class SmsLogController extends Controller
         $action->execute($id);
 
         return redirect()->route('admin.sms-logs.index')
-            ->with('success', 'SMS log deleted successfully.');
+            ->with('success', __('activitylog::activitylog.flash.sms_log_deleted'));
     }
 }

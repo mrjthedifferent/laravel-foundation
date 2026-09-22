@@ -41,7 +41,7 @@
                         <button type="submit" class="navbar-nav-link navbar-nav-link-icon rounded ms-1 border-0 bg-transparent">
                             <div class="d-flex align-items-center mx-md-1">
                                 <i class="ph-sign-out"></i>
-                                <span class="d-none d-md-inline-block ms-2">{{ __('Logout') }}</span>
+                                <span class="d-none d-md-inline-block ms-2">{{ __('foundation::foundation.layout.logout') }}</span>
                             </div>
                         </button>
                     </form>

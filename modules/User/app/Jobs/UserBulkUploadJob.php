@@ -40,7 +40,7 @@ class UserBulkUploadJob implements ShouldQueue
             if (! $collection) {
                 app(ImportTracker::class)->fail(
                     $this->importDownloadManagerId,
-                    'No data found in the uploaded file.'
+                    __('user::user.errors.no_data_found_in_file')
                 );
 
                 return;
@@ -62,7 +62,7 @@ class UserBulkUploadJob implements ShouldQueue
 
             // Plain text: the record's remarks are rendered with a raw echo, so no
             // HTML may be built here, only line breaks the view converts safely.
-            $remarks = count($errors) > 0 ? implode("\n", $errors) : 'Completed successfully';
+            $remarks = count($errors) > 0 ? implode("\n", $errors) : __('user::user.flash.job_completed');
             app(ImportTracker::class)->complete($this->importDownloadManagerId, $remarks);
         } catch (Exception $e) {
             Log::error('User bulk upload failed', ['error' => $e->getMessage()]);
@@ -72,7 +72,7 @@ class UserBulkUploadJob implements ShouldQueue
 
     public function failed(Throwable $exception): void
     {
-        app(ImportTracker::class)->fail($this->importDownloadManagerId, 'Job failed: '.$exception->getMessage());
+        app(ImportTracker::class)->fail($this->importDownloadManagerId, __('user::user.errors.job_failed', ['message' => $exception->getMessage()]));
         Log::error('User bulk upload job failed', ['error' => $exception->getMessage()]);
     }
 }

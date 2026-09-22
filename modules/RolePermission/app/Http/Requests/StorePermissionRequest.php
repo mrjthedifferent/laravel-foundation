@@ -28,9 +28,9 @@ class StorePermissionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'permission_name.unique' => 'This permission name already exists.',
-            'module_name.required_without' => 'Please select a module or create a new one.',
-            'new_module_name.required_if' => 'Please enter a name for the new module.',
+            'permission_name.unique' => __('rolepermission::rolepermission.validation.permission_name_unique'),
+            'module_name.required_without' => __('rolepermission::rolepermission.validation.module_name_required_without'),
+            'new_module_name.required_if' => __('rolepermission::rolepermission.validation.new_module_name_required_if'),
         ];
     }
 }

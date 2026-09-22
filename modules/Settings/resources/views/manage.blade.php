@@ -1,7 +1,7 @@
 @extends('settings::layouts.master')
 
 @section('breadcrumb')
-<span class="breadcrumb-item active">Manage Settings</span>
+<span class="breadcrumb-item active">{{ __('settings::settings.manage.breadcrumb_active') }}</span>
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
 {{-- Import errors --}}
 @if(session('import_errors'))
 <x-alert type="warning" icon="ph-warning">
-    <strong>Import completed with errors:</strong>
+    <strong>{{ __('settings::settings.manage.import_errors_title') }}</strong>
     <ul class="mb-0 mt-1 ps-3 fs-sm">
         @foreach(session('import_errors') as $error)
         <li>{{ $error }}</li>
@@ -23,29 +23,29 @@
     <div class="card-body">
         <div class="row g-2 align-items-end">
             <div class="col-md-4">
-                <label class="form-label">Search</label>
+                <label class="form-label">{{ __('settings::settings.manage.search_label') }}</label>
                 <div class="input-group">
                     <span class="input-group-text bg-white border-end-0"><i class="ph-magnifying-glass text-muted"></i></span>
                     <input type="text" id="settings-search" class="form-control form-control-sm border-start-0"
-                        placeholder="Search by key or description…">
-                    <button class="btn btn-light border" id="clear-search" type="button" title="Clear">
+                        placeholder="{{ __('settings::settings.manage.search_placeholder') }}">
+                    <button class="btn btn-light border" id="clear-search" type="button" title="{{ __('settings::settings.manage.clear') }}">
                         <i class="ph-x"></i>
                     </button>
                 </div>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Group</label>
+                <label class="form-label">{{ __('settings::settings.manage.group_label') }}</label>
                 <select id="group-filter" class="form-select form-select-sm">
-                    <option value="">All Groups</option>
+                    <option value="">{{ __('settings::settings.manage.all_groups') }}</option>
                     @foreach($settings->pluck('group')->unique()->sort()->values() as $group)
-                    <option value="{{ $group }}">{{ $group }}</option>
+                    <option value="{{ $group }}">{{ display_label($group) }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Type</label>
+                <label class="form-label">{{ __('settings::settings.manage.type_label') }}</label>
                 <select id="type-filter" class="form-select form-select-sm">
-                    <option value="">All Types</option>
+                    <option value="">{{ __('settings::settings.manage.all_types') }}</option>
                     @foreach($settings->pluck('type')->unique()->sort()->values() as $type)
                     <option value="{{ $type }}">{{ ucfirst($type) }}</option>
                     @endforeach
@@ -53,7 +53,7 @@
             </div>
             <div class="col-md-auto ms-auto mb-2 d-flex align-items-end">
                 <button type="button" id="reset-filters-btn" class="btn btn-sm btn-outline-secondary">
-                    <i class="ph-arrow-counter-clockwise me-1"></i>Reset
+                    <i class="ph-arrow-counter-clockwise me-1"></i>{{ __('foundation::foundation.common.reset') }}
                 </button>
             </div>
         </div>
@@ -64,24 +64,24 @@
 <div class="card">
     <div class="card-header d-flex align-items-center justify-content-between">
         <h4 class="card-title mb-0">
-            Manage Settings
+            {{ __('settings::settings.manage.title') }}
             <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle ms-1 fw-normal">
-                Showing <span id="visible-count">{{ $settings->count() }}</span> of {{ $settings->count() }}
+                {{ __('settings::settings.manage.showing_pre') }} <span id="visible-count">{{ $settings->count() }}</span> {{ __('settings::settings.manage.showing_of') }} {{ $settings->count() }}
             </span>
         </h4>
         <div class="d-flex gap-2">
             <a href="{{ route('admin.settings.sync') }}" class="btn btn-success w-sm swal-post"
-                data-text="Sync settings? This will run the SettingsSettingsSeeder to add any new settings from module config files.">
-                <i class="ph-eject me-1"></i>Sync
+                data-text="{{ __('settings::settings.manage.sync_confirm') }}">
+                <i class="ph-eject me-1"></i>{{ __('settings::settings.manage.sync') }}
             </a>
             <a href="{{ route('admin.settings.export') }}" class="btn btn-success w-sm">
-                <i class="ph-download me-1"></i>Export
+                <i class="ph-download me-1"></i>{{ __('foundation::foundation.common.export') }}
             </a>
             <a href="{{ route('admin.settings.import_form') }}" class="btn btn-secondary w-sm">
-                <i class="ph-upload me-1"></i>Import
+                <i class="ph-upload me-1"></i>{{ __('settings::settings.manage.import') }}
             </a>
             <a href="{{ route('admin.settings.create') }}" class="btn btn-primary w-sm">
-                <i class="ph-plus me-1"></i>New Setting
+                <i class="ph-plus me-1"></i>{{ __('settings::settings.manage.new_setting') }}
             </a>
         </div>
     </div>
@@ -91,39 +91,39 @@
         {{-- Bulk action bar --}}
         <div id="bulk-bar" class="d-none align-items-center gap-2 flex-wrap border rounded p-2 mb-2 bg-body-tertiary">
             <span class="fw-semibold fs-sm">
-                <i class="ph-check-square me-1"></i><span id="selected-count">0</span> selected
+                <i class="ph-check-square me-1"></i><span id="selected-count">0</span> {{ __('settings::settings.manage.selected') }}
             </span>
             <div class="vr mx-1"></div>
             <div class="input-group input-group-sm flex-nowrap" style="width:auto;">
                 <select id="bulk-action" class="form-select form-select-sm" style="min-width:145px;">
-                    <option value="">Choose action…</option>
-                    <option value="visibility">Change Visibility</option>
-                    <option value="group">Move to Group</option>
-                    <option value="delete">Delete Selected</option>
+                    <option value="">{{ __('settings::settings.manage.choose_action') }}</option>
+                    <option value="visibility">{{ __('settings::settings.manage.action_visibility') }}</option>
+                    <option value="group">{{ __('settings::settings.manage.action_group') }}</option>
+                    <option value="delete">{{ __('settings::settings.manage.action_delete') }}</option>
                 </select>
                 <select id="bulk-visibility" class="form-select form-select-sm d-none" style="min-width:130px;">
-                    <option value="1">Make Visible</option>
-                    <option value="0">Make Hidden</option>
+                    <option value="1">{{ __('settings::settings.manage.make_visible') }}</option>
+                    <option value="0">{{ __('settings::settings.manage.make_hidden') }}</option>
                 </select>
                 <select id="bulk-group" class="form-select form-select-sm d-none" style="min-width:130px;">
                     @foreach($settings->pluck('group')->unique()->sort()->values() as $group)
-                    <option value="{{ $group }}">{{ $group }}</option>
+                    <option value="{{ $group }}">{{ display_label($group) }}</option>
                     @endforeach
-                    <option value="new">+ New group…</option>
+                    <option value="new">{{ __('settings::settings.manage.new_group_option') }}</option>
                 </select>
                 <input type="text" id="bulk-new-group" class="form-control form-control-sm d-none"
-                    placeholder="Group name…" style="min-width:130px;">
-                <button type="button" id="apply-bulk-action" class="btn btn-sm btn-primary">Apply</button>
+                    placeholder="{{ __('settings::settings.manage.new_group_placeholder') }}" style="min-width:130px;">
+                <button type="button" id="apply-bulk-action" class="btn btn-sm btn-primary">{{ __('settings::settings.manage.apply') }}</button>
             </div>
             <button type="button" id="deselect-all" class="btn btn-sm btn-outline-secondary ms-auto">
-                <i class="ph-x me-1"></i>Clear
+                <i class="ph-x me-1"></i>{{ __('settings::settings.manage.clear') }}
             </button>
         </div>
 
         {{-- Select-all row --}}
         <div id="select-bar" class="d-flex align-items-center pb-2">
             <button type="button" id="select-all" class="btn btn-sm btn-outline-secondary">
-                <i class="ph-check-square me-1"></i>Select all visible
+                <i class="ph-check-square me-1"></i>{{ __('settings::settings.manage.select_all_visible') }}
             </button>
         </div>
 
@@ -133,14 +133,14 @@
                 <thead class="table-active">
                     <tr>
                         <th style="width:36px;"><input class="form-check-input" type="checkbox" id="check-all"></th>
-                        <th>Key</th>
-                        <th>Group</th>
-                        <th>Type</th>
-                        <th>Value</th>
-                        <th>Description</th>
-                        <th class="text-center" style="width:70px;">Visible</th>
-                        <th class="text-center" style="width:70px;">Req.</th>
-                        <th class="text-end" style="width:80px;">Action</th>
+                        <th>{{ __('settings::settings.manage.col_key') }}</th>
+                        <th>{{ __('settings::settings.manage.col_group') }}</th>
+                        <th>{{ __('settings::settings.manage.col_type') }}</th>
+                        <th>{{ __('settings::settings.manage.col_value') }}</th>
+                        <th>{{ __('foundation::foundation.common.description') }}</th>
+                        <th class="text-center" style="width:70px;">{{ __('settings::settings.manage.col_visible') }}</th>
+                        <th class="text-center" style="width:70px;">{{ __('settings::settings.manage.col_required') }}</th>
+                        <th class="text-end" style="width:80px;">{{ __('foundation::foundation.common.action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -167,7 +167,7 @@
                             <code class="text-body fs-sm">{{ $setting->key }}</code>
                         </td>
                         <td>
-                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">{{ $setting->group }}</span>
+                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">{{ display_label($setting->group) }}</span>
                         </td>
                         <td>
                             <span class="badge bg-{{ $c }}-subtle text-{{ $c }} border border-{{ $c }}-subtle text-uppercase">{{ $setting->type }}</span>
@@ -181,9 +181,9 @@
                             </a>
                             @elseif($setting->type === 'boolean')
                             @if($setting->value)
-                            <span class="badge bg-success-subtle text-success border border-success-subtle">Enabled</span>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">{{ __('settings::settings.manage.enabled') }}</span>
                             @else
-                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Disabled</span>
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ __('settings::settings.manage.disabled') }}</span>
                             @endif
                             @elseif(in_array($setting->type, ['json','array']))
                             <span class="badge bg-{{ $c }}-subtle text-{{ $c }} border border-{{ $c }}-subtle text-uppercase">{{ strtoupper($setting->type) }}</span>
@@ -192,18 +192,18 @@
                             @endif
                         </td>
                         <td>
-                            <span class="text-muted fs-sm">{{ Str::limit($setting->description, 40) }}</span>
+                            <span class="text-muted fs-sm">{{ Str::limit(display_label($setting->description), 40) }}</span>
                         </td>
                         <td class="text-center">
                             @if($setting->is_visible)
-                            <i class="ph-eye text-success" title="Visible"></i>
+                            <i class="ph-eye text-success" title="{{ __('settings::settings.manage.visible_tooltip') }}"></i>
                             @else
-                            <i class="ph-eye-slash text-muted" title="Hidden"></i>
+                            <i class="ph-eye-slash text-muted" title="{{ __('settings::settings.manage.hidden_tooltip') }}"></i>
                             @endif
                         </td>
                         <td class="text-center">
                             @if($setting->required)
-                            <i class="ph-asterisk text-warning" title="Required"></i>
+                            <i class="ph-asterisk text-warning" title="{{ __('settings::settings.manage.required_tooltip') }}"></i>
                             @else
                             <span class="text-muted">—</span>
                             @endif
@@ -211,13 +211,13 @@
                         <td class="text-end">
                             <x-dropdown-menu>
                                 <x-dropdown-link :url="route('admin.settings.edit', $setting)">
-                                    <i class="ph-pencil-simple me-2"></i> Edit
+                                    <i class="ph-pencil-simple me-2"></i> {{ __('foundation::foundation.common.edit') }}
                                 </x-dropdown-link>
                                 <div class="dropdown-divider"></div>
                                 <button type="button" class="dropdown-item text-danger swal-delete"
                                     data-url="{{ route('admin.settings.destroy', $setting) }}"
-                                    data-text="Delete setting '{{ $setting->key }}'?">
-                                    <i class="ph-trash me-2"></i> Delete
+                                    data-text="{{ __('settings::settings.manage.delete_confirm', ['key' => $setting->key]) }}">
+                                    <i class="ph-trash me-2"></i> {{ __('foundation::foundation.common.delete') }}
                                 </button>
                             </x-dropdown-menu>
                         </td>
@@ -225,7 +225,7 @@
                     @empty
                     <tr>
                         <td colspan="9" class="text-center py-4 text-muted">
-                            No settings found.
+                            {{ __('settings::settings.manage.no_settings_found') }}
                         </td>
                     </tr>
                     @endforelse
@@ -235,7 +235,7 @@
 
         <div id="no-results" class="text-center py-5 d-none text-muted">
             <i class="ph-magnifying-glass d-block mb-2 opacity-25" style="font-size:2.5rem;"></i>
-            No settings match your filters.
+            {{ __('settings::settings.manage.no_results') }}
         </div>
 
     </div>
@@ -365,12 +365,12 @@
         document.getElementById('apply-bulk-action').addEventListener('click', function() {
             var action = bulkAction.value;
             if (!action) {
-                window.toast('warning', 'Choose an action first', '');
+                window.toast('warning', '{{ __('settings::settings.manage.toast_choose_action') }}', '');
                 return;
             }
             var ids = checkedRows().map(r => r.querySelector('.setting-checkbox').value);
             if (!ids.length) {
-                window.toast('warning', 'Select at least one setting', '');
+                window.toast('warning', '{{ __('settings::settings.manage.toast_select_one') }}', '');
                 return;
             }
 
@@ -388,10 +388,10 @@
 
             if (action === 'visibility') {
                 window.showConfirm({
-                    title: 'Confirm',
-                    text: 'Change visibility for ' + ids.length + ' setting(s)?',
+                    title: '{{ __('settings::settings.manage.confirm_title') }}',
+                    text: '{{ __('settings::settings.manage.confirm_visibility') }}'.replace('{count}', ids.length),
                     icon: 'question',
-                    confirmText: 'Yes',
+                    confirmText: '{{ __('settings::settings.manage.confirm_yes') }}',
                     onConfirm: function() {
                         document.getElementById('visibility-value').value = bulkVisibility.value;
                         fill('visibility-ids-container');
@@ -401,14 +401,14 @@
             } else if (action === 'group') {
                 var grp = bulkGroup.value === 'new' ? bulkNewGroup.value.trim() : bulkGroup.value;
                 if (!grp) {
-                    window.toast('warning', 'Enter a group name', '');
+                    window.toast('warning', '{{ __('settings::settings.manage.toast_enter_group') }}', '');
                     return;
                 }
                 window.showConfirm({
-                    title: 'Confirm',
-                    text: 'Move ' + ids.length + ' setting(s) to "' + grp + '"?',
+                    title: '{{ __('settings::settings.manage.confirm_title') }}',
+                    text: '{{ __('settings::settings.manage.confirm_move_group') }}'.replace('{count}', ids.length).replace('{group}', grp),
                     icon: 'question',
-                    confirmText: 'Yes',
+                    confirmText: '{{ __('settings::settings.manage.confirm_yes') }}',
                     onConfirm: function() {
                         document.getElementById('group-value').value = grp;
                         fill('group-ids-container');
@@ -417,10 +417,10 @@
                 });
             } else if (action === 'delete') {
                 window.showConfirm({
-                    title: 'Delete ' + ids.length + ' setting(s)?',
-                    text: 'This cannot be undone.',
+                    title: '{{ __('settings::settings.manage.confirm_delete_title') }}'.replace('{count}', ids.length),
+                    text: '{{ __('settings::settings.manage.confirm_delete_text') }}',
                     icon: 'warning',
-                    confirmText: 'Delete',
+                    confirmText: '{{ __('foundation::foundation.common.delete') }}',
                     confirmClass: 'btn btn-danger',
                     onConfirm: function() {
                         fill('delete-ids-container');

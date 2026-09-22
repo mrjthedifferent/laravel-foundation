@@ -1,34 +1,34 @@
 @extends('rolepermission::layouts.master')
 
 @section('breadcrumb')
-<span class="breadcrumb-item active">Roles</span>
+<span class="breadcrumb-item active">{{ __('rolepermission::rolepermission.index.breadcrumb') }}</span>
 @endsection
 
 @section('content')
 <x-search-card>
     <div class="col-md-12 mb-2">
-        <x-form.input name="name" label="Search" :value="request('name')" placeholder="Role name…" />
+        <x-form.input name="name" label="{{ __('foundation::foundation.common.search') }}" :value="request('name')" placeholder="{{ __('rolepermission::rolepermission.index.search_placeholder') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="Roles" :data="$roles" empty-icon="ph-shield" empty-message="No roles found">
+<x-table-view-pagination title="{{ __('rolepermission::rolepermission.index.breadcrumb') }}" :data="$roles" empty-icon="ph-shield" empty-message="{{ __('rolepermission::rolepermission.index.empty') }}">
     <x-slot name="actions">
         <x-table-actions>
             @can('Assign Permission')
-                <x-table-action :href="route('admin.permissions.manage')" class="btn-info" icon="ph-shield" title="Manage Permissions" />
+                <x-table-action :href="route('admin.permissions.manage')" class="btn-info" icon="ph-shield" title="{{ __('rolepermission::rolepermission.index.manage_permissions') }}" />
             @endcan
             @can('Create Role')
-                <x-table-action class="btn-primary" icon="ph-plus" title="Create Role" data-bs-toggle="modal" data-bs-target="#createRoleModal" />
+                <x-table-action class="btn-primary" icon="ph-plus" title="{{ __('rolepermission::rolepermission.index.create_role') }}" data-bs-toggle="modal" data-bs-target="#createRoleModal" />
             @endcan
         </x-table-actions>
     </x-slot>
 
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Permissions Assigned</th>
-            <th>Users Assigned</th>
-            <th class="text-end" style="width:60px">Action</th>
+            <th>{{ __('foundation::foundation.common.name') }}</th>
+            <th>{{ __('rolepermission::rolepermission.index.col_permissions_assigned') }}</th>
+            <th>{{ __('rolepermission::rolepermission.index.col_users_assigned') }}</th>
+            <th class="text-end" style="width:60px">{{ __('foundation::foundation.common.action') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -52,27 +52,27 @@
                         data-role-id="{{ $role->id }}"
                         data-role-name="{{ $role->name }}"
                         data-url="{{ route('admin.role.update', $role->id) }}">
-                        <i class="ph-pencil me-2"></i>Edit
+                        <i class="ph-pencil me-2"></i>{{ __('foundation::foundation.common.edit') }}
                     </button>
                     @endcan
                     @can('Assign Permission')
                     <x-dropdown-link :url="route('admin.role.assign.permission.get', $role->id)">
-                        <i class="ph-shield-check me-2"></i>Assign Permissions
+                        <i class="ph-shield-check me-2"></i>{{ __('rolepermission::rolepermission.index.assign_permissions') }}
                     </x-dropdown-link>
                     @endcan
                     @can('Create Role')
                     <x-dropdown-link :url="route('admin.role.clone', $role->id)"
                         class="swal-confirm"
-                        data-text="Clone this role with all its permissions?">
-                        <i class="ph-copy me-2"></i>Clone Role
+                        data-text="{{ __('rolepermission::rolepermission.index.clone_role_confirm') }}">
+                        <i class="ph-copy me-2"></i>{{ __('rolepermission::rolepermission.index.clone_role') }}
                     </x-dropdown-link>
                     @endcan
                     @can('Delete Role')
                     @if ($role->users_count === 0)
                     <x-dropdown-link :url="route('admin.role.destroy', $role->id)"
                         class="swal-delete text-danger"
-                        data-text="Delete this role? This action cannot be undone.">
-                        <i class="ph-trash me-2"></i>Delete Role
+                        data-text="{{ __('rolepermission::rolepermission.index.delete_role_confirm') }}">
+                        <i class="ph-trash me-2"></i>{{ __('rolepermission::rolepermission.index.delete_role') }}
                     </x-dropdown-link>
                     @endif
                     @endcan
@@ -84,30 +84,30 @@
 </x-table-view-pagination>
 
 {{-- Create Role Modal --}}
-<x-modal id="createRoleModal" title="Create Role" size="sm">
+<x-modal id="createRoleModal" title="{{ __('rolepermission::rolepermission.index.create_role') }}" size="sm">
     <form action="{{ route('admin.role.store') }}" method="POST" id="createForm">
         @csrf
         <div class="mb-3">
-            <x-form.input name="role_name" label="Role Name" required placeholder="Role name" />
+            <x-form.input name="role_name" label="{{ __('rolepermission::rolepermission.index.role_name_label') }}" required placeholder="{{ __('rolepermission::rolepermission.index.role_name_placeholder') }}" />
         </div>
         <x-slot name="footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" form="createForm" class="btn btn-primary">Create Role</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
+            <button type="submit" form="createForm" class="btn btn-primary">{{ __('rolepermission::rolepermission.index.create_role') }}</button>
         </x-slot>
     </form>
 </x-modal>
 
 {{-- Edit Role Modal --}}
-<x-modal id="updateRoleModal" title="Edit Role" size="sm">
+<x-modal id="updateRoleModal" title="{{ __('rolepermission::rolepermission.index.edit_role') }}" size="sm">
     <form id="updateForm" method="POST">
         @csrf @method('PUT')
         <div class="mb-3">
-            <x-form.input name="role_name" id="edit_role_name" label="Role Name" required placeholder="Role name" />
+            <x-form.input name="role_name" id="edit_role_name" label="{{ __('rolepermission::rolepermission.index.role_name_label') }}" required placeholder="{{ __('rolepermission::rolepermission.index.role_name_placeholder') }}" />
         </div>
     </form>
     <x-slot name="footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="submit" form="updateForm" class="btn btn-primary">Update Role</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
+        <button type="submit" form="updateForm" class="btn btn-primary">{{ __('rolepermission::rolepermission.index.update_role') }}</button>
     </x-slot>
 </x-modal>
 @endsection

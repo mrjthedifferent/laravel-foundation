@@ -46,15 +46,18 @@ class ErrorReportNotification extends Notification
         $summary = $this->buildSummary();
 
         return (new MailMessage)
-            ->subject('[Error] '.config('app.name').' - '.Str::limit($report->message, 60))
+            ->subject(__('errorreport::errorreport.notification.mail_subject', [
+                'app' => config('app.name'),
+                'message' => Str::limit($report->message, 60),
+            ]))
             ->line($summary)
-            ->line('**Exception:** '.$report->exception_class)
-            ->line('**File:** '.$report->file.':'.$report->line)
-            ->line('**Occurrences:** '.$report->occurrences)
-            ->line('**First seen:** '.$report->first_seen_at->format(config('foundation.formats.datetime')))
-            ->line('**Last seen:** '.$report->last_seen_at->format(config('foundation.formats.datetime')))
-            ->when($report->request_url, fn (MailMessage $m) => $m->line('**URL:** '.$report->request_url))
-            ->action('View in Dashboard', route('admin.error-reports.show', $report));
+            ->line(__('errorreport::errorreport.notification.exception_line', ['value' => $report->exception_class]))
+            ->line(__('errorreport::errorreport.notification.file_line', ['value' => $report->file.':'.$report->line]))
+            ->line(__('errorreport::errorreport.notification.occurrences_line', ['value' => $report->occurrences]))
+            ->line(__('errorreport::errorreport.notification.first_seen_line', ['value' => $report->first_seen_at->format(config('foundation.formats.datetime'))]))
+            ->line(__('errorreport::errorreport.notification.last_seen_line', ['value' => $report->last_seen_at->format(config('foundation.formats.datetime'))]))
+            ->when($report->request_url, fn (MailMessage $m) => $m->line(__('errorreport::errorreport.notification.url_line', ['value' => $report->request_url])))
+            ->action(__('errorreport::errorreport.notification.view_in_dashboard'), route('admin.error-reports.show', $report));
     }
 
     public function toSlack(object $notifiable): SlackMessage
@@ -64,15 +67,15 @@ class ErrorReportNotification extends Notification
 
         return (new SlackMessage)
             ->error()
-            ->content('*'.config('app.name').' Error Report*')
+            ->content(__('errorreport::errorreport.notification.slack_title', ['app' => config('app.name')]))
             ->attachment(function ($attachment) use ($report): void {
                 $attachment
                     ->title($report->exception_class, route('admin.error-reports.show', $report))
                     ->fields([
-                        'Message' => Str::limit($report->message, 200),
-                        'File' => $report->file.':'.$report->line,
-                        'Occurrences' => (string) $report->occurrences,
-                        'URL' => $report->request_url ?? '—',
+                        __('errorreport::errorreport.notification.slack_field_message') => Str::limit($report->message, 200),
+                        __('errorreport::errorreport.notification.slack_field_file') => $report->file.':'.$report->line,
+                        __('errorreport::errorreport.notification.slack_field_occurrences') => (string) $report->occurrences,
+                        __('errorreport::errorreport.notification.slack_field_url') => $report->request_url ?? '—',
                     ]);
             });
     }
@@ -82,11 +85,11 @@ class ErrorReportNotification extends Notification
         $report = $this->errorReport;
         $summary = $this->buildSummary();
 
-        $text = '*'.config('app.name')." Error*\n\n";
+        $text = __('errorreport::errorreport.notification.telegram_title', ['app' => config('app.name')])."\n\n";
         $text .= $summary."\n\n";
-        $text .= 'Exception: `'.$report->exception_class."`\n";
-        $text .= 'File: `'.$report->file.':'.$report->line."`\n";
-        $text .= 'Occurrences: '.$report->occurrences;
+        $text .= __('errorreport::errorreport.notification.telegram_exception', ['value' => $report->exception_class])."\n";
+        $text .= __('errorreport::errorreport.notification.telegram_file', ['value' => $report->file.':'.$report->line])."\n";
+        $text .= __('errorreport::errorreport.notification.telegram_occurrences', ['value' => $report->occurrences]);
 
         return TelegramMessage::create()
             ->content($text)

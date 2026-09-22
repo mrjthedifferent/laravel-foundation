@@ -1,8 +1,8 @@
 @extends('user::layouts.master')
 
 @section('breadcrumb')
-    <a href="{{ route('admin.users.index') }}" class="breadcrumb-item">User List</a>
-    <span class="breadcrumb-item active">Create User</span>
+    <a href="{{ route('admin.users.index') }}" class="breadcrumb-item">{{ __('user::user.index.breadcrumb') }}</a>
+    <span class="breadcrumb-item active">{{ __('user::user.create.breadcrumb') }}</span>
 @endsection
 
 @section('content')
@@ -36,23 +36,23 @@
 }">
 
 <x-page-header
-    title="Create New User"
-    subtitle="Fill in the details below to add a new user"
+    title="{{ __('user::user.create.title') }}"
+    subtitle="{{ __('user::user.create.subtitle') }}"
     icon="ph-user-plus"
     :back-url="route('admin.users.index')"
-    back-label="Back to List" />
+    back-label="{{ __('user::user.create.back_label') }}" />
 
-<x-form-section title="Personal Information" icon="ph-identification-card">
+<x-form-section title="{{ __('user::user.create.section_personal') }}" icon="ph-identification-card">
     <div class="row g-3">
         <div class="col-md-6">
-            <x-form.input name="name" label="Full Name" required placeholder="Full name" />
+            <x-form.input name="name" label="{{ __('user::user.create.full_name_label') }}" required placeholder="{{ __('user::user.create.full_name_placeholder') }}" />
         </div>
         <div class="col-md-3">
-            <x-form.select class="select" name="gender" label="Gender" required :options="['male' => 'Male', 'female' => 'Female', 'other' => 'Other']" :selected="null" data-placeholder="Select gender…" />
+            <x-form.select class="select" name="gender" label="{{ __('user::user.create.gender_label') }}" required :options="['male' => __('user::user.common.male'), 'female' => __('user::user.common.female'), 'other' => __('user::user.common.other')]" :selected="null" data-placeholder="{{ __('user::user.create.select_gender_placeholder') }}" />
         </div>
         <div class="col-md-3">
-            <x-form.file name="image" id="image-upload" label="Profile Image" accept="image/jpeg,image/png" @change="onImageChange($event)" />
-            <div class="form-text">JPEG or PNG, max 2 MB</div>
+            <x-form.file name="image" id="image-upload" label="{{ __('user::user.create.profile_image_label') }}" accept="image/jpeg,image/png" @change="onImageChange($event)" />
+            <div class="form-text">{{ __('user::user.create.image_hint') }}</div>
         </div>
         <div class="col-md-3 d-flex align-items-center">
             <img x-show="imagePreview" x-bind:src="imagePreview" alt="Preview"
@@ -62,19 +62,19 @@
     </div>
 </x-form-section>
 
-<x-form-section title="Contact & Credentials" icon="ph-envelope">
+<x-form-section title="{{ __('user::user.create.section_contact') }}" icon="ph-envelope">
     <div class="row g-3">
         <div class="col-md-3">
-            <x-form.input type="email" name="email" label="Email" required placeholder="email@example.com" />
+            <x-form.input type="email" name="email" label="{{ __('user::user.create.email_label') }}" required placeholder="{{ __('user::user.create.email_placeholder') }}" />
         </div>
         <div class="col-md-3">
-            <x-form.input name="phone" label="Mobile No" placeholder="+8801712345678" inputmode="tel" />
-            <div class="form-text">With country code, e.g. +8801712345678</div>
+            <x-form.input name="phone" label="{{ __('user::user.create.phone_label') }}" placeholder="{{ __('user::user.create.phone_placeholder') }}" inputmode="tel" />
+            <div class="form-text">{{ __('user::user.create.phone_hint') }}</div>
         </div>
         <div class="col-md-3">
-            <x-form.label for="password" required>Password</x-form.label>
+            <x-form.label for="password" required>{{ __('user::user.create.password_label') }}</x-form.label>
             <div class="position-relative">
-                <input type="password" name="password" id="password" class="form-control pe-5" placeholder="Min. 8 characters" required x-model="password">
+                <input type="password" name="password" id="password" class="form-control pe-5" placeholder="{{ __('user::user.create.password_placeholder') }}" required x-model="password">
                 <button type="button" class="btn border-0 text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" tabindex="-1"
                         @click="togglePassword('password')">
                     <i x-show="!passwordVisible" class="ph-eye"></i>
@@ -83,13 +83,13 @@
             </div>
         </div>
         <div class="col-md-3">
-            <x-form.label for="password_confirmation" required>Confirm Password</x-form.label>
+            <x-form.label for="password_confirmation" required>{{ __('user::user.create.password_confirmation_label') }}</x-form.label>
             <span class="ms-1">
                 <i x-show="passwordConfirmation && password === passwordConfirmation" class="ph-check-circle text-success"></i>
                 <i x-show="passwordConfirmation && password !== passwordConfirmation" class="ph-x-circle text-danger"></i>
             </span>
             <div class="position-relative">
-                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control pe-5" placeholder="Repeat password" required x-model="passwordConfirmation">
+                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control pe-5" placeholder="{{ __('user::user.create.password_confirmation_placeholder') }}" required x-model="passwordConfirmation">
                 <button type="button" class="btn border-0 text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" tabindex="-1"
                         @click="togglePassword('password_confirmation')">
                     <i x-show="!passwordConfirmVisible" class="ph-eye"></i>
@@ -100,23 +100,23 @@
     </div>
 </x-form-section>
 
-<x-form-section title="Access & Status" icon="ph-shield-check">
+<x-form-section title="{{ __('user::user.create.section_access') }}" icon="ph-shield-check">
     <div class="row g-3">
         <div class="col-md-6">
-            <x-form.select class="select" name="roles[]" id="roles" label="Roles" required multiple :options="$roles" :selected="null" data-placeholder="Select roles…" />
+            <x-form.select class="select" name="roles[]" id="roles" label="{{ __('user::user.create.roles_label') }}" required multiple :options="$roles" :selected="null" data-placeholder="{{ __('user::user.create.select_roles_placeholder') }}" />
         </div>
         <div class="col-md-6">
-            <x-form.select class="select" name="is_active" label="Status" required :options="integerStatus()" selected="1" data-placeholder="Select status…" />
+            <x-form.select class="select" name="is_active" label="{{ __('foundation::foundation.common.status') }}" required :options="integerStatus()" selected="1" data-placeholder="{{ __('user::user.create.select_status_placeholder') }}" />
         </div>
     </div>
 </x-form-section>
 
 <div class="d-flex justify-content-between align-items-center">
     <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary">
-        <i class="ph-x me-1"></i>Cancel
+        <i class="ph-x me-1"></i>{{ __('foundation::foundation.common.cancel') }}
     </a>
     <x-primary-button id="submit-button" class="px-5">
-        <i class="ph-user-plus me-1"></i>Create User
+        <i class="ph-user-plus me-1"></i>{{ __('user::user.create.breadcrumb') }}
     </x-primary-button>
 </div>
 </div>

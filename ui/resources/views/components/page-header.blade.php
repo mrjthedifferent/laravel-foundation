@@ -3,7 +3,7 @@
     'subtitle' => null,
     'icon'     => null,
     'backUrl'  => null,
-    'backLabel'=> 'Back',
+    'backLabel'=> null,
 ])
 
 <div class="d-flex align-items-center justify-content-between mb-3 gap-2 flex-wrap">
@@ -28,7 +28,7 @@
         @endisset
         @if($backUrl)
             <a href="{{ $backUrl }}" class="btn btn-sm btn-outline-secondary">
-                <i class="ph-arrow-left me-1"></i>{{ $backLabel }}
+                <i class="ph-arrow-left me-1"></i>{{ $backLabel ?? __('foundation::foundation.components.back') }}
             </a>
         @endif
     </div>

@@ -74,31 +74,31 @@ class Handler extends ExceptionHandler
             if ($e instanceof ValidationException) {
                 $message = collect($e->errors())->flatten()->implode(' ');
 
-                return JsonResponseFactory::validationError('Validation Error: '.$message, $e->errors());
+                return JsonResponseFactory::validationError(__('foundation::foundation.api.validation_error', ['message' => $message]), $e->errors());
             }
             if ($e instanceof ModelNotFoundException) {
-                return JsonResponseFactory::notFound('Resource not found');
+                return JsonResponseFactory::notFound(__('foundation::foundation.api.resource_not_found'));
             }
             if ($e instanceof AuthenticationException) {
                 return JsonResponseFactory::unauthorized();
             }
             if ($e instanceof AuthorizationException) {
-                return JsonResponseFactory::forbidden($e->getMessage() ?: 'Unauthorized');
+                return JsonResponseFactory::forbidden($e->getMessage() ?: __('foundation::foundation.api.unauthorized'));
             }
             if ($e instanceof AccessDeniedHttpException) {
                 return JsonResponseFactory::forbidden(
-                    $e->getMessage() ?: 'You are not authorized to subscribe to this channel.'
+                    $e->getMessage() ?: __('foundation::foundation.api.channel_forbidden')
                 );
             }
             if ($e instanceof NotFoundHttpException) {
-                return JsonResponseFactory::notFound($e->getMessage() ?: 'Not found.');
+                return JsonResponseFactory::notFound($e->getMessage() ?: __('foundation::foundation.api.not_found'));
             }
             if ($e instanceof HttpException) {
-                return JsonResponseFactory::error($e->getMessage() ?: 'Error.', null, $e->getStatusCode());
+                return JsonResponseFactory::error($e->getMessage() ?: __('foundation::foundation.api.error'), null, $e->getStatusCode());
             }
             if ($e instanceof BroadcastException) {
                 return JsonResponseFactory::serverError(
-                    config('app.debug') ? ($e->getMessage() ?: 'Broadcasting service unavailable.') : 'Broadcasting service unavailable.'
+                    config('app.debug') ? ($e->getMessage() ?: __('foundation::foundation.api.broadcasting_unavailable')) : __('foundation::foundation.api.broadcasting_unavailable')
                 );
             }
 
@@ -131,7 +131,7 @@ class Handler extends ExceptionHandler
         if (app()->isProduction() && $this->isUnhandledServerError($e)) {
             return redirect()->back()
                 ->withInput($request->except($this->dontFlash))
-                ->with('error', 'Something went wrong. Please try again.');
+                ->with('error', __('foundation::foundation.errors.generic_failure'));
         }
 
         return parent::render($request, $e);
@@ -152,10 +152,10 @@ class Handler extends ExceptionHandler
     protected function safeServerErrorMessage(Throwable $e): string
     {
         if (config('app.debug')) {
-            return $e->getMessage() ?: 'An error occurred.';
+            return $e->getMessage() ?: __('foundation::foundation.api.error_occurred');
         }
 
-        return 'An unexpected error occurred. Please try again later.';
+        return __('foundation::foundation.api.unexpected_error');
     }
 
     /**

@@ -46,13 +46,13 @@ class DownloadImportManagerController extends Controller
         $this->authorize('delete', $downloadImportManager);
 
         if (! $downloadImportManager->status->isDeletable()) {
-            return redirect()->back()->with('error', 'Cannot delete a record that is still being processed.');
+            return redirect()->back()->with('error', __('importdownloadmanager::importdownloadmanager.flash.cannot_delete'));
         }
 
         $action->execute($downloadImportManager);
         $downloadImportManager->delete();
 
-        return redirect()->back()->with('success', 'Record deleted successfully.');
+        return redirect()->back()->with('success', __('importdownloadmanager::importdownloadmanager.flash.deleted'));
     }
 
     /**
@@ -65,7 +65,7 @@ class DownloadImportManagerController extends Controller
         $ids = array_filter((array) $request->input('ids', []));
 
         if (empty($ids)) {
-            return JsonResponseFactory::success('No records to update.', []);
+            return JsonResponseFactory::success(__('importdownloadmanager::importdownloadmanager.errors.no_records_to_update'), []);
         }
 
         $records = DownloadImportQuery::make()
@@ -90,7 +90,7 @@ class DownloadImportManagerController extends Controller
         $disk = ImportFileDisk::forRecord($downloadImportManager);
 
         if ($disk === null) {
-            return redirect()->back()->with('error', 'File not found.');
+            return redirect()->back()->with('error', __('importdownloadmanager::importdownloadmanager.flash.file_not_found'));
         }
 
         return Storage::disk($disk)->download($downloadImportManager->url);

@@ -1,7 +1,7 @@
 @extends('settings::layouts.master')
 
 @section('breadcrumb')
-    <span class="breadcrumb-item active">Terms &amp; Conditions</span>
+    <span class="breadcrumb-item active">{{ __('settings::settings.special_terms_conditions.breadcrumb') }}</span>
 @endsection
 
 @section('content')
@@ -11,19 +11,19 @@
             <i class="ph-scroll"></i>
         </div>
         <div>
-            <div class="fw-bold">Terms &amp; Conditions</div>
-            <div class="text-muted fs-xs">Manage your application's terms and conditions content</div>
+            <div class="fw-bold">{{ __('settings::settings.special_terms_conditions.title') }}</div>
+            <div class="text-muted fs-xs">{{ __('settings::settings.special_terms_conditions.subtitle') }}</div>
         </div>
     </div>
     <div class="card-body p-4">
         <form action="{{ route('admin.settings.special.update_terms_conditions') }}" method="POST">
             @csrf
             <div class="mb-4">
-                <x-form.textarea name="terms_conditions" id="terms_conditions" label="Content" required :value="$setting->value ?? ''" :rows="20" />
+                <x-form.textarea name="terms_conditions" id="terms_conditions" label="{{ __('settings::settings.special_terms_conditions.content_label') }}" required :value="$setting->value ?? ''" :rows="20" />
             </div>
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary px-4">
-                    <i class="ph-floppy-disk me-1"></i>Save Terms &amp; Conditions
+                    <i class="ph-floppy-disk me-1"></i>{{ __('settings::settings.special_terms_conditions.submit') }}
                 </button>
             </div>
         </form>

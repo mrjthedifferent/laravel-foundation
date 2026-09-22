@@ -41,9 +41,9 @@ class EnsurePasswordIsChanged
         }
 
         if ($request->is('api/*') || $request->expectsJson()) {
-            return JsonResponseFactory::forbidden('You must set a new password before continuing.');
+            return JsonResponseFactory::forbidden(__('foundation::foundation.auth.password_change_required'));
         }
 
-        return redirect()->route('admin.profile.edit')->with('error', 'You must set a new password before continuing.');
+        return redirect()->route('admin.profile.edit')->with('error', __('foundation::foundation.auth.password_change_required'));
     }
 }

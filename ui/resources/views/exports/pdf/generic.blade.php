@@ -15,7 +15,7 @@
 <body>
     <div class="header">
         <h2>{{ $title }}</h2>
-        <p>Exported on: {{ now()->format('d-M-Y h:i:s A') }}</p>
+        <p>{{ __('foundation::foundation.exports.exported_on', ['date' => now()->format('d-M-Y h:i:s A')]) }}</p>
     </div>
 
     <table>
@@ -38,7 +38,7 @@
     </table>
 
     <div class="footer">
-        Page {PAGENO} of {nbpg}
+        {{ __('foundation::foundation.exports.footer_page') }}
     </div>
 </body>
 </html>

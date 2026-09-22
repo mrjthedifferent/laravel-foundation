@@ -45,7 +45,7 @@
                     <div class="text-center mb-4">
                         <div class="error-title mb-3">@yield('code', '404')</div>
                         <h6 class="w-md-25 mx-md-auto">
-                            @yield('message', __('Service Unavailable'))
+                            @yield('message', __('foundation::foundation.errors.service_unavailable'))
                         </h6>
                     </div>
                     <!-- /error title -->
@@ -54,7 +54,7 @@
                     <div class="text-center">
                         <a href="/" class="btn btn-primary">
                             <i class="ph-house me-2"></i>
-                            {{ __('Return Home') }}
+                            {{ __('foundation::foundation.errors.return_home') }}
                         </a>
                     </div>
                     <!-- /error content -->

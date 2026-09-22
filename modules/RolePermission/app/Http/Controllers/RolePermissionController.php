@@ -42,7 +42,7 @@ class RolePermissionController extends Controller
         $this->authorize('create', Role::class);
         $action->execute($request->validated()['role_name']);
 
-        return redirect()->route('admin.role.index')->with('success', 'Role created successfully.');
+        return redirect()->route('admin.role.index')->with('success', __('rolepermission::rolepermission.flash.role_created'));
     }
 
     public function update(UpdateRoleRequest $request, Role $role, UpdateRoleAction $action): RedirectResponse
@@ -50,7 +50,7 @@ class RolePermissionController extends Controller
         $this->authorize('update', $role);
         $action->execute($role, $request->validated()['role_name']);
 
-        return redirect()->route('admin.role.index')->with('success', 'Role updated successfully.');
+        return redirect()->route('admin.role.index')->with('success', __('rolepermission::rolepermission.flash.role_updated'));
     }
 
     public function destroy(Role $role): RedirectResponse
@@ -58,12 +58,12 @@ class RolePermissionController extends Controller
         $this->authorize('delete', $role);
 
         if ($role->users()->exists()) {
-            return redirect()->route('admin.role.index')->with('error', 'Cannot delete a role that is assigned to users.');
+            return redirect()->route('admin.role.index')->with('error', __('rolepermission::rolepermission.flash.role_has_users'));
         }
 
         $role->delete();
 
-        return redirect()->route('admin.role.index')->with('success', 'Role deleted successfully.');
+        return redirect()->route('admin.role.index')->with('success', __('rolepermission::rolepermission.flash.role_deleted'));
     }
 
     public function clone(Role $role, CloneRoleAction $action): RedirectResponse
@@ -72,7 +72,7 @@ class RolePermissionController extends Controller
 
         $clone = $action->execute($role);
 
-        return redirect()->route('admin.role.index')->with('success', 'Role cloned as "'.$clone->name.'".');
+        return redirect()->route('admin.role.index')->with('success', __('rolepermission::rolepermission.flash.role_cloned', ['name' => $clone->name]));
     }
 
     // ── Permission assignment ─────────────────────────────────────────────────
@@ -96,7 +96,7 @@ class RolePermissionController extends Controller
 
         $action->execute($role, $request->validated()['permissions'] ?? []);
 
-        return redirect()->back()->with('success', 'Permissions assigned successfully.');
+        return redirect()->back()->with('success', __('rolepermission::rolepermission.flash.permissions_assigned'));
     }
 
     // ── Permission management ─────────────────────────────────────────────────
@@ -127,7 +127,7 @@ class RolePermissionController extends Controller
 
         $action->execute($data['permission_name'], $moduleName, $data['description'] ?? null);
 
-        return redirect()->back()->with('success', 'Permission created successfully.');
+        return redirect()->back()->with('success', __('rolepermission::rolepermission.flash.permission_created'));
     }
 
     public function deletePermission(Permission $permission, DeletePermissionAction $action): RedirectResponse
@@ -136,7 +136,7 @@ class RolePermissionController extends Controller
 
         $action->execute($permission);
 
-        return redirect()->back()->with('success', 'Permission deleted successfully.');
+        return redirect()->back()->with('success', __('rolepermission::rolepermission.flash.permission_deleted'));
     }
 
     public function bulkDeletePermissions(Request $request, DeletePermissionAction $action): RedirectResponse
@@ -146,12 +146,12 @@ class RolePermissionController extends Controller
         $ids = $request->input('permission_ids', []);
 
         if (empty($ids)) {
-            return redirect()->back()->with('error', 'No permissions selected.');
+            return redirect()->back()->with('error', __('rolepermission::rolepermission.flash.no_permissions_selected'));
         }
 
         Permission::whereIn('id', $ids)->get()->each(fn ($p) => $action->execute($p));
 
-        return redirect()->back()->with('success', count($ids).' permissions deleted successfully.');
+        return redirect()->back()->with('success', __('rolepermission::rolepermission.flash.permissions_deleted_count', ['count' => count($ids)]));
     }
 
     public function syncPermissions(SyncPermissionsAction $action): RedirectResponse
@@ -160,7 +160,7 @@ class RolePermissionController extends Controller
 
         $action->execute();
 
-        return redirect()->back()->with('success', 'Permissions synced successfully.');
+        return redirect()->back()->with('success', __('rolepermission::rolepermission.flash.permissions_synced'));
     }
 
     public function getPermissionRoles(Permission $permission): JsonResponse
@@ -168,7 +168,7 @@ class RolePermissionController extends Controller
         $this->authorize('managePermissions', Role::class);
 
         return JsonResponseFactory::success(
-            'Roles retrieved.',
+            __('rolepermission::rolepermission.flash.roles_retrieved'),
             ['roles' => $permission->roles()->get(['id', 'name'])]
         );
     }

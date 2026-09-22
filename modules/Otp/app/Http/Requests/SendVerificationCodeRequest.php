@@ -40,10 +40,10 @@ class SendVerificationCodeRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'contact_type.required' => 'The contact type is required.',
-            'contact_type.in' => 'The contact type must be email or phone.',
-            'contact.required' => 'The contact (email or phone) is required.',
-            'contact.email' => 'Please provide a valid email address.',
+            'contact_type.required' => __('otp::otp.validation.contact_type_required'),
+            'contact_type.in' => __('otp::otp.validation.contact_type_in'),
+            'contact.required' => __('otp::otp.validation.contact_required'),
+            'contact.email' => __('otp::otp.validation.email_invalid'),
         ];
     }
 }

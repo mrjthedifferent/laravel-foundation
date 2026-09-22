@@ -55,12 +55,12 @@ class SpecialSettingsController extends Controller
                 'value' => $request->validated('privacy_policy'),
                 'type' => 'textarea',
                 'group' => 'General',
-                'description' => 'The privacy policy content for the application',
+                'description' => __('settings::settings.flash.privacy_policy_description'),
                 'is_visible' => false,
             ]
         );
 
-        return redirect()->back()->with('success', 'Privacy Policy updated successfully');
+        return redirect()->back()->with('success', __('settings::settings.flash.privacy_policy_updated'));
     }
 
     /**
@@ -87,12 +87,12 @@ class SpecialSettingsController extends Controller
                 'value' => $request->validated('terms_conditions'),
                 'type' => 'textarea',
                 'group' => 'General',
-                'description' => 'The terms and conditions content for the application',
+                'description' => __('settings::settings.flash.terms_conditions_description'),
                 'is_visible' => false,
             ]
         );
 
-        return redirect()->back()->with('success', 'Terms & Conditions updated successfully');
+        return redirect()->back()->with('success', __('settings::settings.flash.terms_conditions_updated'));
     }
 
     /**
@@ -139,7 +139,7 @@ class SpecialSettingsController extends Controller
             ['type' => 'select', 'group' => 'General', 'value' => $request->validated('sms_gateway'), 'is_visible' => false]
         );
 
-        return redirect()->back()->with('success', 'SMS Gateways updated successfully');
+        return redirect()->back()->with('success', __('settings::settings.flash.sms_gateways_updated'));
     }
 
     /**
@@ -231,7 +231,7 @@ class SpecialSettingsController extends Controller
             ['type' => 'select', 'group' => 'General', 'value' => $request->validated('email_mailer'), 'is_visible' => false]
         );
 
-        return redirect()->back()->with('success', 'Email Mailers updated successfully');
+        return redirect()->back()->with('success', __('settings::settings.flash.email_mailers_updated'));
     }
 
     /**
@@ -266,11 +266,11 @@ class SpecialSettingsController extends Controller
         $this->authorize('editSpecial', Setting::class);
 
         $phone = $request->validated('mobile_no');
-        $message = 'This is a test message from '.config('app.name');
+        $message = __('settings::settings.flash.test_sms_body', ['app' => config('app.name')]);
         SendSmsJob::dispatch($message, $phone);
 
         return JsonResponseFactory::success(
-            'SMS Job executed successfully. See logs for more details.',
+            __('settings::settings.flash.test_sms_success'),
             null
         );
     }
@@ -297,20 +297,20 @@ class SpecialSettingsController extends Controller
             }
 
             $email = $request->validated('email');
-            $subject = 'This is a test email from '.config('app.name');
-            $message = 'This is a test message from '.config('app.name');
+            $subject = __('settings::settings.flash.test_email_subject', ['app' => config('app.name')]);
+            $message = __('settings::settings.flash.test_email_body', ['app' => config('app.name')]);
             Mail::raw($message, static function ($message) use ($email, $subject): void {
                 $message->to($email)->subject($subject);
             });
         } catch (Exception $e) {
             return JsonResponseFactory::error(
-                'Email Job failed '.$e->getMessage(),
+                __('settings::settings.errors.email_job_failed', ['message' => $e->getMessage()]),
                 null,
                 500
             );
         }
 
-        return JsonResponseFactory::success('Email Job executed successfully.', null);
+        return JsonResponseFactory::success(__('settings::settings.flash.test_email_success'), null);
     }
 
     /**
@@ -333,8 +333,8 @@ class SpecialSettingsController extends Controller
         $this->authorize('editSpecial', Setting::class);
 
         $keys = [
-            'firebase_credentials_json' => ['description' => 'The credentials JSON for the Firebase project'],
-            'firebase_project_id' => ['description' => 'The project ID for the Firebase project'],
+            'firebase_credentials_json' => ['description' => __('settings::settings.flash.firebase_credentials_description')],
+            'firebase_project_id' => ['description' => __('settings::settings.flash.firebase_project_id_description')],
         ];
 
         foreach ($keys as $key => $meta) {
@@ -352,7 +352,7 @@ class SpecialSettingsController extends Controller
             );
         }
 
-        return redirect()->back()->with('success', 'Firebase settings updated successfully');
+        return redirect()->back()->with('success', __('settings::settings.flash.firebase_updated'));
     }
 
     /**
@@ -365,7 +365,7 @@ class SpecialSettingsController extends Controller
 
         if (empty($credentialsJson)) {
             return JsonResponseFactory::error(
-                'Firebase credentials JSON is not configured. Please save your credentials first.',
+                __('settings::settings.errors.firebase_not_configured'),
                 null,
                 400
             );
@@ -374,7 +374,7 @@ class SpecialSettingsController extends Controller
         $credentials = is_string($credentialsJson) ? json_decode($credentialsJson, true) : $credentialsJson;
         if (! is_array($credentials) || empty($credentials['type']) || $credentials['type'] !== 'service_account') {
             return JsonResponseFactory::error(
-                'Invalid Firebase credentials format. Expected a service account JSON.',
+                __('settings::settings.errors.firebase_invalid_credentials'),
                 null,
                 400
             );
@@ -391,21 +391,21 @@ class SpecialSettingsController extends Controller
 
             if (! $accessToken) {
                 return JsonResponseFactory::error(
-                    'Failed to obtain access token from Firebase.',
+                    __('settings::settings.errors.firebase_no_token'),
                     null,
                     502
                 );
             }
 
             return JsonResponseFactory::success(
-                'Firebase connection successful. Credentials are valid and access token was obtained.',
+                __('settings::settings.errors.firebase_connection_success'),
                 null
             );
         } catch (Exception $e) {
             Log::warning('Firebase connection test failed: '.$e->getMessage());
 
             return JsonResponseFactory::error(
-                'Firebase connection failed: '.$e->getMessage(),
+                __('settings::settings.errors.firebase_connection_failed', ['message' => $e->getMessage()]),
                 null,
                 502
             );
@@ -491,7 +491,7 @@ class SpecialSettingsController extends Controller
 
         app(SettingsRepository::class)->forget();
 
-        return redirect()->back()->with('success', 'Social Auth settings updated successfully');
+        return redirect()->back()->with('success', __('settings::settings.flash.social_auth_updated'));
     }
 
     /**
@@ -535,7 +535,7 @@ class SpecialSettingsController extends Controller
             $value = is_string($value) ? trim($value) : $value;
             if ($value === null || $value === '') {
                 return JsonResponseFactory::error(
-                    "{$label} is not fully configured. Fill in all required fields for this provider (and save if testing saved values).",
+                    __('settings::settings.errors.social_provider_not_configured', ['label' => $label]),
                     null,
                     400
                 );
@@ -569,21 +569,21 @@ class SpecialSettingsController extends Controller
 
             if (empty($url) || ! str_starts_with($url, 'http')) {
                 return JsonResponseFactory::error(
-                    "{$label} configuration produced an invalid redirect URL.",
+                    __('settings::settings.errors.social_provider_invalid_redirect', ['label' => $label]),
                     null,
                     502
                 );
             }
 
             return JsonResponseFactory::success(
-                "Redirect URL was generated. Try signing in with {$label} to verify your credentials.",
+                __('settings::settings.errors.social_provider_test_success', ['label' => $label]),
                 null
             );
         } catch (Exception $e) {
             Log::warning("Social Auth test failed for {$provider}: ".$e->getMessage());
 
             return JsonResponseFactory::error(
-                "{$label} OAuth test failed: ".$e->getMessage(),
+                __('settings::settings.errors.social_provider_test_failed', ['label' => $label, 'message' => $e->getMessage()]),
                 null,
                 502
             );

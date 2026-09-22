@@ -40,7 +40,7 @@ class ApiPushNotificationController extends Controller
             );
         });
 
-        return JsonResponseFactory::success('Firebase token updated.', $token);
+        return JsonResponseFactory::success(__('notification::notification.api.firebase_token_updated'), $token);
     }
 
     /**
@@ -58,6 +58,6 @@ class ApiPushNotificationController extends Controller
             channels: $data['channels'],
         );
 
-        return JsonResponseFactory::success('Notification sent via: '.implode(', ', $data['channels']));
+        return JsonResponseFactory::success(__('notification::notification.api.sent_via', ['channels' => implode(', ', $data['channels'])]));
     }
 }

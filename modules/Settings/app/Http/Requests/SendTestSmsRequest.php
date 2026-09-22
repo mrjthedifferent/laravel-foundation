@@ -25,7 +25,7 @@ class SendTestSmsRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'mobile_no.required' => 'A mobile number is required.',
+            'mobile_no.required' => __('settings::settings.errors.mobile_no_required'),
         ];
     }
 }

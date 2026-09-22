@@ -1,6 +1,6 @@
 @props([
     'id'       => 'modal',
-    'title'    => 'Modal Title',
+    'title'    => null,
     'size'     => '',      # {{-- sm | lg | xl | fullscreen --}}
     'static'   => false,   # {{-- true = backdrop:static --}}
     'scrollable' => true,
@@ -22,8 +22,8 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title fw-semibold">{{ $title }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title fw-semibold">{{ $title ?? __('foundation::foundation.components.modal_title') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('foundation::foundation.common.close') }}"></button>
             </div>
 
             <div class="modal-body">

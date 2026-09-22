@@ -51,7 +51,7 @@ class ErrorReportSettingsController extends Controller
 
         Cache::forget(SettingsServiceProvider::cacheKey());
 
-        return redirect()->back()->with('success', 'Error Report settings updated successfully');
+        return redirect()->back()->with('success', __('errorreport::errorreport.flash.settings_updated'));
     }
 
     private function saveSetting(string $key, string $value, string $type = 'text'): void

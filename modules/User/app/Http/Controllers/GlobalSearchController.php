@@ -21,7 +21,7 @@ class GlobalSearchController extends Controller
         $results = [];
 
         if ($query === '') {
-            return JsonResponseFactory::success('No query.', $results);
+            return JsonResponseFactory::success(__('user::user.search.no_query'), $results);
         }
 
         $actor = $request->user();
@@ -54,7 +54,7 @@ class GlobalSearchController extends Controller
                     'icon' => 'ph-user-circle',
                     'avatar' => $user->image ?: asset('images/person.png'),
                     'url' => route('admin.users.show', $user->id),
-                    'category' => 'User',
+                    'category' => __('user::user.search.category_user'),
                 ];
 
                 if (count($results) >= 5) {
@@ -63,6 +63,6 @@ class GlobalSearchController extends Controller
             }
         }
 
-        return JsonResponseFactory::success('Search results.', $results);
+        return JsonResponseFactory::success(__('user::user.search.results'), $results);
     }
 }

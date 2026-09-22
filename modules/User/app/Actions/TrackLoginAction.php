@@ -42,8 +42,8 @@ final readonly class TrackLoginAction
         if ($hasPriorLogins && ! $seenThisDevice) {
             NotifyAction::toUser(
                 $user,
-                'New device sign-in',
-                "A new sign-in to your account was detected on {$browser} ({$platform}). If this wasn't you, change your password immediately.",
+                __('user::user.notifications.new_device_title'),
+                __('user::user.notifications.new_device_body', ['browser' => $browser, 'platform' => $platform]),
                 NotificationType::Info,
                 ['type' => 'new_device_login', 'browser' => $browser, 'platform' => $platform],
                 ['database', 'fcm', 'mail'],

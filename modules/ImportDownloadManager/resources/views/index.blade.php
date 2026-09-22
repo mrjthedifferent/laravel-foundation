@@ -5,39 +5,39 @@ use Modules\ImportDownloadManager\Enum\ImportType;
 @extends('importdownloadmanager::layouts.master')
 
 @section('breadcrumb')
-<span class="breadcrumb-item active">Import Download Manager</span>
+<span class="breadcrumb-item active">{{ __('importdownloadmanager::importdownloadmanager.index.breadcrumb') }}</span>
 @endsection
 
 @section('content')
 <x-search-card>
     <div class="col-md-4 mb-2">
-        <x-form.input name="search" label="Search" :value="request('search')" placeholder="Title, type…" />
+        <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.search_placeholder') }}" />
     </div>
     <div class="col-md-4 mb-2">
-        <x-form.select class="select" name="type" label="Type" :options="$types" :selected="request('type')" data-placeholder="All Types" />
+        <x-form.select class="select" name="type" label="{{ __('importdownloadmanager::importdownloadmanager.index.type') }}" :options="$types" :selected="request('type')" data-placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.all_types') }}" />
     </div>
     <div class="col-md-4 mb-2">
-        <x-form.select class="select" name="status" label="Status" :options="$statuses" :selected="request('status')" data-placeholder="All Statuses" />
+        <x-form.select class="select" name="status" label="{{ __('foundation::foundation.common.status') }}" :options="$statuses" :selected="request('status')" data-placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.all_statuses') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="Import / Download Manager" :data="$downloadImports" empty-icon="ph-tray" empty-message="No records found">
+<x-table-view-pagination title="{{ __('importdownloadmanager::importdownloadmanager.index.title') }}" :data="$downloadImports" empty-icon="ph-tray" empty-message="{{ __('importdownloadmanager::importdownloadmanager.index.empty') }}">
     <x-slot name="actions">
         <x-table-actions>
-            <x-table-action :href="route('admin.download.import.manager.index')" class="btn-outline-secondary" icon="ph-arrows-clockwise" title="Refresh" />
+            <x-table-action :href="route('admin.download.import.manager.index')" class="btn-outline-secondary" icon="ph-arrows-clockwise" title="{{ __('importdownloadmanager::importdownloadmanager.index.refresh') }}" />
         </x-table-actions>
     </x-slot>
 
     <thead>
         <tr>
             <th>#</th>
-            <th>Date</th>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Type</th>
-            <th>Remarks</th>
+            <th>{{ __('importdownloadmanager::importdownloadmanager.index.col_date') }}</th>
+            <th>{{ __('importdownloadmanager::importdownloadmanager.index.col_title') }}</th>
+            <th>{{ __('foundation::foundation.common.status') }}</th>
+            <th>{{ __('importdownloadmanager::importdownloadmanager.index.type') }}</th>
+            <th>{{ __('importdownloadmanager::importdownloadmanager.index.col_remarks') }}</th>
             @canany(['Import Manager Data Download', 'Import Manager Data Delete'])
-            <th class="text-end">Action</th>
+            <th class="text-end">{{ __('foundation::foundation.common.action') }}</th>
             @endcanany
         </tr>
     </thead>
@@ -52,7 +52,7 @@ use Modules\ImportDownloadManager\Enum\ImportType;
         <tr>
             <td>{{ $i++ }}</td>
             <td class="fs-sm text-muted">{{ date('Y-m-d H:i', strtotime($item->created_at)) }}</td>
-            <td>{{ $item->title }}</td>
+            <td>{{ display_label($item->title) }}</td>
             <td>
                 @php
                 $statusColor = match($item->status) {
@@ -81,12 +81,12 @@ use Modules\ImportDownloadManager\Enum\ImportType;
                     @can('Import Manager Data Download')
                     @if ($item->status === ImportStatus::Completed && $item->type === ImportType::Download)
                     <x-dropdown-link :url="route('admin.download.import.manager.download', ['downloadImportManager' => $item->id])">
-                        <i class="ph-download-simple me-2"></i> Download
+                        <i class="ph-download-simple me-2"></i> {{ __('importdownloadmanager::importdownloadmanager.index.download') }}
                     </x-dropdown-link>
                     @endif
                     @if ($item->type !== ImportType::Download)
                     <x-dropdown-link :url="route('admin.download.import.manager.download', ['downloadImportManager' => $item->id])">
-                        <i class="ph-download-simple me-2"></i> Download Source File
+                        <i class="ph-download-simple me-2"></i> {{ __('importdownloadmanager::importdownloadmanager.index.download_source_file') }}
                     </x-dropdown-link>
                     @endif
                     @endcan
@@ -95,8 +95,8 @@ use Modules\ImportDownloadManager\Enum\ImportType;
                     <div class="dropdown-divider"></div>
                     <button type="button" class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.download.import.manager.delete', ['downloadImportManager' => $item->id]) }}"
-                        data-text="Are you sure you want to delete this record?">
-                        <i class="ph-trash me-2"></i> Delete
+                        data-text="{{ __('importdownloadmanager::importdownloadmanager.index.delete_confirm') }}">
+                        <i class="ph-trash me-2"></i> {{ __('importdownloadmanager::importdownloadmanager.index.delete') }}
                     </button>
                     @endif
                     @endcan

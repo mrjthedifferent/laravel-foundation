@@ -35,11 +35,11 @@ class AuthenticatedSessionController extends Controller
             : User::query()->wherePhone(PhoneNumber::toE164($login))->first();
 
         if (! $user) {
-            return redirect()->route('login')->with('error', 'Invalid credentials');
+            return redirect()->route('login')->with('error', __('user::user.auth.invalid_credentials'));
         }
 
         if ($user->is_active !== true) {
-            return redirect()->route('login')->with('error', 'Your account is not active');
+            return redirect()->route('login')->with('error', __('user::user.auth.account_not_active'));
         }
 
         if ($message = $user->accessDenialMessage()) {

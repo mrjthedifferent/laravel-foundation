@@ -1,9 +1,13 @@
 @props([
 'title' => '',
 'data' => null,
-'emptyMessage' => 'No data available',
+'emptyMessage' => null,
 'emptyIcon' => 'ph-tray',
 ])
+
+@php
+    $emptyMessage = $emptyMessage ?? __('foundation::foundation.table.empty_default');
+@endphp
 
 @php
 // Support both Paginator (has total()) and plain Collection/array (use count())
@@ -53,7 +57,7 @@ $totalCount = isset($data) ? ($isPaginator ? $data->total() : count($data)) : 0;
         <div class="d-flex align-items-center justify-content-between px-3 py-2 border-top flex-wrap gap-2">
             <div class="flex-1">
                 <span class="text-muted fs-sm">
-                    Showing {{ $data->firstItem() }}–{{ $data->lastItem() }} of {{ number_format($data->total()) }}
+                    {{ __('foundation::foundation.table.showing', ['first' => $data->firstItem(), 'last' => $data->lastItem(), 'total' => number_format($data->total())]) }}
                 </span>
             </div>
 
@@ -65,7 +69,7 @@ $totalCount = isset($data) ? ($isPaginator ? $data->total() : count($data)) : 0;
                 {{-- Navigation control, not a form field: no name and no <form> wrapper, so an
                      enclosing form (e.g. a bulk-action POST) can never capture or submit it. --}}
                 <div class="d-flex align-items-center gap-2">
-                    <label class="text-muted fs-sm mb-0 text-nowrap">Per page</label>
+                    <label class="text-muted fs-sm mb-0 text-nowrap">{{ __('foundation::foundation.table.per_page') }}</label>
                     <select class="form-control form-control-sm select js-per-page">
                         @foreach(getParPagePaginate() as $size => $label)
                             <option value="{{ $size }}" @selected((int) $size === perPage())>{{ $label }}</option>

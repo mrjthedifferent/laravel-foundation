@@ -42,10 +42,10 @@ class UpdateOtpWhitelistRequest extends FormRequest
         $digits = (int) config('settings.otp_digit_length.value', 6);
 
         return [
-            'recipient_type.in' => 'The recipient type must be email or phone.',
-            'recipient.email' => 'Please provide a valid email address.',
-            'fixed_otp.size' => "The fixed OTP must be exactly {$digits} digits.",
-            'fixed_otp.regex' => 'The fixed OTP must contain only digits.',
+            'recipient_type.in' => __('otp::otp.validation.recipient_type_in'),
+            'recipient.email' => __('otp::otp.validation.email_invalid'),
+            'fixed_otp.size' => __('otp::otp.validation.fixed_otp_size', ['digits' => $digits]),
+            'fixed_otp.regex' => __('otp::otp.validation.fixed_otp_regex'),
         ];
     }
 }

@@ -1,7 +1,7 @@
 <!-- Notifications -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="notifications">
     <div class="offcanvas-header py-0">
-        <h5 class="offcanvas-title py-3">Notifications</h5>
+        <h5 class="offcanvas-title py-3">{{ __('foundation::foundation.notification.title') }}</h5>
         <button type="button" class="btn btn-light btn-sm btn-icon border-transparent rounded-pill"
             data-bs-dismiss="offcanvas">
             <i class="ph-x"></i>
@@ -9,7 +9,7 @@
     </div>
 
     <div class="offcanvas-body p-0">
-        <div class="bg-body-tertiary fw-medium py-2 px-3">New notifications</div>
+        <div class="bg-body-tertiary fw-medium py-2 px-3">{{ __('foundation::foundation.notification.new_notifications') }}</div>
         <div class="p-3" id="notification-list">
             {{--            <div class="d-flex align-items-start mb-3"> --}}
             {{--                <a href="#" class="status-indicator-container me-3"> --}}
@@ -24,7 +24,7 @@
             {{--            </div> --}}
             <div class="text-center">
                 <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">{{ __('foundation::foundation.notification.loading') }}</span>
                 </div>
             </div>
         </div>
@@ -35,8 +35,8 @@
         <button type="button" class="me-2 btn btn-danger w-100 swal-post"
             data-url="{{ route('admin.notification.mark-all-as-read') }}"
             data-method="PATCH"
-            data-text="Are you sure you want to mark all as read?">Mark All as Read</button>
-        <a href="{{ route('admin.notification.index') }}" class="ms-2 btn btn-secondary w-100">View All</a>
+            data-text="{{ __('foundation::foundation.notification.mark_all_read_confirm') }}">{{ __('foundation::foundation.notification.mark_all_read') }}</button>
+        <a href="{{ route('admin.notification.index') }}" class="ms-2 btn btn-secondary w-100">{{ __('foundation::foundation.notification.view_all') }}</a>
     </div>
 </div>
 <!-- /notifications -->
@@ -67,7 +67,7 @@
                     $('#notification-list').html(`
                         <div class="text-center text-muted py-3">
                             <i class="ph-warning-circle ph-2x mb-2"></i>
-                            <p class="mb-0">Failed to load notifications</p>
+                            <p class="mb-0">{{ __('foundation::foundation.notification.failed_to_load') }}</p>
                         </div>
                     `);
                 }
@@ -83,7 +83,7 @@
                 notificationList.html(`
                     <div class="text-center text-muted py-3">
                         <i class="ph-bell-slash ph-2x mb-2"></i>
-                        <p class="mb-0">No new notifications</p>
+                        <p class="mb-0">{{ __('foundation::foundation.notification.empty') }}</p>
                     </div>
                 `);
                 return;
@@ -108,8 +108,8 @@
                         <div class="flex-fill ms-3">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
-                                    <h6 class="mb-1 fw-semibold">${notificationData.title || 'Notification'}</h6>
-                                    <p class="text-muted mb-1 small">${notificationData.body || 'No message'}</p>
+                                    <h6 class="mb-1 fw-semibold">${notificationData.title || @js(__('foundation::foundation.notification.default_title'))}</h6>
+                                    <p class="text-muted mb-1 small">${notificationData.body || @js(__('foundation::foundation.notification.default_body'))}</p>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <small class="text-muted">${timeAgo}</small>

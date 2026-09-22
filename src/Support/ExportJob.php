@@ -124,6 +124,6 @@ abstract class ExportJob implements ShouldQueue
 
     protected function emptyMessage(): string
     {
-        return 'No data found for the selected filters.';
+        return __('foundation::foundation.exports.no_data');
     }
 }

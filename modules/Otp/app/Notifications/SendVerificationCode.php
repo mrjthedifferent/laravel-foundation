@@ -37,7 +37,7 @@ class SendVerificationCode extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Verification Code')
+            ->subject(__('otp::otp.notifications.subject'))
             ->view('otp::emails.verification-code', ['code' => $notifiable->code]);
     }
 
@@ -45,6 +45,6 @@ class SendVerificationCode extends Notification
     {
         $appName = config('settings.app_name.value') ?: config('app.name');
 
-        return "{$appName}: Your verification code is: {$notifiable->code}";
+        return __('otp::otp.notifications.sms_body', ['app' => $appName, 'code' => $notifiable->code]);
     }
 }

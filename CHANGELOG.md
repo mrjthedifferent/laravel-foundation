@@ -1,5 +1,51 @@
 # Changelog
 
+## 0.19.0
+
+Translations. Every user-facing string in the package — views, flash
+messages, JSON API messages, custom validation messages, notification
+e-mails/SMS, error pages, PDF export headings — now comes from a lang file,
+so the admin panel can run in another language. Under the default `en`
+locale nothing a user sees changes: every English value is the original
+text, byte for byte.
+
+- **Where strings live.** Shared chrome (layouts, auth, profile, error
+  pages, shared components) is in `lang/en/foundation.php`, read as
+  `__('foundation::foundation.…')`; each module has
+  `modules/{Name}/lang/en/{alias}.php`, read as `__('{alias}::{alias}.…')`.
+  Generic words (Name, Status, Action, Edit, Delete, Save, Cancel, …) sit
+  once in `foundation::foundation.common`. About 1,475 strings in total.
+- **Identifiers stay English.** Permission names (`@can('View Role')`),
+  setting keys, route names and stored values are untouched, so translating
+  the UI can never break authorization. Labels that come from config or the
+  database — sidebar items, permission and module names on the permission
+  screens, setting groups and descriptions, stored export titles — are
+  displayed through a new `display_label()` helper: a project translates
+  them in `lang/{locale}.json`, keyed by the English text. Unlike a bare
+  `__($value)` it never returns an array, so a stored name that happens to
+  equal a lang file name (`auth`, `validation`) can't break the page.
+- **Overriding or adding a language.** `php artisan vendor:publish
+  --tag=foundation-lang` copies the shared file (keys you delete fall back to
+  the package's); a module's file is overridden by a full copy at
+  `resources/lang/modules/{alias}/{locale}/{alias}.php`. A new language is the
+  same files under another locale directory plus `APP_LOCALE`.
+- **Fixed: `foundation:make-module` generated a broken module.** Since 0.14.0
+  its controller imported the deleted `PaginationEnum`, so the new module's
+  index page crashed, and its routes ignored `foundation.routing`. The stubs
+  now use `perPage()`, the configurable route group, `<x-module-layout>` and a
+  translated index view with its own lang file. The make-module test now
+  fails if a generated file imports a package class that no longer exists,
+  or if a generated view uses a translation key that doesn't resolve.
+- `sync/guidelines/` gain a "Translations" section, and their examples use
+  `__()` throughout. Stale route (`prefix('admin')`) and layout
+  (`<x-app-layout>` wrapper) examples in `module-creation.md` and
+  `module-architecture.md` are corrected.
+- `StatusBadge`'s default labels are now translated; its constructor
+  defaults became `null`.
+- Notification-toggle setting descriptions are generated in one place
+  (`NotificationToggleRegistry::description()`) and always stored in
+  English, whoever saves the page, then translated for display.
+
 ## 0.18.0
 
 Drops `konekt/html`. Every one of the 310 `Form::` calls across the 29

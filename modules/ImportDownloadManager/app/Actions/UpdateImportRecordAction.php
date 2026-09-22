@@ -29,7 +29,7 @@ final readonly class UpdateImportRecordAction
         $record = DownloadImportManager::find($id);
 
         if ($record === null) {
-            throw new RuntimeException("DownloadImportManager record [{$id}] not found.");
+            throw new RuntimeException(__('importdownloadmanager::importdownloadmanager.errors.record_not_found', ['id' => $id]));
         }
 
         $record->status = $status;
@@ -55,7 +55,7 @@ final readonly class UpdateImportRecordAction
             return;
         }
 
-        $title = $record->title ?? 'Import/Export';
+        $title = $record->title ?? __('importdownloadmanager::importdownloadmanager.errors.default_title');
 
         if ($record->status === ImportStatus::Completed) {
             $data = ['type' => 'export_ready'];
@@ -64,8 +64,8 @@ final readonly class UpdateImportRecordAction
             }
             NotifyAction::toUser(
                 $user,
-                "{$title} Complete",
-                'Your file is ready for download.',
+                __('importdownloadmanager::importdownloadmanager.errors.export_complete_title', ['title' => $title]),
+                __('importdownloadmanager::importdownloadmanager.errors.export_complete_body'),
                 NotificationType::Export,
                 $data,
                 channels: ['database', 'broadcast', 'mail'],
@@ -73,8 +73,8 @@ final readonly class UpdateImportRecordAction
         } else {
             NotifyAction::toUser(
                 $user,
-                "{$title} Failed",
-                $record->remarks ?? 'An error occurred.',
+                __('importdownloadmanager::importdownloadmanager.errors.export_failed_title', ['title' => $title]),
+                $record->remarks ?? __('importdownloadmanager::importdownloadmanager.errors.export_failed_body_default'),
                 NotificationType::Error,
                 channels: ['database', 'broadcast'],
             );

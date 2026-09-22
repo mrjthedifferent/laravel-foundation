@@ -7,19 +7,19 @@
         <ul class="nav">
             @if (Route::has('privacy-policy'))
             <li class="nav-item">
-                <a href="{{ route('privacy-policy') }}" class="navbar-nav-link rounded" target="_blank">Privacy Policy</a>
+                <a href="{{ route('privacy-policy') }}" class="navbar-nav-link rounded" target="_blank">{{ __('foundation::foundation.footer.privacy_policy') }}</a>
             </li>
             @endif
             @if (Route::has('account-deletion'))
             <li class="nav-item">
-                <a href="{{ route('account-deletion') }}" class="navbar-nav-link rounded" target="_blank">Account Deletion</a>
+                <a href="{{ route('account-deletion') }}" class="navbar-nav-link rounded" target="_blank">{{ __('foundation::foundation.footer.account_deletion') }}</a>
             </li>
             @endif
             <li class="nav-item">
                 <a href="mailto:{{ config('app.email') }}" class="navbar-nav-link navbar-nav-link-icon rounded" target="_blank">
                     <div class="d-flex align-items-center mx-md-1">
                         <i class="ph-lifebuoy"></i>
-                        <span class="d-none d-md-inline-block ms-2">Support</span>
+                        <span class="d-none d-md-inline-block ms-2">{{ __('foundation::foundation.footer.support') }}</span>
                     </div>
                 </a>
             </li>

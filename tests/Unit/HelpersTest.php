@@ -11,7 +11,7 @@ class HelpersTest extends TestCase
 {
     public function test_helpers_are_autoloaded(): void
     {
-        foreach (['integerStatus', 'getParPagePaginate', 'form_old_key', 'allPermissions', 'mailAppName'] as $function) {
+        foreach (['integerStatus', 'getParPagePaginate', 'form_old_key', 'display_label', 'allPermissions', 'mailAppName'] as $function) {
             $this->assertTrue(function_exists($function), "$function() is not loaded");
         }
     }
@@ -21,6 +21,19 @@ class HelpersTest extends TestCase
         $this->assertSame('roles', form_old_key('roles[]'));
         $this->assertSame('sms_gateways.0.VALUE.endpoint', form_old_key('sms_gateways[0][VALUE][endpoint]'));
         $this->assertSame('option_keys', form_old_key('option_keys[]'));
+    }
+
+    public function test_display_label_translates_through_json_and_never_returns_an_array(): void
+    {
+        app('translator')->addLines(['*.View Role' => 'Rolle anzeigen'], 'de', '*');
+        app()->setLocale('de');
+
+        $this->assertSame('Rolle anzeigen', display_label('View Role'));
+        $this->assertSame('Untranslated Label', display_label('Untranslated Label'));
+        // A stored name equal to a lang file name makes __() return the whole file.
+        $this->assertIsArray(__('validation'));
+        $this->assertSame('validation', display_label('validation'));
+        $this->assertSame('', display_label(null));
     }
 
     public function test_email_is_normalized(): void

@@ -2,7 +2,7 @@
 @extends('activitylog::layouts.master')
 
 @section('breadcrumb')
-    <span class="breadcrumb-item active">Content History</span>
+    <span class="breadcrumb-item active">{{ __('activitylog::activitylog.show.breadcrumb') }}</span>
 @endsection
 
 @section('content')
@@ -10,14 +10,14 @@
         <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
             <div>
                 <h5 class="card-title mb-0">
-                    Content History
+                    {{ __('activitylog::activitylog.show.breadcrumb') }}
                     <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle ms-2">{{ $helper::getModelName($audit->auditable_type) }}</span>
                 </h5>
-                <small class="text-muted">{{ $audits->total() }} record(s)</small>
+                <small class="text-muted">{{ __('activitylog::activitylog.show.record_count', ['count' => $audits->total()]) }}</small>
             </div>
             <div class="d-flex align-items-center gap-2">
                 <form method="GET" class="d-flex align-items-center gap-2">
-                    <label class="text-muted mb-0 small">Per page:</label>
+                    <label class="text-muted mb-0 small">{{ __('activitylog::activitylog.show.per_page') }}</label>
                     <select name="per_page" class="form-select form-select-sm" style="width:75px;"
                             onchange="this.form.submit()">
                         @foreach ([10, 20, 50, 100] as $pp)
@@ -27,7 +27,7 @@
                     </select>
                 </form>
                 <a href="{{ route('admin.activity-logs.index') }}" class="btn btn-outline-secondary btn-sm">
-                    <i class="ph-arrow-left me-1"></i> Back
+                    <i class="ph-arrow-left me-1"></i> {{ __('activitylog::activitylog.show.back') }}
                 </a>
             </div>
         </div>
@@ -36,11 +36,11 @@
             <table class="table table-hover table-borderless align-middle mb-0">
                 <thead class="table-active">
                 <tr>
-                    <th style="width:95px;">Event</th>
-                    <th style="width:140px;">Action By</th>
-                    <th style="width:140px;">Time</th>
-                    <th style="width:120px;">IP / URL</th>
-                    <th>Changes</th>
+                    <th style="width:95px;">{{ __('activitylog::activitylog.show.col_event') }}</th>
+                    <th style="width:140px;">{{ __('activitylog::activitylog.show.col_action_by') }}</th>
+                    <th style="width:140px;">{{ __('activitylog::activitylog.show.col_time') }}</th>
+                    <th style="width:120px;">{{ __('activitylog::activitylog.show.col_ip_url') }}</th>
+                    <th>{{ __('activitylog::activitylog.show.col_changes') }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -83,9 +83,9 @@
                                         </span>
                                 @endcan
                             @elseif ($audit->user_id)
-                                <span class="text-muted small">Deleted #{{ $audit->user_id }}</span>
+                                <span class="text-muted small">{{ __('activitylog::activitylog.show.deleted_user', ['id' => $audit->user_id]) }}</span>
                             @else
-                                <span class="text-muted small">System</span>
+                                <span class="text-muted small">{{ __('activitylog::activitylog.show.system') }}</span>
                             @endif
                         </td>
 
@@ -157,7 +157,7 @@
                                             class="text-success bg-success bg-opacity-10 px-1 rounded">{{ $newVal }}</code>
                                     </div>
                                 @empty
-                                    <span class="text-muted small fst-italic">No changes recorded.</span>
+                                    <span class="text-muted small fst-italic">{{ __('activitylog::activitylog.show.no_changes_recorded') }}</span>
                                 @endforelse
 
                             @elseif (in_array($audit->event, ['created', 'restored']))
@@ -189,7 +189,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center py-4 text-muted">No audit history available.</td>
+                        <td colspan="5" class="text-center py-4 text-muted">{{ __('activitylog::activitylog.show.no_audit_history') }}</td>
                     </tr>
                 @endforelse
                 </tbody>
@@ -203,7 +203,7 @@
         @endif
     </div>
 
-    <x-modal id="track-ip-modal" title="IP Information">
+    <x-modal id="track-ip-modal" title="{{ __('activitylog::activitylog.show.ip_information') }}">
         <div id="ip-details"></div>
     </x-modal>
 @endsection
@@ -220,7 +220,7 @@
                     url: "{{ route('admin.track-ip') }}",
                     data: {ip},
                     success: data => $('#ip-details').html(data),
-                    error: () => $('#ip-details').html('<div class="alert alert-danger mb-0">Failed to load IP information.</div>'),
+                    error: () => $('#ip-details').html('<div class="alert alert-danger mb-0">' + @js(__('activitylog::activitylog.show.failed_ip')) + '</div>'),
                 });
             });
         });

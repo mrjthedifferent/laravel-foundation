@@ -29,7 +29,7 @@ class DocumentController extends Controller
         $action->execute($user, UserDocumentData::from($request->validated()));
 
         return redirect(route('admin.users.show', $user->id).'#documents')
-            ->with('success', 'Document uploaded successfully');
+            ->with('success', __('user::user.documents.uploaded'));
     }
 
     /**
@@ -45,6 +45,6 @@ class DocumentController extends Controller
         $document->delete();
 
         return redirect(route('admin.users.show', $user->id).'#documents')
-            ->with('success', 'Document deleted successfully');
+            ->with('success', __('user::user.documents.deleted'));
     }
 }

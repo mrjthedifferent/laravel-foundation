@@ -25,7 +25,7 @@ final readonly class DeleteBackupAction
         $filePath = $backupName.'/'.$filename;
 
         if (! $storageDisk->exists($filePath)) {
-            throw new RuntimeException('Backup file not found: '.$filePath);
+            throw new RuntimeException(__('backupcleanup::backupcleanup.errors.file_not_found_detail', ['path' => $filePath]));
         }
 
         $storageDisk->delete($filePath);

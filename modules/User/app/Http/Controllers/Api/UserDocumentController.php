@@ -16,7 +16,7 @@ class UserDocumentController extends Controller
     {
         $documents = $request->user()->documents()->get();
 
-        return JsonResponseFactory::success('User documents list', UserDocumentResource::collection($documents));
+        return JsonResponseFactory::success(__('user::user.flash.user_documents_list'), UserDocumentResource::collection($documents));
     }
 
     public function store(UserDocumentData $data, UploadUserDocumentAction $action): JsonResponse
@@ -25,6 +25,6 @@ class UserDocumentController extends Controller
 
         $document = $action->execute(request()->user(), $data);
 
-        return JsonResponseFactory::created('Document Uploaded', UserDocumentResource::make($document));
+        return JsonResponseFactory::created(__('user::user.flash.document_uploaded'), UserDocumentResource::make($document));
     }
 }

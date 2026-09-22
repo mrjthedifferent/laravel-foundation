@@ -50,9 +50,9 @@ class StoreUserRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.unique' => 'The email has already been taken',
-            'roles.required' => 'At least one role must be assigned',
-            'roles.min' => 'At least one role must be assigned',
+            'email.unique' => __('user::user.errors.email_unique'),
+            'roles.required' => __('user::user.errors.roles_required'),
+            'roles.min' => __('user::user.errors.roles_required'),
         ];
     }
 

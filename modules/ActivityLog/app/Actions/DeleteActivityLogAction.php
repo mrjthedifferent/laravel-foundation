@@ -19,7 +19,7 @@ final readonly class DeleteActivityLogAction
         } catch (Exception $e) {
             Log::error('Failed to delete activity log: '.$e->getMessage());
 
-            throw new RuntimeException('Failed to delete activity log.', 0, $e);
+            throw new RuntimeException(__('activitylog::activitylog.errors.delete_failed'), 0, $e);
         }
     }
 }

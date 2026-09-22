@@ -68,8 +68,8 @@ final readonly class UpdateUserAction
             // Notify the user when their account has just been deactivated.
             if ($wasActive && ! $user->is_active) {
                 DB::afterCommit(fn () => $user->notify(new AppNotification(
-                    title: 'Account deactivated',
-                    body: 'Your account has been deactivated. Contact an administrator if you believe this is a mistake.',
+                    title: __('user::user.notifications.account_deactivated_title'),
+                    body: __('user::user.notifications.account_deactivated_body'),
                     type: NotificationType::Info,
                     data: ['type' => 'account_deactivated'],
                     channels: ['database', 'fcm', 'mail'],

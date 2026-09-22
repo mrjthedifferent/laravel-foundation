@@ -1,11 +1,11 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Update Password') }}
+            {{ __('foundation::foundation.profile.update_password') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
+            {{ __('foundation::foundation.profile.update_password_notice') }}
         </p>
     </header>
 
@@ -14,7 +14,7 @@
         @method('put')
 
         <div>
-            <x-input-label for="update_password_current_password" :value="__('Current Password')" />
+            <x-input-label for="update_password_current_password" :value="__('foundation::foundation.profile.current_password')" />
             <div class="position-relative mt-1">
                 <x-text-input id="update_password_current_password" name="current_password" type="password" class="block w-full pe-5" autocomplete="current-password" />
                 <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" data-target="update_password_current_password" tabindex="-1">
@@ -25,7 +25,7 @@
         </div>
 
         <div>
-            <x-input-label for="update_password_password" :value="__('New Password')" />
+            <x-input-label for="update_password_password" :value="__('foundation::foundation.profile.new_password')" />
             <div class="position-relative mt-1">
                 <x-text-input id="update_password_password" name="password" type="password" class="block w-full pe-5" autocomplete="new-password" />
                 <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" data-target="update_password_password" tabindex="-1">
@@ -36,7 +36,7 @@
         </div>
 
         <div>
-            <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
+            <x-input-label for="update_password_password_confirmation" :value="__('foundation::foundation.profile.confirm_password')" />
             <div class="position-relative mt-1">
                 <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="block w-full pe-5" autocomplete="new-password" />
                 <button type="button" class="btn border-0 pw-toggle text-muted shadow-none position-absolute top-50 end-0 translate-middle-y" data-target="update_password_password_confirmation" tabindex="-1">
@@ -47,7 +47,7 @@
         </div>
 
         <div class="flex items-center gap-4 mt-2">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <x-primary-button>{{ __('foundation::foundation.common.save') }}</x-primary-button>
 
             @if (session('status') === 'password-updated')
             <p
@@ -55,7 +55,7 @@
                 x-show="show"
                 x-transition
                 x-init="setTimeout(() => show = false, 2000)"
-                class="text-sm text-gray-600">{{ __('Saved.') }}</p>
+                class="text-sm text-gray-600">{{ __('foundation::foundation.profile.saved') }}</p>
             @endif
         </div>
     </form>

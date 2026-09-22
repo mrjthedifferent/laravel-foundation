@@ -1,39 +1,39 @@
 @extends('settings::layouts.master')
 
 @section('breadcrumb')
-    <span class="breadcrumb-item active">Theme Settings</span>
+    <span class="breadcrumb-item active">{{ __('settings::settings.special_theme.breadcrumb') }}</span>
 @endsection
 
 @section('content')
     @php
         $palettes = [
-            'blue' => ['label' => 'Blue', 'hex' => '#0c83ff', 'semantic' => 'Primary'],
-            'slate' => ['label' => 'Slate', 'hex' => '#247297', 'semantic' => 'Secondary'],
-            'indigo' => ['label' => 'Indigo', 'hex' => '#5C6BC0', 'semantic' => ''],
-            'purple' => ['label' => 'Purple', 'hex' => '#8e70c1', 'semantic' => ''],
-            'pink' => ['label' => 'Pink', 'hex' => '#f35c86', 'semantic' => ''],
-            'red' => ['label' => 'Red', 'hex' => '#EF4444', 'semantic' => 'Danger'],
-            'orange' => ['label' => 'Orange', 'hex' => '#f58646', 'semantic' => 'Warning'],
-            'yellow' => ['label' => 'Yellow', 'hex' => '#ffd648', 'semantic' => ''],
-            'green' => ['label' => 'Green', 'hex' => '#059669', 'semantic' => 'Success'],
-            'teal' => ['label' => 'Teal', 'hex' => '#26A69A', 'semantic' => ''],
-            'cyan' => ['label' => 'Cyan', 'hex' => '#049aad', 'semantic' => 'Info'],
+            'blue' => ['label' => __('settings::settings.special_theme.palette_blue'), 'hex' => '#0c83ff', 'semantic' => __('settings::settings.special_theme.semantic_primary')],
+            'slate' => ['label' => __('settings::settings.special_theme.palette_slate'), 'hex' => '#247297', 'semantic' => __('settings::settings.special_theme.semantic_secondary')],
+            'indigo' => ['label' => __('settings::settings.special_theme.palette_indigo'), 'hex' => '#5C6BC0', 'semantic' => ''],
+            'purple' => ['label' => __('settings::settings.special_theme.palette_purple'), 'hex' => '#8e70c1', 'semantic' => ''],
+            'pink' => ['label' => __('settings::settings.special_theme.palette_pink'), 'hex' => '#f35c86', 'semantic' => ''],
+            'red' => ['label' => __('settings::settings.special_theme.palette_red'), 'hex' => '#EF4444', 'semantic' => __('settings::settings.special_theme.semantic_danger')],
+            'orange' => ['label' => __('settings::settings.special_theme.palette_orange'), 'hex' => '#f58646', 'semantic' => __('settings::settings.special_theme.semantic_warning')],
+            'yellow' => ['label' => __('settings::settings.special_theme.palette_yellow'), 'hex' => '#ffd648', 'semantic' => ''],
+            'green' => ['label' => __('settings::settings.special_theme.palette_green'), 'hex' => '#059669', 'semantic' => __('settings::settings.special_theme.semantic_success')],
+            'teal' => ['label' => __('settings::settings.special_theme.palette_teal'), 'hex' => '#26A69A', 'semantic' => ''],
+            'cyan' => ['label' => __('settings::settings.special_theme.palette_cyan'), 'hex' => '#049aad', 'semantic' => __('settings::settings.special_theme.semantic_info')],
         ];
 
         $layouts = [
             '1' => [
-                'label' => 'Layout 1',
-                'description' => 'Dark navbar on top. Sidebar inside page-content.',
+                'label' => __('settings::settings.special_theme.layout_1_label'),
+                'description' => __('settings::settings.special_theme.layout_1_desc'),
                 'icon' => 'ph-layout',
             ],
             '2' => [
-                'label' => 'Layout 2',
-                'description' => 'Sidebar first with logo header. Navbar inside content-wrapper.',
+                'label' => __('settings::settings.special_theme.layout_2_label'),
+                'description' => __('settings::settings.special_theme.layout_2_desc'),
                 'icon' => 'ph-sidebar',
             ],
             '3' => [
-                'label' => 'Layout 3',
-                'description' => 'Detached sidebar. Static document scroll.',
+                'label' => __('settings::settings.special_theme.layout_3_label'),
+                'description' => __('settings::settings.special_theme.layout_3_desc'),
                 'icon' => 'ph-columns',
             ],
         ];
@@ -62,11 +62,11 @@
                     <i class="ph-layout"></i>
                 </div>
                 <div>
-                    <div class="fw-bold">Layout</div>
-                    <div class="text-muted fs-xs">Choose the overall page structure</div>
+                    <div class="fw-bold">{{ __('settings::settings.special_theme.layout_header') }}</div>
+                    <div class="text-muted fs-xs">{{ __('settings::settings.special_theme.layout_subtitle') }}</div>
                 </div>
                 <a href="{{ route('admin.dashboard') }}" target="_blank" class="ms-auto btn btn-sm btn-outline-secondary">
-                    <i class="ph-arrow-square-out me-1"></i>Preview
+                    <i class="ph-arrow-square-out me-1"></i>{{ __('settings::settings.special_theme.preview') }}
                 </a>
             </div>
             <div class="card-body">
@@ -102,13 +102,17 @@
                     <i class="ph-moon"></i>
                 </div>
                 <div>
-                    <div class="fw-bold">Color Mode</div>
-                    <div class="text-muted fs-xs">Light, dark, or follow system preference</div>
+                    <div class="fw-bold">{{ __('settings::settings.special_theme.color_mode_header') }}</div>
+                    <div class="text-muted fs-xs">{{ __('settings::settings.special_theme.color_mode_subtitle') }}</div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="row g-3">
-                    @foreach (['light' => ['label' => 'Light', 'icon' => 'ph-sun', 'desc' => 'Clean light interface'], 'dark' => ['label' => 'Dark', 'icon' => 'ph-moon', 'desc' => 'Easy on the eyes in low light'], 'auto' => ['label' => 'Auto', 'icon' => 'ph-device-mobile', 'desc' => 'Follows system preference']] as $value => $opt)
+                    @foreach ([
+                        'light' => ['label' => __('settings::settings.special_theme.mode_light'), 'icon' => 'ph-sun', 'desc' => __('settings::settings.special_theme.mode_light_desc')],
+                        'dark' => ['label' => __('settings::settings.special_theme.mode_dark'), 'icon' => 'ph-moon', 'desc' => __('settings::settings.special_theme.mode_dark_desc')],
+                        'auto' => ['label' => __('settings::settings.special_theme.mode_auto'), 'icon' => 'ph-device-mobile', 'desc' => __('settings::settings.special_theme.mode_auto_desc')],
+                    ] as $value => $opt)
                         <div class="col-sm-4">
                             <label class="d-block cursor-pointer">
                                 <input type="radio" name="theme_color_mode" value="{{ $value }}"
@@ -137,8 +141,8 @@
                     <i class="ph-palette"></i>
                 </div>
                 <div>
-                    <div class="fw-bold">Color Palette</div>
-                    <div class="text-muted fs-xs">Sets the primary accent color across the UI</div>
+                    <div class="fw-bold">{{ __('settings::settings.special_theme.palette_header') }}</div>
+                    <div class="text-muted fs-xs">{{ __('settings::settings.special_theme.palette_subtitle') }}</div>
                 </div>
             </div>
             <div class="card-body">
@@ -173,8 +177,8 @@
                             data-palette="custom">
                             <div class="d-flex align-items-center justify-content-between px-2 pt-2 pb-1">
                                 <div>
-                                    <div class="fw-semibold fs-sm">Custom</div>
-                                    <div class="text-muted" style="font-size:10px;">Pick any color</div>
+                                    <div class="fw-semibold fs-sm">{{ __('settings::settings.special_theme.custom_label') }}</div>
+                                    <div class="text-muted" style="font-size:10px;">{{ __('settings::settings.special_theme.custom_desc') }}</div>
                                 </div>
                                 <i
                                     class="ph-check-circle text-primary check-icon {{ $currentPalette === 'custom' ? '' : 'd-none' }}"></i>
@@ -189,7 +193,7 @@
                 <div id="custom-color-picker-wrap"
                     class="mt-3 p-3 border rounded bg-body-tertiary {{ $currentPalette === 'custom' ? '' : 'd-none' }}">
                     <label class="form-label fw-semibold fs-sm mb-2">
-                        <i class="ph-eyedropper me-1"></i>Custom Primary Color
+                        <i class="ph-eyedropper me-1"></i>{{ __('settings::settings.special_theme.custom_primary_color_label') }}
                     </label>
                     <div class="d-flex align-items-center gap-3 flex-wrap">
                         <input type="color" id="custom-color-picker" value="{{ $currentCustomColor }}"
@@ -198,7 +202,7 @@
                         <input type="text" id="custom-color-hex" value="{{ $currentCustomColor }}"
                             class="form-control form-control-sm font-monospace" placeholder="#0c83ff" maxlength="7"
                             style="max-width:120px;">
-                        <span class="text-muted fs-xs">Choose or type a hex color, then save.</span>
+                        <span class="text-muted fs-xs">{{ __('settings::settings.special_theme.custom_color_hint') }}</span>
                     </div>
                 </div>
             </div>
@@ -212,13 +216,16 @@
                     <i class="ph-arrows-left-right"></i>
                 </div>
                 <div>
-                    <div class="fw-bold">Text Direction</div>
-                    <div class="text-muted fs-xs">LTR or RTL layout</div>
+                    <div class="fw-bold">{{ __('settings::settings.special_theme.direction_header') }}</div>
+                    <div class="text-muted fs-xs">{{ __('settings::settings.special_theme.direction_subtitle') }}</div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="row g-3">
-                    @foreach (['ltr' => ['label' => 'LTR', 'icon' => 'ph-text-align-left', 'desc' => 'Left to Right (default)'], 'rtl' => ['label' => 'RTL', 'icon' => 'ph-text-align-right', 'desc' => 'Right to Left (Arabic, Hebrew…)']] as $value => $opt)
+                    @foreach ([
+                        'ltr' => ['label' => __('settings::settings.special_theme.direction_ltr'), 'icon' => 'ph-text-align-left', 'desc' => __('settings::settings.special_theme.direction_ltr_desc')],
+                        'rtl' => ['label' => __('settings::settings.special_theme.direction_rtl'), 'icon' => 'ph-text-align-right', 'desc' => __('settings::settings.special_theme.direction_rtl_desc')],
+                    ] as $value => $opt)
                         <div class="col-sm-6">
                             <label class="d-block cursor-pointer">
                                 <input type="radio" name="theme_direction" value="{{ $value }}"
@@ -248,18 +255,22 @@
                     <i class="ph-sidebar-simple"></i>
                 </div>
                 <div>
-                    <div class="fw-bold">Sidebar</div>
-                    <div class="text-muted fs-xs">Color scheme and display type</div>
+                    <div class="fw-bold">{{ __('settings::settings.special_theme.sidebar_header') }}</div>
+                    <div class="text-muted fs-xs">{{ __('settings::settings.special_theme.sidebar_subtitle') }}</div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="row g-4">
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold fs-sm">Color Scheme</label>
+                        <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_theme.color_scheme_label') }}</label>
                         <input type="hidden" name="theme_sidebar_color" id="sidebar-color-value"
                             value="{{ $currentSidebarC }}">
                         <div class="d-flex gap-2 flex-wrap">
-                            @foreach (['dark' => 'Dark', 'light' => 'Light', 'primary' => 'Primary'] as $value => $label)
+                            @foreach ([
+                                'dark' => __('settings::settings.special_theme.scheme_dark'),
+                                'light' => __('settings::settings.special_theme.scheme_light'),
+                                'primary' => __('settings::settings.special_theme.scheme_primary'),
+                            ] as $value => $label)
                                 <label class="cursor-pointer">
                                     <input type="radio" name="_sidebar_color_radio" value="{{ $value }}"
                                         class="d-none sidebar-color-radio"
@@ -271,11 +282,11 @@
                                 </label>
                             @endforeach
                         </div>
-                        <div class="form-text">Primary tints the sidebar with the active palette color.</div>
+                        <div class="form-text">{{ __('settings::settings.special_theme.sidebar_primary_hint') }}</div>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold fs-sm">Custom Background Color
-                            <span class="text-muted fw-normal">(optional)</span>
+                        <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_theme.custom_bg_label') }}
+                            <span class="text-muted fw-normal">{{ __('settings::settings.special_theme.optional') }}</span>
                         </label>
                         <input type="hidden" name="theme_sidebar_color_custom" id="sidebar-color-custom-value"
                             value="{{ $currentSidebarColorCustom }}">
@@ -292,15 +303,18 @@
                             <label class="form-check mb-0 ms-1 cursor-pointer">
                                 <input type="checkbox" class="form-check-input" id="sidebar-color-use-default"
                                     {{ empty($currentSidebarColorCustom) ? 'checked' : '' }}>
-                                <span class="form-check-label fs-sm">Use default</span>
+                                <span class="form-check-label fs-sm">{{ __('settings::settings.special_theme.use_default') }}</span>
                             </label>
                         </div>
-                        <div class="form-text">Leave on "Use default" to keep the Dark/Light preset colour.</div>
+                        <div class="form-text">{{ __('settings::settings.special_theme.sidebar_bg_hint') }}</div>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold fs-sm">Display Type</label>
+                        <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_theme.display_type_label') }}</label>
                         <div class="d-flex gap-2 flex-wrap">
-                            @foreach (['default' => 'Default', 'mini' => 'Mini (Icon)'] as $value => $label)
+                            @foreach ([
+                                'default' => __('settings::settings.special_theme.display_default'),
+                                'mini' => __('settings::settings.special_theme.display_mini'),
+                            ] as $value => $label)
                                 <label class="cursor-pointer">
                                     <input type="radio" name="theme_sidebar_type" value="{{ $value }}"
                                         class="d-none theme-btn-radio-input"
@@ -323,16 +337,20 @@
                     <i class="ph-rows"></i>
                 </div>
                 <div>
-                    <div class="fw-bold">Navbar</div>
-                    <div class="text-muted fs-xs">Top navigation bar color scheme and optional background override</div>
+                    <div class="fw-bold">{{ __('settings::settings.special_theme.navbar_header') }}</div>
+                    <div class="text-muted fs-xs">{{ __('settings::settings.special_theme.navbar_subtitle') }}</div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="row g-4">
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold fs-sm">Color Scheme</label>
+                        <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_theme.color_scheme_label') }}</label>
                         <div class="d-flex gap-2 flex-wrap">
-                            @foreach (['dark' => 'Dark', 'light' => 'Light', 'primary' => 'Primary'] as $value => $label)
+                            @foreach ([
+                                'dark' => __('settings::settings.special_theme.scheme_dark'),
+                                'light' => __('settings::settings.special_theme.scheme_light'),
+                                'primary' => __('settings::settings.special_theme.scheme_primary'),
+                            ] as $value => $label)
                                 <label class="cursor-pointer">
                                     <input type="radio" name="theme_navbar_color" value="{{ $value }}"
                                         class="d-none theme-btn-radio-input"
@@ -344,11 +362,11 @@
                                 </label>
                             @endforeach
                         </div>
-                        <div class="form-text">Primary tints the navbar with the active palette color.</div>
+                        <div class="form-text">{{ __('settings::settings.special_theme.navbar_primary_hint') }}</div>
                     </div>
                     <div class="col-md-8">
-                        <label class="form-label fw-semibold fs-sm">Custom Background Color
-                            <span class="text-muted fw-normal">(optional)</span>
+                        <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.special_theme.custom_bg_label') }}
+                            <span class="text-muted fw-normal">{{ __('settings::settings.special_theme.optional') }}</span>
                         </label>
                         {{-- Hidden field carries the actual value (hex or empty) --}}
                         <input type="hidden" name="theme_navbar_bg" id="navbar-bg-value"
@@ -369,10 +387,10 @@
                             <label class="form-check mb-0 ms-1 cursor-pointer">
                                 <input type="checkbox" class="form-check-input" id="navbar-bg-none"
                                     {{ empty($currentNavbarBg) ? 'checked' : '' }}>
-                                <span class="form-check-label fs-sm">Use default</span>
+                                <span class="form-check-label fs-sm">{{ __('settings::settings.special_theme.use_default') }}</span>
                             </label>
                         </div>
-                        <div class="form-text">Leave on "Use default" to keep the theme's built-in navbar colour.</div>
+                        <div class="form-text">{{ __('settings::settings.special_theme.navbar_bg_hint') }}</div>
                     </div>
                 </div>
             </div>
@@ -386,17 +404,17 @@
                     <i class="ph-text-t"></i>
                 </div>
                 <div>
-                    <div class="fw-bold">Typography</div>
-                    <div class="text-muted fs-xs">Global font family applied to the entire application</div>
+                    <div class="fw-bold">{{ __('settings::settings.special_theme.typography_header') }}</div>
+                    <div class="text-muted fs-xs">{{ __('settings::settings.special_theme.typography_subtitle') }}</div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="row g-3">
                     @foreach ([
-            'inter' => ['label' => 'Inter', 'preview' => 'The quick brown fox jumps over the lazy dog.', 'stack' => "'Inter', sans-serif"],
-            'roboto' => ['label' => 'Roboto', 'preview' => 'The quick brown fox jumps over the lazy dog.', 'stack' => "'Roboto', sans-serif"],
-            'poppins' => ['label' => 'Poppins', 'preview' => 'The quick brown fox jumps over the lazy dog.', 'stack' => "'Poppins', sans-serif"],
-            'system' => ['label' => 'System Default', 'preview' => 'The quick brown fox jumps over the lazy dog.', 'stack' => "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"],
+            'inter' => ['label' => 'Inter', 'preview' => __('settings::settings.special_theme.font_preview_text'), 'stack' => "'Inter', sans-serif"],
+            'roboto' => ['label' => 'Roboto', 'preview' => __('settings::settings.special_theme.font_preview_text'), 'stack' => "'Roboto', sans-serif"],
+            'poppins' => ['label' => 'Poppins', 'preview' => __('settings::settings.special_theme.font_preview_text'), 'stack' => "'Poppins', sans-serif"],
+            'system' => ['label' => __('settings::settings.special_theme.font_system_default'), 'preview' => __('settings::settings.special_theme.font_preview_text'), 'stack' => "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"],
         ] as $value => $font)
                         <div class="col-sm-6 col-xl-3">
                             <label class="d-block cursor-pointer">
@@ -423,10 +441,10 @@
         {{-- ── Save ─────────────────────────────────────────────────────────── --}}
         <div class="d-flex justify-content-end gap-2">
             <a href="{{ route('admin.dashboard') }}" target="_blank" class="btn btn-outline-secondary">
-                <i class="ph-arrow-square-out me-1"></i>Preview Dashboard
+                <i class="ph-arrow-square-out me-1"></i>{{ __('settings::settings.special_theme.preview_dashboard') }}
             </a>
             <button type="submit" class="btn btn-primary">
-                <i class="ph-floppy-disk me-1"></i>Save Theme Settings
+                <i class="ph-floppy-disk me-1"></i>{{ __('settings::settings.special_theme.submit') }}
             </button>
         </div>
     </form>

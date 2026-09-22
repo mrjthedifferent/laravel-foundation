@@ -54,8 +54,10 @@ final readonly class SidebarMenu
                 $active = $currentRoute !== null && in_array($currentRoute, $this->activeRoutes($item), true);
                 $open = $open || $active;
 
+                // Labels are English source strings from config; a project translates
+                // them with a lang/{locale}.json file keyed by that English text.
                 $rendered[] = [
-                    'label' => $item['label'],
+                    'label' => display_label($item['label']),
                     'icon' => $item['icon'],
                     'href' => isset($item['route']) ? route($item['route']) : url((string) $item['url']),
                     'target' => $item['target'] ?? null,
@@ -65,7 +67,7 @@ final readonly class SidebarMenu
 
             $tree[] = [
                 'key' => $key,
-                'label' => $parent['label'],
+                'label' => display_label($parent['label']),
                 'icon' => $parent['icon'],
                 // A single-page parent is a plain link, not a submenu of one.
                 'single' => (bool) ($parent['single'] ?? false),

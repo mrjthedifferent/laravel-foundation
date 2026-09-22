@@ -23,26 +23,17 @@ class NotificationSettingsController extends Controller
     /**
      * Channels shown as matrix columns, in display order.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    private const array UI_CHANNELS = [
-        'mail' => 'Email',
-        'database' => 'In-App',
-        'fcm' => 'Push',
-        'sms' => 'SMS',
-    ];
-
-    /**
-     * Per-channel setting descriptions (sprintf with the entry label).
-     *
-     * @var array<string, string>
-     */
-    private const array DESCRIPTIONS = [
-        'mail' => 'Send the "%s" email automatically',
-        'database' => 'Deliver the "%s" in-app notification',
-        'fcm' => 'Send the "%s" push notification',
-        'sms' => 'Send the "%s" SMS',
-    ];
+    private static function uiChannels(): array
+    {
+        return [
+            'mail' => __('settings::settings.special_notifications.channel_mail'),
+            'database' => __('settings::settings.special_notifications.channel_database'),
+            'fcm' => __('settings::settings.special_notifications.channel_fcm'),
+            'sms' => __('settings::settings.special_notifications.channel_sms'),
+        ];
+    }
 
     /**
      * Display the notification channel matrix, grouped by domain.
@@ -54,7 +45,7 @@ class NotificationSettingsController extends Controller
         $groups = [];
         foreach (NotificationToggleRegistry::entries() as $entry) {
             $cells = [];
-            foreach (array_keys(self::UI_CHANNELS) as $channel) {
+            foreach (array_keys(self::uiChannels()) as $channel) {
                 $key = NotificationToggleRegistry::settingKey($entry, $channel);
                 $cells[$channel] = [
                     'key' => $key,
@@ -72,7 +63,7 @@ class NotificationSettingsController extends Controller
 
         return view('settings::special.notifications', [
             'groups' => $groups,
-            'channels' => self::UI_CHANNELS,
+            'channels' => self::uiChannels(),
         ]);
     }
 
@@ -84,7 +75,7 @@ class NotificationSettingsController extends Controller
         $this->authorize('editSpecial', Setting::class);
 
         foreach (NotificationToggleRegistry::entries() as $entry) {
-            foreach (array_keys(self::UI_CHANNELS) as $channel) {
+            foreach (array_keys(self::uiChannels()) as $channel) {
                 if (! NotificationToggleRegistry::supports($entry, $channel)
                     || NotificationToggleRegistry::isLocked($entry, $channel)) {
                     continue;
@@ -99,7 +90,8 @@ class NotificationSettingsController extends Controller
                         'type' => 'boolean',
                         'value' => $request->boolean($key) ? '1' : '0',
                         'is_visible' => false,
-                        'description' => sprintf(self::DESCRIPTIONS[$channel], $entry['label']),
+                        // Stored in English; the settings pages translate it at display time.
+                        'description' => NotificationToggleRegistry::description($entry, $channel),
                     ],
                 );
             }
@@ -108,6 +100,6 @@ class NotificationSettingsController extends Controller
         app(SettingsRepository::class)->forget();
 
         return redirect()->route('admin.settings.special.notifications')
-            ->with('success', 'Notification settings updated successfully');
+            ->with('success', __('settings::settings.flash.notifications_updated'));
     }
 }

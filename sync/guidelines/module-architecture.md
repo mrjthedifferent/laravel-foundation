@@ -98,12 +98,16 @@ User, Settings, RolePermission, Notification, ActivityLog, BackupCleanup and Imp
 
 ### Route Structure
 
-Web routes are always wrapped:
+Web routes are always wrapped in the configurable admin group (prefix, domain and middleware from `config('foundation.routing')`; route names always `admin.*`):
 ```php
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('things', ThingController::class);
-    // additional non-resource routes here
-});
+Route::middleware(config('foundation.routing.middleware'))
+    ->domain(config('foundation.routing.domain'))
+    ->prefix(config('foundation.routing.prefix'))
+    ->name('admin.')
+    ->group(function (): void {
+        Route::resource('things', ThingController::class);
+        // additional non-resource routes here
+    });
 ```
 
 API routes use Sanctum:

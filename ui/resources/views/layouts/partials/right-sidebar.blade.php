@@ -13,7 +13,7 @@
 <div class="offcanvas offcanvas-end" tabindex="-1" id="demo_config">
 
     <div class="offcanvas-header border-bottom py-0">
-        <h5 class="offcanvas-title py-3">Theme configuration</h5>
+        <h5 class="offcanvas-title py-3">{{ __('foundation::foundation.theme_config.title') }}</h5>
         <button type="button" class="btn btn-light btn-sm btn-icon border-transparent rounded-pill"
                 data-bs-dismiss="offcanvas">
             <i class="ph-x"></i>
@@ -25,22 +25,22 @@
         {{-- ── Active Settings Summary ─────────────────────────────────── --}}
         <div class="mb-3 p-2 border rounded bg-body-tertiary bg-opacity-50 fs-sm">
             <div class="d-flex flex-wrap gap-1">
-                <span class="badge bg-secondary">Layout {{ $rsLayout }}</span>
+                <span class="badge bg-secondary">{{ __('foundation::foundation.theme_config.layout_badge', ['layout' => $rsLayout]) }}</span>
                 <span class="badge bg-secondary">{{ ucfirst($rsColorMode) }}</span>
                 <span class="badge bg-secondary">{{ strtoupper($rsDirection) }}</span>
                 <span class="badge bg-secondary">{{ ucfirst($rsPalette) }}</span>
-                <span class="badge bg-secondary">Sidebar: {{ ucfirst($rsSidebarClr) }}/{{ ucfirst($rsSidebarType) }}</span>
-                <span class="badge bg-secondary">Navbar: {{ ucfirst($rsNavbarColor) }}</span>
-                <span class="badge bg-secondary">Font: {{ ucfirst($rsFont) }}</span>
+                <span class="badge bg-secondary">{{ __('foundation::foundation.theme_config.sidebar_badge', ['color' => ucfirst($rsSidebarClr), 'type' => ucfirst($rsSidebarType)]) }}</span>
+                <span class="badge bg-secondary">{{ __('foundation::foundation.theme_config.navbar_badge', ['color' => ucfirst($rsNavbarColor)]) }}</span>
+                <span class="badge bg-secondary">{{ __('foundation::foundation.theme_config.font_badge', ['font' => ucfirst($rsFont)]) }}</span>
             </div>
         </div>
 
         {{-- ── Color mode (live session toggle) ───────────────────────── --}}
-        <div class="fw-semibold mb-2">Color mode <span class="text-muted fw-normal fs-sm">(session override)</span></div>
+        <div class="fw-semibold mb-2">{{ __('foundation::foundation.theme_config.color_mode') }} <span class="text-muted fw-normal fs-sm">{{ __('foundation::foundation.theme_config.session_override') }}</span></div>
         <div class="list-group mb-3">
-            @foreach(['light' => ['icon'=>'ph-sun','label'=>'Light theme','desc'=>'Set light theme or reset to default'],
-                       'dark'  => ['icon'=>'ph-moon','label'=>'Dark theme','desc'=>'Switch to dark theme'],
-                       'auto'  => ['icon'=>'ph-translate','label'=>'Auto theme','desc'=>'Set theme based on system mode']] as $val => $opt)
+            @foreach(['light' => ['icon'=>'ph-sun','label'=>__('foundation::foundation.theme_config.light_theme'),'desc'=>__('foundation::foundation.theme_config.light_theme_desc')],
+                       'dark'  => ['icon'=>'ph-moon','label'=>__('foundation::foundation.theme_config.dark_theme'),'desc'=>__('foundation::foundation.theme_config.dark_theme_desc')],
+                       'auto'  => ['icon'=>'ph-translate','label'=>__('foundation::foundation.theme_config.auto_theme'),'desc'=>__('foundation::foundation.theme_config.auto_theme_desc')]] as $val => $opt)
             <label class="list-group-item list-group-item-action form-check border-width-1 rounded mb-2 @if($val === $rsColorMode) rs-item-selected @endif">
                 <div class="d-flex flex-fill my-1">
                     <div class="form-check-label d-flex me-2">
@@ -58,15 +58,15 @@
         </div>
 
         {{-- ── Direction (live session toggle) ────────────────────────── --}}
-        <div class="fw-semibold mb-2">Direction <span class="text-muted fw-normal fs-sm">(session override)</span></div>
+        <div class="fw-semibold mb-2">{{ __('foundation::foundation.theme_config.direction') }} <span class="text-muted fw-normal fs-sm">{{ __('foundation::foundation.theme_config.session_override') }}</span></div>
         <div class="list-group mb-3">
             <label class="list-group-item list-group-item-action form-check border-width-1 rounded mb-0">
                 <div class="d-flex flex-fill my-1">
                     <div class="form-check-label d-flex me-2">
                         <i class="ph-translate ph-lg me-3"></i>
                         <div>
-                            <span class="fw-bold">RTL direction</span>
-                            <div class="text-muted">Toggle between LTR and RTL</div>
+                            <span class="fw-bold">{{ __('foundation::foundation.theme_config.rtl_direction') }}</span>
+                            <div class="text-muted">{{ __('foundation::foundation.theme_config.rtl_direction_desc') }}</div>
                         </div>
                     </div>
                     <input type="checkbox" name="layout-direction" value="rtl"
@@ -77,15 +77,15 @@
         </div>
 
         {{-- ── Persistent Settings ──────────────────────────────────────── --}}
-        <div class="fw-semibold mb-2">Persistent settings</div>
+        <div class="fw-semibold mb-2">{{ __('foundation::foundation.theme_config.persistent_settings') }}</div>
         <div class="alert alert-info border-0 py-2 mb-2 fs-sm">
             <i class="ph-info me-1"></i>
-            Changes below are saved to the database and apply to all users.
+            {{ __('foundation::foundation.theme_config.persistent_settings_note') }}
         </div>
         @if (Route::has('admin.settings.special.theme'))
         @can('editSpecial', \Modules\Settings\Models\Setting::class)
         <a href="{{ route('admin.settings.special.theme') }}" class="btn btn-primary btn-sm w-100 mb-1">
-            <i class="ph-paint-brush me-1"></i>Open Theme Settings
+            <i class="ph-paint-brush me-1"></i>{{ __('foundation::foundation.theme_config.open_theme_settings') }}
         </a>
         @endcan
         @endif

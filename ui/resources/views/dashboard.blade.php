@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="breadcrumbs">
-        <a href="{{ route('admin.dashboard') }}" class="breadcrumb-item">Home</a>
-        <span class="breadcrumb-item active">Dashboard</span>
+        <a href="{{ route('admin.dashboard') }}" class="breadcrumb-item">{{ __('foundation::foundation.layout.home') }}</a>
+        <span class="breadcrumb-item active">{{ __('foundation::foundation.dashboard.breadcrumb') }}</span>
     </x-slot>
 
     @php
         $greeting = match (true) {
-            now()->hour < 12 => 'Good morning',
-            now()->hour < 18 => 'Good afternoon',
-            default => 'Good evening',
+            now()->hour < 12 => __('foundation::foundation.dashboard.greeting_morning'),
+            now()->hour < 18 => __('foundation::foundation.dashboard.greeting_afternoon'),
+            default => __('foundation::foundation.dashboard.greeting_evening'),
         };
     @endphp
 

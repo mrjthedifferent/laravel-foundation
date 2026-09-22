@@ -531,8 +531,8 @@ A password field with no toggle button — just the blank-by-default, never-repo
 
 **Set flash messages in controllers** — rendered automatically by `_message.blade.php`:
 ```php
-return redirect()->route('admin.items.index')->with('success', 'Item created.');
-return back()->with('error', 'Something went wrong.');
+return redirect()->route('admin.items.index')->with('success', __('item::item.flash.created'));
+return back()->with('error', __('item::item.flash.create_failed'));
 ```
 
 | Session key | SweetAlert style | Behaviour |

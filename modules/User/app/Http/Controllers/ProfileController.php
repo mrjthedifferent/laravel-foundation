@@ -48,7 +48,7 @@ class ProfileController extends Controller
 
         $action->execute($user->id, $userData);
 
-        return Redirect::route('admin.profile.edit')->with('success', 'Your profile updated successfully');
+        return Redirect::route('admin.profile.edit')->with('success', __('user::user.profile.updated'));
     }
 
     /**
@@ -56,7 +56,7 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        return Redirect::back()->with('error', 'User Deletion is disabled.');
+        return Redirect::back()->with('error', __('user::user.profile.deletion_disabled'));
         //        $request->validateWithBag('userDeletion', [
         //            'password' => ['required', 'current_password'],
         //        ]);

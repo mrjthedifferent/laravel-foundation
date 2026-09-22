@@ -1,8 +1,8 @@
 @extends('notification::layouts.push-notification')
 
 @section('breadcrumb')
-<a href="{{ route('admin.push.notification.index') }}" class="breadcrumb-item">Push Notifications</a>
-<span class="breadcrumb-item active">Send Push Notification</span>
+<a href="{{ route('admin.push.notification.index') }}" class="breadcrumb-item">{{ __('notification::notification.layouts.push_notifications') }}</a>
+<span class="breadcrumb-item active">{{ __('notification::notification.push_notification_create.breadcrumb') }}</span>
 @endsection
 
 @section('content')
@@ -10,55 +10,55 @@
     @csrf
 
 <x-page-header
-    title="Send Push Notification"
-    subtitle="Compose and dispatch a push notification"
+    title="{{ __('notification::notification.push_notification_create.title') }}"
+    subtitle="{{ __('notification::notification.push_notification_create.subtitle') }}"
     icon="ph-paper-plane-tilt"
     :back-url="route('admin.push.notification.index')"
-    back-label="Back to List" />
+    back-label="{{ __('notification::notification.push_notification_create.back_to_list') }}" />
 
-<x-form-section title="Recipient" icon="ph-user">
+<x-form-section title="{{ __('notification::notification.push_notification_create.recipient_section') }}" icon="ph-user">
     <div class="row g-3">
         <div class="col-md-12">
             <x-form.select
                 class="select"
                 name="user_id"
                 id="user_id"
-                label="Select User"
+                label="{{ __('notification::notification.push_notification_create.select_user_label') }}"
                 required
                 :options="$users->mapWithKeys(fn($u) => [$u->id => $u->name.' ('.$u->email.')'])"
                 :selected="old('user_id')"
-                data-placeholder="Search user by name or email…"
+                data-placeholder="{{ __('notification::notification.push_notification_create.search_user_placeholder') }}"
             />
         </div>
     </div>
 </x-form-section>
 
-<x-form-section title="Content" icon="ph-article">
+<x-form-section title="{{ __('notification::notification.push_notification_create.content_section') }}" icon="ph-article">
     <div class="row g-3">
         <div class="col-md-6">
-            <x-form.input name="title" label="Title" required :value="old('title')" placeholder="Notification title" />
+            <x-form.input name="title" label="{{ __('notification::notification.push_notification_create.title_label') }}" required :value="old('title')" placeholder="{{ __('notification::notification.push_notification_create.title_placeholder') }}" />
         </div>
         <div class="col-md-6">
-            <x-form.input name="url" label="URL" :value="old('url')" placeholder="https://…" />
+            <x-form.input name="url" label="{{ __('notification::notification.push_notification_create.url_label') }}" :value="old('url')" placeholder="{{ __('notification::notification.push_notification_create.url_placeholder') }}" />
         </div>
         <div class="col-md-12">
-            <x-form.textarea name="body" label="Body" required :value="old('body')" :rows="3" placeholder="Notification message…" />
+            <x-form.textarea name="body" label="{{ __('notification::notification.push_notification_create.body_label') }}" required :value="old('body')" :rows="3" placeholder="{{ __('notification::notification.push_notification_create.body_placeholder') }}" />
         </div>
         <div class="col-md-12">
-            <x-form.textarea name="description" label="Internal Description" :value="old('description')" :rows="2" placeholder="Optional internal note…" />
+            <x-form.textarea name="description" label="{{ __('notification::notification.push_notification_create.description_label') }}" :value="old('description')" :rows="2" placeholder="{{ __('notification::notification.push_notification_create.description_placeholder') }}" />
         </div>
         <div class="col-md-12">
-            <x-form.file name="image" label="Image" accept="image/*" />
+            <x-form.file name="image" label="{{ __('notification::notification.push_notification_create.image_label') }}" accept="image/*" />
         </div>
     </div>
 </x-form-section>
 
 <div class="d-flex justify-content-between align-items-center">
     <a href="{{ route('admin.push.notification.index') }}" class="btn btn-outline-secondary">
-        <i class="ph-x me-1"></i>Cancel
+        <i class="ph-x me-1"></i>{{ __('foundation::foundation.common.cancel') }}
     </a>
     <x-primary-button id="submit-button" class="px-5">
-        <i class="ph-paper-plane-tilt me-1"></i>Send Notification
+        <i class="ph-paper-plane-tilt me-1"></i>{{ __('notification::notification.push_notification_create.send_notification') }}
     </x-primary-button>
 </div>
 

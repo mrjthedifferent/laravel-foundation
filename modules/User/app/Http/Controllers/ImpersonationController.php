@@ -24,7 +24,7 @@ class ImpersonationController extends Controller
         $action->execute($request->user(), $user);
 
         return redirect()->route('admin.dashboard')
-            ->with('info', "You are now signed in as {$user->name}.");
+            ->with('info', __('user::user.impersonation.started', ['name' => $user->name]));
     }
 
     /**
@@ -37,6 +37,6 @@ class ImpersonationController extends Controller
         $user = $action->execute();
 
         return redirect()->route('admin.users.show', $user)
-            ->with('success', 'You are back in your own account.');
+            ->with('success', __('user::user.impersonation.stopped'));
     }
 }

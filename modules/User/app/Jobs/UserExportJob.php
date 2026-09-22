@@ -24,13 +24,13 @@ class UserExportJob extends ExportJob
             ->map(function (User $user) use (&$sl): array {
                 return [
                     'SL' => $sl++,
-                    'Name' => $user->name ?: '',
-                    'Email' => $user->email ?: '',
-                    'Phone' => $user->phone ?: '',
-                    'Gender' => $user->gender ? ucfirst($user->gender->value) : '',
-                    'Role' => $user->roles->pluck('name')->implode(', '),
-                    'Account Status' => $user->is_active ? 'Active' : 'Inactive',
-                    'Registration Date' => $user->created_at->format('d-M-Y h:i:s A'),
+                    __('foundation::foundation.common.name') => $user->name ?: '',
+                    __('user::user.view.col_email') => $user->email ?: '',
+                    __('user::user.view.col_phone') => $user->phone ?: '',
+                    __('user::user.index.gender_label') => $user->gender ? ucfirst($user->gender->value) : '',
+                    __('user::user.index.role_label') => $user->roles->pluck('name')->implode(', '),
+                    __('user::user.export.account_status_col') => $user->is_active ? __('foundation::foundation.common.active') : __('foundation::foundation.common.inactive'),
+                    __('user::user.export.registration_date_col') => $user->created_at->format('d-M-Y h:i:s A'),
                 ];
             })->toArray();
     }
@@ -38,7 +38,7 @@ class UserExportJob extends ExportJob
     #[Override]
     protected function title(): string
     {
-        return 'User List';
+        return __('user::user.index.breadcrumb');
     }
 
     #[Override]
@@ -50,6 +50,6 @@ class UserExportJob extends ExportJob
     #[Override]
     protected function emptyMessage(): string
     {
-        return 'No Data Found For Export';
+        return __('user::user.errors.no_data_found_for_export');
     }
 }

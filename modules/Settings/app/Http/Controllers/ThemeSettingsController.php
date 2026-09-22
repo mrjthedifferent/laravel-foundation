@@ -74,7 +74,7 @@ class ThemeSettingsController extends Controller
 
         Cache::forget(SettingsServiceProvider::cacheKey());
 
-        return redirect()->back()->with('success', 'Theme settings updated successfully');
+        return redirect()->back()->with('success', __('settings::settings.flash.theme_updated'));
     }
 
     /**

@@ -17,8 +17,8 @@ final readonly class ResetPasswordAction
         $user->forceFill(['password' => $password, 'must_change_password' => true])->save();
 
         $user->notify(new AppNotification(
-            title: 'Password Reset',
-            body: "Your password has been reset. Your new password is: {$password}. You must change it the next time you log in.",
+            title: __('user::user.notifications.password_reset_title'),
+            body: __('user::user.notifications.password_reset_body', ['password' => $password]),
             data: ['type' => 'password_reset'],
             channels: ['database', 'mail', 'fcm'],
         ));

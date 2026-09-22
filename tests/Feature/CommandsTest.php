@@ -71,15 +71,32 @@ class CommandsTest extends TestCase
         foreach ([
             'module.json', 'composer.json', 'routes/web.php', 'config/permissions.php', 'resources/views/index.blade.php',
             'app/Providers/ProductCategoryServiceProvider.php', 'app/Models/ProductCategory.php', 'tests/Feature/ProductCategoryTest.php',
+            'lang/en/productcategory.php',
         ] as $file) {
             $this->assertFileExists($module.'/'.$file);
         }
 
+        $lang = require $module.'/lang/en/productcategory.php';
+
         foreach (File::allFiles($module) as $file) {
-            $this->assertStringNotContainsString('__', str_replace('__DIR__', '', $file->getContents()), $file->getRelativePathname());
+            $contents = $file->getContents();
+            $this->assertDoesNotMatchRegularExpression('/__[A-Z_]+__/', str_replace('__DIR__', '', $contents), $file->getRelativePathname());
 
             if ($file->getExtension() === 'php' && ! str_ends_with($file->getFilename(), '.blade.php')) {
-                $this->assertNotEmpty(token_get_all($file->getContents(), TOKEN_PARSE));
+                $this->assertNotEmpty(token_get_all($contents, TOKEN_PARSE));
+            }
+
+            // A stub importing a package class that was since removed only fails once the page is requested.
+            preg_match_all('/^use (Mrj\\\\Foundation\\\\[\w\\\\]+);/m', $contents, $imports);
+            foreach ($imports[1] as $class) {
+                $this->assertTrue(class_exists($class) || interface_exists($class) || trait_exists($class), "{$file->getRelativePathname()} imports missing $class");
+            }
+
+            preg_match_all("/__\('(productcategory|foundation)::\\1\.([\w.]+)'\)/", $contents, $keys, PREG_SET_ORDER);
+            foreach ($keys as [, $namespace, $key]) {
+                $resolved = $namespace === 'foundation' ? __("foundation::foundation.$key") : data_get($lang, $key);
+                $this->assertIsString($resolved, "{$file->getRelativePathname()} uses unknown key $namespace::$key");
+                $this->assertNotSame("foundation::foundation.$key", $resolved);
             }
         }
 

@@ -1,32 +1,32 @@
 @extends('errorreport::layouts.master')
 @section('breadcrumb')
-<span class="breadcrumb-item active">All Errors</span>
+<span class="breadcrumb-item active">{{ __('errorreport::errorreport.index.breadcrumb') }}</span>
 @endsection
 
 @section('content')
 <x-search-card>
     <div class="col-md-4 mb-2">
-        <x-form.input name="search" label="Search" :value="request('search')" placeholder="Message, file, path…" />
+        <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('errorreport::errorreport.index.search_placeholder') }}" />
     </div>
     <div class="col-md-4 mb-2">
-        <x-form.input name="exception_class" label="Exception" :value="request('exception_class')" placeholder="Exception class" />
+        <x-form.input name="exception_class" label="{{ __('errorreport::errorreport.index.exception_label') }}" :value="request('exception_class')" placeholder="{{ __('errorreport::errorreport.index.exception_placeholder') }}" />
     </div>
      <div class="col-md-4 mb-2">
-        <x-form.select name="resolved" label="Status" :options="['' => 'All', '0' => 'Unresolved', '1' => 'Resolved']" :selected="request('resolved')" />
+        <x-form.select name="resolved" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('errorreport::errorreport.index.status_all'), '0' => __('errorreport::errorreport.index.status_unresolved'), '1' => __('errorreport::errorreport.index.status_resolved')]" :selected="request('resolved')" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="Error Reports" :data="$errorReports">
+<x-table-view-pagination title="{{ __('errorreport::errorreport.index.title') }}" :data="$errorReports">
     <thead>
         <tr>
             <th>#</th>
-            <th>Exception</th>
-            <th>Message</th>
-            <th>File</th>
-            <th>Occurrences</th>
-            <th>Last Seen</th>
-            <th>Status</th>
-            <th class="text-end">Action</th>
+            <th>{{ __('errorreport::errorreport.index.exception_label') }}</th>
+            <th>{{ __('errorreport::errorreport.index.col_message') }}</th>
+            <th>{{ __('errorreport::errorreport.index.col_file') }}</th>
+            <th>{{ __('errorreport::errorreport.index.col_occurrences') }}</th>
+            <th>{{ __('errorreport::errorreport.index.col_last_seen') }}</th>
+            <th>{{ __('foundation::foundation.common.status') }}</th>
+            <th class="text-end">{{ __('foundation::foundation.common.action') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -50,16 +50,16 @@
             </td>
             <td>
                 @if ($report->isResolved())
-                    <span class="badge bg-success-subtle text-success border border-success-subtle">Resolved</span>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">{{ __('errorreport::errorreport.index.status_resolved') }}</span>
                 @else
-                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Open</span>
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ __('errorreport::errorreport.index.open') }}</span>
                 @endif
             </td>
             <td class="text-end">
                 <x-dropdown-menu>
                     @can('View Error Report')
                     <x-dropdown-link :url="route('admin.error-reports.show', $report)">
-                        <i class="ph-eye me-2"></i> View
+                        <i class="ph-eye me-2"></i> {{ __('errorreport::errorreport.index.view') }}
                     </x-dropdown-link>
                     @endcan
                     @can('Resolve Error Report')
@@ -67,7 +67,7 @@
                     <form action="{{ route('admin.error-reports.resolve', $report) }}" method="POST" class="d-inline">
                         @csrf
                         <button type="submit" class="dropdown-item">
-                            <i class="ph-check-circle me-2"></i> Mark Resolved
+                            <i class="ph-check-circle me-2"></i> {{ __('errorreport::errorreport.index.mark_resolved') }}
                         </button>
                     </form>
                     @endif
@@ -75,8 +75,8 @@
                     @can('Delete Error Report')
                     <button type="button" class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.error-reports.destroy', $report) }}"
-                        data-text="Are you sure you want to delete this error report?">
-                        <i class="ph-trash me-2"></i> Delete
+                        data-text="{{ __('errorreport::errorreport.index.delete_confirm') }}">
+                        <i class="ph-trash me-2"></i> {{ __('errorreport::errorreport.index.delete') }}
                     </button>
                     @endcan
                 </x-dropdown-menu>

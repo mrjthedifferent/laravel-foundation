@@ -50,7 +50,7 @@ class ActivityLogController extends Controller
         $action->execute($id);
 
         return redirect()->route('admin.activity-logs.index')
-            ->with('success', 'Activity log deleted successfully.');
+            ->with('success', __('activitylog::activitylog.flash.activity_log_deleted'));
     }
 
     public function trackIpInfo(Request $request, GetIpInfoAction $action)
@@ -60,13 +60,13 @@ class ActivityLogController extends Controller
         $ip = $request->get('ip');
 
         if (empty($ip)) {
-            return '<div class="alert alert-danger">No IP address provided.</div>';
+            return '<div class="alert alert-danger">'.__('activitylog::activitylog.errors.no_ip_provided').'</div>';
         }
 
         $info = $action->execute($ip);
 
         if ($info['country'] === 'Unknown' && $info['location'] === null) {
-            return '<div class="alert alert-warning">Could not retrieve information for IP: '.e($ip).'</div>';
+            return '<div class="alert alert-warning">'.__('activitylog::activitylog.errors.ip_info_not_found', ['ip' => e($ip)]).'</div>';
         }
 
         return view('activitylog::partials.ip_info', $info);
@@ -79,6 +79,6 @@ class ActivityLogController extends Controller
         $filters = array_merge($request->all(), ['format' => $request->input('format', 'xlsx')]);
         $action->execute($request->user(), $filters);
 
-        return back()->with('success', 'Export queued. You will receive a notification when it is ready for download.');
+        return back()->with('success', __('activitylog::activitylog.flash.export_queued'));
     }
 }

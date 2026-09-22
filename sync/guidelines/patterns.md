@@ -14,7 +14,7 @@ class ThingController extends Controller
         $action->execute(ThingData::from($request->validated()));
 
         return redirect()->route('admin.things.index')
-            ->with('success', 'Thing created successfully');
+            ->with('success', __('thing::thing.flash.created'));
     }
 }
 ```

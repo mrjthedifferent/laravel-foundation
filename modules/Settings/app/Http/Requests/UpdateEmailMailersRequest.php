@@ -46,19 +46,19 @@ class UpdateEmailMailersRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email_mailers.required' => 'At least one mailer must be configured.',
-            'email_mailers.*.TYPE.required' => 'Each mailer needs a unique name.',
-            'email_mailers.*.VALUE.transport.in' => 'Select a supported transport for each mailer.',
-            'email_mailers.*.VALUE.host.required' => 'Host is required for an SMTP mailer.',
-            'email_mailers.*.VALUE.port.required' => 'Port is required for an SMTP mailer.',
-            'email_mailers.*.VALUE.port.integer' => 'Port must be a number between 1 and 65535.',
-            'email_mailers.*.VALUE.port.between' => 'Port must be a number between 1 and 65535.',
-            'email_mailers.*.VALUE.tenant_id.required' => 'Tenant ID is required for a Microsoft 365 (OAuth2) mailer.',
-            'email_mailers.*.VALUE.client_id.required' => 'Client ID is required for a Microsoft 365 (OAuth2) mailer.',
-            'email_mailers.*.VALUE.client_secret.required' => 'Client Secret is required for a Microsoft 365 (OAuth2) mailer.',
-            'email_mailers.*.VALUE.mailbox.required' => 'Mailbox is required for a Microsoft 365 (OAuth2) mailer.',
-            'email_mailers.*.VALUE.mailbox.email' => 'Mailbox must be the full email address of the sending mailbox.',
-            'email_mailer.in' => 'The active mailer must be one of the mailers listed below.',
+            'email_mailers.required' => __('settings::settings.errors.email_mailers_required'),
+            'email_mailers.*.TYPE.required' => __('settings::settings.errors.email_mailer_type_required'),
+            'email_mailers.*.VALUE.transport.in' => __('settings::settings.errors.email_mailer_transport_in'),
+            'email_mailers.*.VALUE.host.required' => __('settings::settings.errors.email_mailer_host_required'),
+            'email_mailers.*.VALUE.port.required' => __('settings::settings.errors.email_mailer_port_required'),
+            'email_mailers.*.VALUE.port.integer' => __('settings::settings.errors.email_mailer_port_range'),
+            'email_mailers.*.VALUE.port.between' => __('settings::settings.errors.email_mailer_port_range'),
+            'email_mailers.*.VALUE.tenant_id.required' => __('settings::settings.errors.email_mailer_tenant_id_required'),
+            'email_mailers.*.VALUE.client_id.required' => __('settings::settings.errors.email_mailer_client_id_required'),
+            'email_mailers.*.VALUE.client_secret.required' => __('settings::settings.errors.email_mailer_client_secret_required'),
+            'email_mailers.*.VALUE.mailbox.required' => __('settings::settings.errors.email_mailer_mailbox_required'),
+            'email_mailers.*.VALUE.mailbox.email' => __('settings::settings.errors.email_mailer_mailbox_email'),
+            'email_mailer.in' => __('settings::settings.errors.email_mailer_active_in'),
         ];
     }
 

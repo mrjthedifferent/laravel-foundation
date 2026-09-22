@@ -1,1 +1,1 @@
-<x-module-layout route="admin.role.index" label="Roles & Permissions" />
+<x-module-layout route="admin.role.index" :label="__('rolepermission::rolepermission.layouts.label')" />

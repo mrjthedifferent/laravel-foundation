@@ -89,7 +89,7 @@ class UserController extends Controller
         $action->execute(UserData::from($request->validated()));
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'User created successfully');
+            ->with('success', __('user::user.flash.user_created'));
     }
 
     /**
@@ -134,7 +134,7 @@ class UserController extends Controller
 
         $action->execute($user->id, UserData::from($data));
 
-        return back()->with('success', 'User updated successfully');
+        return back()->with('success', __('user::user.flash.user_updated'));
     }
 
     /**
@@ -147,11 +147,11 @@ class UserController extends Controller
         $result = $action->execute($user, AccountAction::Delete);
 
         if (! $result) {
-            return back()->with('error', 'Failed to delete user');
+            return back()->with('error', __('user::user.errors.delete_failed'));
         }
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'User deleted successfully');
+            ->with('success', __('user::user.flash.user_deleted'));
     }
 
     /**
@@ -162,7 +162,7 @@ class UserController extends Controller
         $this->authorize('manageAccount', $user);
 
         if (app()->environment('production')) {
-            return back()->with('error', 'Account management unavailable in production');
+            return back()->with('error', __('user::user.errors.account_management_unavailable'));
         }
 
         $accountAction = AccountAction::from($request->validated('action'));
@@ -170,14 +170,14 @@ class UserController extends Controller
 
         if ($result) {
             if ($accountAction === AccountAction::Reset) {
-                return back()->with('success', 'User account reset successfully');
+                return back()->with('success', __('user::user.flash.account_reset'));
             }
 
             return redirect()->route('admin.users.index')
-                ->with('success', 'User account deleted successfully');
+                ->with('success', __('user::user.flash.account_deleted'));
         }
 
-        return back()->with('error', 'Failed to manage user account');
+        return back()->with('error', __('user::user.errors.manage_account_failed'));
     }
 
     /**
@@ -198,16 +198,16 @@ class UserController extends Controller
         $this->authorize('verifyContact', $user);
 
         if (empty($user->phone)) {
-            return back()->with('error', 'User has no phone number.');
+            return back()->with('error', __('user::user.errors.no_phone'));
         }
 
         if ($user->phone_verified_at) {
-            return back()->with('info', 'Phone is already verified.');
+            return back()->with('info', __('user::user.flash.phone_already_verified'));
         }
 
         $action->execute($user, 'phone');
 
-        return back()->with('success', 'Phone verified successfully.');
+        return back()->with('success', __('user::user.flash.phone_verified'));
     }
 
     /**
@@ -218,16 +218,16 @@ class UserController extends Controller
         $this->authorize('verifyContact', $user);
 
         if (empty($user->email)) {
-            return back()->with('error', 'User has no email address.');
+            return back()->with('error', __('user::user.errors.no_email'));
         }
 
         if ($user->email_verified_at) {
-            return back()->with('info', 'Email is already verified.');
+            return back()->with('info', __('user::user.flash.email_already_verified'));
         }
 
         $action->execute($user, 'email');
 
-        return back()->with('success', 'Email verified successfully.');
+        return back()->with('success', __('user::user.flash.email_verified'));
     }
 
     /**
@@ -239,7 +239,7 @@ class UserController extends Controller
 
         $action->execute($user);
 
-        return back()->with('success', 'Password reset successfully');
+        return back()->with('success', __('user::user.flash.password_reset'));
     }
 
     /**
@@ -251,7 +251,7 @@ class UserController extends Controller
 
         $action->execute($user->id, UserData::from(['is_active' => $request->validated('is_active')]));
 
-        return back()->with('success', 'User status updated successfully');
+        return back()->with('success', __('user::user.flash.status_updated'));
     }
 
     /**
@@ -273,7 +273,7 @@ class UserController extends Controller
 
         $action->execute(Auth::user(), $request->file('users'));
 
-        return back()->with('success', 'Import queued. You will receive a notification when it is ready for download.');
+        return back()->with('success', __('user::user.flash.queued', ['type' => 'Import']));
     }
 
     /**
@@ -286,6 +286,6 @@ class UserController extends Controller
         $filters = array_merge($request->all(), ['format' => $request->input('format', 'xlsx')]);
         $action->execute($request->user(), $filters);
 
-        return back()->with('success', 'Export queued. You will receive a notification when it is ready for download.');
+        return back()->with('success', __('user::user.flash.queued', ['type' => 'Export']));
     }
 }

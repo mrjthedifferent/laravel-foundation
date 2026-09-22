@@ -1,7 +1,7 @@
 @extends('settings::layouts.master')
 
 @section('breadcrumb')
-<span class="breadcrumb-item active">System Settings</span>
+<span class="breadcrumb-item active">{{ __('settings::settings.index.breadcrumb') }}</span>
 @endsection
 
 @section('content')
@@ -17,9 +17,9 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
     {{-- ── Sticky unsaved-changes bar ── --}}
     <div id="save-bar" class="d-none mb-3 sticky-top" style="z-index:1020;">
         <div class="alert alert-warning d-flex align-items-center justify-content-between py-2 px-3 mb-0 rounded-0 border-start-0 border-end-0">
-            <span><i class="ph-warning-circle me-2"></i>You have <strong>unsaved changes</strong> — remember to save.</span>
+            <span><i class="ph-warning-circle me-2"></i>{!! __('settings::settings.index.unsaved_changes') !!}</span>
             <button type="submit" class="btn btn-dark btn-sm px-3">
-                <i class="ph-floppy-disk me-1"></i> Save Now
+                <i class="ph-floppy-disk me-1"></i> {{ __('settings::settings.index.save_now') }}
             </button>
         </div>
     </div>
@@ -33,12 +33,12 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                     <i class="ph-gear"></i>
                 </div>
                 <div>
-                    <div class="fw-bold">System Settings</div>
-                    <div class="text-muted fs-xs">Configure your application preferences</div>
+                    <div class="fw-bold">{{ __('settings::settings.index.title') }}</div>
+                    <div class="text-muted fs-xs">{{ __('settings::settings.index.subtitle') }}</div>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary btn-sm px-4">
-                <i class="ph-floppy-disk me-1"></i> Save Changes
+                <i class="ph-floppy-disk me-1"></i> {{ __('settings::settings.index.save_changes') }}
             </button>
         </div>
 
@@ -49,7 +49,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                 <div class="col-md-2 border-end bg-body-tertiary">
                     <div class="p-2">
                         <div class="text-muted px-2 pt-2 pb-1 fs-xs fw-bold text-uppercase" style="letter-spacing:.06em;">
-                            Categories
+                            {{ __('settings::settings.index.categories') }}
                         </div>
                         <nav class="nav flex-column gap-1 nav-pills" id="settingsTabs" role="tablist">
                             @foreach ($settings as $tabKey => $group)
@@ -78,7 +78,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                 href="#{{ snakeCase($tabKey) }}"
                                 role="tab">
                                 <i class="{{ $tabIcon }}"></i>
-                                <span class="text-nowrap">{{ $tabKey }}</span>
+                                <span class="text-nowrap">{{ display_label($tabKey) }}</span>
                                 @if($visibleCount > 0)
                                 <span class="badge rounded-pill ms-auto bg-black bg-opacity-10 text-body fs-xs">{{ $visibleCount }}</span>
                                 @endif
@@ -102,16 +102,16 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                     <i class="{{ $tabIcon ?? 'ph-sliders' }}"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-bold text-uppercase fs-xs" style="letter-spacing:.04em;">{{ $tabKey }}</div>
+                                    <div class="fw-bold text-uppercase fs-xs" style="letter-spacing:.04em;">{{ display_label($tabKey) }}</div>
                                     @php $tabCount = count($group); @endphp
-                                    <div class="text-muted fs-xs">{{ $tabCount }} {{ Str::plural('setting', $tabCount) }}</div>
+                                    <div class="text-muted fs-xs">{{ trans_choice('settings::settings.index.setting_count', $tabCount) }}</div>
                                 </div>
                             </div>
 
                             <div class="row g-3">
                                 @foreach ($group as $settingKey => $setting)
                                 @php
-                                $label = ucwords(str_replace('_', ' ', $setting->key));
+                                $label = __(ucwords(str_replace('_', ' ', $setting->key)));
                                 $isWide = in_array($setting->type, ['textarea','json','multi-select','array']);
                                 $typeColors = [
                                 'text' => 'secondary',
@@ -143,7 +143,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                             @if ($setting->type === 'boolean')
                                             <div class="d-flex align-items-center justify-content-between gap-3">
                                                 <span class="text-muted fs-sm">
-                                                    {{ $setting->value ? 'Currently enabled' : 'Currently disabled' }}
+                                                    {{ $setting->value ? __('settings::settings.index.currently_enabled') : __('settings::settings.index.currently_disabled') }}
                                                 </span>
                                                 <div class="form-check form-switch mb-0">
                                                     <input type="hidden" name="{{ $setting->key }}" value="0">
@@ -164,12 +164,12 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                                     id="preview_{{ $setting->key }}"
                                                     class="img-preview d-block mx-auto mb-1"
                                                     alt="{{ $label }}">
-                                                <div class="text-muted fs-xs"><i class="ph-pencil me-1"></i>Click to change image</div>
+                                                <div class="text-muted fs-xs"><i class="ph-pencil me-1"></i>{{ __('settings::settings.index.click_to_change_image') }}</div>
                                                 @else
                                                 <img src="" id="preview_{{ $setting->key }}"
                                                     class="img-preview d-none" alt="{{ $label }}">
                                                 <i class="ph-image-square fs-2 text-muted d-block mb-1"></i>
-                                                <div class="text-muted fs-xs">Click to upload image</div>
+                                                <div class="text-muted fs-xs">{{ __('settings::settings.index.click_to_upload_image') }}</div>
                                                 @endif
                                                 <input type="file"
                                                     name="{{ $setting->key }}"
@@ -186,12 +186,12 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                                 @if ($setting->value)
                                                 <a href="{{ $setting->value }}" target="_blank"
                                                     class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1 mb-2">
-                                                    <i class="ph-file-arrow-down"></i> View Current File
+                                                    <i class="ph-file-arrow-down"></i> {{ __('settings::settings.index.view_current_file') }}
                                                 </a>
                                                 @endif
                                                 <input type="file" name="{{ $setting->key }}" id="{{ $setting->key }}"
                                                     class="form-control form-control-sm settings-input">
-                                                <div class="form-text">Leave empty to keep current file.</div>
+                                                <div class="form-text">{{ __('settings::settings.index.leave_empty_file') }}</div>
                                             </div>
 
                                             {{-- ── Integer / Float ── --}}
@@ -217,7 +217,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                             <select name="{{ $setting->key }}"
                                                 id="{{ $setting->key }}"
                                                 class="form-control form-control-sm select settings-input"
-                                                data-placeholder="Select an option..."
+                                                data-placeholder="{{ __('settings::settings.index.select_option_placeholder') }}"
                                                 {{ $setting->required ? 'data-required' : '' }}>
                                                 <option value=""></option>
                                                 @foreach ($setting->options as $optionKey => $optionValue)
@@ -233,7 +233,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                             <select name="{{ $setting->key }}[]"
                                                 id="{{ $setting->key }}"
                                                 class="form-control form-control-sm select settings-input"
-                                                data-placeholder="Select options..."
+                                                data-placeholder="{{ __('settings::settings.index.select_options_placeholder') }}"
                                                 multiple
                                                 {{ $setting->required ? 'data-required' : '' }}>
                                                 @foreach ($setting->options as $optionKey => $optionValue)
@@ -259,7 +259,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                                 id="{{ $setting->key }}"
                                                 class="form-control form-control-sm settings-input"
                                                 autocomplete="new-password"
-                                                placeholder="Leave blank to keep the current secret"
+                                                placeholder="{{ __('settings::settings.index.leave_blank_secret') }}"
                                                 {{ $setting->required ? 'data-required' : '' }}>
 
                                             {{-- ── Text (default) ── --}}
@@ -274,7 +274,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
 
                                             {{-- Description --}}
                                             @if ($setting->description)
-                                            <div class="form-text mt-1">{{ $setting->description }}</div>
+                                            <div class="form-text mt-1">{{ display_label($setting->description) }}</div>
                                             @endif
 
                                         </div>
@@ -294,9 +294,9 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
 
         {{-- ── Footer ── --}}
         <div class="card-footer d-flex justify-content-between align-items-center">
-            <span class="text-muted fs-sm"><i class="ph-info me-1"></i>Changes apply immediately after saving.</span>
+            <span class="text-muted fs-sm"><i class="ph-info me-1"></i>{{ __('settings::settings.index.footer_note') }}</span>
             <button type="submit" class="btn btn-primary px-5">
-                <i class="ph-floppy-disk me-1"></i> Save Changes
+                <i class="ph-floppy-disk me-1"></i> {{ __('settings::settings.index.save_changes') }}
             </button>
         </div>
 
@@ -358,7 +358,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                 e.preventDefault();
                 e.stopPropagation();
                 if (firstErrorTab) $('#settingsTabs a[href="#' + firstErrorTab + '"]').tab('show');
-                window.toast?.('warning', 'Required fields missing', 'Please fill in all required fields before saving.');
+                window.toast?.('warning', '{{ __('settings::settings.index.toast_required_title') }}', '{{ __('settings::settings.index.toast_required_text') }}');
                 return false;
             }
 
@@ -380,7 +380,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                 reader.onload = function(e) {
                     var $img = $('#' + previewId);
                     $img.attr('src', e.target.result).removeClass('d-none');
-                    $img.closest('.border').find('.text-muted').html('<i class="ph-pencil me-1"></i>Click to change image');
+                    $img.closest('.border').find('.text-muted').html('<i class="ph-pencil me-1"></i>{{ __('settings::settings.index.click_to_change_image') }}');
                     $img.closest('.border').find('.ph-image-square').hide();
                 };
                 reader.readAsDataURL(file);

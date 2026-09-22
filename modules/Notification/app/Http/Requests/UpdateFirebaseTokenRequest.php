@@ -26,8 +26,8 @@ class UpdateFirebaseTokenRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'token.required' => 'A Firebase token is required.',
-            'device_id.required' => 'A device ID is required.',
+            'token.required' => __('notification::notification.errors.firebase_token_required'),
+            'device_id.required' => __('notification::notification.errors.device_id_required'),
         ];
     }
 }

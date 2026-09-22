@@ -22,11 +22,11 @@ class EmailVerificationNotificationController extends Controller
         }
 
         if (empty($user->email)) {
-            return back()->with('error', 'No email address is associated with your account.');
+            return back()->with('error', __('user::user.auth.no_email_address'));
         }
 
         $user->sendEmailVerificationNotification();
 
-        return back()->with('success', 'Verification link sent successfully');
+        return back()->with('success', __('user::user.auth.verification_link_sent'));
     }
 }

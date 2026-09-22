@@ -38,9 +38,9 @@ class VerifyLoginOtpRequest extends FormRequest
         $digits = (int) config('settings.otp_digit_length.value', 6);
 
         return [
-            'id.required' => 'Email or phone number is required.',
-            'code.required' => 'The verification code is required.',
-            'code.size' => "The verification code must be {$digits} digits.",
+            'id.required' => __('user::user.errors.otp_id_required'),
+            'code.required' => __('user::user.errors.otp_code_required'),
+            'code.size' => __('user::user.errors.otp_code_size', ['digits' => $digits]),
         ];
     }
 }

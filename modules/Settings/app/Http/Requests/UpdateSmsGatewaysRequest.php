@@ -34,13 +34,13 @@ class UpdateSmsGatewaysRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'sms_gateways.required' => 'At least one gateway must be configured.',
-            'sms_gateways.*.TYPE.required' => 'Each gateway needs a unique name.',
-            'sms_gateways.*.VALUE.endpoint.required' => 'Endpoint is required for a gateway.',
-            'sms_gateways.*.VALUE.method.in' => 'Method must be GET or POST.',
-            'sms_gateways.*.VALUE.mobile_key.required' => 'Mobile key is required for a gateway.',
-            'sms_gateways.*.VALUE.message_key.required' => 'Message key is required for a gateway.',
-            'sms_gateway.in' => 'The active gateway must be one of the gateways listed below.',
+            'sms_gateways.required' => __('settings::settings.errors.sms_gateways_required'),
+            'sms_gateways.*.TYPE.required' => __('settings::settings.errors.sms_gateway_type_required'),
+            'sms_gateways.*.VALUE.endpoint.required' => __('settings::settings.errors.sms_gateway_endpoint_required'),
+            'sms_gateways.*.VALUE.method.in' => __('settings::settings.errors.sms_gateway_method_in'),
+            'sms_gateways.*.VALUE.mobile_key.required' => __('settings::settings.errors.sms_gateway_mobile_key_required'),
+            'sms_gateways.*.VALUE.message_key.required' => __('settings::settings.errors.sms_gateway_message_key_required'),
+            'sms_gateway.in' => __('settings::settings.errors.sms_gateway_active_in'),
         ];
     }
 
