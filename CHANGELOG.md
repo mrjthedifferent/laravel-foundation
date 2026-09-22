@@ -4,6 +4,14 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.0.1
+
+- Fixed: a freshly installed app failed its own `pint --test`. `foundation:install` wrote the
+  user factory and the module scan path in `config/modules.php` with fully qualified class
+  names, which the synced `pint.json` rejects. Both now use imports, and a test runs Pint over
+  every PHP file the installer writes. An app already installed only needs `vendor/bin/pint`
+  run once.
+
 ## 1.0.0 — initial release
 
 The shared base of an admin application, as one Composer package for Laravel 13 (PHP 8.3+).

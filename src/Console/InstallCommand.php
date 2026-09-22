@@ -27,7 +27,7 @@ final class InstallCommand extends Command
 
     private const string SCAN_DEFAULT = "'scan' => [\n        'enabled' => false,\n        'paths' => [\n            base_path('vendor/*/*'),\n        ],\n    ],";
 
-    private const string SCAN_FOUNDATION = "'scan' => [\n        'enabled' => true,\n        'paths' => [\n            \\Mrj\\Foundation\\Foundation::modulesPath(),\n        ],\n    ],";
+    private const string SCAN_FOUNDATION = "'scan' => [\n        'enabled' => true,\n        'paths' => [\n            Foundation::modulesPath(),\n        ],\n    ],";
 
     private const array STOCK_MIGRATIONS = ['0001_01_01_000000_create_users_table', '0001_01_01_000001_create_cache_table', '0001_01_01_000002_create_jobs_table'];
 
@@ -220,7 +220,7 @@ final class InstallCommand extends Command
             return;
         }
 
-        $this->write('config/modules.php', str_replace(self::SCAN_DEFAULT, self::SCAN_FOUNDATION, $config), 'given the scan path');
+        $this->write('config/modules.php', $this->addImport(str_replace(self::SCAN_DEFAULT, self::SCAN_FOUNDATION, $config)), 'given the scan path');
     }
 
     /**
@@ -254,9 +254,30 @@ final class InstallCommand extends Command
         }
 
         $patched = preg_replace('/\)\s*->create\(\);/', ")\n    ->withSingletons(Foundation::singletons())\n    ->create();", (string) $patched, 1);
-        $patched = preg_replace('/((?:^use [^;]+;\n)+)/m', "\$1use Mrj\\Foundation\\Foundation;\n", (string) $patched, 1);
+        $this->write($relative, $this->addImport((string) $patched), 'wired to the foundation');
+    }
 
-        $this->write($relative, (string) $patched, 'wired to the foundation');
+    /**
+     * Import Foundation into a PHP file's leading `use` block, in the alphabetical
+     * position Pint's ordered_imports expects, so the project's own style check passes.
+     */
+    private function addImport(string $code): string
+    {
+        $import = 'use Mrj\\Foundation\\Foundation;';
+
+        if (str_contains($code, $import)) {
+            return $code;
+        }
+
+        if (preg_match('/^(?:use [^;]+;\n)+/m', $code, $block, PREG_OFFSET_CAPTURE) !== 1) {
+            return (string) preg_replace('/^<\?php\n\n/', "<?php\n\n$import\n\n", $code, 1);
+        }
+
+        $lines = array_filter(explode("\n", $block[0][0]));
+        $lines[] = $import;
+        usort($lines, fn (string $a, string $b): int => strcasecmp($a, $b));
+
+        return substr_replace($code, implode("\n", $lines)."\n", $block[0][1], strlen($block[0][0]));
     }
 
     /**

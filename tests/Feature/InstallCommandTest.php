@@ -9,6 +9,7 @@ use Illuminate\Testing\PendingCommand;
 use Mrj\Foundation\Foundation;
 use Mrj\Foundation\Tests\TestCase;
 use Override;
+use Symfony\Component\Process\Process;
 
 /**
  * foundation:install against the files of a fresh `laravel new` app (Laravel 13),
@@ -150,6 +151,25 @@ class InstallCommandTest extends TestCase
         $package = json_decode($this->read('package.json'), true);
         $this->assertArrayHasKey('alpinejs', $package['devDependencies']);
         $this->assertArrayHasKey('vite', $package['devDependencies']);
+    }
+
+    /**
+     * Every PHP file the installer writes passes the project's own style check, with
+     * the pint.json foundation:sync gives it, so a fresh app's `pint --test` is green.
+     */
+    public function test_the_files_it_writes_pass_the_projects_pint_rules(): void
+    {
+        $this->install()->assertSuccessful();
+
+        $files = array_map(fn (string $file): string => "$this->project/$file", [
+            'app/Models/User.php', 'bootstrap/app.php', 'config/modules.php', 'database/factories/UserFactory.php',
+            'database/seeders/DatabaseSeeder.php', 'routes/web.php', 'tests/Feature/ExampleTest.php',
+        ]);
+
+        $pint = new Process([PHP_BINARY, Foundation::path('vendor/laravel/pint/builds/pint'), '--test', '--config', "$this->project/pint.json", ...$files]);
+        $pint->run();
+
+        $this->assertTrue($pint->isSuccessful(), $pint->getOutput().$pint->getErrorOutput());
     }
 
     public function test_a_second_run_changes_nothing(): void
