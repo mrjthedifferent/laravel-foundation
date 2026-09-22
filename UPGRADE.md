@@ -3,6 +3,33 @@
 Manual steps a project must take when moving between versions. Versions without an entry
 need only `composer update mrjthedifferent/laravel-foundation` and `php artisan migrate`.
 
+## 0.14 to 0.15 (architecture, part one)
+
+`composer update mrjthedifferent/laravel-foundation`. No migration.
+
+1. **Exports now time out after 30 minutes** (`ExportJob::$timeout = 1800`),
+   instead of running unbounded. If you export an unusually large dataset
+   that legitimately needs longer, extend `Mrj\Foundation\Support\ExportJob`'s
+   `$timeout` in your own subclass, or raise your queue worker's own timeout
+   ceiling accordingly.
+2. **If you extended a per-module `RouteServiceProvider` or
+   `EventServiceProvider`**, those classes are gone — routes now load by
+   convention from `ModuleServiceProvider::loadRoutes()`, and event listeners
+   go in a `protected array $listen` property on your module's main service
+   provider instead. Nothing to do if you never touched these.
+3. **If your own code called `Modules\ActivityLog\Models\Device`,
+   `Modules\Notification\Models\FirebaseToken`,
+   `Modules\User\Models\UserDocument` or `Modules\User\Models\UserLoginHistory`
+   relations directly off `App\Models\User`** (`$user->devices()`, etc.), no
+   change needed — they still resolve, now via `resolveRelationUsing()`
+   rather than a method defined on the base class.
+4. **BackupCleanup's scheduled cleanup commands now actually run.** They were
+   defined but never wired into Laravel's scheduler by any previous version,
+   so `system:backup:cleanup` and `clear:old-notification` have never
+   executed in any installation. If you don't want them running on their
+   default schedule (`02:00` and `12:10` daily), override them in your own
+   `routes/console.php` or disable the BackupCleanup module.
+
 ## 0.13 to 0.14 (configurability)
 
 `composer update mrjthedifferent/laravel-foundation`. No migration.

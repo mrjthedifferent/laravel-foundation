@@ -1,5 +1,49 @@
 # Changelog
 
+## 0.15.0
+
+Architecture, part one: DRY base classes and decoupling `src/` from the
+modules. This is the first of two releases covering the plan's Phase 5;
+contracts/drivers and the controller/convention cleanup follow in 0.16.0.
+
+- **`src/Models/User.php` no longer imports module classes.** `devices()`,
+  `firebaseTokens()`, `documents()`, `loginHistory()` and `latestLogin()` are
+  now registered by their owning module via Laravel's own
+  `Model::resolveRelationUsing()`, in each module's service provider `boot()`,
+  rather than being defined directly on the core abstract model. Behavior is
+  unchanged; only where the relation is declared moves.
+- **`ModuleServiceProvider` now loads a module's `routes/{web,api,console}.php`
+  by convention** and gained a `protected array $listen` property for event
+  registration. This deleted all 9 per-module `RouteServiceProvider`s and all
+  9 per-module `EventServiceProvider`s (the 3 with real listeners had those
+  listeners moved onto their module's main service provider); the stub
+  templates for both are removed too. **Fixed along the way**: BackupCleanup's
+  `routes/console.php` (the scheduled `system:backup:cleanup` and
+  `clear:old-notification` commands) was never actually loaded by anything —
+  the old `RouteServiceProvider` only mapped API/web routes — so those two
+  scheduled jobs have never run in any installation of this package. They run
+  now.
+- **New `Mrj\Foundation\Support\WidgetComposer` base class** for the 8
+  dashboard widget composers, replacing 8 copies of the same
+  permission-check-then-cache-then-build shape with one abstract class and
+  three methods per composer (`permissions()`, `key()`, `build()`).
+- **New `Mrj\Foundation\Support\QueryBuilder` base class** unifying the two
+  incompatible designs the 8 module query classes had grown independently
+  (one mutated its builder in place, the other re-wrapped it in a "new self"
+  each call that added no actual immutability, since Eloquent's Builder is
+  mutable regardless). Includes an escaped `whereLike()` helper (`%`/`_` are
+  now matched literally, not as wildcards, including on SQLite, which unlike
+  MySQL/PostgreSQL has no default `LIKE` escape character) and a `paginate()`
+  capped by `foundation.pagination.max`. One behavior change: `VerificationCodeQuery::paginate()`
+  now calls `withQueryString()` like its 7 siblings already did.
+- **New `Mrj\Foundation\Support\ExportJob` base class** for the two export
+  jobs (Activity Log, User list), replacing 55 lines of duplicated
+  handle()/failed() boilerplate — and their `ini_set('memory_limit', '-1')`/
+  `set_time_limit(0)` escape hatches — with real, bounded `$tries = 3` and
+  `$timeout = 1800` (30 minutes) job properties. **Behavior change**: an
+  export that previously ran unbounded now fails after 30 minutes. Neither
+  job had a regression test before this; both do now.
+
 ## 0.14.0
 
 Configurability: a project can now change the admin panel's URL prefix/domain,
