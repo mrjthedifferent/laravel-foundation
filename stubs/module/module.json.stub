@@ -4,6 +4,7 @@
     "description": "",
     "keywords": [],
     "priority": 20,
+    "context": "__CONTEXT__",
     "providers": [
         "Modules\\__NAME__\\Providers\\__NAME__ServiceProvider"
     ],

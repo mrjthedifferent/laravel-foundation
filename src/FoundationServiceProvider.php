@@ -10,6 +10,7 @@ use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use LogicException;
 use Mrj\Foundation\Console\InstallCommand;
 use Mrj\Foundation\Console\MakeModuleCommand;
 use Mrj\Foundation\Console\PublishCommand;
@@ -27,6 +29,9 @@ use Mrj\Foundation\Contracts\ErrorReporter;
 use Mrj\Foundation\Contracts\FileStorage;
 use Mrj\Foundation\Contracts\ImpersonationContext;
 use Mrj\Foundation\Contracts\OtpVerifier;
+use Mrj\Foundation\Contracts\TenancyContext;
+use Mrj\Foundation\Enums\ModuleContext;
+use Mrj\Foundation\Events\TenancyContextChanged;
 use Mrj\Foundation\Models\Audit;
 use Mrj\Foundation\Models\User as FoundationUser;
 use Mrj\Foundation\Services\Dashboard\ChartRegistry;
@@ -34,9 +39,12 @@ use Mrj\Foundation\Services\Dashboard\NewUsersChart;
 use Mrj\Foundation\Services\Dashboard\StatRegistry;
 use Mrj\Foundation\Services\LocalFileStorage;
 use Mrj\Foundation\Support\ImpersonationAwareAuditUserResolver;
+use Mrj\Foundation\Support\MigrationPaths;
 use Mrj\Foundation\Support\NullErrorReporter;
 use Mrj\Foundation\Support\NullImpersonationContext;
 use Mrj\Foundation\Support\NullOtpVerifier;
+use Mrj\Foundation\Support\NullTenancyContext;
+use Mrj\Foundation\Support\Tenancy;
 use Mrj\Foundation\View\Components\AppLayout;
 use Mrj\Foundation\View\Components\ChartArea;
 use Mrj\Foundation\View\Components\GuestLayout;
@@ -44,6 +52,7 @@ use Mrj\Foundation\View\Components\ModuleLayout;
 use Mrj\Foundation\View\Components\StatusBadge;
 use Mrj\Foundation\View\Composers\ThemeComposer;
 use Override;
+use Spatie\Permission\PermissionRegistrar;
 
 /** @internal */
 final class FoundationServiceProvider extends ServiceProvider
@@ -58,6 +67,8 @@ final class FoundationServiceProvider extends ServiceProvider
         $this->app->singletonIf(ErrorReporter::class, NullErrorReporter::class);
         $this->app->singletonIf(FileStorage::class, LocalFileStorage::class);
         $this->app->singletonIf(OtpVerifier::class, NullOtpVerifier::class);
+        $this->app->singletonIf(TenancyContext::class, NullTenancyContext::class);
+        $this->app->singleton(MigrationPaths::class);
 
         // One registry per request: modules add their dashboard stats and charts as they boot.
         $this->app->singleton(StatRegistry::class);
@@ -133,8 +144,10 @@ final class FoundationServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->registerTranslations();
         $this->registerRoutes();
+        $this->listenForTenancyChanges();
 
         $this->loadMigrationsFrom(Foundation::path('database/migrations'));
+        $this->app->make(MigrationPaths::class)->register(ModuleContext::Universal, Foundation::path('database/migrations'));
 
         $this->publishes([
             Foundation::path('config/foundation.php') => config_path('foundation.php'),
@@ -255,7 +268,44 @@ final class FoundationServiceProvider extends ServiceProvider
             return;
         }
 
-        Route::middleware('web')->group(Foundation::path('routes/web.php'));
+        $middleware = Tenancy::enabled()
+            ? ['web', ...(array) config('foundation.tenancy.middleware.universal', [])]
+            : 'web';
+
+        Route::middleware($middleware)->group(Foundation::path('routes/web.php'));
+    }
+
+    /**
+     * A tenancy library's "tenant initialised" and "tenancy ended" events become
+     * the one TenancyContextChanged event modules listen to. The permission cache
+     * is re-keyed here: Spatie caches every role and permission under one key,
+     * which would otherwise serve one tenant's roles to the next.
+     */
+    private function listenForTenancyChanges(): void
+    {
+        if (! Tenancy::enabled()) {
+            return;
+        }
+
+        // nwidart would hand every enabled module's migrations to the central
+        // migrator, tenant modules included. Module providers load their own
+        // migrations, so its auto-discovery adds nothing but that mistake.
+        if (config('modules.auto-discover.migrations', true) !== false) {
+            throw new LogicException(
+                "foundation.tenancy is enabled: set 'auto-discover' => ['migrations' => false] in config/modules.php, "
+                .'or tenant-module tables are created in the central database.'
+            );
+        }
+
+        foreach ((array) config('foundation.tenancy.context_changed_events', []) as $event) {
+            Event::listen($event, fn () => TenancyContextChanged::dispatch());
+        }
+
+        Event::listen(TenancyContextChanged::class, function (): void {
+            $registrar = $this->app->make(PermissionRegistrar::class);
+            $registrar->cacheKey = config('permission.cache.key').'.'.(Tenancy::context()->tenantKey() ?? 'central');
+            $registrar->clearPermissionsCollection();
+        });
     }
 
     private function registerViews(): void

@@ -134,6 +134,26 @@ Also available: `$composers`, `$commands`, `$middlewareAliases`, `$prependToGrou
 `$appendToGroups`. Nothing about a module is registered in `bootstrap/app.php` or
 `AppServiceProvider`.
 
+## One database per tenant (opt-in)
+
+For a multi-tenant app on a tenancy library such as `stancl/tenancy`, the foundation can
+run the same modules in the central app and inside every tenant. It is off by default, and
+while off nothing behaves differently. The package never depends on a tenancy library: the
+project connects its library through config and one contract.
+
+- Each module declares where it runs in `module.json`: `"context": "universal"` (the
+  default: central and every tenant, as all foundation modules are), `"central"` or
+  `"tenant"`. `foundation:make-module Invoice --context=tenant` writes it.
+- `foundation.tenancy` in `config/foundation.php` turns it on and names the library's
+  middleware per context, the central domains, and the events after which the tenant changed.
+- Bind `Mrj\Foundation\Contracts\TenancyContext` to a small adapter over the library.
+- Set `'auto-discover' => ['migrations' => false]` in `config/modules.php`, and point the
+  library's tenant migrator at `app(MigrationPaths::class)->for(ModuleContext::Tenant)`.
+
+Routes, migrations, the sidebar, the dashboard, permission seeding, settings (including the
+mailer), the settings cache and the permission cache then follow the current tenant. The
+full guide is `.ai/guidelines/foundation/tenancy.md` after `foundation:sync`.
+
 ## Customising without forking
 
 | To change | Do this |
@@ -158,7 +178,7 @@ Registration is closed by default: an administrator creates accounts.
 |---|---|
 | `foundation:install` | Wire a Laravel app to the foundation (`--dry-run` to preview; safe to run again) |
 | `foundation:super-admin {login?}` | Create a Super Admin, or promote an existing user (`--revoke`, `--list`) |
-| `foundation:make-module {Name}` | Create a module on the foundation conventions |
+| `foundation:make-module {Name}` | Create a module on the foundation conventions (`--group`, `--context`) |
 | `foundation:publish` | Copy theme assets to `public/assets` (skips when current; `--force`, `--link`) |
 | `foundation:sync` | Update shared tooling files: AI coding guidelines, `pint.json`, `.scripts/laravel.sh` (`--check` for CI) |
 
@@ -181,6 +201,7 @@ any of these waits for the next major version:
   `ChartComposer`, `QueryBuilder`,
   `ExportJob`, `Http\Controllers\Controller`, `Exceptions\Handler`), every interface in
   `Contracts`, `JsonResponseFactory`, `Roles`, `Email`, `PhoneNumber`, `FileManagerService`,
+  `Tenancy`, `MigrationPaths`, `Enums\ModuleContext`, `Events\TenancyContextChanged`,
   the validation rules and `HasImageAttribute`
 - the global helper functions, config keys, route names (`admin.*`, `api.*`), Blade component
   tags, translation keys, permission names and the database schema

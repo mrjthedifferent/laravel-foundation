@@ -1,0 +1,12 @@
+{
+    "name": "Ledger",
+    "alias": "ledger",
+    "description": "Test fixture: a tenant-context module.",
+    "keywords": [],
+    "priority": 30,
+    "context": "tenant",
+    "providers": [
+        "Mrj\\Foundation\\Tests\\Tenancy\\Modules\\Ledger\\LedgerServiceProvider"
+    ],
+    "files": []
+}

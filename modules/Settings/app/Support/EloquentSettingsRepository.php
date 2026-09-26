@@ -7,13 +7,14 @@ namespace Modules\Settings\Support;
 use Illuminate\Support\Facades\Cache;
 use Modules\Settings\Models\Setting;
 use Mrj\Foundation\Contracts\SettingsRepository;
+use Mrj\Foundation\Support\Tenancy;
 use Override;
 
 final class EloquentSettingsRepository implements SettingsRepository
 {
     private function cacheKey(): string
     {
-        return config('foundation.cache.prefix').'app_settings';
+        return Tenancy::cacheKey('app_settings');
     }
 
     #[Override]

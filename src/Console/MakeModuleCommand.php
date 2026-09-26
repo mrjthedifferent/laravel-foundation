@@ -5,6 +5,7 @@ namespace Mrj\Foundation\Console;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use Mrj\Foundation\Enums\ModuleContext;
 use Mrj\Foundation\Foundation;
 
 /** @internal */
@@ -12,7 +13,8 @@ final class MakeModuleCommand extends Command
 {
     protected $signature = 'foundation:make-module
         {name : Singular StudlyCase name, e.g. Invoice or ProductCategory}
-        {--group=administration : The sidebar parent (a key in config/sidebar.php) its page appears under}';
+        {--group=administration : The sidebar parent (a key in config/sidebar.php) its page appears under}
+        {--context=universal : Where it runs with foundation.tenancy enabled: universal, central or tenant}';
 
     protected $description = 'Create a module that follows the foundation conventions';
 
@@ -22,6 +24,12 @@ final class MakeModuleCommand extends Command
 
         if (! preg_match('/^[A-Z][A-Za-z0-9]+$/', $name)) {
             $this->components->error('The name must be StudlyCase letters and digits, e.g. Invoice.');
+
+            return self::FAILURE;
+        }
+
+        if (ModuleContext::tryFrom((string) $this->option('context')) === null) {
+            $this->components->error('The context must be one of: '.implode(', ', ModuleContext::values()).'.');
 
             return self::FAILURE;
         }
@@ -83,6 +91,7 @@ final class MakeModuleCommand extends Command
             '__VARS__' => Str::camel(Str::pluralStudly($name)),
             '__VAR__' => Str::camel($name),
             '__NAME__' => $name,
+            '__CONTEXT__' => (string) $this->option('context'),
             "'group' => 'administration'" => "'group' => '".$this->option('group')."'",
         ];
     }

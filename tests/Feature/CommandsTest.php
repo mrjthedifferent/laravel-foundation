@@ -105,8 +105,23 @@ class CommandsTest extends TestCase
         $this->assertStringContainsString("'route' => 'admin.product-categories.index'", File::get($module.'/config/menu.php'));
         $this->assertStringContainsString("'group' => 'settings'", File::get($module.'/config/menu.php'));
         $this->assertTrue(json_decode(File::get(base_path('modules_statuses.json')), true)['ProductCategory']);
+        $this->assertSame('universal', json_decode(File::get($module.'/module.json'), true)['context']);
 
         $this->artisan('foundation:make-module', ['name' => 'ProductCategory'])->assertFailed();
         $this->artisan('foundation:make-module', ['name' => 'User'])->assertFailed();
+    }
+
+    public function test_make_module_records_the_tenancy_context(): void
+    {
+        config(['modules.activators.file.statuses-file' => base_path('modules_statuses.json')]);
+
+        $this->artisan('foundation:make-module', ['name' => 'ProductCategory', '--context' => 'somewhere'])->assertFailed();
+        $this->assertDirectoryDoesNotExist(base_path('Modules/ProductCategory'));
+
+        $this->artisan('foundation:make-module', ['name' => 'ProductCategory', '--context' => 'tenant'])->assertSuccessful();
+
+        $manifest = json_decode(File::get(base_path('Modules/ProductCategory/module.json')), true);
+        $this->assertSame('tenant', $manifest['context']);
+        $this->assertSame('Modules\\ProductCategory\\Providers\\ProductCategoryServiceProvider', $manifest['providers'][0]);
     }
 }

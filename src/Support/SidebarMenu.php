@@ -13,7 +13,8 @@ use Nwidart\Modules\Facades\Module;
  * Every enabled module declares its pages in config/menu.php, naming the parent they
  * belong to; config/sidebar.php fixes the order of parents. A page is shown only when
  * its route exists (so a disabled module contributes nothing) and when the user holds
- * one of its permissions. A project can add its own rule for items carrying custom
+ * one of its permissions. With foundation.tenancy enabled, only modules that belong
+ * where the app is now (central or tenant) contribute. A project can add its own rule for items carrying custom
  * flags through Foundation::sidebarVisibility().
  *
  * @phpstan-type Item array{group: string, label: string, icon: string, route?: string, url?: string, target?: string, routes?: list<string>, permissions?: list<string>, order?: int}
@@ -91,6 +92,11 @@ final readonly class SidebarMenu
         $items = [];
 
         foreach (Module::allEnabled() as $module) {
+            // A central module's pages never show inside a tenant, nor a tenant module's centrally.
+            if (! Tenancy::moduleBelongsHere($module)) {
+                continue;
+            }
+
             foreach ((array) config(strtolower($module->getName()).'.menu', []) as $item) {
                 if (is_array($item) && isset($item['group'], $item['label'])) {
                     $items[] = $item;

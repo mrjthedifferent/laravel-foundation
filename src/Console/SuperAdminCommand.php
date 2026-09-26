@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Validator;
 use Mrj\Foundation\Support\Email;
+use Mrj\Foundation\Support\Tenancy;
 
 /**
  * The only way to make or unmake a Super Admin. A Super Admin passes every
@@ -29,6 +30,13 @@ final class SuperAdminCommand extends Command
 
     public function handle(): int
     {
+        // A Super Admin is platform staff. Inside a tenant the highest privilege is a role.
+        if (Tenancy::enabled() && Tenancy::context()->inTenant()) {
+            $this->components->error('Super Admin is a central-only flag. Give a tenant user the top role instead.');
+
+            return self::FAILURE;
+        }
+
         if ($this->option('list')) {
             return $this->list();
         }

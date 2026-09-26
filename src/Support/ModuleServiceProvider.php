@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Mrj\Foundation\Enums\ModuleContext;
 use Mrj\Foundation\Services\Dashboard\ChartRegistry;
 use Mrj\Foundation\Services\Dashboard\StatRegistry;
 use Nwidart\Modules\Traits\PathNamespace;
@@ -77,7 +78,7 @@ abstract class ModuleServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerTranslations();
         $this->registerViews();
-        $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+        $this->loadMigrations();
         $this->commands($this->commands);
         $this->loadRoutes();
 
@@ -92,11 +93,11 @@ abstract class ModuleServiceProvider extends ServiceProvider
         }
 
         foreach ($this->dashboardStats as $statComposer) {
-            app(StatRegistry::class)->register($statComposer);
+            app(StatRegistry::class)->register($statComposer, $this->moduleContext());
         }
 
         foreach ($this->dashboardCharts as $chartComposer) {
-            app(ChartRegistry::class)->register($chartComposer);
+            app(ChartRegistry::class)->register($chartComposer, $this->moduleContext());
         }
 
         foreach ($this->listen as $event => $listeners) {
@@ -121,16 +122,76 @@ abstract class ModuleServiceProvider extends ServiceProvider
         $consoleRoutes = module_path($this->name, 'routes/console.php');
 
         if (is_file($webRoutes)) {
-            Route::middleware('web')->group($webRoutes);
+            $this->registerRouteFile($webRoutes, 'web');
         }
 
         if (is_file($apiRoutes)) {
-            Route::middleware('api')->prefix('api')->name('api.')->group($apiRoutes);
+            $this->registerRouteFile($apiRoutes, 'api');
         }
 
         if (is_file($consoleRoutes)) {
             require $consoleRoutes;
         }
+    }
+
+    /**
+     * With foundation.tenancy enabled, the module's context adds its middleware
+     * stack, and a central module's routes are bound to the central domains.
+     * Route files keep their own domain() call: Laravel only lets an inner
+     * group's domain replace the outer one when it is set.
+     */
+    private function registerRouteFile(string $file, string $group): void
+    {
+        $middleware = [$group];
+        $domains = [null];
+
+        if (Tenancy::enabled()) {
+            $context = $this->moduleContext();
+            $middleware = [$group, ...(array) config("foundation.tenancy.middleware.{$context->value}", [])];
+
+            if ($context === ModuleContext::Central && (array) config('foundation.tenancy.central_domains', []) !== []) {
+                $domains = (array) config('foundation.tenancy.central_domains');
+            }
+        }
+
+        foreach ($domains as $domain) {
+            $registrar = Route::middleware($middleware);
+
+            if ($domain !== null) {
+                $registrar->domain($domain);
+            }
+
+            if ($group === 'api') {
+                $registrar->prefix('api')->name('api.');
+            }
+
+            $registrar->group($file);
+        }
+    }
+
+    /**
+     * Every module's migrations are recorded by context for a tenancy library's
+     * tenant migrator. With tenancy enabled, a tenant module's tables are not
+     * created by the central `migrate`: they belong in tenant databases only.
+     */
+    private function loadMigrations(): void
+    {
+        $path = module_path($this->name, 'database/migrations');
+        $context = $this->moduleContext();
+
+        $this->app->make(MigrationPaths::class)->register($context, $path);
+
+        if (! Tenancy::enabled() || $context !== ModuleContext::Tenant) {
+            $this->loadMigrationsFrom($path);
+        }
+    }
+
+    /**
+     * The context this module declares in its module.json.
+     */
+    protected function moduleContext(): ModuleContext
+    {
+        return Tenancy::contextOf($this->name);
     }
 
     /**

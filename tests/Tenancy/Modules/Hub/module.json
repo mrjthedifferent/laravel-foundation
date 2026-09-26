@@ -1,0 +1,12 @@
+{
+    "name": "Hub",
+    "alias": "hub",
+    "description": "Test fixture: a central-context module.",
+    "keywords": [],
+    "priority": 30,
+    "context": "central",
+    "providers": [
+        "Mrj\\Foundation\\Tests\\Tenancy\\Modules\\Hub\\HubServiceProvider"
+    ],
+    "files": []
+}

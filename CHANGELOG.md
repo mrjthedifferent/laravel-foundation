@@ -4,6 +4,63 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.3.0
+
+Opt-in support for one database per tenant. The same modules run in a central app and inside
+every tenant, on whatever tenancy library the project uses (stancl/tenancy, for example).
+It is **off by default**: with `foundation.tenancy.enabled` false, nothing behaves
+differently.
+
+**For a project**
+- `foundation.tenancy` in `config/foundation.php` has these keys:
+  - `enabled`
+  - `middleware` per context (`central`, `tenant`, `universal`)
+  - `central_domains`
+  - `context_changed_events`, the library's "tenant initialised/ended" events
+- New contract `Mrj\Foundation\Contracts\TenancyContext` (`@api`). It is bound to a no-tenancy
+  default; bind it to an adapter over your tenancy library.
+- New `@api` classes:
+  - `Mrj\Foundation\Support\Tenancy`: `enabled()`, `current()`, `moduleBelongsHere()`, `cacheKey()`.
+  - `Mrj\Foundation\Support\MigrationPaths`, which lists migration directories by context for the tenant migrator.
+  - `Mrj\Foundation\Enums\ModuleContext`.
+  - `Mrj\Foundation\Events\TenancyContextChanged`.
+
+**For a module**
+- `module.json` accepts `"context": "universal" | "central" | "tenant"`. When it is absent,
+  the module is universal, which is what every foundation module is.
+- `foundation:make-module --context=tenant` writes it.
+
+**What follows the context when tenancy is enabled**
+- Module routes get the context's middleware stack. Central routes are bound to the central
+  domains.
+- A tenant module's migrations never run in the central database.
+- The sidebar, dashboard stats and charts show only the modules that belong where the app is.
+- `RolePermissionPermissionsSeeder` seeds only those modules. A single permission can be
+  limited with `'contexts' => ['central']`.
+- Settings are re-applied to `config()`, including the mailer, whenever the tenant changes.
+  Values one tenant set never leak into the next.
+- The settings cache and the Spatie permission cache are keyed per tenant.
+- `foundation:super-admin` refuses to run inside a tenant.
+- New synced guideline: `.ai/guidelines/foundation/tenancy.md`.
+
+**Internal**
+- The settings-to-config code moved from `SettingsServiceProvider` into
+  `Modules\Settings\Support\SettingsConfigApplier`. It still runs at boot exactly as before.
+
+**Upgrading**
+
+Nothing to do unless you enable tenancy:
+
+```bash
+composer update mrjthedifferent/laravel-foundation
+php artisan foundation:sync
+```
+
+To enable tenancy:
+1. Set `'auto-discover' => ['migrations' => false]` in `config/modules.php`. The app refuses to
+   boot with tenancy on otherwise, because nwidart would create tenant-module tables centrally.
+2. Follow "One database per tenant" in the README.
+
 ## 1.2.1
 
 **Fixed**

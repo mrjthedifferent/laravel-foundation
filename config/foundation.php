@@ -148,4 +148,35 @@ return [
     */
     'umask' => 0002,
 
+    /*
+    | Opt-in support for one database per tenant. Off by default: with 'enabled'
+    | false every code path behaves as it did before this block existed.
+    |
+    | The package never names a tenancy library. A project that turns this on
+    | binds Mrj\Foundation\Contracts\TenancyContext to an adapter over its
+    | library (stancl/tenancy, for example) and names that library's middleware
+    | and events here. Each module declares its context in module.json
+    | ("context": "universal" | "central" | "tenant"; universal when absent).
+    */
+    'tenancy' => [
+        'enabled' => (bool) env('FOUNDATION_TENANCY', false),
+
+        // Middleware wrapped around each module's web and api routes, by the module's context.
+        'middleware' => [
+            'central' => [],
+            'tenant' => [],
+            'universal' => [],
+        ],
+
+        // Hosts of the central app. Central-context routes are registered on these domains only.
+        'central_domains' => array_values(array_filter(array_map(
+            'trim',
+            explode(',', (string) env('FOUNDATION_CENTRAL_DOMAINS', '')),
+        ))),
+
+        // Events after which the current tenant has changed (initialised or ended), by class
+        // name. The foundation re-applies settings and re-keys the permission cache on each.
+        'context_changed_events' => [],
+    ],
+
 ];
