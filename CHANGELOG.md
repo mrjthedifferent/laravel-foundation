@@ -4,6 +4,12 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## Unreleased
+
+**Fixed**
+- `FoundationSeeder` ran `SettingsSettingsSeeder` twice: once directly and again through
+  `SettingsDatabaseSeeder` in the module loop. It runs once now.
+
 ## 1.2.0
 
 The dashboard is the one from the design reference: a greeting, a row of headline

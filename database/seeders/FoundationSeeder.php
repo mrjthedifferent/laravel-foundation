@@ -4,7 +4,6 @@ namespace Mrj\Foundation\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\RolePermission\Database\Seeders\RolePermissionPermissionsSeeder;
-use Modules\Settings\Database\Seeders\SettingsSettingsSeeder;
 use Mrj\Foundation\Foundation;
 use Nwidart\Modules\Facades\Module;
 
@@ -17,10 +16,10 @@ class FoundationSeeder extends Seeder
 {
     public function run(): void
     {
-        // Permissions and settings are collected from every enabled module's
-        // config, the project's own modules included.
+        // Permissions are collected from every enabled module's config, the
+        // project's own modules included. Settings are collected the same way,
+        // by SettingsDatabaseSeeder in the loop below.
         $this->call(RolePermissionPermissionsSeeder::class);
-        $this->call(SettingsSettingsSeeder::class);
 
         $foundationModules = str_replace('\\', '/', Foundation::modulesPath()).'/';
 
