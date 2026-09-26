@@ -4,6 +4,17 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.3.1
+
+**Fixed**
+- With tenancy enabled, booting failed for a central module whose `routes/web.php` has the
+  shape `foundation:make-module` generates. Such a file calls
+  `->domain(config('foundation.routing.domain'))`, which is `null`, and Laravel merged that
+  `null` with the central domain into an array. The error was
+  `preg_match_all(): Argument #2 ($subject) must be of type string, array given`.
+  While a central module's route file loads, `foundation.routing.domain` now holds the
+  central domain it is bound to.
+
 ## 1.3.0
 
 Opt-in support for one database per tenant. The same modules run in a central app and inside

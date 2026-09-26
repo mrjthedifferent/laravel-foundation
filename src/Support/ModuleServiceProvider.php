@@ -137,8 +137,11 @@ abstract class ModuleServiceProvider extends ServiceProvider
     /**
      * With foundation.tenancy enabled, the module's context adds its middleware
      * stack, and a central module's routes are bound to the central domains.
-     * Route files keep their own domain() call: Laravel only lets an inner
-     * group's domain replace the outer one when it is set.
+     *
+     * Route files call ->domain(config('foundation.routing.domain')) themselves.
+     * Laravel merges a group's domain recursively when the inner one is null,
+     * turning it into an array, so while a central file loads that config key
+     * holds the same central domain the outer group sets.
      */
     private function registerRouteFile(string $file, string $group): void
     {
@@ -154,18 +157,25 @@ abstract class ModuleServiceProvider extends ServiceProvider
             }
         }
 
+        $configuredDomain = config('foundation.routing.domain');
+
         foreach ($domains as $domain) {
             $registrar = Route::middleware($middleware);
 
             if ($domain !== null) {
                 $registrar->domain($domain);
+                config(['foundation.routing.domain' => $domain]);
             }
 
             if ($group === 'api') {
                 $registrar->prefix('api')->name('api.');
             }
 
-            $registrar->group($file);
+            try {
+                $registrar->group($file);
+            } finally {
+                config(['foundation.routing.domain' => $configuredDomain]);
+            }
         }
     }
 

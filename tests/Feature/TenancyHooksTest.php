@@ -93,6 +93,11 @@ class TenancyHooksTest extends TestCase
         $this->assertSame('central.test', $route->getDomain());
         $this->assertContains(self::CENTRAL, $this->middlewareOf('hub.index'));
         $this->assertNotContains(self::TENANT, $this->middlewareOf('hub.index'));
+
+        // A route file that reads foundation.routing.domain itself (the generated shape)
+        // gets the central domain too, and the config key is back to what it was.
+        $this->assertSame('central.test', Route::getRoutes()->getByName('admin.hubs.index')->getDomain());
+        $this->assertNull(config('foundation.routing.domain'));
     }
 
     public function test_a_tenant_module_gets_the_tenant_stack_on_web_and_api_routes(): void
