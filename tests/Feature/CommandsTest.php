@@ -123,5 +123,22 @@ class CommandsTest extends TestCase
         $manifest = json_decode(File::get(base_path('Modules/ProductCategory/module.json')), true);
         $this->assertSame('tenant', $manifest['context']);
         $this->assertSame('Modules\\ProductCategory\\Providers\\ProductCategoryServiceProvider', $manifest['providers'][0]);
+
+        // Its test says it needs a tenant instead of failing centrally, and still parses.
+        $test = File::get(base_path('Modules/ProductCategory/tests/Feature/ProductCategoryTest.php'));
+        $this->assertStringContainsString("markTestSkipped('Tenant module", $test);
+        $this->assertStringContainsString("    use RefreshDatabase;\n\n    protected function setUp(): void\n", $test);
+        $this->assertNotEmpty(token_get_all($test, TOKEN_PARSE));
+    }
+
+    public function test_a_universal_modules_test_needs_no_tenant(): void
+    {
+        config(['modules.activators.file.statuses-file' => base_path('modules_statuses.json')]);
+
+        $this->artisan('foundation:make-module', ['name' => 'ProductCategory'])->assertSuccessful();
+
+        $test = File::get(base_path('Modules/ProductCategory/tests/Feature/ProductCategoryTest.php'));
+        $this->assertStringNotContainsString('markTestSkipped', $test);
+        $this->assertStringContainsString("    use RefreshDatabase;\n\n    public function test_", $test);
     }
 }

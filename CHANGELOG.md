@@ -4,6 +4,17 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.3.2
+
+**Fixed**
+- With tenancy enabled, `SettingsSettingsSeeder` seeded every module's settings everywhere.
+  A tenant module's settings reached the central database, and a central module's reached
+  tenants. It now filters by module context, as the permissions seeder does. A single setting
+  can also be limited with `'contexts' => ['central']` (or `['tenant']`).
+- `foundation:make-module --context=tenant` generated a test that could only fail: it asked
+  for the module's page on the central host, where tenant routes do not exist. The test now
+  skips with a note to initialise a tenant in `setUp()` first.
+
 ## 1.3.1
 
 **Fixed**

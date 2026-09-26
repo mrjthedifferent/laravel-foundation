@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Modules\RolePermission\Database\Seeders\RolePermissionPermissionsSeeder;
+use Modules\Settings\Database\Seeders\SettingsSettingsSeeder;
 use Modules\Settings\Models\Setting;
 use Modules\Settings\Providers\SettingsServiceProvider;
 use Mrj\Foundation\Contracts\TenancyContext;
@@ -154,6 +155,24 @@ class TenancyHooksTest extends TestCase
         $this->assertContains('Ledger', $labels());
         $this->assertNotContains('Hub', $labels());
         $this->assertContains('Users', $labels());
+    }
+
+    public function test_settings_are_seeded_by_module_context_and_entry_contexts(): void
+    {
+        $this->seed(SettingsSettingsSeeder::class);
+
+        $this->assertDatabaseHas('settings', ['key' => 'hub_setting']);
+        $this->assertDatabaseHas('settings', ['key' => 'app_name']);
+        $this->assertDatabaseMissing('settings', ['key' => 'ledger_setting']);
+
+        Setting::query()->delete();
+        $this->enterTenant('acme');
+        $this->seed(SettingsSettingsSeeder::class);
+
+        $this->assertDatabaseHas('settings', ['key' => 'ledger_setting']);
+        $this->assertDatabaseHas('settings', ['key' => 'app_name']);
+        $this->assertDatabaseMissing('settings', ['key' => 'ledger_central_setting']);
+        $this->assertDatabaseMissing('settings', ['key' => 'hub_setting']);
     }
 
     public function test_permissions_are_seeded_by_module_context_and_entry_contexts(): void

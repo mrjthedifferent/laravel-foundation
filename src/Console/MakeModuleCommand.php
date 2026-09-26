@@ -18,6 +18,25 @@ final class MakeModuleCommand extends Command
 
     protected $description = 'Create a module that follows the foundation conventions';
 
+    /**
+     * A tenant module's pages and tables exist only inside a tenant, which the
+     * package cannot set up for a project: its generated test says so instead
+     * of failing with a 404 or a missing table.
+     */
+    private const string TENANT_TEST_SETUP = <<<'PHP'
+
+
+            protected function setUp(): void
+            {
+                parent::setUp();
+
+                // A tenant module: its routes and tables exist only inside a tenant. Initialise one
+                // here with the project's tenancy test helper, request the tenant's host, then
+                // remove this line.
+                $this->markTestSkipped('Tenant module: initialise a tenant in setUp() first.');
+            }
+        PHP;
+
     public function handle(Filesystem $files): int
     {
         $name = Str::studly(Str::singular((string) $this->argument('name')));
@@ -92,6 +111,7 @@ final class MakeModuleCommand extends Command
             '__VAR__' => Str::camel($name),
             '__NAME__' => $name,
             '__CONTEXT__' => (string) $this->option('context'),
+            '__TENANT_TEST_SETUP__' => $this->option('context') === 'tenant' ? self::TENANT_TEST_SETUP : '',
             "'group' => 'administration'" => "'group' => '".$this->option('group')."'",
         ];
     }

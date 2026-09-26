@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class __NAME__Test extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase;__TENANT_TEST_SETUP__
 
     public function test_a_permitted_user_can_list___SNAKE_PLURAL__(): void
     {
