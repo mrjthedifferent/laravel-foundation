@@ -4,6 +4,15 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.5.2
+
+**Fixed**
+- A fresh install sent no email. The `email_mailer` setting was seeded as `log`, and the
+  settings take precedence over `.env`, so every email was written to the log instead. It is
+  now seeded empty, which means the mail settings in `.env` are used until someone picks a
+  mailer under Settings → Email. Existing installs keep their stored value: if yours is
+  still `log` and you did not choose it, clear it.
+
 ## 1.5.1
 
 **Fixed**

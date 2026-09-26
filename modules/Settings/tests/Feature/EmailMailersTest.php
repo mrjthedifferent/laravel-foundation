@@ -8,11 +8,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Modules\Settings\Database\Seeders\SettingsSettingsSeeder;
 use Modules\Settings\Mail\Transport\MicrosoftGraphTransport;
 use Modules\Settings\Mail\Transport\MicrosoftOAuthTransport;
 use Modules\Settings\Models\Setting;
 use Modules\Settings\Services\MailerSecretCipher;
 use Modules\Settings\Services\MicrosoftOAuthTokenService;
+use Modules\Settings\Support\SettingsConfigApplier;
+use Mrj\Foundation\Contracts\SettingsRepository;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -497,5 +500,18 @@ class EmailMailersTest extends TestCase
                 && str_contains($mime, 'Subject: Graph Hello')
                 && str_contains($mime, 'someone@example.com');
         });
+    }
+
+    public function test_a_fresh_install_sends_with_the_env_mailer(): void
+    {
+        Setting::query()->whereIn('key', ['email_mailer', 'email_mailers'])->delete();
+        $this->seed(SettingsSettingsSeeder::class);
+        $before = config('mail.default');
+
+        app(SettingsRepository::class)->forget();
+        app(SettingsConfigApplier::class)->apply();
+
+        $this->assertSame('', Setting::query()->where('key', 'email_mailer')->value('value') ?? '');
+        $this->assertSame($before, config('mail.default'));
     }
 }

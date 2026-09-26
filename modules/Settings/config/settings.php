@@ -390,9 +390,10 @@ return [
     ],
     'email_mailer' => [
         'group' => 'General',
-        'value' => 'log',
+        // Empty: the mail config in .env is used. Choosing a mailer here overrides it.
+        'value' => '',
         'type' => 'select',
-        'description' => 'Default mailer (e.g. log, smtp). Use "log" to write emails to the log instead of sending.',
+        'description' => 'Mailer to send with (e.g. smtp). Empty uses the mail settings in .env; "log" writes emails to the log instead of sending.',
         'is_visible' => false,
     ],
     /*
