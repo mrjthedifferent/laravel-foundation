@@ -229,6 +229,19 @@ class TenancyHooksTest extends TestCase
         $this->assertStringEndsWith('.central', app(PermissionRegistrar::class)->cacheKey);
     }
 
+    public function test_the_permission_registrar_follows_the_cache_store_a_tenant_switch_installs(): void
+    {
+        $registrar = app(PermissionRegistrar::class);
+        $storeOf = fn (): mixed => (fn () => $this->cache->getStore())->call($registrar);
+
+        // A tenancy library that gives each tenant its own store (as a prefixing bootstrapper does).
+        $this->app->forgetInstance('cache.store');
+        app('cache')->forgetDriver(config('cache.default'));
+        $this->enterTenant('acme');
+
+        $this->assertSame(app('cache')->store()->getStore(), $storeOf());
+    }
+
     public function test_super_admin_cannot_be_granted_inside_a_tenant(): void
     {
         $this->enterTenant('acme');

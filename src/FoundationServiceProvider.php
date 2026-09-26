@@ -303,8 +303,11 @@ final class FoundationServiceProvider extends ServiceProvider
 
         Event::listen(TenancyContextChanged::class, function (): void {
             $registrar = $this->app->make(PermissionRegistrar::class);
+            // Re-read the cache store too, not just the key: the registrar keeps the store
+            // it was built with, and a tenancy library may give each tenant its own (a
+            // prefixed or tagged store). Also drops the in-memory permissions and roles.
+            $registrar->initializeCache();
             $registrar->cacheKey = config('permission.cache.key').'.'.(Tenancy::context()->tenantKey() ?? 'central');
-            $registrar->clearPermissionsCollection();
         });
     }
 

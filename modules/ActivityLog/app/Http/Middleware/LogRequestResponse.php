@@ -122,6 +122,8 @@ class LogRequestResponse
         $exact = [
             'code', 'otp', 'cvv', 'pin', 'password', 'password_confirmation', 'current_password',
             'access_token', 'refresh_token', 'credit_card', 'card_number', 'secret',
+            // The project's own (activitylog.sensitive_keys), e.g. personal data it handles.
+            ...array_map(fn (mixed $key): string => strtolower((string) $key), (array) config('activitylog.sensitive_keys', [])),
         ];
         if (in_array($keyLower, $exact, true)) {
             return true;

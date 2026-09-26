@@ -4,6 +4,22 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.4.0
+
+**Added**
+- `activitylog.sensitive_keys`: more keys whose values the request/response log masks.
+  Use it for personal data your project handles, e.g. `['msisdn', 'national_id']`.
+  Keys match exactly, case-insensitive, at any depth, and a matching array is masked whole.
+  Publish the module config (`php artisan vendor:publish --tag=activitylog-module-config`)
+  to set it.
+
+**Fixed**
+- With tenancy enabled, the permission cache could serve a tenant a stale list of
+  permissions. That list might, for example, have been cached while the tenant's database
+  was still being migrated, so users were refused pages their role allows. The registrar
+  kept the cache store it was built with. On every tenant change it now re-reads the store,
+  and drops its in-memory permissions and roles, before being re-keyed.
+
 ## 1.3.2
 
 **Fixed**
