@@ -16,7 +16,7 @@
         window.__THEME__ = @json($theme['windowTheme']);
     </script>
 
-    <title>@yield('title', config('app.name', 'App')) — {{ config('app.name', 'App') }}</title>
+    <title>@yield('title', appName()) — {{ appName() }}</title>
     <link rel="icon" type="image/x-icon" href="{{ $theme['favicon'] }}">
 
     @include('layouts.partials.head-styles', ['theme' => $theme])

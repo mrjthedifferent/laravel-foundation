@@ -4,6 +4,14 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.5.1
+
+**Fixed**
+- Error pages, the sign-in layout, the footer and the two-factor issuer showed
+  `config('app.name')`, while the panel showed the `app_name` setting. With tenancy, each
+  tenant's pages therefore carried the platform's name. They now use the new `appName()`
+  helper: the `app_name` setting, falling back to `config('app.name')`.
+
 ## 1.5.0
 
 **Added**

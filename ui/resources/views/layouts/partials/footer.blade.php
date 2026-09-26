@@ -2,7 +2,7 @@
 <div class="navbar navbar-sm navbar-footer">
     <div class="container-fluid">
         <span>&copy; @if(date('Y') == config('app.copyright_year', date('Y'))) {{ date('Y') }} @else {{ config('app.copyright_year') }} - {{ date('Y') }} @endif
-            <a href="{{ config('app.url') }}" target="_blank">{{ config('app.name') }}</a>
+            <a href="{{ config('app.url') }}" target="_blank">{{ appName() }}</a>
         </span>
         <ul class="nav ms-auto">
             @if (Route::has('privacy-policy'))

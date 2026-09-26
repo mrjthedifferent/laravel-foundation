@@ -11,7 +11,7 @@
 
     @include('layouts.partials.head-scripts', ['theme' => $theme])
 
-    <title>{{ config('settings.app_name.value') ?: config('app.name', 'App') }}</title>
+    <title>{{ appName() }}</title>
     <link rel="icon" type="image/x-icon" href="{{ $theme['favicon'] }}">
 
     @include('layouts.partials.head-styles', ['theme' => $theme])

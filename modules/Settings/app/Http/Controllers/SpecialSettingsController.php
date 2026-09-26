@@ -266,7 +266,7 @@ class SpecialSettingsController extends Controller
         $this->authorize('editSpecial', Setting::class);
 
         $phone = $request->validated('mobile_no');
-        $message = __('settings::settings.flash.test_sms_body', ['app' => config('app.name')]);
+        $message = __('settings::settings.flash.test_sms_body', ['app' => appName()]);
         SendSmsJob::dispatch($message, $phone);
 
         return JsonResponseFactory::success(
@@ -297,8 +297,8 @@ class SpecialSettingsController extends Controller
             }
 
             $email = $request->validated('email');
-            $subject = __('settings::settings.flash.test_email_subject', ['app' => config('app.name')]);
-            $message = __('settings::settings.flash.test_email_body', ['app' => config('app.name')]);
+            $subject = __('settings::settings.flash.test_email_subject', ['app' => appName()]);
+            $message = __('settings::settings.flash.test_email_body', ['app' => appName()]);
             Mail::raw($message, static function ($message) use ($email, $subject): void {
                 $message->to($email)->subject($subject);
             });

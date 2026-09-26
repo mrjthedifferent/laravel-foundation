@@ -11,7 +11,7 @@
 
     @include('layouts.partials.head-scripts', ['theme' => $theme])
 
-    <title>{{ config('app.name', 'App') }}</title>
+    <title>{{ appName() }}</title>
     <link rel="icon" type="image/x-icon" href="{{ $theme['favicon'] }}">
 
     @include('layouts.partials.head-styles', ['theme' => $theme])
@@ -40,7 +40,7 @@
             </div>
 
             <div class="fs-xs fd-auth-copyright">
-                &copy; @if(date('Y') == config('app.copyright_year', date('Y'))) {{ date('Y') }} @else {{ config('app.copyright_year') }} - {{ date('Y') }} @endif {{ config('app.name') }}
+                &copy; @if(date('Y') == config('app.copyright_year', date('Y'))) {{ date('Y') }} @else {{ config('app.copyright_year') }} - {{ date('Y') }} @endif {{ appName() }}
             </div>
         </aside>
 

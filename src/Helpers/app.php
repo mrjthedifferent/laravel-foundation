@@ -18,3 +18,15 @@ if (! function_exists('apiTokenIdleExpirationMinutes')) {
             : (int) config('sanctum.idle_expiration', 43200);
     }
 }
+
+if (! function_exists('appName')) {
+    /**
+     * The application's name as people see it: the app_name setting (a tenant's
+     * own, with tenancy), falling back to config('app.name'). Use it anywhere
+     * the name is shown: titles, footers, error pages, emails.
+     */
+    function appName(): string
+    {
+        return (string) (config('settings.app_name.value') ?: config('app.name', 'App'));
+    }
+}

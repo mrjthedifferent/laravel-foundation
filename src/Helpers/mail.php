@@ -41,7 +41,7 @@ if (! function_exists('mailAppName')) {
      */
     function mailAppName(): string
     {
-        return config('settings.app_name.value') ?: config('app.name', 'App');
+        return appName();
     }
 }
 

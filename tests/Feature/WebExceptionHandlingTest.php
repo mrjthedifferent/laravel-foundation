@@ -49,4 +49,12 @@ class WebExceptionHandlingTest extends TestCase
         $response->assertStatus(500);
         $response->assertSee('boom');
     }
+
+    public function test_error_pages_show_the_app_name_setting(): void
+    {
+        config(['app.name' => 'Platform', 'settings.app_name.value' => 'Acme Pay']);
+
+        $this->get('/no-such-page')->assertNotFound()->assertSee('Acme Pay')->assertDontSee('Platform');
+        $this->get(route('login'))->assertOk()->assertSee('Acme Pay')->assertDontSee('Platform');
+    }
 }

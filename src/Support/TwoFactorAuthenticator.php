@@ -54,7 +54,7 @@ final class TwoFactorAuthenticator
      */
     public function otpauthUrl(User $user, string $secret): string
     {
-        $issuer = (string) (config('foundation.two_factor.issuer') ?: config('app.name'));
+        $issuer = (string) (config('foundation.two_factor.issuer') ?: appName());
 
         return $this->engine->getQRCodeUrl($issuer, (string) ($user->email ?? $user->phone ?? $user->uuid), $secret);
     }
