@@ -11,6 +11,7 @@ use Modules\User\Http\Controllers\Auth\NewPasswordController;
 use Modules\User\Http\Controllers\Auth\PasswordController;
 use Modules\User\Http\Controllers\Auth\PasswordResetLinkController;
 use Modules\User\Http\Controllers\Auth\SocialAuthController;
+use Modules\User\Http\Controllers\Auth\TwoFactorChallengeController;
 use Modules\User\Http\Controllers\Auth\VerifyEmailController;
 
 /*
@@ -20,6 +21,10 @@ use Modules\User\Http\Controllers\Auth\VerifyEmailController;
 Route::middleware('guest')->group(function (): void {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'store'])->middleware('throttle:auth');
+
+    // The second step for accounts with two-factor authentication.
+    Route::get('two-factor-challenge', [TwoFactorChallengeController::class, 'create'])->name('two-factor.login');
+    Route::post('two-factor-challenge', [TwoFactorChallengeController::class, 'store'])->middleware('throttle:auth');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
@@ -45,7 +50,7 @@ Route::middleware('auth')->group(function (): void {
         ->name('verification.send');
 
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirm');
-    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
+    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store'])->name('password.confirm.store');
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 

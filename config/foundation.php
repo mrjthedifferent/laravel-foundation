@@ -43,6 +43,24 @@ return [
     ],
 
     /*
+    | Two-factor authentication (TOTP: Google Authenticator, 1Password, ...).
+    | Off by default. When enabled, every user can turn it on from their
+    | profile; users of 'required_roles' (and super admins, if set) must turn
+    | it on before they can use the panel. User::requiresTwoFactor() decides,
+    | so a project can override it with its own rule.
+    */
+    'two_factor' => [
+        'enabled' => (bool) env('FOUNDATION_TWO_FACTOR', false),
+        'required_roles' => [],
+        'required_for_super_admins' => (bool) env('FOUNDATION_TWO_FACTOR_SUPER_ADMINS', false),
+        // Shown in the authenticator app; the app name when empty.
+        'issuer' => env('FOUNDATION_TWO_FACTOR_ISSUER'),
+        // Codes accepted either side of now, in 30-second steps (clock drift).
+        'window' => 1,
+        'recovery_codes' => 8,
+    ],
+
+    /*
     | Prepended to every cache key this package writes (settings, dashboard
     | widgets, OAuth/FCM tokens). Empty by default — set it if this package's
     | cache store is shared with something else whose keys might collide,

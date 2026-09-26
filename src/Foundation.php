@@ -12,6 +12,7 @@ use Mrj\Foundation\Exceptions\Handler;
 use Mrj\Foundation\Http\Middleware\CheckUserIsActive;
 use Mrj\Foundation\Http\Middleware\EnsureContactIsVerified;
 use Mrj\Foundation\Http\Middleware\EnsurePasswordIsChanged;
+use Mrj\Foundation\Http\Middleware\EnsureTwoFactorIsEnabled;
 use Mrj\Foundation\Http\Middleware\OptionalAuthenticateSanctum;
 use Mrj\Foundation\Http\Middleware\SlideSanctumTokenExpiry;
 use Mrj\Foundation\Models\User;
@@ -43,6 +44,8 @@ final class Foundation
             $middleware->appendToGroup('api', CheckUserIsActive::class);
             $middleware->appendToGroup('web', EnsurePasswordIsChanged::class);
             $middleware->appendToGroup('api', EnsurePasswordIsChanged::class);
+            $middleware->appendToGroup('web', EnsureTwoFactorIsEnabled::class);
+            $middleware->appendToGroup('api', EnsureTwoFactorIsEnabled::class);
             // Sliding idle expiry for Sanctum API tokens. Appended so it runs after
             // auth:sanctum has resolved the user.
             $middleware->appendToGroup('api', SlideSanctumTokenExpiry::class);

@@ -58,6 +58,15 @@
                                 <i class="ph-key"></i>{{ __('user::user.view.reset_password') }}
                             </a>
                         @endcan
+                        @if (config('foundation.two_factor.enabled') && $user->hasTwoFactorEnabled())
+                            @can('resetPassword', $user)
+                                <a href="{{ route('admin.users.two-factor.reset', $user->id) }}"
+                                    class="btn btn-sm btn-light swal-post" data-method="DELETE"
+                                    data-text="{{ __('user::user.two_factor.reset_confirm') }}">
+                                    <i class="ph-shield-slash"></i>{{ __('user::user.two_factor.reset_button') }}
+                                </a>
+                            @endcan
+                        @endif
                         @can('impersonate', $user)
                             <a href="{{ route('admin.users.impersonate', $user->id) }}"
                                 class="btn btn-sm btn-light swal-post"

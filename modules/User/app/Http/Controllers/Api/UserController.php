@@ -24,6 +24,7 @@ use Modules\User\Http\Requests\UpdateProfileRequest;
 use Modules\User\Transformers\UserResource;
 use Mrj\Foundation\Contracts\OtpVerifier;
 use Mrj\Foundation\Http\Responses\JsonResponseFactory;
+use Mrj\Foundation\Support\TwoFactorAuthenticator;
 
 /**
  * API Controller for User Management
@@ -51,7 +52,8 @@ class UserController extends Controller
     public function login(
         LoginRequest $request,
         LoginAction $loginAction,
-        TrackLoginAction $trackLoginAction
+        TrackLoginAction $trackLoginAction,
+        TwoFactorAuthenticator $twoFactor,
     ): JsonResponse {
         $user = $loginAction->execute(
             $request->validated('id'),
@@ -64,6 +66,21 @@ class UserController extends Controller
 
         if (! $user->is_active) {
             return JsonResponseFactory::forbidden(__('user::user.errors.account_not_active'));
+        }
+
+        if (config('foundation.two_factor.enabled') && $user->hasTwoFactorEnabled()) {
+            $given = $request->filled('two_factor_code') || $request->filled('recovery_code');
+            $passed = $request->filled('recovery_code')
+                ? $twoFactor->useRecoveryCode($user, $request->string('recovery_code')->value())
+                : $twoFactor->verify($user, $request->string('two_factor_code')->value());
+
+            if (! $passed) {
+                return JsonResponseFactory::error(
+                    __($given ? 'user::user.two_factor.invalid_code' : 'user::user.two_factor.code_required'),
+                    ['two_factor' => ['required']],
+                    401,
+                );
+            }
         }
 
         $token = $user->createToken('authToken', ['*'], now()->addMinutes(apiTokenIdleExpirationMinutes()))->plainTextToken;

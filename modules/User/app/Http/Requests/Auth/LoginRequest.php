@@ -81,6 +81,27 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Checks the password of an already looked-up user without signing them in
+     * (the two-factor challenge signs them in), with the same rate limit.
+     *
+     * @throws ValidationException
+     */
+    public function validateCredentials(User $user): void
+    {
+        $this->ensureIsNotRateLimited();
+
+        if (! Hash::check((string) $this->input('password'), $user->password)) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'login' => trans('auth.failed'),
+            ]);
+        }
+
+        RateLimiter::clear($this->throttleKey());
+    }
+
+    /**
      * Email logs in against users.email. A phone number is resolved through the
      * project's user model (User::scopeWherePhone()) and the password verified.
      */

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Modules\User\Actions\TrackLoginAction;
 use Modules\User\Http\Requests\Auth\LoginRequest;
+use Modules\User\Services\PendingTwoFactorLogin;
 use Mrj\Foundation\Http\Controllers\Controller;
 use Mrj\Foundation\Support\PhoneNumber;
 
@@ -25,7 +26,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request, TrackLoginAction $trackLogin): RedirectResponse
+    public function store(LoginRequest $request, TrackLoginAction $trackLogin, PendingTwoFactorLogin $twoFactor): RedirectResponse
     {
         $login = (string) $request->input('login');
 
@@ -45,6 +46,13 @@ class AuthenticatedSessionController extends Controller
 
         if ($message = $user->accessDenialMessage()) {
             return redirect()->route('login')->with('error', $message);
+        }
+
+        // Two-factor users are only signed in once they pass the challenge.
+        if (config('foundation.two_factor.enabled') && $user->hasTwoFactorEnabled()) {
+            $request->validateCredentials($user);
+
+            return $twoFactor->challenge($request, $user, $request->boolean('remember'));
         }
 
         $request->authenticate();

@@ -17,6 +17,14 @@
             </div>
         </div>
 
+        @if (config('foundation.two_factor.enabled'))
+            <div class="card card-body p-4">
+                <div class="max-w-xl">
+                    @include('profile.partials.two-factor-form')
+                </div>
+            </div>
+        @endif
+
         <div class="card card-body p-4">
             <div class="max-w-xl">
                 @include('profile.partials.delete-user-form')

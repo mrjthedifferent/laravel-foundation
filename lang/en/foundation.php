@@ -262,6 +262,7 @@ return [
         'no_email_address' => 'Your account has no email address. Please contact support or verify via phone.',
         'log_out' => 'Log out',
         'password_change_required' => 'You must set a new password before continuing.',
+        'two_factor_required' => 'Your account must use two-factor authentication. Set it up to continue.',
         'impersonation_ended' => 'Impersonation ended: :name can no longer access the system.',
         'inactive' => 'Your account is not active.',
         'contact_not_verified' => 'Your contact is not verified.',

@@ -4,9 +4,11 @@ namespace Modules\User\Http\Controllers\Auth;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\User\Actions\HandleSocialUserAction;
+use Modules\User\Services\PendingTwoFactorLogin;
 use Mrj\Foundation\Http\Controllers\Controller;
 
 class SocialAuthController extends Controller
@@ -25,7 +27,7 @@ class SocialAuthController extends Controller
     /**
      * Handle the callback from the provider.
      */
-    public function callback(string $provider, HandleSocialUserAction $action): RedirectResponse
+    public function callback(string $provider, HandleSocialUserAction $action, Request $request, PendingTwoFactorLogin $twoFactor): RedirectResponse
     {
         $this->ensureSocialAuthEnabled();
         $this->validateProvider($provider);
@@ -54,6 +56,10 @@ class SocialAuthController extends Controller
 
         if ($message = $user->accessDenialMessage()) {
             return redirect()->route('login')->with('error', $message);
+        }
+
+        if ($challenge = $twoFactor->challenge($request, $user, true)) {
+            return $challenge;
         }
 
         Auth::login($user, true);

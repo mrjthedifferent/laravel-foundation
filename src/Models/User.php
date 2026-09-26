@@ -42,6 +42,9 @@ use Spatie\Permission\Traits\HasRoles;
  * @property bool $must_change_password
  * @property bool $is_active
  * @property bool $is_super_admin
+ * @property string|null $two_factor_secret
+ * @property list<string>|null $two_factor_recovery_codes
+ * @property Carbon|null $two_factor_confirmed_at
  * @property string|null $image
  * @property string|null $gender
  * @property string|null $provider
@@ -106,6 +109,8 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
     /**
@@ -155,7 +160,55 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
             // is not optional the way Otp/ErrorReport are, so this one import
             // is kept rather than built a lifecycle-event workaround for it.
             'gender' => Gender::class,
+            'two_factor_secret' => 'encrypted',
+            'two_factor_recovery_codes' => 'encrypted:array',
+            'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Two-factor secrets never reach the audit trail, whatever the project's
+     * $auditExclude or audit.exclude says.
+     *
+     * @return array<int, string>
+     */
+    public function getAuditExclude(): array
+    {
+        return array_values(array_unique([
+            ...($this->auditExclude ?? config('audit.exclude', [])),
+            'two_factor_secret',
+            'two_factor_recovery_codes',
+        ]));
+    }
+
+    /**
+     * Two-factor authentication is on: a secret exists and the user has
+     * confirmed it with a code from their authenticator.
+     */
+    public function hasTwoFactorEnabled(): bool
+    {
+        return $this->two_factor_secret !== null && $this->two_factor_confirmed_at !== null;
+    }
+
+    /**
+     * Must this user turn on two-factor authentication before using the panel?
+     * By default: foundation.two_factor.required_roles, and super admins when
+     * foundation.two_factor.required_for_super_admins is on. Projects override
+     * this for their own rules (a per-tenant setting, for example).
+     */
+    public function requiresTwoFactor(): bool
+    {
+        if (! config('foundation.two_factor.enabled')) {
+            return false;
+        }
+
+        if ($this->isSuperAdmin() && config('foundation.two_factor.required_for_super_admins')) {
+            return true;
+        }
+
+        $roles = (array) config('foundation.two_factor.required_roles', []);
+
+        return $roles !== [] && $this->hasAnyRole($roles);
     }
 
     protected function image(): Attribute

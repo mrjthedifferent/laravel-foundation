@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/View/Components/ChartArea.php
-
-		-
 			message: '#^Relation ''user'' is not found in OwenIt\\Auditing\\Models\\Audit model\.$#'
 			identifier: larastan.relationExistence
 			count: 1
@@ -925,36 +919,6 @@ parameters:
 			path: modules/User/app/Actions/ManageUserAccountAction.php
 
 		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/User/app/Http/Controllers/Auth/AuthenticatedSessionController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/User/app/Http/Controllers/Auth/ConfirmablePasswordController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/User/app/Http/Controllers/Auth/EmailVerificationPromptController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/User/app/Http/Controllers/Auth/NewPasswordController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/User/app/Http/Controllers/Auth/PasswordResetLinkController.php
-
-		-
 			message: '#^Call to an undefined method Laravel\\Socialite\\Contracts\\Provider\:\:stateless\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -969,12 +933,6 @@ parameters:
 		-
 			message: '#^Instanceof between string\|null and Modules\\User\\Enum\\Gender will always evaluate to false\.$#'
 			identifier: instanceof.alwaysFalse
-			count: 1
-			path: modules/User/app/Http/Controllers/ProfileController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
 			count: 1
 			path: modules/User/app/Http/Controllers/ProfileController.php
 
@@ -1151,33 +1109,3 @@ parameters:
 			identifier: property.phpDocType
 			count: 1
 			path: src/Models/User.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Support/ExportJob.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/View/Components/AppLayout.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/View/Components/GuestLayout.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/View/Components/ModuleLayout.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/View/Components/StatusBadge.php

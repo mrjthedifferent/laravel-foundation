@@ -4,6 +4,28 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.5.0
+
+**Added**
+- Two-factor authentication (TOTP), off by default. `FOUNDATION_TWO_FACTOR=true` turns it on.
+  - Users turn it on from their profile: they scan a QR code, confirm a code, and receive
+    recovery codes. Turning it on or off asks for the password again.
+  - Web and social sign-in then show a code challenge. The API `login` takes
+    `two_factor_code` or `recovery_code`, and without one answers 401 with
+    `errors.two_factor`. A code is accepted only once.
+  - `foundation.two_factor.required_roles` and `required_for_super_admins` make it
+    mandatory. `EnsureTwoFactorIsEnabled` (appended to the `web` and `api` groups) sends
+    such users to set it up before anything else. Override `User::requiresTwoFactor()`
+    for a different rule.
+  - Anyone who may reset a user's password can also reset their two-factor authentication.
+- Users get the columns `two_factor_secret`, `two_factor_recovery_codes` and
+  `two_factor_confirmed_at`. Secrets are encrypted, hidden from serialisation and never
+  audited. Run `php artisan migrate` (and your tenant migrations).
+- New dependencies: `pragmarx/google2fa` and `bacon/bacon-qr-code`.
+
+**Changed**
+- `POST confirm-password` is named `password.confirm.store`.
+
 ## 1.4.0
 
 **Added**

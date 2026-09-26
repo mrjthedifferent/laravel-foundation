@@ -22,6 +22,12 @@ parameters:
     excludePaths:
         - modules/*/lang/*
 
+    # The admin UI's views are registered at runtime (View::addLocation); the
+    # app Larastan boots must know them too, so view('auth.…') names are checked
+    # against the package's own files.
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+
     # This is a package: config/*.php IS the config directory Laravel loads at
     # boot, so env() here is correct and intended, not the "called outside
     # config and breaks under config:cache" mistake this rule looks for.

@@ -27,6 +27,7 @@
     },
     "require": {
         "php": "^8.3",
+        "bacon/bacon-qr-code": "3.0",
         "google/apiclient": "^2.19",
         "guzzlehttp/guzzle": "^7.8|^8.0",
         "laravel-notification-channels/telegram": "^8.0",
@@ -38,6 +39,7 @@
         "nwidart/laravel-modules": "^13.0",
         "opcodesio/log-viewer": "^3.12",
         "owen-it/laravel-auditing": "^14.0",
+        "pragmarx/google2fa": "9.0",
         "rap2hpoutre/fast-excel": "^5.5",
         "spatie/laravel-backup": "^10.3",
         "spatie/laravel-data": "^4.18",

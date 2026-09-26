@@ -7,6 +7,7 @@ use Modules\User\Http\Controllers\DocumentController;
 use Modules\User\Http\Controllers\GlobalSearchController;
 use Modules\User\Http\Controllers\ImpersonationController;
 use Modules\User\Http\Controllers\ProfileController;
+use Modules\User\Http\Controllers\TwoFactorController;
 use Modules\User\Http\Controllers\UserController;
 use Modules\User\Http\Middleware\RequireRecentPasswordConfirmation;
 
@@ -30,6 +31,21 @@ Route::middleware(config('foundation.routing.middleware'))
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
         Route::get('/global-search', [GlobalSearchController::class, 'search'])->name('global-search');
+
+        // Two-factor authentication (foundation.two_factor.enabled)
+        Route::post('/profile/two-factor', [TwoFactorController::class, 'store'])
+            ->middleware(RequireRecentPasswordConfirmation::class)
+            ->name('profile.two-factor.enable');
+        Route::post('/profile/two-factor/confirm', [TwoFactorController::class, 'confirm'])
+            ->middleware('throttle:auth')
+            ->name('profile.two-factor.confirm');
+        Route::post('/profile/two-factor/recovery-codes', [TwoFactorController::class, 'recoveryCodes'])
+            ->middleware(RequireRecentPasswordConfirmation::class)
+            ->name('profile.two-factor.recovery-codes');
+        Route::delete('/profile/two-factor', [TwoFactorController::class, 'destroy'])
+            ->middleware(RequireRecentPasswordConfirmation::class)
+            ->name('profile.two-factor.disable');
+        Route::delete('users/{user}/two-factor', [TwoFactorController::class, 'reset'])->name('users.two-factor.reset');
 
         Route::resource('users', UserController::class);
         Route::get('reset/password/{user}', [UserController::class, 'resetPassword'])->name('user.password.reset');

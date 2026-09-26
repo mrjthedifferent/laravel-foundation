@@ -27,6 +27,9 @@ class LoginRequest extends FormRequest
         return [
             'id' => ['required', 'string', new EmailOrPhone],
             'password' => ['required', 'string'],
+            // Accounts with two-factor authentication on: one or the other.
+            'two_factor_code' => ['nullable', 'string', 'max:20'],
+            'recovery_code' => ['nullable', 'string', 'max:40'],
         ];
     }
 
