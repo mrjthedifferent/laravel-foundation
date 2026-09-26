@@ -4,6 +4,14 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.5.3
+
+**Fixed**
+- Impersonating a user who still had to change an administrator-set password sent the
+  impersonator to the password page, and they could not do anything else. The password is
+  the user's to choose, so `EnsurePasswordIsChanged` now lets impersonated sessions through
+  (`ImpersonationContext::isImpersonating()`).
+
 ## 1.5.2
 
 **Fixed**

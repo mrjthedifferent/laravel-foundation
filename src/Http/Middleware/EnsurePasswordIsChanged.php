@@ -4,6 +4,7 @@ namespace Mrj\Foundation\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Mrj\Foundation\Contracts\ImpersonationContext;
 use Mrj\Foundation\Http\Responses\JsonResponseFactory;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,7 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
  * Forces a user whose password an administrator set (ResetPasswordAction sets
  * must_change_password) to choose their own before touching anything else.
  * Runs on every web and API request, the same way CheckUserIsActive does,
- * so it cannot be bypassed by deep-linking past the profile page.
+ * so it cannot be bypassed by deep-linking past the profile page. Not while
+ * someone is impersonating them: the new password is the user's to choose.
  */
 final class EnsurePasswordIsChanged
 {
@@ -23,6 +25,8 @@ final class EnsurePasswordIsChanged
      */
     private const array ALLOWED_ROUTES = ['admin.profile.edit', 'password.update', 'logout'];
 
+    public function __construct(private readonly ImpersonationContext $impersonation) {}
+
     /**
      * @param  Closure(Request): (Response)  $next
      */
@@ -30,7 +34,7 @@ final class EnsurePasswordIsChanged
     {
         $user = $request->user();
 
-        if (! $user || ! $user->must_change_password) {
+        if (! $user || ! $user->must_change_password || $this->impersonation->isImpersonating()) {
             return $next($request);
         }
 

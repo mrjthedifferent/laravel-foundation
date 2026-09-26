@@ -70,6 +70,17 @@ class ImpersonationTest extends TestCase
         ]);
     }
 
+    public function test_an_impersonated_user_with_a_password_to_change_is_not_forced_to(): void
+    {
+        $target = $this->userWithRole('Manager');
+        $target->forceFill(['must_change_password' => true])->save();
+
+        $this->impersonate($this->superAdmin(), $target);
+
+        // The new password is the user's to choose, not the impersonator's.
+        $this->get(route('admin.dashboard'))->assertOk();
+    }
+
     public function test_impersonation_requires_a_recent_password_confirmation(): void
     {
         $admin = $this->superAdmin();
