@@ -13,24 +13,6 @@ parameters:
 			path: modules/ActivityLog/app/Actions/GetActivityLogsAction.php
 
 		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 3
-			path: modules/ActivityLog/app/Http/Controllers/ActivityLogController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 2
-			path: modules/ActivityLog/app/Http/Controllers/EmailLogController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/ActivityLog/app/Http/Controllers/SmsLogController.php
-
-		-
 			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:each\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: mixed, Closure\(OwenIt\\Auditing\\Models\\Audit\)\: void given\.$#'
 			identifier: argument.type
 			count: 1
@@ -65,36 +47,6 @@ parameters:
 			identifier: property.notFound
 			count: 1
 			path: modules/ActivityLog/tests/Feature/ActivityLogExportJobTest.php
-
-		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 2
-			path: modules/ActivityLog/tests/Feature/ActivityLogTest.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/BackupCleanup/app/Http/Controllers/BackupController.php
-
-		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/BackupCleanup/tests/Feature/BackupTest.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 2
-			path: modules/ErrorReport/app/Http/Controllers/ErrorReportController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/ErrorReport/app/Http/Controllers/ErrorReportSettingsController.php
 
 		-
 			message: '#^Access to an undefined property Modules\\ErrorReport\\Models\\ErrorReport\:\:\$last_notified_at\.$#'
@@ -235,12 +187,6 @@ parameters:
 			path: modules/ImportDownloadManager/app/Http/Controllers/DownloadImportManagerController.php
 
 		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/ImportDownloadManager/app/Http/Controllers/DownloadImportManagerController.php
-
-		-
 			message: '#^Access to an undefined property Modules\\ImportDownloadManager\\Models\\DownloadImportManager\:\:\$url\.$#'
 			identifier: property.notFound
 			count: 1
@@ -251,12 +197,6 @@ parameters:
 			identifier: property.notFound
 			count: 1
 			path: modules/ImportDownloadManager/app/Support/ImportFileDisk.php
-
-		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/ImportDownloadManager/tests/Feature/DownloadImportManagerTest.php
 
 		-
 			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$body\.$#'
@@ -299,18 +239,6 @@ parameters:
 			identifier: nullCoalesce.offset
 			count: 1
 			path: modules/Notification/app/Concerns/SendsFirebasePush.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 2
-			path: modules/Notification/app/Http/Controllers/NotificationController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 2
-			path: modules/Notification/app/Http/Controllers/PushNotificationController.php
 
 		-
 			message: '#^Access to an undefined property Modules\\Notification\\Http\\Resources\\NotificationResource\:\:\$created_at\.$#'
@@ -409,12 +337,6 @@ parameters:
 			path: modules/Notification/tests/Feature/NotificationControllerTest.php
 
 		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Notification/tests/Feature/NotificationControllerTest.php
-
-		-
 			message: '#^Access to an undefined property Modules\\Notification\\Models\\Notification\:\:\$data\.$#'
 			identifier: property.notFound
 			count: 3
@@ -467,18 +389,6 @@ parameters:
 			identifier: property.notFound
 			count: 1
 			path: modules/Otp/app/Http/Controllers/OtpVerificationController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 4
-			path: modules/Otp/app/Http/Controllers/OtpWhitelistController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Otp/app/Http/Controllers/VerificationCodeHistoryController.php
 
 		-
 			message: '#^Access to an undefined property Modules\\Otp\\Models\\OtpWhitelist\:\:\$recipient_type\.$#'
@@ -535,12 +445,6 @@ parameters:
 			path: modules/Otp/app/Models/VerificationCode.php
 
 		-
-			message: '#^Parameter \#1 \$view of method Illuminate\\Notifications\\Messages\\MailMessage\:\:view\(\) expects array\<view\-string\>\|view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Otp/app/Notifications/SendVerificationCode.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
 			identifier: property.notFound
 			count: 2
@@ -551,18 +455,6 @@ parameters:
 			identifier: property.notFound
 			count: 1
 			path: modules/Otp/tests/Feature/OtpWhitelistTest.php
-
-		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Otp/tests/Feature/OtpWhitelistTest.php
-
-		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Otp/tests/Feature/VerificationCodeHistoryTest.php
 
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$fixed_otp\.$#'
@@ -619,18 +511,6 @@ parameters:
 			path: modules/RolePermission/app/Actions/StoreRoleAction.php
 
 		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 3
-			path: modules/RolePermission/app/Http/Controllers/RolePermissionController.php
-
-		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 2
-			path: modules/RolePermission/tests/Feature/RolePermissionTest.php
-
-		-
 			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$description\.$#'
 			identifier: property.notFound
 			count: 1
@@ -679,12 +559,6 @@ parameters:
 			path: modules/Settings/app/Http/Controllers/Api/ApiSettingsController.php
 
 		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Settings/app/Http/Controllers/NotificationSettingsController.php
-
-		-
 			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$group\.$#'
 			identifier: property.notFound
 			count: 1
@@ -695,24 +569,6 @@ parameters:
 			identifier: property.notFound
 			count: 1
 			path: modules/Settings/app/Http/Controllers/SettingsController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 5
-			path: modules/Settings/app/Http/Controllers/SettingsController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 6
-			path: modules/Settings/app/Http/Controllers/SpecialSettingsController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Settings/app/Http/Controllers/ThemeSettingsController.php
 
 		-
 			message: '#^Parameter \#2 \$response of class Symfony\\Component\\Mailer\\Exception\\HttpTransportException constructor expects Symfony\\Contracts\\HttpClient\\ResponseInterface, Psr\\Http\\Message\\ResponseInterface given\.$#'
@@ -811,20 +667,8 @@ parameters:
 			path: modules/Settings/app/Support/EloquentSettingsRepository.php
 
 		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Settings/tests/Feature/EmailMailersTest.php
-
-		-
 			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$type\.$#'
 			identifier: property.notFound
-			count: 1
-			path: modules/Settings/tests/Feature/FirebaseTest.php
-
-		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
 			count: 1
 			path: modules/Settings/tests/Feature/FirebaseTest.php
 
@@ -833,18 +677,6 @@ parameters:
 			identifier: assign.propertyType
 			count: 1
 			path: modules/Settings/tests/Feature/FirebaseTest.php
-
-		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Settings/tests/Feature/NotificationSettingsTest.php
-
-		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Settings/tests/Feature/PrivacyPolicyTest.php
 
 		-
 			message: '#^Property Modules\\Settings\\Tests\\Feature\\PrivacyPolicyTest\:\:\$adminRole \(Spatie\\Permission\\Models\\Role\) does not accept Spatie\\Permission\\Contracts\\Role\.$#'
@@ -859,22 +691,10 @@ parameters:
 			path: modules/Settings/tests/Feature/SettingsApiTest.php
 
 		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 4
-			path: modules/Settings/tests/Feature/SettingsCrudTest.php
-
-		-
 			message: '#^Property Modules\\Settings\\Tests\\Feature\\SettingsCrudTest\:\:\$developerRole \(Spatie\\Permission\\Models\\Role\) does not accept Spatie\\Permission\\Contracts\\Role\.$#'
 			identifier: assign.propertyType
 			count: 1
 			path: modules/Settings/tests/Feature/SettingsCrudTest.php
-
-		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Settings/tests/Feature/SmsGatewaysTest.php
 
 		-
 			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$type\.$#'
@@ -883,22 +703,10 @@ parameters:
 			path: modules/Settings/tests/Feature/SocialAuthTest.php
 
 		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Settings/tests/Feature/SocialAuthTest.php
-
-		-
 			message: '#^Property Modules\\Settings\\Tests\\Feature\\SocialAuthTest\:\:\$adminRole \(Spatie\\Permission\\Models\\Role\) does not accept Spatie\\Permission\\Contracts\\Role\.$#'
 			identifier: assign.propertyType
 			count: 1
 			path: modules/Settings/tests/Feature/SocialAuthTest.php
-
-		-
-			message: '#^Parameter \#1 \$value of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertViewIs\(\) expects view\-string, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Settings/tests/Feature/TermsConditionsTest.php
 
 		-
 			message: '#^Property Modules\\Settings\\Tests\\Feature\\TermsConditionsTest\:\:\$adminRole \(Spatie\\Permission\\Models\\Role\) does not accept Spatie\\Permission\\Contracts\\Role\.$#'
@@ -935,12 +743,6 @@ parameters:
 			identifier: instanceof.alwaysFalse
 			count: 1
 			path: modules/User/app/Http/Controllers/ProfileController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 5
-			path: modules/User/app/Http/Controllers/UserController.php
 
 		-
 			message: '#^PHPDoc tag @return with type array\<string, string\> is incompatible with native type void\.$#'
