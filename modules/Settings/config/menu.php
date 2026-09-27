@@ -74,10 +74,10 @@ return [
     ],
     [
         'group' => 'settings',
-        'label' => 'Two-Factor',
+        'label' => 'Security',
         'icon' => 'ph-shield-check',
-        'route' => 'admin.settings.special.two_factor',
-        'routes' => ['admin.settings.special.update_two_factor'],
+        'route' => 'admin.settings.special.security',
+        'routes' => ['admin.settings.special.update_security', 'admin.settings.special.two_factor', 'admin.settings.special.update_two_factor'],
         'permissions' => ['Edit Special Setting'],
         'order' => 85,
     ],

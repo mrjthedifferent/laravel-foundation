@@ -296,7 +296,6 @@ return [
         'current_password_required' => 'Current password is required',
         'new_password_required' => 'New password is required',
         'password_confirmation_mismatch' => 'Password confirmation does not match',
-        'password_min' => 'Password must be at least 6 characters',
         'login_id_required' => 'Email or phone number is required',
         'login_password_required' => 'Password is required',
         'email_code_required_with' => 'Email verification code is required when email is provided',

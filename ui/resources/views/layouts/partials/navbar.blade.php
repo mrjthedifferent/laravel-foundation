@@ -29,6 +29,17 @@
 
         <ul class="nav navbar-group">
 
+            {{-- Only super admins get past EnsurePanelIsAvailable, so only they see this. --}}
+            @if (config('settings.maintenance_mode.value'))
+            <li class="nav-item d-flex align-items-center">
+                <a href="{{ Route::has('admin.settings.index') ? route('admin.settings.index') : '#' }}"
+                    class="badge bg-warning text-dark text-decoration-none"
+                    title="{{ __('foundation::foundation.navbar.maintenance_on_help') }}">
+                    <i class="ph-wrench"></i> {{ __('foundation::foundation.navbar.maintenance_on') }}
+                </a>
+            </li>
+            @endif
+
             @if(config('broadcasting.default') === 'reverb' && filled(config('reverb.apps.apps.0.key')))
             <li class="nav-item dropdown d-none d-sm-flex align-items-center">
                 <a href="#" id="online-user-count" class="navbar-nav-link online-indicator rounded-pill gap-2"

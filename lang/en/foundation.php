@@ -82,6 +82,8 @@ return [
     |--------------------------------------------------------------------------
     */
     'navbar' => [
+        'maintenance_on' => 'Maintenance mode',
+        'maintenance_on_help' => 'Only super admins can use the panel. Turn it off under Settings → General.',
         'search_placeholder' => 'Search or jump to…',
         'users_online' => 'Users online',
         'online_now' => 'Online now',
@@ -220,6 +222,8 @@ return [
         'service_unavailable' => 'Service Unavailable',
         'go_back' => 'Go Back',
         'return_home' => 'Return Home',
+        'maintenance' => 'Under maintenance',
+        'sign_out' => 'Sign out',
         'description' => 'The link may be old, or the page was moved. Check the address, or head back to the dashboard.',
         'generic_failure' => 'Something went wrong. Please try again.',
     ],

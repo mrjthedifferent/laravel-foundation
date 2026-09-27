@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Modules\User\Enum\Gender;
 use Modules\User\Rules\UniquePhone;
 use Mrj\Foundation\Rules\PhoneNumber;
@@ -36,7 +37,7 @@ class UpdateUserRequest extends FormRequest
             'name' => ['required', 'string', 'max:80'],
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($userId)],
             'phone' => ['nullable', 'string', new PhoneNumber, new UniquePhone((int) $userId)],
-            'password' => ['nullable', 'confirmed', 'min:6'],
+            'password' => ['nullable', 'confirmed', Password::defaults()],
             'gender' => ['nullable', Rule::in(Gender::values())],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
             'roles' => ['required', 'array', 'min:1'],

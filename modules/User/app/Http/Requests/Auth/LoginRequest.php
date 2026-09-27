@@ -134,7 +134,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), max(1, (int) config('foundation.login.max_attempts', 5)))) {
             return;
         }
 

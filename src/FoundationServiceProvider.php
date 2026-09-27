@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\FileViewFinder;
 use LogicException;
 use Mrj\Foundation\Console\InstallCommand;
@@ -140,6 +141,7 @@ final class FoundationServiceProvider extends ServiceProvider
     {
         $this->configureRuntime();
         $this->configureRateLimiting();
+        $this->configurePasswords();
         $this->configureMorphMap();
         $this->configureSuperAdmin();
         $this->registerViews();
@@ -198,6 +200,37 @@ final class FoundationServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * The rule every password form uses, from foundation.passwords (which
+     * Settings → Security overrides). Read when a form validates, so a changed
+     * setting applies at once. A project that calls Password::defaults() in its
+     * own provider replaces this; it boots later.
+     */
+    private function configurePasswords(): void
+    {
+        Password::defaults(function (): Password {
+            $rule = Password::min(max(1, (int) config('foundation.passwords.min_length', 8)));
+
+            if (config('foundation.passwords.mixed_case')) {
+                $rule->mixedCase();
+            }
+
+            if (config('foundation.passwords.numbers')) {
+                $rule->numbers();
+            }
+
+            if (config('foundation.passwords.symbols')) {
+                $rule->symbols();
+            }
+
+            if (config('foundation.passwords.uncompromised')) {
+                $rule->uncompromised();
+            }
+
+            return $rule;
+        });
+    }
+
     private function configureRateLimiting(): void
     {
         // Auth endpoints (login / forgot / reset). Keyed primarily by the
@@ -207,7 +240,7 @@ final class FoundationServiceProvider extends ServiceProvider
             $login = Str::lower(trim((string) $request->input('login', $request->input('email', ''))));
 
             return [
-                Limit::perMinute(5)->by('auth:'.$login.'|'.$request->ip()),
+                Limit::perMinute(max(1, (int) config('foundation.login.max_attempts', 5)))->by('auth:'.$login.'|'.$request->ip()),
                 Limit::perMinute(30)->by('auth-ip:'.$request->ip()),
             ];
         });

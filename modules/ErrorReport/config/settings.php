@@ -41,6 +41,7 @@ return [
     ],
     'error_report_slack_webhook' => [
         'group' => 'Error Report',
+        'config' => 'logging.channels.slack.url',
         'value' => '',
         'type' => 'text',
         'description' => 'Slack webhook URL (fallback: LOG_SLACK_WEBHOOK_URL)',

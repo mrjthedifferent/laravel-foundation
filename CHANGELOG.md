@@ -4,6 +4,30 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## Unreleased
+
+**Added**
+- Settings → Security replaces Settings → Two-Factor. It adds the password rule
+  (minimum length, mixed case, numbers, symbols, breached-password check), failed
+  sign-ins before lockout, and session lifetime to the two-factor options. The 1.6 route
+  names `admin.settings.special.two_factor` and `update_two_factor` still work.
+- Date format, date-time format and default page size are editable under Settings →
+  General. Existing projects get them with their current values on "Sync settings".
+- A setting can drive any config key: declare `'config' => 'some.config.key'` in a
+  module's `config/settings.php`, plus `'seed' => false` if a page creates it. This
+  replaces `SettingsConfigApplier::CONFIG_MAP`.
+- New config keys `foundation.passwords.*` and `foundation.login.max_attempts`.
+
+**Changed**
+- Creating a user, editing a user's password and the forced password change now use the
+  password rule (`Password::defaults()`, at least 8 characters by default) instead of
+  `min:6`.
+
+**Fixed**
+- The maintenance mode setting did nothing. It now closes the panel to everyone but super
+  admins, shows the maintenance message, and shows super admins a navbar notice while it
+  is on.
+
 ## 1.6.0
 
 **Added**

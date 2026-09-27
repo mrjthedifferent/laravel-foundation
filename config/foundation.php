@@ -49,7 +49,7 @@ return [
     | it on before they can use the panel. User::requiresTwoFactor() decides,
     | so a project can override it with its own rule.
     |
-    | Settings → Two-Factor overrides enabled, required_roles,
+    | Settings → Security overrides enabled, required_roles,
     | required_for_super_admins and issuer once it has been saved; window and
     | recovery_codes are set here only.
     */
@@ -62,6 +62,25 @@ return [
         // Codes accepted either side of now, in 30-second steps (clock drift).
         'window' => 1,
         'recovery_codes' => 8,
+    ],
+
+    /*
+    | The password rule every password form uses (Password::defaults()), and
+    | how many failed sign-ins lock a login out for a minute. Settings →
+    | Security overrides both once it has been saved.
+    */
+    'passwords' => [
+        'min_length' => 8,
+        'mixed_case' => false,
+        'numbers' => false,
+        'symbols' => false,
+        // Rejects passwords found in known data breaches (asks haveibeenpwned.com
+        // with a k-anonymous hash prefix; the password itself never leaves).
+        'uncompromised' => false,
+    ],
+
+    'login' => [
+        'max_attempts' => 5,
     ],
 
     /*
@@ -88,6 +107,7 @@ return [
     | Date/time display formats used across the admin UI's detail pages,
     | exports and notifications (list views that show a compact, minute-only
     | timestamp for space are a separate, deliberate choice and stay as-is).
+    | Editable under Settings → General; these are the values seeded there.
     */
     'formats' => [
         'date' => env('FOUNDATION_DATE_FORMAT', 'Y-m-d'),
@@ -99,7 +119,8 @@ return [
     | picker options ("Show 10/25/50/100 rows"), the default when the request
     | supplies none, and the ceiling for endpoints that accept an arbitrary
     | per_page instead of picking from 'options'. See perPage() and
-    | cappedPerPage() in src/Helpers/common.php.
+    | cappedPerPage() in src/Helpers/common.php. 'default' is editable under
+    | Settings → General (one of 'options').
     */
     'pagination' => [
         'default' => (int) env('FOUNDATION_PAGINATION_DEFAULT', 10),

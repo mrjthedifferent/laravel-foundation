@@ -29,9 +29,13 @@
     <h1 class="fd-error-title">@yield('message', __('foundation::foundation.errors.service_unavailable'))</h1>
     <p class="fd-error-text">@yield('description', __('foundation::foundation.errors.description'))</p>
 
-    <a href="/" class="btn btn-primary">
-        <i class="ph-house"></i>{{ __('foundation::foundation.errors.return_home') }}
-    </a>
+    @hasSection('actions')
+        @yield('actions')
+    @else
+        <a href="/" class="btn btn-primary">
+            <i class="ph-house"></i>{{ __('foundation::foundation.errors.return_home') }}
+        </a>
+    @endif
 </div>
 </body>
 </html>

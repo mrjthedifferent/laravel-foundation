@@ -114,6 +114,29 @@ getSystemSetting('app_name') // avoid — hits DB every time
 - Never query the `Setting` model directly in application code.
 - Never use `env()` for settings that are user-configurable at runtime.
 
+### Settings That Override Config
+
+A setting can drive a config key: declare `'config' => 'some.config.key'` and the stored value is copied onto it at boot (`SettingsConfigApplier`). Code keeps reading `config('some.config.key')`, and the key keeps its default in the config file, so it still works without the Settings module.
+
+```php
+'date_format' => [
+    'group' => 'General',
+    'config' => 'foundation.formats.date',   // no 'value': seeded from the current config/.env value
+    'type' => 'text',
+    'description' => 'How dates are shown, in PHP date() format',
+],
+'password_min_length' => [
+    'group' => 'Security',
+    'config' => 'foundation.passwords.min_length',
+    'seed' => false,          // created by its page on first save; until then config/.env decides
+    'type' => 'integer',
+    'is_visible' => false,
+],
+```
+
+- A stored `null` is not applied.
+- Use this for runtime policy an administrator may change on a live site. Keep structural config (route prefix, guards, role names, cache prefix, storage disk, tenancy) in config/`.env`: it is needed before the database, or changing it breaks URLs or data.
+
 ### Setting Types
 
 | Type | Storage | Cast |
@@ -132,5 +155,5 @@ getSystemSetting('app_name') // avoid — hits DB every time
 
 Settings that need custom UI use `is_visible => false` and are managed by dedicated pages. Two patterns:
 
-1. **Centralized (Settings module)** — OAuth, payment keys, SMS/email gateways, theme, etc. live under `SpecialSettingsController` / `ThemeSettingsController` in the Settings module.
+1. **Centralized (Settings module)** — OAuth, payment keys, SMS/email gateways, theme, security (two-factor, passwords, sign-in), etc. live under `SpecialSettingsController` / `ThemeSettingsController` / `SecuritySettingsController` in the Settings module.
 2. **Module-owned** — When a module has settings that belong to its domain (e.g. Error Report), create a settings page inside that module, add a permission (e.g. `Edit Error Report Settings`), register a gate, and add a link in the module's sidebar menu. Keep those settings `is_visible => false` so they never appear in the generic settings page.

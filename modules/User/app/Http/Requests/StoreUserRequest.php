@@ -5,6 +5,7 @@ namespace Modules\User\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Modules\User\Enum\Gender;
 use Modules\User\Rules\UniquePhone;
 use Mrj\Foundation\Rules\PhoneNumber;
@@ -32,7 +33,7 @@ class StoreUserRequest extends FormRequest
             'name' => ['required', 'string', 'max:80'],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
             'phone' => ['nullable', 'string', new PhoneNumber, new UniquePhone],
-            'password' => ['required', 'confirmed', 'min:6'],
+            'password' => ['required', 'confirmed', Password::defaults()],
             'gender' => ['nullable', Rule::in(Gender::values())],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
             'roles' => ['required', 'array', 'min:1'],

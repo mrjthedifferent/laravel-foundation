@@ -154,18 +154,32 @@ Routes, migrations, the sidebar, the dashboard, permission seeding, settings (in
 mailer), the settings cache and the permission cache then follow the current tenant. The
 full guide is `.ai/guidelines/foundation/tenancy.md` after `foundation:sync`.
 
-## Two-factor authentication (opt-in)
+## Security settings
 
-Turn it on under **Settings → Two-Factor** (or set `FOUNDATION_TWO_FACTOR=true`), and users
-can turn on TOTP two-factor authentication from their profile: they scan a QR code in any authenticator app, confirm a code, and receive
-recovery codes. Sign-in (password or social) then asks for a code, and the API's `login`
-takes `two_factor_code` or `recovery_code`. Each code works once.
+**Settings → Security** holds the security policy, so an administrator can change it
+without a deploy:
 
-The same page chooses who must set it up before they can use the panel (any roles, and
-super admins) and the issuer name shown in the authenticator app. Until that page is first
-saved, `foundation.two_factor.*` in config and `.env` decide; after that, the page does. For another
-rule, override `requiresTwoFactor(): bool` on `App\Models\User`. An administrator who may
-reset passwords can also reset a user's two-factor authentication from the user's page.
+- **Two-factor authentication** (off by default). Once it is on, users can turn on TOTP
+  two-factor authentication from their profile. They scan a QR code in any authenticator
+  app, confirm a code, and receive recovery codes. Sign-in (password or social) then asks
+  for a code, and the API's `login` takes `two_factor_code` or `recovery_code`. Each code
+  works once. The page also chooses who must set it up before they can use the panel (any
+  roles, and super admins) and the issuer name. For another rule, override
+  `requiresTwoFactor(): bool` on `App\Models\User`. An administrator who may reset
+  passwords can also reset a user's two-factor authentication from the user's page.
+- **Passwords:** minimum length; whether upper- and lower-case letters, numbers or
+  symbols are required; and whether breached passwords are rejected. The rule is Laravel's
+  `Password::defaults()`, used by every password form. A project that calls
+  `Password::defaults()` in its own provider overrides it.
+- **Sign-in:** failed attempts before a login is locked out, and session lifetime.
+
+Until the page is first saved, `foundation.two_factor.*`, `foundation.passwords.*`,
+`foundation.login.*` and `session.lifetime` (config and `.env`) decide. After that, the
+page does.
+
+**Maintenance mode** (Settings → General) closes the panel to everyone but super admins.
+Other signed-in users see the maintenance message and can sign out. The date formats and
+the default page size are under Settings → General too.
 
 ## Customising without forking
 
@@ -176,9 +190,10 @@ reset passwords can also reset a user's two-factor authentication from the user'
 | A module's menu, permissions or settings | `php artisan vendor:publish --tag={alias}-module-config`, then edit `config/{alias}/` |
 | Which modules are on | `modules_statuses.json`, or `php artisan module:enable Otp` |
 | Who may sign in | Override `accessDenialMessage(): ?string` on `App\Models\User` |
-| Who must use two-factor authentication | Settings → Two-Factor, or override `requiresTwoFactor(): bool` on `App\Models\User` |
+| Who must use two-factor authentication | Settings → Security, or override `requiresTwoFactor(): bool` on `App\Models\User` |
 | Where phone numbers live | Users have a `phone` column, stored in E.164 form, and can sign in with it. To keep phones in your own table instead, override `scopeWherePhone($query, ?string $phone)` on `App\Models\User` |
 | Colours, dark mode, RTL, sidebar style | Settings → Theme, or the settings seeder |
+| Let administrators change a config value | Declare the setting with `'config' => 'the.config.key'` in a module's `config/settings.php` (see `.ai/guidelines/foundation/permissions-settings.md`) |
 | PDF fonts | Put a `.ttf` in `resources/fonts` and list it under `pdf.fonts` in `config/foundation.php` |
 | Files `foundation:sync` overwrites | List them under `sync.except` in `config/foundation.php` |
 | Any text, or the language | `php artisan vendor:publish --tag=foundation-lang`, or a copy of a module's file at `resources/lang/modules/{alias}/{locale}/{alias}.php`; menu, permission and setting names in `lang/{locale}.json` |

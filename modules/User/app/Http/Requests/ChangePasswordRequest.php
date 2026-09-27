@@ -6,6 +6,7 @@ namespace Modules\User\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 use Override;
 
 class ChangePasswordRequest extends FormRequest
@@ -27,7 +28,7 @@ class ChangePasswordRequest extends FormRequest
     {
         return [
             'current_password' => ['required', 'string'],
-            'password' => ['required', 'string', 'confirmed', 'min:6'],
+            'password' => ['required', 'string', 'confirmed', Password::defaults()],
         ];
     }
 
@@ -43,7 +44,6 @@ class ChangePasswordRequest extends FormRequest
             'current_password.required' => __('user::user.errors.current_password_required'),
             'password.required' => __('user::user.errors.new_password_required'),
             'password.confirmed' => __('user::user.errors.password_confirmation_mismatch'),
-            'password.min' => __('user::user.errors.password_min'),
         ];
     }
 }
