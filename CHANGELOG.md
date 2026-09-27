@@ -146,6 +146,13 @@ To enable tenancy:
    boot with tenancy on otherwise, because nwidart would create tenant-module tables centrally.
 2. Follow "One database per tenant" in the README.
 
+## 1.2.2
+
+**Fixed**
+- `php artisan optimize` failed at `view:cache` in a project with no `resources/views`
+  folder (projects created from the skeleton before it kept one). Missing folders are
+  now left out of the view paths.
+
 ## 1.2.1
 
 **Fixed**

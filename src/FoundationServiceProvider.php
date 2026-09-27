@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\View\FileViewFinder;
 use LogicException;
 use Mrj\Foundation\Console\InstallCommand;
 use Mrj\Foundation\Console\MakeModuleCommand;
@@ -313,8 +314,16 @@ final class FoundationServiceProvider extends ServiceProvider
 
     private function registerViews(): void
     {
+        // A project may have no resources/views of its own, and view:cache (so
+        // `php artisan optimize`) fails on a path that does not exist.
+        $finder = View::getFinder();
+
+        if ($finder instanceof FileViewFinder) {
+            $finder->setPaths(array_values(array_filter($finder->getPaths(), is_dir(...))));
+        }
+
         // Appended, so a file at the same path under the project's resources/views wins.
-        $paths = config('view.paths', []);
+        $paths = array_values(array_filter(config('view.paths', []), is_dir(...)));
         $paths[] = Foundation::uiPath('resources/views');
         config(['view.paths' => $paths]);
         View::addLocation(Foundation::uiPath('resources/views'));
