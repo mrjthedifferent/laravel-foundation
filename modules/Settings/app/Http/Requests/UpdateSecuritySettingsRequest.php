@@ -28,6 +28,7 @@ class UpdateSecuritySettingsRequest extends FormRequest
             'password_uncompromised' => ['nullable', 'boolean'],
             'login_max_attempts' => ['required', 'integer', 'between:1,100'],
             'session_lifetime' => ['required', 'integer', 'between:5,43200'],
+            'api_token_idle_expiration_minutes' => ['required', 'integer', 'between:5,525600'],
         ];
     }
 }

@@ -49,6 +49,7 @@ class SecuritySettingsTest extends TestCase
             'password_min_length' => 8,
             'login_max_attempts' => 5,
             'session_lifetime' => 120,
+            'api_token_idle_expiration_minutes' => 43200,
         ];
     }
 
@@ -104,6 +105,7 @@ class SecuritySettingsTest extends TestCase
             'password_symbols' => '1',
             'login_max_attempts' => 3,
             'session_lifetime' => 30,
+            'api_token_idle_expiration_minutes' => 1440,
         ]);
 
         $this->assertSame('editor', Setting::where('key', 'two_factor_required_roles')->first()->getRawOriginal('value'));
@@ -119,6 +121,8 @@ class SecuritySettingsTest extends TestCase
         $this->assertTrue(config('foundation.passwords.symbols'));
         $this->assertSame(3, config('foundation.login.max_attempts'));
         $this->assertSame(30, config('session.lifetime'));
+        $this->assertSame(1440, apiTokenIdleExpirationMinutes());
+        $this->assertFalse(Setting::where('key', 'api_token_idle_expiration_minutes')->first()->getAttribute('is_visible'));
     }
 
     public function test_turning_it_off_and_clearing_roles_is_stored(): void
@@ -140,8 +144,9 @@ class SecuritySettingsTest extends TestCase
                 'password_min_length' => 4,
                 'login_max_attempts' => 0,
                 'session_lifetime' => 1,
+                'api_token_idle_expiration_minutes' => 0,
             ]))
-            ->assertSessionHasErrors(['two_factor_required_roles.0', 'password_min_length', 'login_max_attempts', 'session_lifetime']);
+            ->assertSessionHasErrors(['two_factor_required_roles.0', 'password_min_length', 'login_max_attempts', 'session_lifetime', 'api_token_idle_expiration_minutes']);
 
         $this->assertDatabaseMissing('settings', ['key' => 'two_factor_enabled']);
     }

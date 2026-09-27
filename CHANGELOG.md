@@ -4,6 +4,14 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.7.1
+
+**Changed**
+- The API token lifetime (`api_token_idle_expiration_minutes`) moved from the general
+  settings list to Settings → Security, beside session lifetime. It now overrides
+  `sanctum.idle_expiration`, which `apiTokenIdleExpirationMinutes()` reads. In an existing
+  project it also stays in the general list until Settings → Security is first saved.
+
 ## 1.7.0
 
 **Added**

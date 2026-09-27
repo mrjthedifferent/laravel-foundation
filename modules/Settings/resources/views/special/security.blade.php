@@ -90,15 +90,20 @@
     {{-- Sign-in --}}
     <x-form-section :title="__('settings::settings.special_security.sign_in_header')" icon="ph-sign-in">
         <div class="row g-3">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <x-form.input type="number" name="login_max_attempts" id="login_max_attempts" min="1" max="100" required
                     :label="__('settings::settings.special_security.max_attempts_label')" :value="$maxAttempts"
                     :help="__('settings::settings.special_security.max_attempts_help')" />
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <x-form.input type="number" name="session_lifetime" id="session_lifetime" min="5" max="43200" required
                     :label="__('settings::settings.special_security.session_lifetime_label')" :value="$sessionLifetime"
                     :help="__('settings::settings.special_security.session_lifetime_help')" />
+            </div>
+            <div class="col-md-4">
+                <x-form.input type="number" name="api_token_idle_expiration_minutes" id="api_token_idle_expiration_minutes" min="5" max="525600" required
+                    :label="__('settings::settings.special_security.api_token_idle_label')" :value="$apiTokenIdle"
+                    :help="__('settings::settings.special_security.api_token_idle_help')" />
             </div>
         </div>
     </x-form-section>

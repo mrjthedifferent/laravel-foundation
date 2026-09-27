@@ -277,11 +277,13 @@ return [
         'uncompromised_label' => 'Reject passwords found in data breaches',
         'uncompromised_help' => 'Checks haveibeenpwned.com using only the first characters of a hash; the password never leaves the server.',
         'passwords_help' => 'Applies whenever a password is set or changed. Existing passwords keep working.',
-        'sign_in_header' => 'Sign-in',
+        'sign_in_header' => 'Sign-in and sessions',
         'max_attempts_label' => 'Failed attempts before lockout',
         'max_attempts_help' => 'After this many wrong passwords, the login is locked for a minute.',
         'session_lifetime_label' => 'Session lifetime (minutes)',
         'session_lifetime_help' => 'An inactive panel session ends after this many minutes.',
+        'api_token_idle_label' => 'API token lifetime (minutes)',
+        'api_token_idle_help' => 'A mobile/API token unused for this long expires. Each request extends it. 43200 = 30 days.',
     ],
 
     'special_firebase' => [

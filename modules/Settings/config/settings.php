@@ -94,11 +94,14 @@ return [
     | Security Settings
     |--------------------------------------------------------------------------
     */
+    // Managed on Settings → Security.
     'api_token_idle_expiration_minutes' => [
         'group' => 'Security',
+        'config' => 'sanctum.idle_expiration',
         'value' => '43200',
         'type' => 'integer',
         'description' => 'Minutes of inactivity before a mobile/API login token expires. Each request the user makes slides this window forward, so a continuously-used token never expires. Default 43200 (30 days).',
+        'is_visible' => false,
     ],
 
     // Managed on Settings → Security (SecuritySettingsController), which creates

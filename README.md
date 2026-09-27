@@ -171,10 +171,12 @@ without a deploy:
   symbols are required; and whether breached passwords are rejected. The rule is Laravel's
   `Password::defaults()`, used by every password form. A project that calls
   `Password::defaults()` in its own provider overrides it.
-- **Sign-in:** failed attempts before a login is locked out, and session lifetime.
+- **Sign-in and sessions:** failed attempts before a login is locked out, panel session
+  lifetime, and how long an unused mobile/API token lasts.
 
 Until the page is first saved, `foundation.two_factor.*`, `foundation.passwords.*`,
-`foundation.login.*` and `session.lifetime` (config and `.env`) decide. After that, the
+`foundation.login.*` and `session.lifetime` (config and `.env`) decide.
+The API token lifetime is already a setting, 30 days by default. After that, the
 page does.
 
 **Maintenance mode** (Settings → General) closes the panel to everyone but super admins.
