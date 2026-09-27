@@ -51,14 +51,14 @@ which is a fresh Laravel app already wired up:
 git clone https://github.com/mrjthedifferent/laravel-foundation-skeleton my-project
 cd my-project
 composer install
-cp .env.example .env && php artisan key:generate
-php artisan migrate --seed
+composer run setup
 php artisan foundation:super-admin
-npm install && npm run build
-php artisan serve
+composer run dev
 ```
 
-Sign in at `/login` with the Super Admin you just created.
+`composer run setup` creates `.env`, migrates and seeds the database, and builds the assets.
+The default database is SQLite; set `DB_*` in `.env` for MySQL or PostgreSQL first. Sign in at
+`/login` with the Super Admin you just created.
 
 ## Install in a Laravel 13 app
 
@@ -198,11 +198,13 @@ Registration is closed by default: an administrator creates accounts.
 ## Updating
 
 ```bash
-composer update mrjthedifferent/laravel-foundation
+composer update mrjthedifferent/laravel-foundation --with-dependencies
 php artisan migrate
 ```
 
-Read the [CHANGELOG](CHANGELOG.md) before a major version; it lists anything a project must do.
+`--with-dependencies` lets Composer update or add the packages a new release needs. Read the
+[CHANGELOG](CHANGELOG.md) before updating across several versions; its **Upgrading** sections
+list anything a project must do.
 
 ## Public API and versioning
 

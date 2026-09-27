@@ -95,6 +95,29 @@ silently.
 - Keep pull requests to one concern. Discuss large or breaking changes in an issue
   first.
 
+## Releasing
+
+For maintainers. Releases are cut from `main`; there are no release branches.
+
+1. Run the tests and the three quality checks above.
+2. Rename the changelog's pending section to the new version (a fix bumps the patch
+   number, a feature the minor), commit it as `Release x.y.z` and push.
+3. Wait for CI on that commit to pass, then tag and publish:
+
+   ```bash
+   git tag -a vx.y.z -m "vx.y.z — one-line summary"
+   git push origin vx.y.z
+   gh release create vx.y.z --title vx.y.z --notes "..."
+   ```
+
+   Packagist picks up the tag within a minute. Never move or delete a tag once it is
+   pushed: projects may already have installed it.
+4. Update the [skeleton](https://github.com/mrjthedifferent/laravel-foundation-skeleton):
+   `composer update mrjthedifferent/laravel-foundation --with-dependencies`, then
+   `php artisan migrate:fresh --seed`, `php artisan test` and `php artisan optimize`.
+   Commit `composer.lock` together with any file `foundation:sync` added under `.ai/`, and
+   push; the skeleton's CI must pass too.
+
 ## Security issues
 
 Do not open a public issue or pull request for a vulnerability. Follow
