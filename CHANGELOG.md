@@ -4,6 +4,13 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.5.4
+
+**Fixed**
+- `php artisan optimize` failed at `view:cache` in a project with no `resources/views`
+  folder (projects created from the skeleton before it kept one). Missing folders are
+  now left out of the view paths.
+
 ## 1.5.3
 
 **Fixed**
@@ -145,13 +152,6 @@ To enable tenancy:
 1. Set `'auto-discover' => ['migrations' => false]` in `config/modules.php`. The app refuses to
    boot with tenancy on otherwise, because nwidart would create tenant-module tables centrally.
 2. Follow "One database per tenant" in the README.
-
-## 1.2.2
-
-**Fixed**
-- `php artisan optimize` failed at `view:cache` in a project with no `resources/views`
-  folder (projects created from the skeleton before it kept one). Missing folders are
-  now left out of the view paths.
 
 ## 1.2.1
 
