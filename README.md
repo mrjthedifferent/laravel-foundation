@@ -156,13 +156,14 @@ full guide is `.ai/guidelines/foundation/tenancy.md` after `foundation:sync`.
 
 ## Two-factor authentication (opt-in)
 
-Set `FOUNDATION_TWO_FACTOR=true` and users can turn on TOTP two-factor authentication from
-their profile: they scan a QR code in any authenticator app, confirm a code, and receive
+Turn it on under **Settings → Two-Factor** (or set `FOUNDATION_TWO_FACTOR=true`), and users
+can turn on TOTP two-factor authentication from their profile: they scan a QR code in any authenticator app, confirm a code, and receive
 recovery codes. Sign-in (password or social) then asks for a code, and the API's `login`
 takes `two_factor_code` or `recovery_code`. Each code works once.
 
-Users of the roles in `foundation.two_factor.required_roles` must set it up before they can
-use the panel. So must super admins when `required_for_super_admins` is on. For another
+The same page chooses who must set it up before they can use the panel (any roles, and
+super admins) and the issuer name shown in the authenticator app. Until that page is first
+saved, `foundation.two_factor.*` in config and `.env` decide; after that, the page does. For another
 rule, override `requiresTwoFactor(): bool` on `App\Models\User`. An administrator who may
 reset passwords can also reset a user's two-factor authentication from the user's page.
 
@@ -175,7 +176,7 @@ reset passwords can also reset a user's two-factor authentication from the user'
 | A module's menu, permissions or settings | `php artisan vendor:publish --tag={alias}-module-config`, then edit `config/{alias}/` |
 | Which modules are on | `modules_statuses.json`, or `php artisan module:enable Otp` |
 | Who may sign in | Override `accessDenialMessage(): ?string` on `App\Models\User` |
-| Who must use two-factor authentication | `two_factor.required_roles` in `config/foundation.php`, or override `requiresTwoFactor(): bool` on `App\Models\User` |
+| Who must use two-factor authentication | Settings → Two-Factor, or override `requiresTwoFactor(): bool` on `App\Models\User` |
 | Where phone numbers live | Users have a `phone` column, stored in E.164 form, and can sign in with it. To keep phones in your own table instead, override `scopeWherePhone($query, ?string $phone)` on `App\Models\User` |
 | Colours, dark mode, RTL, sidebar style | Settings → Theme, or the settings seeder |
 | PDF fonts | Put a `.ttf` in `resources/fonts` and list it under `pdf.fonts` in `config/foundation.php` |

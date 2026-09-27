@@ -7,6 +7,7 @@ use Modules\Settings\Http\Controllers\NotificationSettingsController;
 use Modules\Settings\Http\Controllers\SettingsController;
 use Modules\Settings\Http\Controllers\SpecialSettingsController;
 use Modules\Settings\Http\Controllers\ThemeSettingsController;
+use Modules\Settings\Http\Controllers\TwoFactorSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +83,10 @@ Route::middleware(config('foundation.routing.middleware'))
             Route::post('test-google-auth', [SpecialSettingsController::class, 'testGoogleAuth'])->name('test_google_auth');
             Route::post('test-github-auth', [SpecialSettingsController::class, 'testGithubAuth'])->name('test_github_auth');
             Route::post('test-apple-auth', [SpecialSettingsController::class, 'testAppleAuth'])->name('test_apple_auth');
+
+            // Two-factor authentication settings
+            Route::get('two-factor', [TwoFactorSettingsController::class, 'show'])->name('two_factor');
+            Route::post('two-factor', [TwoFactorSettingsController::class, 'update'])->name('update_two_factor');
 
             // Theme settings routes
             Route::get('theme', [ThemeSettingsController::class, 'show'])->name('theme');

@@ -4,6 +4,15 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## Unreleased
+
+**Added**
+- Settings → Two-Factor: turn two-factor authentication on or off, require it for chosen
+  roles and for super admins, and set the issuer name, without editing `.env`. The page
+  needs the `Edit Special Setting` permission. Its values override `foundation.two_factor.*`
+  once saved; until then, config and `.env` decide as before. Existing projects get the
+  page on update, with nothing to migrate.
+
 ## 1.5.4
 
 **Fixed**

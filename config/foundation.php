@@ -48,6 +48,10 @@ return [
     | profile; users of 'required_roles' (and super admins, if set) must turn
     | it on before they can use the panel. User::requiresTwoFactor() decides,
     | so a project can override it with its own rule.
+    |
+    | Settings → Two-Factor overrides enabled, required_roles,
+    | required_for_super_admins and issuer once it has been saved; window and
+    | recovery_codes are set here only.
     */
     'two_factor' => [
         'enabled' => (bool) env('FOUNDATION_TWO_FACTOR', false),

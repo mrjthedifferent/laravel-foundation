@@ -74,6 +74,15 @@ return [
     ],
     [
         'group' => 'settings',
+        'label' => 'Two-Factor',
+        'icon' => 'ph-shield-check',
+        'route' => 'admin.settings.special.two_factor',
+        'routes' => ['admin.settings.special.update_two_factor'],
+        'permissions' => ['Edit Special Setting'],
+        'order' => 85,
+    ],
+    [
+        'group' => 'settings',
         'label' => 'Theme',
         'icon' => 'ph-paint-brush',
         'route' => 'admin.settings.special.theme',

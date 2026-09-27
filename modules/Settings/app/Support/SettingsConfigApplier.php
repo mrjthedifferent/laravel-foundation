@@ -37,6 +37,11 @@ final class SettingsConfigApplier
         'apple_key_id' => 'services.apple.key_id',
         'apple_key_file' => 'services.apple.key_file',
         'error_report_slack_webhook' => 'logging.channels.slack.url',
+        // Settings → Two-Factor (TwoFactorSettingsController); absent until first saved.
+        'two_factor_enabled' => 'foundation.two_factor.enabled',
+        'two_factor_required_for_super_admins' => 'foundation.two_factor.required_for_super_admins',
+        'two_factor_required_roles' => 'foundation.two_factor.required_roles',
+        'two_factor_issuer' => 'foundation.two_factor.issuer',
     ];
 
     /** @var array<string, mixed>|null config key => value before the first run */
