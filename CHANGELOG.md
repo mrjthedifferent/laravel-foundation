@@ -4,7 +4,7 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
-## Unreleased
+## 1.8.0
 
 **Added**
 - Passwordless phone sign-in for API clients (Otp module): `POST v1/auth/otp/request` and
