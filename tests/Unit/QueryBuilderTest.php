@@ -32,6 +32,23 @@ class QueryBuilderTest extends TestCase
         $this->assertSame('a', $results->first()->key);
     }
 
+    public function test_where_like_is_case_insensitive(): void
+    {
+        Setting::create(['key' => 'a', 'group' => 'G', 'type' => 'text', 'value' => 'Broiler Feed']);
+
+        $query = new class(Setting::query()) extends QueryBuilder
+        {
+            public function search(string $term): self
+            {
+                $this->whereLike(['value'], $term);
+
+                return $this;
+            }
+        };
+
+        $this->assertCount(1, $query->search('broiler')->get());
+    }
+
     public function test_paginate_clamps_to_the_configured_maximum(): void
     {
         config(['foundation.pagination.max' => 5]);

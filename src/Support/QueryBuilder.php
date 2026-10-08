@@ -35,16 +35,22 @@ abstract class QueryBuilder
      * clause is required for this to work on SQLite, which — unlike MySQL
      * and PostgreSQL — has no default LIKE escape character.
      *
+     * On PostgreSQL each column is cast to text (LIKE is not defined for
+     * types such as inet, uuid or numbers) and matched with ILIKE, so search
+     * is case-insensitive there as it is on MySQL and SQLite.
+     *
      * @param  list<string>  $columns
      */
     protected function whereLike(array $columns, string $term): static
     {
         $like = '%'.escapeLike($term).'%';
+        $pgsql = $this->query->getModel()->getConnection()->getDriverName() === 'pgsql';
 
-        $this->query->where(function (Builder $q) use ($columns, $like): void {
+        $this->query->where(function (Builder $q) use ($columns, $like, $pgsql): void {
             foreach ($columns as $index => $column) {
                 $method = $index === 0 ? 'whereRaw' : 'orWhereRaw';
-                $q->{$method}("{$column} LIKE ? ESCAPE ?", [$like, '\\']);
+                $sql = $pgsql ? "CAST({$column} AS TEXT) ILIKE ? ESCAPE ?" : "{$column} LIKE ? ESCAPE ?";
+                $q->{$method}($sql, [$like, '\\']);
             }
         });
 

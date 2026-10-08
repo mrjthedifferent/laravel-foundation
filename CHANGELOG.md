@@ -4,6 +4,25 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## Unreleased
+
+**Fixed**
+- Models with ULID or UUID keys, including every `Syncable` model, can be audited. The
+  `audits.auditable_id` column was an integer, so PostgreSQL and MySQL refused the audit
+  insert and the save failed with it. A new migration makes it a string; existing ids are
+  kept.
+- On PostgreSQL, list searches (`QueryBuilder::whereLike()`) cast each column to text and
+  match with `ILIKE`. The activity log search failed there, because `LIKE` is not defined
+  for the `inet` IP-address column, and searches were case-sensitive, unlike on MySQL and
+  SQLite.
+
+**Upgrading**
+
+```bash
+composer update mrjthedifferent/laravel-foundation
+php artisan migrate
+```
+
 ## 1.9.1
 
 **Fixed**
