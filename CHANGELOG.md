@@ -4,7 +4,7 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
-## Unreleased
+## 1.11.0
 
 **Changed**
 - `POST sync/push` reports an operation that failed with a server exception as `error`
