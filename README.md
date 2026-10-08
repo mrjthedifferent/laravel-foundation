@@ -260,7 +260,9 @@ its own transaction, and each gets a result:
 - `applied` returns the new `version`.
 - `conflict` means the server row changed since the client's `version`. The result includes
   the current row as `server`, or `null` if it was deleted.
-- `rejected` returns `errors`.
+- `rejected` returns `errors` (validation or permission). Don't retry it unchanged.
+- `error` means the server failed to save it, for example because the database was
+  unavailable. Nothing changed; keep the change and retry it later.
 
 ### Idempotent requests
 

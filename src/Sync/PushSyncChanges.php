@@ -36,7 +36,7 @@ final readonly class PushSyncChanges
                 $results[] = DB::transaction(fn (): SyncResult => SyncRegistry::handler($op->name)->apply($user, $op));
             } catch (Throwable $e) {
                 report($e);
-                $results[] = SyncResult::rejected($op, ['id' => [__('foundation::foundation.offline_sync.failed')]]);
+                $results[] = SyncResult::error($op, ['id' => [__('foundation::foundation.offline_sync.failed')]]);
             }
         }
 

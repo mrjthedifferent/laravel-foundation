@@ -296,6 +296,16 @@ class OfflineSyncTest extends TestCase
         $this->assertNotNull(SyncNote::find($good));
     }
 
+    public function test_a_server_failure_is_reported_as_a_retryable_error_not_a_rejection(): void
+    {
+        $this->withoutExceptionHandling();
+        Schema::drop('sync_notes'); // any exception while applying the op
+
+        $this->push($this->alice, [['name' => 'notes', 'op' => 'upsert', 'id' => (string) Str::ulid(), 'data' => ['title' => 'Kept']]])
+            ->assertOk()
+            ->assertJsonPath('data.results.0.status', 'error');
+    }
+
     public function test_push_requires_an_idempotency_key_and_replays_retries(): void
     {
         $ops = ['ops' => [['name' => 'notes', 'op' => 'upsert', 'id' => (string) Str::ulid(), 'data' => ['title' => 'Once']]]];

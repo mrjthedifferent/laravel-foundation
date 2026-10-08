@@ -4,6 +4,19 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## Unreleased
+
+**Changed**
+- `POST sync/push` reports an operation that failed with a server exception as `error`
+  (retryable) instead of `rejected`. A client that dropped rejected changes would otherwise
+  lose data when, for example, the database was briefly unavailable. Clients should keep
+  and retry `error` operations. `SyncResult::error()` is added.
+
+**Upgrading**
+
+Update offline clients to treat the new `error` status as retryable. Older clients treat
+any status they don't know according to their own rules.
+
 ## 1.10.0
 
 **Fixed**

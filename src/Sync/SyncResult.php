@@ -13,6 +13,9 @@ namespace Mrj\Foundation\Sync;
  *   to adopt or re-apply its change on top of.
  * - `rejected`: refused (validation, permission, unknown collection); the
  *   client should surface `errors` and not retry unchanged.
+ * - `error`: the server failed to save it (an exception, e.g. the database
+ *   was unavailable); nothing changed, and the client should keep the change
+ *   and retry it later.
  *
  * @api
  */
@@ -23,6 +26,8 @@ final readonly class SyncResult
     public const string CONFLICT = 'conflict';
 
     public const string REJECTED = 'rejected';
+
+    public const string ERROR = 'error';
 
     /**
      * @param  array<string, mixed>|null  $server
@@ -56,6 +61,16 @@ final readonly class SyncResult
     public static function rejected(SyncOperation $op, array $errors): self
     {
         return new self(self::REJECTED, $op->name, $op->id, null, null, $errors);
+    }
+
+    /**
+     * A server-side failure the client should retry.
+     *
+     * @param  array<string, list<string>>  $errors
+     */
+    public static function error(SyncOperation $op, array $errors): self
+    {
+        return new self(self::ERROR, $op->name, $op->id, null, null, $errors);
     }
 
     /**
