@@ -4,7 +4,7 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
-## Unreleased
+## 1.10.0
 
 **Fixed**
 - Models with ULID or UUID keys, including every `Syncable` model, can be audited. The
