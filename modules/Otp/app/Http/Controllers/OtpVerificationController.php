@@ -10,7 +10,7 @@ use Modules\Otp\Enum\ContactType;
 use Modules\Otp\Http\Requests\SendVerificationCodeRequest;
 use Modules\Otp\Http\Requests\VerifyOtpRequest;
 use Modules\Otp\Http\Resources\VerificationCodeResource;
-use Modules\Otp\Models\VerificationCode;
+use Modules\Otp\Support\OtpThrottle;
 use Mrj\Foundation\Http\Controllers\Controller;
 use Mrj\Foundation\Http\Responses\JsonResponseFactory;
 use Mrj\Foundation\Support\PhoneNumber;
@@ -39,16 +39,10 @@ class OtpVerificationController extends Controller
             return JsonResponseFactory::error(__('otp::otp.errors.account_exists', ['type' => $contactType->value]), null, 400);
         }
 
-        $existing = VerificationCode::active()->contact($contact)->latest()->first();
+        $refusal = OtpThrottle::refusal($contact);
 
-        if ($existing && $existing->created_at->diffInSeconds(now()) < 60) {
-            return JsonResponseFactory::error(__('otp::otp.errors.wait_before_retry'), null, 429);
-        }
-
-        $maxAttempts = (int) config('settings.max_verification_attempts.value', 5);
-
-        if (VerificationCode::active()->contact($contact)->count() >= $maxAttempts) {
-            return JsonResponseFactory::error(__('otp::otp.errors.max_attempts_reached'), null, 429);
+        if ($refusal !== null) {
+            return JsonResponseFactory::error(__($refusal), null, 429);
         }
 
         $verificationCode = $this->sendOtp->execute($contact, $contactType);

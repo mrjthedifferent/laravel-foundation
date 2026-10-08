@@ -52,4 +52,33 @@ class SendSmsJobTest extends TestCase
                 && $request['text'] === 'Hello there';
         });
     }
+
+    public function test_the_gateway_gets_the_real_text_but_the_sms_log_gets_the_redacted_text(): void
+    {
+        Setting::updateOrCreate(
+            ['key' => 'sms_gateways'],
+            ['type' => 'json', 'group' => 'General', 'is_visible' => false, 'value' => json_encode([
+                ['TYPE' => 'Provider', 'VALUE' => [
+                    'endpoint' => 'https://api.provider.com/send',
+                    'method' => 'POST',
+                    'mobile_prefix' => null,
+                    'mobile_key' => 'mobile',
+                    'message_key' => 'text',
+                ]],
+            ])]
+        );
+        Setting::updateOrCreate(
+            ['key' => 'sms_gateway'],
+            ['type' => 'select', 'group' => 'General', 'is_visible' => false, 'value' => 'Provider']
+        );
+
+        Http::fake(['api.provider.com/*' => Http::response(['ok' => true], 200)]);
+
+        $job = new SendSmsJob('App: Your verification code is: 482913', '+8801711111111', 'App: Your verification code is: ******');
+        app()->call([$job, 'handle']);
+
+        Http::assertSent(fn ($request): bool => $request['text'] === 'App: Your verification code is: 482913');
+        $this->assertDatabaseHas('sms_logs', ['message' => 'App: Your verification code is: ******']);
+        $this->assertDatabaseMissing('sms_logs', ['message' => 'App: Your verification code is: 482913']);
+    }
 }

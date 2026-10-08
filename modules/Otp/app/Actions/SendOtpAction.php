@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Otp\Actions;
 
 use Modules\Otp\Enum\ContactType;
@@ -28,7 +30,7 @@ final readonly class SendOtpAction
         $isWhitelisted = OtpWhitelist::findByRecipient($contactType, $contact) !== null;
 
         if (! $isWhitelisted) {
-            $verificationCode->notify(new SendVerificationCode);
+            $verificationCode->notify(new SendVerificationCode($verificationCode->plainCode));
         }
 
         return $verificationCode;

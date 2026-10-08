@@ -46,7 +46,7 @@
             </td>
             <td>{{ $code->contact }}</td>
             <td>
-                @if(config('app.debug'))
+                @if(config('app.debug') && $code->code !== null)
                 <code class="fs-sm">{{ $code->code }}</code>
                 @else
                 <code class="fs-sm">••••••</code>

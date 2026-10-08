@@ -26,6 +26,25 @@ return array_merge([
         'type' => 'integer',
         'description' => 'Number of minutes before an OTP code expires.',
     ],
+    'otp_login_enabled' => [
+        'group' => 'OTP',
+        'value' => '0',
+        'type' => 'boolean',
+        'description' => 'Allow API clients to sign in with a phone number and a one-time code (POST auth/otp/request, auth/otp/verify).',
+    ],
+    'otp_self_registration_enabled' => [
+        'group' => 'OTP',
+        'value' => '0',
+        'type' => 'boolean',
+        'description' => 'Create an account on first OTP sign-in for a phone number that has none.',
+    ],
+    'otp_registration_role' => [
+        'group' => 'OTP',
+        'value' => '',
+        'type' => 'string',
+        'description' => 'Role given to accounts created by OTP sign-in. Leave empty for none.',
+        'is_required' => false,
+    ],
     'phone_country_codes' => [
         'group' => 'OTP',
         'value' => '+880',

@@ -29,7 +29,11 @@ class SmsChannel
             return true;
         }
 
-        SendSmsJob::dispatch($message, $contact);
+        $logMessage = method_exists($notification, 'toSmsLog')
+            ? $notification->toSmsLog($notifiable)
+            : null;
+
+        SendSmsJob::dispatch($message, $contact, $logMessage);
 
         return true;
     }

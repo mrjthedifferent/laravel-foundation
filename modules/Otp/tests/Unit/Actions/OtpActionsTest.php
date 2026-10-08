@@ -38,8 +38,61 @@ class OtpActionsTest extends TestCase
 
         $code = app(GenerateOtpAction::class)->execute('user@example.com', ContactType::Email);
 
-        $this->assertEquals(6, strlen($code->code));
-        $this->assertMatchesRegularExpression('/^\d+$/', $code->code);
+        $this->assertEquals(6, strlen((string) $code->plainCode));
+        $this->assertMatchesRegularExpression('/^\d+$/', (string) $code->plainCode);
+    }
+
+    public function test_generate_stores_only_a_hash_of_the_code(): void
+    {
+        $code = app(GenerateOtpAction::class)->execute('user@example.com', ContactType::Email);
+        $stored = $code->fresh();
+
+        $this->assertNull($stored->code);
+        $this->assertNotNull($stored->code_hash);
+        $this->assertStringNotContainsString((string) $code->plainCode, (string) $stored->code_hash);
+        $this->assertTrue($stored->matches((string) $code->plainCode));
+    }
+
+    public function test_hash_is_bound_to_the_contact(): void
+    {
+        $code = app(GenerateOtpAction::class)->execute('user@example.com', ContactType::Email);
+
+        $this->assertFalse(
+            app(VerifyOtpAction::class)->execute('other@example.com', (string) $code->plainCode)
+        );
+        $this->assertTrue(
+            app(VerifyOtpAction::class)->execute('user@example.com', (string) $code->plainCode)
+        );
+    }
+
+    public function test_codes_written_before_hashing_still_verify(): void
+    {
+        $id = VerificationCode::query()->insertGetId([
+            'code' => '424242',
+            'contact_type' => ContactType::Email->value,
+            'contact' => 'legacy@example.com',
+            'expires_at' => now()->addMinutes(5),
+            'is_verified' => false,
+            'attempts' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->assertTrue(app(VerifyOtpAction::class)->execute('legacy@example.com', '424242'));
+        $this->assertTrue(VerificationCode::find($id)->is_verified);
+    }
+
+    public function test_send_passes_the_plain_code_to_the_notification(): void
+    {
+        Notification::fake();
+
+        $record = app(SendOtpAction::class)->execute('user@example.com', ContactType::Email);
+
+        Notification::assertSentTo(
+            $record,
+            SendVerificationCode::class,
+            fn (SendVerificationCode $n): bool => str_contains($n->toSms($record->fresh()), (string) $record->plainCode),
+        );
     }
 
     public function test_generate_respects_dynamic_expiry_minutes(): void
@@ -65,7 +118,7 @@ class OtpActionsTest extends TestCase
 
         $code = app(GenerateOtpAction::class)->execute('whitelisted@example.com', ContactType::Email);
 
-        $this->assertEquals('999999', $code->code);
+        $this->assertEquals('999999', $code->plainCode);
     }
 
     // ── SendOtpAction ─────────────────────────────────────────────────────────

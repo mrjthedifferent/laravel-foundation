@@ -18,6 +18,13 @@ class SendVerificationCode extends Notification
     use Queueable;
 
     /**
+     * The plain code to deliver. Only a hash is stored on the notifiable, so
+     * the sender passes the code in; `$notifiable->code` is a fallback for
+     * callers built against 1.7.
+     */
+    public function __construct(private readonly ?string $code = null) {}
+
+    /**
      * Get the notification's delivery channels.
      *
      * @return array<int, string>
@@ -38,13 +45,30 @@ class SendVerificationCode extends Notification
     {
         return (new MailMessage)
             ->subject(__('otp::otp.notifications.subject'))
-            ->view('otp::emails.verification-code', ['code' => $notifiable->code]);
+            ->view('otp::emails.verification-code', ['code' => $this->codeFor($notifiable)]);
     }
 
     public function toSms(object $notifiable): string
     {
         $appName = config('settings.app_name.value') ?: config('app.name');
 
-        return __('otp::otp.notifications.sms_body', ['app' => $appName, 'code' => $notifiable->code]);
+        return __('otp::otp.notifications.sms_body', ['app' => $appName, 'code' => $this->codeFor($notifiable)]);
+    }
+
+    /**
+     * What SMS logs record instead of the message: the same text with the
+     * code masked, so codes never reach `sms_logs`.
+     */
+    public function toSmsLog(object $notifiable): string
+    {
+        $appName = config('settings.app_name.value') ?: config('app.name');
+        $masked = str_repeat('*', max(4, strlen($this->codeFor($notifiable))));
+
+        return __('otp::otp.notifications.sms_body', ['app' => $appName, 'code' => $masked]);
+    }
+
+    private function codeFor(object $notifiable): string
+    {
+        return (string) ($this->code ?? $notifiable->plainCode ?? $notifiable->code ?? '');
     }
 }

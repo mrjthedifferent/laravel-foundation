@@ -4,8 +4,12 @@ namespace Modules\Otp\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Otp\Models\VerificationCode;
 use Override;
 
+/**
+ * @mixin VerificationCode
+ */
 class VerificationCodeResource extends JsonResource
 {
     /**
@@ -20,7 +24,7 @@ class VerificationCodeResource extends JsonResource
         $exposeCode = config('app.debug') && (bool) config('settings.otp_expose_code.value', false);
 
         return [
-            'code' => $exposeCode ? $this->code : '********',
+            'code' => $exposeCode && $this->plainCode !== null ? $this->plainCode : '********',
             'contact_type' => $this->contact_type,
             'contact' => $this->contact,
             'expires_at' => $this->expires_at?->toIso8601String(),

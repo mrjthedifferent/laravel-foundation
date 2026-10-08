@@ -6,6 +6,7 @@ namespace Modules\Notification\Jobs;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Modules\Notification\Support\SmsLogRedaction;
 use Mrj\Foundation\Contracts\SmsGateway;
 
 class SendSmsJob implements ShouldQueue
@@ -19,10 +20,15 @@ class SendSmsJob implements ShouldQueue
     public function __construct(
         protected string $message,
         protected string $phone,
+        // What to record in SMS logs instead of $message (e.g. with an OTP masked).
+        protected ?string $logMessage = null,
     ) {}
 
     public function handle(SmsGateway $gateway): void
     {
-        $gateway->send($this->phone, $this->message);
+        SmsLogRedaction::during(
+            $this->logMessage,
+            fn () => $gateway->send($this->phone, $this->message),
+        );
     }
 }

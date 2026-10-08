@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Otp\Tests\Unit\Notifications;
 
 use Modules\Otp\Notifications\SendVerificationCode;
@@ -14,6 +16,16 @@ class SendVerificationCodeTest extends TestCase
         $message = (new SendVerificationCode)->toSms((object) ['code' => '123456']);
 
         $this->assertSame('Acme Portal: Your verification code is: 123456', $message);
+    }
+
+    public function test_sms_uses_the_code_passed_in_and_logs_it_masked(): void
+    {
+        config(['settings.app_name.value' => 'Acme']);
+        $notification = new SendVerificationCode('482913');
+        $notifiable = (object) ['code' => null];
+
+        $this->assertSame('Acme: Your verification code is: 482913', $notification->toSms($notifiable));
+        $this->assertSame('Acme: Your verification code is: ******', $notification->toSmsLog($notifiable));
     }
 
     public function test_sms_message_falls_back_to_app_config_name(): void

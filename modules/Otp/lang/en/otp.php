@@ -132,11 +132,13 @@ return [
         'wait_before_retry' => 'Please wait 60 seconds before requesting another code.',
         'max_attempts_reached' => 'Maximum verification code limit reached. Please try again later.',
         'invalid_or_expired_code' => 'Invalid or expired verification code.',
+        'login_disabled' => 'Signing in with a one-time code is not available.',
     ],
 
     'success' => [
         'code_sent' => 'Verification code sent.',
         'code_valid' => 'Verification code is valid.',
+        'login_code_sent' => 'If this number can sign in, a code has been sent to it.',
     ],
 
     'validation' => [
@@ -145,6 +147,9 @@ return [
         'contact_required' => 'The contact (email or phone) is required.',
         'email_invalid' => 'Please provide a valid email address.',
         'code_required' => 'The verification code is required.',
+        'phone_required' => 'The phone number is required.',
+        'phone_invalid' => 'Please provide a valid mobile number.',
+        'phone_country_not_allowed' => 'Phone numbers from this country are not accepted.',
         'code_size' => 'The verification code must be :digits digits.',
         'recipient_type_required' => 'The recipient type is required.',
         'recipient_type_in' => 'The recipient type must be email or phone.',

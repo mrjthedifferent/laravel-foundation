@@ -183,6 +183,23 @@ page does.
 Other signed-in users see the maintenance message and can sign out. The date formats and
 the default page size are under Settings → General too.
 
+## Phone sign-in for mobile apps
+
+With the Otp module on (`php artisan module:enable Otp`), API clients can sign in with a
+phone number and a one-time SMS code instead of a password. Turn it on under
+**Settings → OTP**:
+
+- **OTP login** opens `POST v1/auth/otp/request {phone}` and
+  `POST v1/auth/otp/verify {phone, code, device_name?, name?}`. The verify step returns
+  `{token, user, is_new_user}`, a Sanctum token like `POST v1/login`.
+- **OTP self-registration** creates the account on first sign-in for a number that has
+  none, with the role chosen in **OTP registration role**. When it is off, only existing
+  users can sign in.
+
+Phones may be typed in any form (`01712345678`, `8801712345678`, `+8801712345678`) and are
+stored as E.164. The request step answers the same way whether or not the number has an
+account. Codes are stored only as a keyed hash, and SMS logs record them masked.
+
 ## Customising without forking
 
 | To change | Do this |

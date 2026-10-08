@@ -4,6 +4,40 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## Unreleased
+
+**Added**
+- Passwordless phone sign-in for API clients (Otp module): `POST v1/auth/otp/request` and
+  `POST v1/auth/otp/verify` return a Sanctum token. New settings under Settings → OTP:
+  `otp_login_enabled` and `otp_self_registration_enabled` (both off by default) and
+  `otp_registration_role`. See "Phone sign-in for mobile apps" in the README.
+- A notification can define `toSmsLog(object $notifiable): string`. SMS logs then record
+  that text instead of the message sent. `SendSmsJob` takes it as an optional third argument.
+
+**Changed**
+- One-time codes are stored as an HMAC keyed with `APP_KEY` (`verification_codes.code_hash`)
+  instead of in plain text. The plain code is available only on the instance that generated
+  it, as `$verificationCode->plainCode`. Rows written by older versions still verify.
+- Verification-code SMS are recorded in `sms_logs` with the code masked. The dry-run `log`
+  gateway still writes the real text to the `daily_sms` log file, which local development
+  reads codes from.
+- `SendVerificationCode` takes the code as a constructor argument. Without one it falls back
+  to `$notifiable->plainCode`, then `$notifiable->code`.
+- The OTP digit-length setting is clamped to 4–10, and the `verification_codes.code` column
+  is now nullable and 10 characters wide.
+
+**Upgrading**
+
+```bash
+composer update mrjthedifferent/laravel-foundation
+php artisan migrate
+```
+
+Codes sent before the update but not yet used still work. Code that read
+`$verificationCode->code` after generating a code must read `$verificationCode->plainCode`.
+Phone sign-in stays off until it is turned on under Settings → OTP; run "Sync settings"
+there to add the new settings to an existing project.
+
 ## 1.7.1
 
 **Changed**

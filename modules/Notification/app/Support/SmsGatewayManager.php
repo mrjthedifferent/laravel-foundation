@@ -56,7 +56,7 @@ final class SmsGatewayManager implements SmsGateway
             Log::channel('daily_sms')->error('SMS Gateway not found', [
                 'status' => 'failed',
                 'phone' => $phone,
-                'message' => $message,
+                'message' => SmsLogRedaction::forLog($message),
             ]);
 
             return;
@@ -80,7 +80,7 @@ final class SmsGatewayManager implements SmsGateway
         ]);
 
         if (module('ActivityLog')) {
-            app(CreateSmsLogAction::class)->execute($phone, $message, []);
+            app(CreateSmsLogAction::class)->execute($phone, SmsLogRedaction::forLog($message), []);
         }
     }
 
@@ -104,7 +104,7 @@ final class SmsGatewayManager implements SmsGateway
 
         if (! $url || ! $method || ! $mobileKey || ! $messageKey) {
             Log::channel('daily_sms')->error('SMS Gateway settings are incomplete', [
-                'sms' => ['phone' => $phone, 'message' => $message],
+                'sms' => ['phone' => $phone, 'message' => SmsLogRedaction::forLog($message)],
                 'sms_setting' => $settings,
             ]);
 
@@ -139,19 +139,19 @@ final class SmsGatewayManager implements SmsGateway
             }
 
             if (module('ActivityLog')) {
-                $smsLog = app(CreateSmsLogAction::class)->execute($phone, $message, $result);
+                $smsLog = app(CreateSmsLogAction::class)->execute($phone, SmsLogRedaction::forLog($message), $result);
                 Log::channel('daily_sms')->info('SMS sent', $smsLog->toArray());
             } else {
                 Log::channel('daily_sms')->info('SMS sent', [
                     'phone' => $phone,
-                    'message' => $message,
+                    'message' => SmsLogRedaction::forLog($message),
                 ]);
             }
         } catch (Throwable $e) {
             Log::channel('daily_sms')->error('Error sending SMS', [
                 'error' => $e->getMessage(),
                 'phone' => $phone,
-                'message' => $message,
+                'message' => SmsLogRedaction::forLog($message),
             ]);
         }
     }

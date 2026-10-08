@@ -33,7 +33,7 @@ final readonly class VerifyOtpAction implements OtpVerifier
             return false;
         }
 
-        if (! hash_equals((string) $verificationCode->code, $code)) {
+        if (! $verificationCode->matches($code)) {
             $verificationCode->registerFailedAttempt();
 
             return false;

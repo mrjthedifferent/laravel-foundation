@@ -361,12 +361,6 @@ parameters:
 			path: modules/Otp/app/Actions/GenerateOtpAction.php
 
 		-
-			message: '#^Parameter \#1 \$string of function str_pad expects string, int\<1, max\> given\.$#'
-			identifier: argument.type
-			count: 1
-			path: modules/Otp/app/Actions/GenerateOtpAction.php
-
-		-
 			message: '#^Access to an undefined property Modules\\Otp\\Models\\OtpWhitelist\:\:\$recipient\.$#'
 			identifier: property.notFound
 			count: 1
@@ -379,18 +373,6 @@ parameters:
 			path: modules/Otp/app/Actions/UpdateOtpWhitelistAction.php
 
 		-
-			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$code\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Otp/app/Actions/VerifyOtpAction.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$created_at\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Otp/app/Http/Controllers/OtpVerificationController.php
-
-		-
 			message: '#^Access to an undefined property Modules\\Otp\\Models\\OtpWhitelist\:\:\$recipient_type\.$#'
 			identifier: property.notFound
 			count: 2
@@ -401,48 +383,6 @@ parameters:
 			identifier: nullsafe.neverNull
 			count: 2
 			path: modules/Otp/app/Http/Requests/UpdateOtpWhitelistRequest.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Otp\\Http\\Resources\\VerificationCodeResource\:\:\$code\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Otp/app/Http/Resources/VerificationCodeResource.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Otp\\Http\\Resources\\VerificationCodeResource\:\:\$contact\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Otp/app/Http/Resources/VerificationCodeResource.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Otp\\Http\\Resources\\VerificationCodeResource\:\:\$contact_type\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Otp/app/Http/Resources/VerificationCodeResource.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Otp\\Http\\Resources\\VerificationCodeResource\:\:\$expires_at\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Otp/app/Http/Resources/VerificationCodeResource.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$attempts\.$#'
-			identifier: property.notFound
-			count: 2
-			path: modules/Otp/app/Models/VerificationCode.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$contact\.$#'
-			identifier: property.notFound
-			count: 2
-			path: modules/Otp/app/Models/VerificationCode.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$expires_at\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Otp/app/Models/VerificationCode.php
 
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
@@ -470,18 +410,6 @@ parameters:
 
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$recipient\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Otp/tests/Unit/Actions/OtpActionsTest.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$code\.$#'
-			identifier: property.notFound
-			count: 3
-			path: modules/Otp/tests/Unit/Actions/OtpActionsTest.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Otp\\Models\\VerificationCode\:\:\$expires_at\.$#'
 			identifier: property.notFound
 			count: 1
 			path: modules/Otp/tests/Unit/Actions/OtpActionsTest.php
