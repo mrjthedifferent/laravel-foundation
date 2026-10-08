@@ -172,6 +172,17 @@ return [
     ],
 
     /*
+    | API sign-up (POST auth/register/request): `roles` lists the role names a
+    | person may choose when signing up (e.g. ['farmer', 'buyer']); empty means
+    | no choice and the `otp_registration_role` setting applies. `require_terms`
+    | makes accepting the terms (`terms: true`) mandatory.
+    */
+    'registration' => [
+        'roles' => [],
+        'require_terms' => false,
+    ],
+
+    /*
     | Offline sync (the Sync module: GET sync/pull, POST sync/push). `handlers`
     | maps each sync name the client uses to a class implementing
     | Mrj\Foundation\Contracts\SyncHandler, e.g. ['farms' => FarmSyncHandler::class].

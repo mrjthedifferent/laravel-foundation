@@ -36,14 +36,20 @@ return array_merge([
         'group' => 'OTP',
         'value' => '0',
         'type' => 'boolean',
-        'description' => 'Create an account on first OTP sign-in for a phone number that has none.',
+        'description' => 'Let API clients create accounts: on first OTP sign-in, and through sign-up confirmed by a code (POST auth/register/request, auth/register/verify).',
     ],
     'otp_registration_role' => [
         'group' => 'OTP',
         'value' => '',
         'type' => 'string',
-        'description' => 'Role given to accounts created by OTP sign-in. Leave empty for none.',
+        'description' => 'Role given to accounts created through the API when the client does not choose one. Leave empty for none.',
         'is_required' => false,
+    ],
+    'otp_password_reset_enabled' => [
+        'group' => 'OTP',
+        'value' => '0',
+        'type' => 'boolean',
+        'description' => 'Let API clients reset a password with a code sent to the phone (POST auth/password/forgot, auth/password/reset).',
     ],
     'phone_country_codes' => [
         'group' => 'OTP',

@@ -200,6 +200,24 @@ Phones may be typed in any form (`01712345678`, `8801712345678`, `+8801712345678
 stored as E.164. The request step answers the same way whether or not the number has an
 account. Codes are stored only as a keyed hash, and SMS logs record them masked.
 
+**Sign-up with a password.** With **OTP self-registration** on, a client can also register
+with a form:
+
+1. `POST v1/auth/register/request {name, phone, email?, password, role?, terms?}` sends a
+   code to the phone. No account exists yet; the form waits in the cache until the code
+   expires.
+2. `POST v1/auth/register/verify {phone, code, device_name?}` creates the account, with the
+   phone already verified, and returns `{token, user}`.
+
+The person then signs in with `POST v1/login {id, password}`. To let them pick a role, list
+the allowed role names in `foundation.registration.roles`. Set
+`foundation.registration.require_terms` to make accepting the terms mandatory.
+
+**Password reset by code.** With **OTP password reset** on,
+`POST v1/auth/password/forgot {phone}` sends a code, and
+`POST v1/auth/password/reset {phone, code, password, password_confirmation}` sets the new
+password and signs out every device.
+
 ## Offline sync for mobile apps
 
 An app that works offline keeps a local copy of some tables and exchanges changes with the

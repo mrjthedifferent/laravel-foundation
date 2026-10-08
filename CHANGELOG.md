@@ -4,6 +4,28 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## Unreleased
+
+**Added**
+- API sign-up with a password and a phone confirmed by code:
+  `POST v1/auth/register/request` and `POST v1/auth/register/verify` (Otp module, on with
+  the `otp_self_registration_enabled` setting). No account is created until the code is
+  confirmed. The new `foundation.registration.roles` and
+  `foundation.registration.require_terms` config keys control the role choice and the
+  terms check.
+- Password reset by code for API clients: `POST v1/auth/password/forgot` and
+  `POST v1/auth/password/reset`, on with the new `otp_password_reset_enabled` setting.
+  A reset signs out every device.
+
+**Upgrading**
+
+```bash
+composer update mrjthedifferent/laravel-foundation
+```
+
+Both features stay off until turned on under Settings → OTP. Run "Sync settings" there to
+add the new setting to an existing project.
+
 ## 1.11.0
 
 **Changed**

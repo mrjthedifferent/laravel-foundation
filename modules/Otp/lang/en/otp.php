@@ -133,12 +133,16 @@ return [
         'max_attempts_reached' => 'Maximum verification code limit reached. Please try again later.',
         'invalid_or_expired_code' => 'Invalid or expired verification code.',
         'login_disabled' => 'Signing in with a one-time code is not available.',
+        'registration_disabled' => 'Creating an account is not available.',
+        'password_reset_disabled' => 'Resetting a password with a code is not available.',
     ],
 
     'success' => [
         'code_sent' => 'Verification code sent.',
         'code_valid' => 'Verification code is valid.',
         'login_code_sent' => 'If this number can sign in, a code has been sent to it.',
+        'reset_code_sent' => 'If this number has an account, a code has been sent to it.',
+        'password_reset' => 'Your password has been changed. Sign in with the new password.',
     ],
 
     'validation' => [
