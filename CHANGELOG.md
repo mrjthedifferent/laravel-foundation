@@ -4,6 +4,12 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.9.1
+
+**Fixed**
+- `GET sync/pull` now always returns `changes` and `tombstones` as JSON objects. When nothing
+  had changed they were sent as `[]`, which clients that expect a map failed to read.
+
 ## 1.9.0
 
 **Added**

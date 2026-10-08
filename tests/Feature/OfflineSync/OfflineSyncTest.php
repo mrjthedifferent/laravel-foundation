@@ -141,6 +141,14 @@ class OfflineSyncTest extends TestCase
             ->assertJsonPath('data.changes', []);
     }
 
+    public function test_empty_changes_and_tombstones_are_json_objects_not_lists(): void
+    {
+        $body = (string) $this->pull($this->alice)->assertOk()->getContent();
+
+        $this->assertStringContainsString('"changes":{}', $body);
+        $this->assertStringContainsString('"tombstones":{}', $body);
+    }
+
     public function test_an_edit_after_a_pull_comes_back_on_the_next_pull(): void
     {
         $note = $this->note($this->alice);

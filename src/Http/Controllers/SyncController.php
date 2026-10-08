@@ -31,15 +31,18 @@ class SyncController extends Controller
 
         $only = isset($data['only']) ? array_values(array_filter(explode(',', $data['only']))) : null;
 
-        return JsonResponseFactory::success(
-            __('foundation::foundation.offline_sync.pulled'),
-            $pull->execute(
-                $request->user(),
-                $data['cursor'] ?? null,
-                $only,
-                (int) ($data['limit'] ?? config('foundation.offline_sync.pull_limit', 500)),
-            ),
+        $result = $pull->execute(
+            $request->user(),
+            $data['cursor'] ?? null,
+            $only,
+            (int) ($data['limit'] ?? config('foundation.offline_sync.pull_limit', 500)),
         );
+
+        // Always JSON objects: an empty PHP array would otherwise encode as [].
+        $result['changes'] = (object) $result['changes'];
+        $result['tombstones'] = (object) $result['tombstones'];
+
+        return JsonResponseFactory::success(__('foundation::foundation.offline_sync.pulled'), $result);
     }
 
     public function push(Request $request, PushSyncChanges $push): JsonResponse
