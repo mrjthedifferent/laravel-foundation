@@ -5,6 +5,9 @@ namespace Modules\Notification\Queries;
 use Modules\Notification\Models\PushNotification;
 use Mrj\Foundation\Support\QueryBuilder;
 
+/**
+ * @extends QueryBuilder<PushNotification>
+ */
 final class PushNotificationQuery extends QueryBuilder
 {
     public static function make(): self

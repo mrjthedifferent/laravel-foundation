@@ -8,6 +8,9 @@ use Modules\ImportDownloadManager\Enum\ImportType;
 use Modules\ImportDownloadManager\Models\DownloadImportManager;
 use Mrj\Foundation\Support\QueryBuilder;
 
+/**
+ * @extends QueryBuilder<DownloadImportManager>
+ */
 final class DownloadImportQuery extends QueryBuilder
 {
     public static function make(): self

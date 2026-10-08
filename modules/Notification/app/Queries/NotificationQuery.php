@@ -16,6 +16,8 @@ use Mrj\Foundation\Support\QueryBuilder;
  *     ->filterByReadStatus(false)
  *     ->orderByLatest()
  *     ->paginate();
+ *
+ * @extends QueryBuilder<Notification>
  */
 final class NotificationQuery extends QueryBuilder
 {

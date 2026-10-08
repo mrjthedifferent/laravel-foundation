@@ -1,0 +1,24 @@
+<?php
+
+namespace OwenIt\Auditing;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
+/**
+ * owen-it/laravel-auditing declares these relations without return types, so
+ * Larastan cannot see them as relations. This stub states the types the
+ * methods actually return; it is read by PHPStan only.
+ */
+trait Audit
+{
+    /**
+     * @return MorphTo<Model, $this>
+     */
+    public function auditable();
+
+    /**
+     * @return MorphTo<Model, $this>
+     */
+    public function user();
+}

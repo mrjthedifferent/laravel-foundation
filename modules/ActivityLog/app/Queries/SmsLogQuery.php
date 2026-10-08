@@ -5,6 +5,9 @@ namespace Modules\ActivityLog\Queries;
 use Modules\ActivityLog\Models\SmsLog;
 use Mrj\Foundation\Support\QueryBuilder;
 
+/**
+ * @extends QueryBuilder<SmsLog>
+ */
 final class SmsLogQuery extends QueryBuilder
 {
     public static function make(): self

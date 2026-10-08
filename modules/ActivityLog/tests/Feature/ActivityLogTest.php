@@ -33,10 +33,10 @@ class ActivityLogTest extends TestCase
     private function createAudit(): Audit
     {
         return Audit::create([
-            'user_type' => User::class,
+            'user_type' => (new User)->getMorphClass(),
             'user_id' => $this->admin->id,
             'event' => 'created',
-            'auditable_type' => User::class,
+            'auditable_type' => (new User)->getMorphClass(),
             'auditable_id' => 1,
             'old_values' => '{}',
             'new_values' => '{}',

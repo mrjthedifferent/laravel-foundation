@@ -7,6 +7,9 @@ use Mrj\Foundation\Support\QueryBuilder;
 use Override;
 use OwenIt\Auditing\Models\Audit;
 
+/**
+ * @extends QueryBuilder<Audit>
+ */
 final class ActivityLogQuery extends QueryBuilder
 {
     public static function make(): self

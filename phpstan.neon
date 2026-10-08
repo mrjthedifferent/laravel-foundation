@@ -13,6 +13,10 @@ parameters:
     parallel:
         maximumNumberOfProcesses: 1
 
+    # Return types for third-party code that omits them (PHPStan-only).
+    stubFiles:
+        - tests/phpstan-stubs/Audit.stub
+
     paths:
         - src
         - modules

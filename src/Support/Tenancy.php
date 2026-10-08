@@ -6,7 +6,7 @@ namespace Mrj\Foundation\Support;
 
 use Mrj\Foundation\Contracts\TenancyContext;
 use Mrj\Foundation\Enums\ModuleContext;
-use Nwidart\Modules\Facades\Module as ModuleFacade;
+use Nwidart\Modules\Contracts\RepositoryInterface;
 use Nwidart\Modules\Module;
 
 /**
@@ -39,11 +39,15 @@ final class Tenancy
     public static function contextOf(Module|string $module): ModuleContext
     {
         if (is_string($module)) {
-            if (! ModuleFacade::has($module)) {
+            // The repository contract (unlike the facade's docblock) types
+            // find() as nullable, so an unknown module name is handled here.
+            $found = app(RepositoryInterface::class)->find($module);
+
+            if ($found === null) {
                 return ModuleContext::Universal;
             }
 
-            $module = ModuleFacade::find($module);
+            $module = $found;
         }
 
         return ModuleContext::of($module);

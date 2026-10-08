@@ -4,6 +4,7 @@ namespace Mrj\Foundation\Support;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
@@ -13,10 +14,18 @@ use Illuminate\Pagination\LengthAwarePaginator;
  * `return $this` rather than wrapping a "new" instance that would hold that
  * very same mutated Builder anyway.
  *
+ * A subclass names its model with `@extends QueryBuilder<Model>` so that get()
+ * returns a collection of that model.
+ *
+ * @template TModel of Model
+ *
  * @api
  */
 abstract class QueryBuilder
 {
+    /**
+     * @param  Builder<TModel>  $query
+     */
     public function __construct(protected Builder $query) {}
 
     /**
@@ -49,6 +58,9 @@ abstract class QueryBuilder
             ->withQueryString();
     }
 
+    /**
+     * @return Collection<int, TModel>
+     */
     public function get(): Collection
     {
         return $this->query->get();

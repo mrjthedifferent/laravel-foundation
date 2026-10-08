@@ -26,10 +26,10 @@ class ActivityLogExportJobTest extends TestCase
     private function createAudit(User $user): Audit
     {
         return Audit::create([
-            'user_type' => User::class,
+            'user_type' => (new User)->getMorphClass(),
             'user_id' => $user->id,
             'event' => 'updated',
-            'auditable_type' => User::class,
+            'auditable_type' => (new User)->getMorphClass(),
             'auditable_id' => $user->id,
             'old_values' => ['name' => 'Old Name'],
             'new_values' => ['name' => 'New Name'],

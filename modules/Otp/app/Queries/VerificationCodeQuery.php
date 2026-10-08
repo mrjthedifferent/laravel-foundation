@@ -19,6 +19,8 @@ use Mrj\Foundation\Support\QueryBuilder;
  *     ->search('user@example.com')
  *     ->orderByLatest()
  *     ->paginate();
+ *
+ * @extends QueryBuilder<VerificationCode>
  */
 final class VerificationCodeQuery extends QueryBuilder
 {

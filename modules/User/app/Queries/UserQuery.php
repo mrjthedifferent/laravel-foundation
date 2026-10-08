@@ -18,6 +18,8 @@ use Mrj\Foundation\Support\QueryBuilder;
  *     ->filterByRole($roleId)
  *     ->search($searchTerm)
  *     ->paginate();
+ *
+ * @extends QueryBuilder<User>
  */
 final class UserQuery extends QueryBuilder
 {

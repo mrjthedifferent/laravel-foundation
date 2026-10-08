@@ -25,6 +25,14 @@ what that covers.
   to `$notifiable->plainCode`, then `$notifiable->code`.
 - The OTP digit-length setting is clamped to 4–10, and the `verification_codes.code` column
   is now nullable and 10 characters wide.
+- `QueryBuilder` is generic. A subclass declares `@extends QueryBuilder<YourModel>`, and
+  `get()` then returns a collection of that model to static analysis.
+
+**Fixed**
+- Works with the latest dependencies again (Laravel 13.35, nwidart/laravel-modules,
+  Larastan 3.13). `Tenancy::contextOf()` looks a module up through the repository contract,
+  because `Module::has()` is no longer on the facade. Test fixtures store morph aliases,
+  since Laravel now enforces the morph map when it reads a morph type.
 
 **Upgrading**
 
