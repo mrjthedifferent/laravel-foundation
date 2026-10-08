@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -47,6 +48,7 @@ use Mrj\Foundation\Support\NullImpersonationContext;
 use Mrj\Foundation\Support\NullOtpVerifier;
 use Mrj\Foundation\Support\NullTenancyContext;
 use Mrj\Foundation\Support\Tenancy;
+use Mrj\Foundation\Sync\SyncRegistry;
 use Mrj\Foundation\View\Components\AppLayout;
 use Mrj\Foundation\View\Components\ChartArea;
 use Mrj\Foundation\View\Components\GuestLayout;
@@ -84,6 +86,25 @@ final class FoundationServiceProvider extends ServiceProvider
 
         $this->configureAuditing();
         $this->configureLogChannels();
+        $this->registerBlueprintMacros();
+    }
+
+    /**
+     * `$table->syncable()` adds what a Syncable model needs besides its ULID key
+     * and timestamps: the version counter, soft deletes, and the pull index.
+     */
+    private function registerBlueprintMacros(): void
+    {
+        if (Blueprint::hasMacro('syncable')) {
+            return;
+        }
+
+        Blueprint::macro('syncable', function (): void {
+            /** @var Blueprint $this */
+            $this->unsignedInteger('version')->default(1);
+            $this->softDeletes();
+            $this->index(['updated_at', 'id']);
+        });
     }
 
     /**
@@ -298,7 +319,16 @@ final class FoundationServiceProvider extends ServiceProvider
      */
     private function registerRoutes(): void
     {
-        if ($this->app->routesAreCached() || config('foundation.routing.dashboard') === false) {
+        if ($this->app->routesAreCached()) {
+            return;
+        }
+
+        if (SyncRegistry::enabled()) {
+            // Same URL and name prefix as a module's routes/api.php.
+            Route::middleware('api')->prefix('api')->name('api.')->group(Foundation::path('routes/api.php'));
+        }
+
+        if (config('foundation.routing.dashboard') === false) {
             return;
         }
 

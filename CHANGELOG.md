@@ -4,6 +4,31 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## Unreleased
+
+**Added**
+- Offline sync for mobile apps. Models use the `Mrj\Foundation\Sync\Syncable` trait
+  (client-generated ULID key, soft deletes, a `version` counter), and tables add
+  `$table->syncable()`. A handler extending `Mrj\Foundation\Sync\ModelSyncHandler`, registered
+  in `foundation.offline_sync.handlers`, connects each collection to
+  `GET api/v1/sync/pull` (cursor-paged changes and tombstones) and `POST api/v1/sync/push`
+  (per-operation results: applied, conflict or rejected). The routes exist only once a
+  handler is registered. See "Offline sync for mobile apps" in the README.
+- The `idempotent` middleware: a write sent with an `Idempotency-Key` header runs once, and
+  retries get the stored response. `idempotent:required` makes the header mandatory. The
+  keys live in the new `idempotency_keys` table and are removed by `model:prune`.
+
+**Upgrading**
+
+```bash
+composer update mrjthedifferent/laravel-foundation
+php artisan migrate
+```
+
+Nothing else changes until you register a sync handler or use the `idempotent` middleware.
+If `model:prune` is not scheduled yet, add `Schedule::command('model:prune')->daily();` so
+expired idempotency keys are removed.
+
 ## 1.8.0
 
 **Added**

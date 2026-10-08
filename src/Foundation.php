@@ -11,6 +11,7 @@ use Mrj\Foundation\Contracts\ErrorReporter;
 use Mrj\Foundation\Exceptions\Handler;
 use Mrj\Foundation\Http\Middleware\CheckUserIsActive;
 use Mrj\Foundation\Http\Middleware\EnsureContactIsVerified;
+use Mrj\Foundation\Http\Middleware\EnsureIdempotency;
 use Mrj\Foundation\Http\Middleware\EnsurePanelIsAvailable;
 use Mrj\Foundation\Http\Middleware\EnsurePasswordIsChanged;
 use Mrj\Foundation\Http\Middleware\EnsureTwoFactorIsEnabled;
@@ -55,6 +56,7 @@ final class Foundation
             $aliases = [
                 'verified' => EnsureContactIsVerified::class,
                 'optional.auth.sanctum' => OptionalAuthenticateSanctum::class,
+                'idempotent' => EnsureIdempotency::class,
             ];
 
             // Middleware::alias() replaces the alias list rather than adding to it, so the

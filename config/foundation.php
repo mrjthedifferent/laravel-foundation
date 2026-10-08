@@ -164,6 +164,29 @@ return [
     ],
 
     /*
+    | The `idempotent` middleware stores the first response to each Idempotency-Key
+    | for this many hours. Schedule `php artisan model:prune` to remove old keys.
+    */
+    'idempotency' => [
+        'ttl_hours' => 24,
+    ],
+
+    /*
+    | Offline sync (the Sync module: GET sync/pull, POST sync/push). `handlers`
+    | maps each sync name the client uses to a class implementing
+    | Mrj\Foundation\Contracts\SyncHandler, e.g. ['farms' => FarmSyncHandler::class].
+    | Pull returns rows changed at least `settle_seconds` ago, so a row written
+    | by a transaction that commits late is not skipped by an advancing cursor.
+    */
+    'offline_sync' => [
+        'handlers' => [],
+        'pull_limit' => 500,
+        'max_pull_limit' => 1000,
+        'max_push_ops' => 200,
+        'settle_seconds' => 2,
+    ],
+
+    /*
     | PDF exports (mPDF). `default_font` falls back to DejaVu Sans, which ships with
     | mPDF. To use your own, put the .ttf in resources/fonts and list it here:
     | 'fonts' => ['nikosh' => 'Nikosh.ttf'], 'default_font' => 'nikosh'

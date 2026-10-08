@@ -22,6 +22,9 @@ parameters:
         - modules
         - config
         - database
+        # The package's public traits (e.g. Sync\Syncable) are only used by
+        # consuming apps; these fixtures are what puts them under analysis.
+        - tests/Feature/OfflineSync/Fixtures
 
     excludePaths:
         - modules/*/lang/*

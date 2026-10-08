@@ -333,4 +333,22 @@ return [
         'error_occurred' => 'An error occurred.',
         'unexpected_error' => 'An unexpected error occurred. Please try again later.',
     ],
+
+    // Offline sync (GET sync/pull, POST sync/push).
+    'offline_sync' => [
+        'pulled' => 'Changes retrieved.',
+        'pushed' => 'Changes processed.',
+        'unknown_collection' => 'This collection is not synced.',
+        'not_found' => 'Record not found.',
+        'forbidden' => 'You are not allowed to change this record.',
+        'failed' => 'This change could not be saved. Try again later.',
+    ],
+
+    // Idempotency-Key handling (the `idempotent` middleware).
+    'idempotency' => [
+        'key_required' => 'An Idempotency-Key header is required for this request.',
+        'key_invalid' => 'The Idempotency-Key header must be 8 to 255 letters, digits, dashes or underscores.',
+        'key_reused' => 'This Idempotency-Key was already used for a different request.',
+        'in_progress' => 'A request with this Idempotency-Key is still being processed. Retry shortly.',
+    ],
 ];

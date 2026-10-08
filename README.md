@@ -200,6 +200,77 @@ Phones may be typed in any form (`01712345678`, `8801712345678`, `+8801712345678
 stored as E.164. The request step answers the same way whether or not the number has an
 account. Codes are stored only as a keyed hash, and SMS logs record them masked.
 
+## Offline sync for mobile apps
+
+An app that works offline keeps a local copy of some tables and exchanges changes with the
+server. The foundation provides the server side.
+
+1. Make the model syncable. Its table uses a ULID key, which the client generates:
+
+   ```php
+   Schema::create('farms', function (Blueprint $table) {
+       $table->ulid('id')->primary();
+       $table->string('name');
+       $table->timestamps();
+       $table->syncable(); // version, deleted_at, pull index
+   });
+
+   class Farm extends Model
+   {
+       use \Mrj\Foundation\Sync\Syncable;
+
+       protected $fillable = ['name'];
+   }
+   ```
+
+2. Write a handler. It decides which rows a user sees, validates pushed data, and sets
+   server-owned attributes. Writes are authorised by the model's policy (`create`,
+   `update`, `delete`), and only `$fillable` attributes are taken from the client.
+
+   ```php
+   final class FarmSyncHandler extends \Mrj\Foundation\Sync\ModelSyncHandler
+   {
+       protected function model(): string { return Farm::class; }
+
+       protected function scope(Builder $query, Authenticatable $user): void
+       {
+           $query->whereIn('id', $user->farms()->select('farms.id'));
+       }
+
+       protected function rules(Authenticatable $user, ?Model $existing): array
+       {
+           return ['name' => [$existing ? 'sometimes' : 'required', 'string', 'max:100']];
+       }
+   }
+   ```
+
+3. Register it in `config/foundation.php`:
+   `'offline_sync' => ['handlers' => ['farms' => FarmSyncHandler::class]]`. The endpoints
+   exist only once a handler is registered.
+
+**Pull:** `GET api/v1/sync/pull?cursor=&limit=&only=farms,batches` returns
+`{changes: {farms: [...]}, tombstones: {farms: [ids]}, cursor, has_more, server_time}`.
+Store the cursor and send it back. While `has_more` is true, pull again. Rows are returned
+only once they were last changed at least `settle_seconds` ago, so a slow transaction cannot
+slip behind the cursor.
+
+**Push:** `POST api/v1/sync/push` with an `Idempotency-Key` header and
+`{ops: [{name, op: "upsert"|"delete", id, version?, data}]}`. Each operation is applied in
+its own transaction, and each gets a result:
+- `applied` returns the new `version`.
+- `conflict` means the server row changed since the client's `version`. The result includes
+  the current row as `server`, or `null` if it was deleted.
+- `rejected` returns `errors`.
+
+### Idempotent requests
+
+The `idempotent` middleware makes a write safe to retry. The client sends an
+`Idempotency-Key` header, a ULID or UUID per operation. The first response is stored, and
+a retry with the same key gets that response again, marked `Idempotent-Replayed: true`.
+The same key with a different request is refused with 422, and a key still in progress
+answers 409. Server errors are not stored. Use `idempotent:required` to reject requests
+that have no key. Schedule `php artisan model:prune` to remove expired keys.
+
 ## Customising without forking
 
 | To change | Do this |
