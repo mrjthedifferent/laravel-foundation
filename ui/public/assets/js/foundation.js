@@ -330,6 +330,8 @@
 
     // --- Dropdown ----------------------------------------------------
     function dropdownMenu(toggle) {
+        // While open, the menu lives on <body> (see below), so it is remembered rather than found.
+        if (toggle._fdMenu) { return toggle._fdMenu; }
         var next = toggle.nextElementSibling;
         if (next && next.classList.contains('dropdown-menu')) { return next; }
         var parent = toggle.closest('.dropdown, .dropup, .dropend, .dropstart') || toggle.parentElement;
@@ -367,6 +369,11 @@
             var menu = api.menu();
             if (!menu || api.isOpen()) { return; }
             if (openDropdown) { openDropdown.hide(); }
+            // Moved to <body> while open: an ancestor with backdrop-filter (the navbar) or a transform
+            // would otherwise become the containing block of this fixed menu and offset it.
+            toggle._fdMenu = menu;
+            toggle._fdHome = { parent: menu.parentNode, next: menu.nextSibling };
+            document.body.appendChild(menu);
             menu.classList.add('show');
             toggle.classList.add('show');
             toggle.setAttribute('aria-expanded', 'true');
@@ -380,6 +387,11 @@
             menu.classList.remove('show');
             menu.removeAttribute('data-placed');
             menu.style.top = menu.style.left = '';
+            if (toggle._fdHome && toggle._fdHome.parent) {
+                toggle._fdHome.parent.insertBefore(menu, toggle._fdHome.next && toggle._fdHome.next.parentNode === toggle._fdHome.parent ? toggle._fdHome.next : null);
+            }
+            toggle._fdMenu = null;
+            toggle._fdHome = null;
             toggle.classList.remove('show');
             toggle.setAttribute('aria-expanded', 'false');
             if (openDropdown === api) { openDropdown = null; }
