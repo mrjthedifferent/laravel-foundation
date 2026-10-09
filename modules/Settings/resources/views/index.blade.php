@@ -15,39 +15,34 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
     @csrf
 
     {{-- ── Sticky unsaved-changes bar ── --}}
-    <div id="save-bar" class="d-none mb-3 sticky-top">
-        <div class="alert alert-warning d-flex align-items-center justify-content-between py-2 px-3 mb-0 rounded-0 border-start-0 border-end-0">
+    <div id="save-bar" class="hidden mb-4 sticky top-0 z-10">
+        <div class="alert alert-warning flex items-center justify-between py-2 px-4 mb-0 rounded-none border-s-0 border-e-0">
             <span><i class="ph-warning-circle me-2"></i>{!! __('settings::settings.index.unsaved_changes') !!}</span>
-            <button type="submit" class="btn btn-dark btn-sm px-3">
+            <button type="submit" class="btn btn-dark btn-sm px-4">
                 <i class="ph-floppy-disk"></i>{{ __('settings::settings.index.save_now') }}
             </button>
         </div>
     </div>
 
-    <div class="card shadow-sm">
-
-        {{-- ── Card header ── --}}
-        <div class="card-header">
-            <span class="fd-icon-tile"><i class="ph-gear"></i></span>
-            <div>
-                <div class="card-title">{{ __('settings::settings.index.title') }}</div>
-                <div class="text-muted fs-xs">{{ __('settings::settings.index.subtitle') }}</div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-sm ms-auto">
+    <x-page-header title="{{ __('settings::settings.index.title') }}" subtitle="{{ __('settings::settings.index.subtitle') }}" icon="ph-gear">
+        <x-slot name="actions">
+            <button type="submit" class="btn btn-primary">
                 <i class="ph-floppy-disk"></i>{{ __('settings::settings.index.save_changes') }}
             </button>
-        </div>
+        </x-slot>
+    </x-page-header>
 
+    <div class="card">
         <div class="card-body p-0">
-            <div class="row g-0">
+            <div class="grid grid-cols-12 gap-0">
 
                 {{-- ── Sidebar ── --}}
-                <div class="col-md-2 border-end bg-body-tertiary">
+                <div class="col-span-12 border-e bg-subtle md:col-span-3 xl:col-span-2">
                     <div class="p-2">
                         <div class="fd-overline px-2 pt-2 pb-1">
                             {{ __('settings::settings.index.categories') }}
                         </div>
-                        <nav class="nav flex-column gap-1 nav-pills" id="settingsTabs" role="tablist">
+                        <nav class="nav flex-col gap-1 nav-pills" id="settingsTabs" role="tablist">
                             @foreach ($settings as $tabKey => $group)
                             @php
                             $tabKeyLower = strtolower($tabKey);
@@ -68,13 +63,13 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
 
                             $visibleCount = count($group);
                             @endphp
-                            <a class="nav-link d-flex align-items-center gap-1 py-2 px-2 fs-sm {{ $loop->first ? 'active' : '' }}"
+                            <a class="nav-link flex items-center gap-1 py-2 px-2 text-sm {{ $loop->first ? 'active' : '' }}"
                                 id="{{ snakeCase($tabKey) }}-tab"
-                                data-bs-toggle="pill"
+                                data-fd-toggle="tab"
                                 href="#{{ snakeCase($tabKey) }}"
                                 role="tab">
                                 <i class="{{ $tabIcon }}"></i>
-                                <span class="text-nowrap">{{ display_label($tabKey) }}</span>
+                                <span class="whitespace-nowrap">{{ display_label($tabKey) }}</span>
                                 @if($visibleCount > 0)
                                 <span class="badge badge-count ms-auto">{{ $visibleCount }}</span>
                                 @endif
@@ -85,26 +80,26 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                 </div>
 
                 {{-- ── Tab content ── --}}
-                <div class="col-md-10">
-                    <div class="tab-content p-4" id="settingsTabsContent">
+                <div class="col-span-12 md:col-span-9 xl:col-span-10">
+                    <div class="tab-content p-6" id="settingsTabsContent">
                         @foreach ($settings as $tabKey => $group)
                         <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
                             id="{{ snakeCase($tabKey) }}"
                             role="tabpanel">
 
                             {{-- Section header --}}
-                            <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                            <div class="flex items-center gap-2 mb-4 pb-2 border-b">
                                 <span class="fd-icon-tile fd-icon-tile-sm">
                                     <i class="{{ $tabIcon ?? 'ph-sliders' }}"></i>
                                 </span>
                                 <div>
                                     <div class="fd-overline">{{ display_label($tabKey) }}</div>
                                     @php $tabCount = count($group); @endphp
-                                    <div class="text-muted fs-xs">{{ trans_choice('settings::settings.index.setting_count', $tabCount) }}</div>
+                                    <div class="text-muted text-xs">{{ trans_choice('settings::settings.index.setting_count', $tabCount) }}</div>
                                 </div>
                             </div>
 
-                            <div class="row g-3">
+                            <div class="grid grid-cols-12 items-start gap-4">
                                 @foreach ($group as $settingKey => $setting)
                                 @php
                                 $label = __(ucwords(str_replace('_', ' ', $setting->key)));
@@ -125,20 +120,20 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                 $badgeColor = $typeColors[$setting->type] ?? 'secondary';
                                 @endphp
 
-                                <div class="{{ $isWide ? 'col-md-12' : 'col-xl-6 col-md-6' }}">
-                                    <div class="card h-100">
-                                        <div class="card-body py-2 px-3">
+                                <div class="{{ $isWide ? 'col-span-12 md:col-span-12' : 'col-span-12 xl:col-span-6 md:col-span-6' }}">
+                                    <div class="card h-full">
+                                        <div class="card-body py-2 px-4">
 
                                             {{-- Card label row --}}
-                                            <div class="d-flex align-items-center gap-1 mb-2">
-                                                <span class="fw-semibold fs-sm">{{ $label }}</span>
-                                                <span class="badge ms-auto bg-{{ $badgeColor }} text-uppercase">{{ $setting->type }}</span>
+                                            <div class="flex items-center gap-1 mb-2">
+                                                <span class="font-semibold text-sm">{{ $label }}</span>
+                                                <span class="badge ms-auto badge-{{ $badgeColor }} uppercase">{{ $setting->type }}</span>
                                             </div>
 
                                             {{-- ── Boolean ── --}}
                                             @if ($setting->type === 'boolean')
-                                            <div class="d-flex align-items-center justify-content-between gap-3">
-                                                <span class="text-muted fs-sm">
+                                            <div class="flex items-center justify-between gap-4">
+                                                <span class="text-muted text-sm">
                                                     {{ $setting->value ? __('settings::settings.index.currently_enabled') : __('settings::settings.index.currently_disabled') }}
                                                 </span>
                                                 <div class="form-check form-switch mb-0">
@@ -154,23 +149,23 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
 
                                             {{-- ── Image ── --}}
                                             @elseif ($setting->type === 'image')
-                                            <div class="border rounded p-2 text-center position-relative overflow-hidden cursor-pointer" id="upload_box_{{ $setting->key }}">
+                                            <div class="border rounded-md p-2 text-center relative overflow-hidden cursor-pointer" id="upload_box_{{ $setting->key }}">
                                                 @if ($setting->value)
                                                 <img src="{{ $setting->value }}"
                                                     id="preview_{{ $setting->key }}"
-                                                    class="img-preview d-block mx-auto mb-1"
+                                                    class="img-preview block mx-auto mb-1"
                                                     alt="{{ $label }}">
-                                                <div class="text-muted fs-xs"><i class="ph-pencil me-1"></i>{{ __('settings::settings.index.click_to_change_image') }}</div>
+                                                <div class="text-muted text-xs"><i class="ph-pencil me-1"></i>{{ __('settings::settings.index.click_to_change_image') }}</div>
                                                 @else
                                                 <img src="" id="preview_{{ $setting->key }}"
-                                                    class="img-preview d-none" alt="{{ $label }}">
-                                                <i class="ph-image-square fs-2 text-muted d-block mb-1"></i>
-                                                <div class="text-muted fs-xs">{{ __('settings::settings.index.click_to_upload_image') }}</div>
+                                                    class="img-preview hidden" alt="{{ $label }}">
+                                                <i class="ph-image-square text-[2rem] text-muted block mb-1"></i>
+                                                <div class="text-muted text-xs">{{ __('settings::settings.index.click_to_upload_image') }}</div>
                                                 @endif
                                                 <input type="file"
                                                     name="{{ $setting->key }}"
                                                     id="{{ $setting->key }}"
-                                                    class="settings-input image-preview-input position-absolute top-0 start-0 w-100 h-100 opacity-0"
+                                                    class="settings-input image-preview-input absolute top-0 start-0 w-full h-full opacity-0"
                                                     accept="image/*"
                                                     data-preview="preview_{{ $setting->key }}"
                                                     class="cursor-pointer">
@@ -244,7 +239,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                             @elseif ($setting->type === 'json')
                                             <textarea name="{{ $setting->key }}"
                                                 id="{{ $setting->key }}"
-                                                class="form-control form-control-sm settings-input font-monospace fs-xs"
+                                                class="form-control form-control-sm settings-input font-mono text-xs"
                                                 rows="5">{{ is_array($setting->value) ? json_encode($setting->value, JSON_PRETTY_PRINT) : $setting->value }}</textarea>
 
                                             {{-- ── Encrypted ── --}}
@@ -288,9 +283,9 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
         </div>
 
         {{-- ── Footer ── --}}
-        <div class="card-footer d-flex justify-content-between align-items-center">
-            <span class="text-muted fs-sm"><i class="ph-info me-1"></i>{{ __('settings::settings.index.footer_note') }}</span>
-            <button type="submit" class="btn btn-primary px-5">
+        <div class="card-footer flex justify-between items-center">
+            <span class="text-muted text-sm"><i class="ph-info me-1"></i>{{ __('settings::settings.index.footer_note') }}</span>
+            <button type="submit" class="btn btn-primary px-12">
                 <i class="ph-floppy-disk"></i>{{ __('settings::settings.index.save_changes') }}
             </button>
         </div>
@@ -313,7 +308,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
             }
         }
 
-        $('#settingsTabs a[data-bs-toggle="pill"]').on('shown.bs.tab', function(e) {
+        $('#settingsTabs a[data-fd-toggle="tab"]').on('fd:tab-shown', function(e) {
             localStorage.setItem('activeSettingsTab', $(e.target).attr('href'));
         });
 
@@ -323,7 +318,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
         function markChanged() {
             if (!formChanged) {
                 formChanged = true;
-                $('#save-bar').removeClass('d-none');
+                $('#save-bar').removeClass('hidden');
             }
         }
         $('#settings-form').on('change input', '.settings-input', markChanged);
@@ -358,7 +353,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
             }
 
             formChanged = false;
-            $('#save-bar').addClass('d-none');
+            $('#save-bar').addClass('hidden');
         });
 
         // Clear invalid state on input
@@ -374,7 +369,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     var $img = $('#' + previewId);
-                    $img.attr('src', e.target.result).removeClass('d-none');
+                    $img.attr('src', e.target.result).removeClass('hidden');
                     $img.closest('.border').find('.text-muted').html('<i class="ph-pencil me-1"></i>{{ __('settings::settings.index.click_to_change_image') }}');
                     $img.closest('.border').find('.ph-image-square').hide();
                 };

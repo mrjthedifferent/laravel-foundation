@@ -5,29 +5,23 @@
 @endsection
 
 @section('content')
+<x-page-header title="{{ __('settings::settings.special_social_auth.title') }}" subtitle="{{ __('settings::settings.special_social_auth.subtitle') }}" icon="ph-users-three">
+</x-page-header>
+
 <div class="card">
 
-    {{-- Header --}}
-    <div class="card-header">
-        <span class="fd-icon-tile"><i class="ph-users-three"></i></span>
-        <div>
-            <div class="card-title">{{ __('settings::settings.special_social_auth.title') }}</div>
-            <div class="text-muted fs-xs">{{ __('settings::settings.special_social_auth.subtitle') }}</div>
-        </div>
-    </div>
-
-    <div class="card-body p-4">
+    <div class="card-body p-6">
 
         {{-- Info tip --}}
-        <x-alert type="primary" icon="ph-info" class="mb-4">
-            <span class="fs-sm">{!! __('settings::settings.special_social_auth.info_tip') !!}</span>
+        <x-alert type="primary" icon="ph-info" class="mb-6">
+            <span class="text-sm">{!! __('settings::settings.special_social_auth.info_tip') !!}</span>
         </x-alert>
 
         <form action="{{ route('admin.settings.special.update_social_auth') }}" method="POST">
             @csrf
 
             {{-- Google --}}
-            <div class="card mb-3">
+            <div class="card mb-4">
                 <div class="card-header">
                     <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-google-logo"></i></span>
                     <span class="fd-overline">Google</span>
@@ -36,18 +30,18 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-4">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.input name="google_client_id" label="{{ __('settings::settings.special_social_auth.client_id_label') }}" :value="optional($settings->get('google_client_id'))->value ?? ''" placeholder="*.apps.googleusercontent.com" />
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.label for="google_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
                             <div class="input-group input-group-sm">
                                 <x-form.input type="password" name="google_client_secret" />
-                                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost pw-toggle text-muted position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="google_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
+                                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost pw-toggle text-muted absolute top-1/2 end-0 -translate-y-1/2 toggle-password" data-target="google_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.input name="google_redirect_uri" label="{{ __('settings::settings.special_social_auth.redirect_uri_label') }}" :value="optional($settings->get('google_redirect_uri'))->value ?? '/auth/google/callback'" placeholder="/auth/google/callback" />
                         </div>
                     </div>
@@ -55,7 +49,7 @@
             </div>
 
             {{-- GitHub --}}
-            <div class="card mb-3">
+            <div class="card mb-4">
                 <div class="card-header">
                     <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-github-logo"></i></span>
                     <span class="fd-overline">GitHub</span>
@@ -64,18 +58,18 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-4">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.input name="github_client_id" label="{{ __('settings::settings.special_social_auth.client_id_label') }}" :value="optional($settings->get('github_client_id'))->value ?? ''" />
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.label for="github_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
                             <div class="input-group input-group-sm">
                                 <x-form.input type="password" name="github_client_secret" />
-                                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost pw-toggle text-muted position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="github_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
+                                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost pw-toggle text-muted absolute top-1/2 end-0 -translate-y-1/2 toggle-password" data-target="github_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.input name="github_redirect_uri" label="{{ __('settings::settings.special_social_auth.redirect_uri_label') }}" :value="optional($settings->get('github_redirect_uri'))->value ?? '/auth/github/callback'" placeholder="/auth/github/callback" />
                         </div>
                     </div>
@@ -83,7 +77,7 @@
             </div>
 
             {{-- Apple --}}
-            <div class="card mb-3">
+            <div class="card mb-4">
                 <div class="card-header">
                     <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-apple-logo"></i></span>
                     <span class="fd-overline">Apple</span>
@@ -92,35 +86,35 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-4">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.input name="apple_client_id" label="{{ __('settings::settings.special_social_auth.client_id_label') }}" :value="optional($settings->get('apple_client_id'))->value ?? ''" />
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.label for="apple_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
                             <div class="input-group input-group-sm">
                                 <x-form.input type="password" name="apple_client_secret" />
-                                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost pw-toggle text-muted position-absolute top-50 end-0 translate-middle-y toggle-password" data-target="apple_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
+                                <button type="button" aria-label="{{ __('foundation::foundation.auth.show_password') }}" class="btn btn-ghost pw-toggle text-muted absolute top-1/2 end-0 -translate-y-1/2 toggle-password" data-target="apple_client_secret" tabindex="-1"><i class="ph-eye"></i></button>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.input name="apple_redirect_uri" label="{{ __('settings::settings.special_social_auth.redirect_uri_label') }}" :value="optional($settings->get('apple_redirect_uri'))->value ?? '/auth/apple/callback'" placeholder="/auth/apple/callback" />
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.input name="apple_team_id" label="{{ __('settings::settings.special_social_auth.team_id_label') }}" :value="optional($settings->get('apple_team_id'))->value ?? ''" />
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.input name="apple_key_id" label="{{ __('settings::settings.special_social_auth.key_id_label') }}" :value="optional($settings->get('apple_key_id'))->value ?? ''" />
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-span-12 md:col-span-4">
                             <x-form.input name="apple_key_file" label="{{ __('settings::settings.special_social_auth.key_file_label') }}" :value="optional($settings->get('apple_key_file'))->value ?? ''" placeholder="{{ __('settings::settings.special_social_auth.key_file_placeholder') }}" />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary px-4">
+            <div class="flex justify-end">
+                <button type="submit" class="btn btn-primary px-6">
                     <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_social_auth.submit') }}
                 </button>
             </div>

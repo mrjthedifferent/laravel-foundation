@@ -21,6 +21,10 @@
             @endforeach
         </g>
 
+        @if ($previousPath !== '')
+            <path class="chart-previous" d="{{ $previousPath }}" fill="none" stroke="var(--fd-faint)" stroke-width="1.5"
+                stroke-dasharray="4 4" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+        @endif
         <path d="{{ $areaPath }}" fill="url(#{{ $gradientId }})"></path>
         <path d="{{ $linePath }}" fill="none" stroke="var(--fd-accent)" stroke-width="2"
             stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>

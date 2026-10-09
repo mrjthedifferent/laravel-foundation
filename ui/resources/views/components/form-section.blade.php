@@ -4,7 +4,7 @@
     'open'  => true,
 ])
 
-<div class="card mb-3">
+<div class="card mb-4">
     <div class="card-header">
         <span class="fd-icon-tile fd-icon-tile-sm"><i class="{{ $icon }}"></i></span>
         <span class="fd-overline">{{ $title }}</span>

@@ -5,22 +5,18 @@
 @endsection
 
 @section('content')
+<x-page-header title="{{ __('settings::settings.special_privacy_policy.title') }}" subtitle="{{ __('settings::settings.special_privacy_policy.subtitle') }}" icon="ph-file-text">
+</x-page-header>
+
 <div class="card">
-    <div class="card-header">
-        <span class="fd-icon-tile"><i class="ph-file-text"></i></span>
-        <div>
-            <div class="card-title">{{ __('settings::settings.special_privacy_policy.title') }}</div>
-            <div class="text-muted fs-xs">{{ __('settings::settings.special_privacy_policy.subtitle') }}</div>
-        </div>
-    </div>
-    <div class="card-body p-4">
+    <div class="card-body p-6">
         <form action="{{ route('admin.settings.special.update_privacy_policy') }}" method="POST">
             @csrf
-            <div class="mb-4">
+            <div class="mb-6">
                 <x-form.textarea name="privacy_policy" id="privacy_policy" label="{{ __('settings::settings.special_privacy_policy.content_label') }}" required :value="$setting->value ?? ''" :rows="20" />
             </div>
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary px-4">
+            <div class="flex justify-end">
+                <button type="submit" class="btn btn-primary px-6">
                     <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_privacy_policy.submit') }}
                 </button>
             </div>
@@ -41,7 +37,7 @@
             var holder = document.createElement('div');
             holder.style.minHeight = '20rem';
             field.insertAdjacentElement('afterend', holder);
-            field.classList.add('d-none');
+            field.classList.add('hidden');
 
             var quill = new Quill(holder, {
                 theme: 'snow',

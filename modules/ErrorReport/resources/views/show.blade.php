@@ -8,10 +8,10 @@
     <div class="card-header">
         <span class="fd-icon-tile fd-icon-tile-sm {{ $errorReport->isResolved() ? 'is-success' : 'is-danger' }}"><i class="ph-bug"></i></span>
         <h2 class="card-title">{{ __('errorreport::errorreport.show.title') }}</h2>
-        <div class="d-flex gap-2 ms-auto">
+        <div class="flex gap-2 ms-auto">
             @can('Resolve Error Report')
             @if (! $errorReport->isResolved())
-            <form action="{{ route('admin.error-reports.resolve', $errorReport) }}" method="POST" class="d-inline">
+            <form action="{{ route('admin.error-reports.resolve', $errorReport) }}" method="POST" class="inline">
                 @csrf
                 <button type="submit" class="btn btn-primary btn-sm">
                     <i class="ph-check-circle"></i>{{ __('errorreport::errorreport.index.mark_resolved') }}
@@ -59,7 +59,7 @@
 
             @if ($errorReport->request_url)
             <dt>{{ __('errorreport::errorreport.show.request_url_label') }}</dt>
-            <dd class="text-break"><a href="{{ $errorReport->request_url }}" target="_blank" rel="noopener">{{ $errorReport->request_url }}</a></dd>
+            <dd class="break-words"><a href="{{ $errorReport->request_url }}" target="_blank" rel="noopener">{{ $errorReport->request_url }}</a></dd>
             @endif
 
             @if ($errorReport->request_method)
@@ -69,8 +69,8 @@
         </dl>
 
         @if ($errorReport->trace && count($errorReport->trace) > 0)
-        <div class="fd-overline mt-4 mb-1">{{ __('errorreport::errorreport.show.stack_trace_label') }}</div>
-        <pre class="bg-body-tertiary border rounded p-3 mb-0 fs-xs fd-scroll-y overflow-auto">@foreach ($errorReport->trace as $frame)
+        <div class="fd-overline mt-6 mb-1">{{ __('errorreport::errorreport.show.stack_trace_label') }}</div>
+        <pre class="bg-subtle border rounded-md p-4 mb-0 text-xs fd-scroll-y overflow-auto">@foreach ($errorReport->trace as $frame)
 {{ ($frame['class'] ?? '') . ($frame['type'] ?? '') . ($frame['function'] ?? '') }}()
     {{ ($frame['file'] ?? '') }}:{{ $frame['line'] ?? '' }}
 @endforeach</pre>

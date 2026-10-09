@@ -5,16 +5,16 @@
 
 @section('content')
 <x-search-card>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('activitylog::activitylog.sms_logs_index.search_placeholder') }}" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.input name="date_from" label="{{ __('activitylog::activitylog.sms_logs_index.date_from') }}" type="date" :value="request('date_from')" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.input name="date_to" label="{{ __('activitylog::activitylog.sms_logs_index.date_to') }}" type="date" :value="request('date_to')" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.select class="select" name="status" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('activitylog::activitylog.sms_logs_index.all_statuses'), 'success' => __('activitylog::activitylog.sms_logs_index.success'), 'failed' => __('activitylog::activitylog.sms_logs_index.failed')]" :selected="request('status')" data-placeholder="{{ __('activitylog::activitylog.sms_logs_index.all') }}" />
     </div>
 </x-search-card>
@@ -48,7 +48,7 @@
             </td>
             <td>
                 @if ($log->response)
-                <a href="#" class="badge bg-secondary-subtle text-secondary border border-secondary-subtle view-response"
+                <a href="#" class="badge badge-secondary text-muted border border-line view-response"
                     data-response="{{ e($log->response) }}">{{ __('foundation::foundation.common.view') }}</a>
                 @else
                 <span class="text-muted">—</span>

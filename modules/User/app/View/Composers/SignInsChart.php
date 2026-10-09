@@ -44,4 +44,10 @@ final class SignInsChart extends ChartComposer
     {
         return app(DailySeries::class)->count(UserLoginHistory::query()->toBase(), 'logged_in_at', $days);
     }
+
+    #[Override]
+    protected function buildPrevious(int $days): array
+    {
+        return app(DailySeries::class)->count(UserLoginHistory::query()->toBase(), 'logged_in_at', $days, $days);
+    }
 }

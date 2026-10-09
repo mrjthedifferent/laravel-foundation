@@ -1,5 +1,5 @@
 {{-- An on/off setting. The hidden 0 is sent when the switch is off. --}}
-<div class="mb-3">
+<div class="mb-4">
     <div class="form-check form-switch mb-0">
         <input type="hidden" name="{{ $name }}" value="0">
         <input class="form-check-input" type="checkbox" role="switch" id="{{ $name }}" name="{{ $name }}" value="1"

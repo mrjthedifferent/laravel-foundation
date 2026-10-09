@@ -75,6 +75,8 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 
 ### Available Shared Components
 
+Every component's props and slots: [`components-reference.md`](components-reference.md).
+
 | Component | Purpose |
 |---|---|
 | `<x-app-layout>` | Root page wrapper (use in `layouts/master.blade.php` only) |
@@ -85,11 +87,11 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 | `<x-table-view-pagination>` | Card + table + pagination + empty state for list pages |
 | `<x-table-actions>` / `<x-table-action>` | Action group for the table card header; overflow collapses into a menu |
 | `<x-table-export-dropdown>` / `<x-table-export-item>` | Export menu for the table's `$exports` slot |
-| `<x-stat-card label="" :value="" icon="">` | KPI tile (`.fd-stat`) for dashboards |
+| `<x-stat-card label="" :value="" icon="">` | KPI tile (`.fd-stat`) for dashboards; `:series` adds a sparkline |
 | `<x-status-badge :active="">` | Status dot + translated Active/Inactive label (`.fd-status`) |
 | `<x-dropdown-menu>` | Action dropdown in table rows |
 | `<x-dropdown-link :url="">` | Link item inside `x-dropdown-menu` |
-| `<x-modal id="" title="">` | Bootstrap modal dialog |
+| `<x-modal id="" title="">` | Modal dialog |
 | `<x-alert type="">` | Inline alert with a matching Phosphor icon |
 | `<x-form.input>`, `<x-form.select>`, `<x-form.textarea>`, `<x-form.file>`, `<x-form.checkbox>`, `<x-form.label>` | Labeled form fields — old-input, validation errors and `is-invalid` built in (see `patterns.md` / `ui-components.md` for the full API) |
 
@@ -97,8 +99,8 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 ```blade
 <x-page-header :title="$thing->name" icon="ph-pencil-simple" :back-url="route('admin.things.index')" back-label="Back to List">
     <x-slot name="actions">
-        <span class="badge bg-primary">{{ display_label($thing->type) }}</span>
-        <x-status-badge :active="$thing->is_active" class="fs-xs" />
+        <span class="badge badge-primary">{{ display_label($thing->type) }}</span>
+        <x-status-badge :active="$thing->is_active" class="text-xs" />
     </x-slot>
 </x-page-header>
 ```
@@ -117,10 +119,10 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 @section('content')
     {{-- Filter card --}}
     <x-search-card>
-        <div class="col-md-3 mb-3">
+        <div class="col-span-12 mb-4 md:col-span-3">
             <x-form.input name="search" :label="__('foundation::foundation.common.search')" :value="request('search')" :placeholder="__('thing::thing.index.search_placeholder')" />
         </div>
-        <div class="col-md-3 mb-3">
+        <div class="col-span-12 mb-4 md:col-span-3">
             <x-form.select class="select" name="is_active" :label="__('foundation::foundation.common.status')" :options="integerStatus()" :selected="request('is_active')" />
         </div>
     </x-search-card>
@@ -200,21 +202,21 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
         :back-label="__('thing::thing.form.back')" />
 
     <x-form-section :title="__('thing::thing.form.basic_information')" icon="ph-info">
-        <div class="row g-3">
-            <div class="col-md-6">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-12 md:col-span-6">
                 <x-form.input name="name" :label="__('foundation::foundation.common.name')" required />
             </div>
-            <div class="col-md-6">
+            <div class="col-span-12 md:col-span-6">
                 <x-form.select class="select" name="is_active" :label="__('foundation::foundation.common.status')" required :options="integerStatus()" selected="1" />
             </div>
         </div>
     </x-form-section>
 
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="fd-form-actions">
         <a href="{{ route('admin.things.index') }}" class="btn btn-light">
             <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
-        <x-primary-button class="px-5">
+        <x-primary-button class="px-12">
             <i class="ph-floppy-disk"></i>{{ __('thing::thing.create.submit') }}
         </x-primary-button>
     </div>
@@ -246,28 +248,28 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
         :back-url="route('admin.things.index')"
         :back-label="__('thing::thing.form.back')">
         <x-slot name="actions">
-            <x-status-badge :active="$thing->is_active" class="fs-xs" />
+            <x-status-badge :active="$thing->is_active" class="text-xs" />
         </x-slot>
     </x-page-header>
 
     <x-form-section :title="__('thing::thing.form.basic_information')" icon="ph-info">
-        <div class="row g-3">
-            <div class="col-md-6">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-12 md:col-span-6">
                 <x-form.input name="name" :label="__('foundation::foundation.common.name')" required :value="$thing->name" />
                 {{-- Every field's current value is passed explicitly — there is
                      no model-binding auto-population to rely on. --}}
             </div>
-            <div class="col-md-6">
+            <div class="col-span-12 md:col-span-6">
                 <x-form.select class="select" name="is_active" :label="__('foundation::foundation.common.status')" required :options="integerStatus()" :selected="(int) $thing->is_active" />
             </div>
         </div>
     </x-form-section>
 
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="fd-form-actions">
         <a href="{{ route('admin.things.index') }}" class="btn btn-light">
             <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
-        <x-primary-button class="px-5">
+        <x-primary-button class="px-12">
             <i class="ph-floppy-disk"></i>{{ __('thing::thing.edit.submit') }}
         </x-primary-button>
     </div>
@@ -296,9 +298,9 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 
 **Authorization:** Gate all action buttons and links with `@can('Permission Name') ... @endcan`.
 
-**Status:** `<x-status-badge :active="$thing->is_active" />` — a `.fd-status` dot plus an already-translated label; don't hand-write badge markup for state. A label or count that isn't state is a soft badge: `bg-*-subtle` + `text-*-emphasis`.
+**Status:** `<x-status-badge :active="$thing->is_active" />` — a `.fd-status` dot plus an already-translated label; don't hand-write badge markup for state. A label or count that isn't state is a soft badge: `badge badge-primary|secondary|success|danger|warning|info|count`.
 
-**Styling:** No inline `style=` attributes, and never add rules to the package's `assets/css/foundation.css` — it is overwritten on update. Use Bootstrap utilities, the `.fd-*` classes and the `--fd-*` tokens (see `ui-components.md`); project-wide CSS belongs in `resources/css/app.css`.
+**Styling:** No inline `style=` attributes, and never add rules to the package's `assets/css/foundation.css` — it is overwritten on update. Use Tailwind utilities, the `.fd-*` classes and the `--fd-*` tokens (see `ui-components.md`); project-wide CSS belongs in `resources/css/app.css`.
 
 **Scripts:** Add page-specific JS with `@push('scripts') <script>...</script> @endpush` at the bottom of the view.
 

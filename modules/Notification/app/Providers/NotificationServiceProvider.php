@@ -14,6 +14,7 @@ use Modules\Notification\Models\PushNotification;
 use Modules\Notification\Policies\NotificationPolicy;
 use Modules\Notification\Policies\PushNotificationPolicy;
 use Modules\Notification\Support\SmsGatewayManager;
+use Modules\Notification\View\Composers\NotificationQuickActions;
 use Modules\Notification\View\Composers\NotificationWidgetComposer;
 use Mrj\Foundation\Contracts\PushSender;
 use Mrj\Foundation\Contracts\SmsGateway;
@@ -44,6 +45,10 @@ class NotificationServiceProvider extends ModuleServiceProvider
     protected array $policies = [
         Notification::class => NotificationPolicy::class,
         PushNotification::class => PushNotificationPolicy::class,
+    ];
+
+    protected array $dashboardActions = [
+        NotificationQuickActions::class,
     ];
 
     protected array $composers = [

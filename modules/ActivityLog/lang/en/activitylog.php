@@ -139,6 +139,12 @@ return [
     'widget' => [
         'view_all' => 'View all',
         'recent_activity' => 'Recent activity',
+        'by_event_title' => 'Changes by type',
+        'last_days' => 'Last :days days',
+    ],
+
+    'quick' => [
+        'activity_logs' => 'Activity logs',
     ],
 
     'flash' => [

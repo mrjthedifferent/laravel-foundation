@@ -10,13 +10,13 @@ use Modules\ImportDownloadManager\Enum\ImportType;
 
 @section('content')
 <x-search-card>
-    <div class="col-md-4 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-4">
         <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.search_placeholder') }}" />
     </div>
-    <div class="col-md-4 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-4">
         <x-form.select class="select" name="type" label="{{ __('importdownloadmanager::importdownloadmanager.index.type') }}" :options="$types" :selected="request('type')" data-placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.all_types') }}" />
     </div>
-    <div class="col-md-4 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-4">
         <x-form.select class="select" name="status" label="{{ __('foundation::foundation.common.status') }}" :options="$statuses" :selected="request('status')" data-placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.all_statuses') }}" />
     </div>
 </x-search-card>
@@ -51,7 +51,7 @@ use Modules\ImportDownloadManager\Enum\ImportType;
         @endif
         <tr>
             <td>{{ $i++ }}</td>
-            <td class="fs-sm text-muted">{{ date('Y-m-d H:i', strtotime($item->created_at)) }}</td>
+            <td class="text-sm text-muted">{{ date('Y-m-d H:i', strtotime($item->created_at)) }}</td>
             <td>{{ display_label($item->title) }}</td>
             <td>
                 @php
@@ -60,7 +60,7 @@ use Modules\ImportDownloadManager\Enum\ImportType;
                 ImportStatus::Processing => 'bg-warning-subtle text-warning border border-warning-subtle',
                 ImportStatus::Failed => 'bg-danger-subtle text-danger border border-danger-subtle',
                 ImportStatus::Completed => 'bg-success-subtle text-success border border-success-subtle',
-                default => 'bg-secondary-subtle text-secondary border border-secondary-subtle',
+                default => 'bg-subtle text-muted border border-line',
                 };
                 @endphp
                 <span id="status{{ $item->id }}" class="badge {{ $statusColor }}">

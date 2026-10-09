@@ -12,7 +12,7 @@
         subtitle="{{ __('settings::settings.special_security.subtitle') }}"
         icon="ph-shield-check">
         <x-slot name="actions">
-            <button type="submit" class="btn btn-primary px-4">
+            <button type="submit" class="btn btn-primary px-6">
                 <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_security.save_changes') }}
             </button>
         </x-slot>
@@ -20,7 +20,7 @@
 
     {{-- Two-factor authentication --}}
     <x-form-section :title="__('settings::settings.special_security.two_factor_header')" icon="ph-device-mobile">
-        <p class="text-muted fs-sm">{{ __('settings::settings.special_security.two_factor_info') }}</p>
+        <p class="text-muted text-sm">{{ __('settings::settings.special_security.two_factor_info') }}</p>
 
         @include('settings::special.partials.switch', [
             'name' => 'two_factor_enabled',
@@ -38,9 +38,9 @@
 
         <label class="form-label">{{ __('settings::settings.special_security.roles_label') }}</label>
         @if (count($roles))
-            <div class="row g-2">
+            <div class="grid grid-cols-12 gap-2">
                 @foreach ($roles as $role)
-                    <div class="col-sm-6 col-lg-4">
+                    <div class="col-span-12 sm:col-span-6 lg:col-span-4">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="two_factor_required_roles[]"
                                 id="required_role_{{ $loop->index }}" value="{{ $role }}"
@@ -51,12 +51,12 @@
                 @endforeach
             </div>
         @else
-            <p class="text-muted fs-sm mb-0">{{ __('settings::settings.special_security.no_roles') }}</p>
+            <p class="text-muted text-sm mb-0">{{ __('settings::settings.special_security.no_roles') }}</p>
         @endif
         @error('two_factor_required_roles.*')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
+            <div class="invalid-feedback block">{{ $message }}</div>
         @enderror
-        <div class="form-text mb-3">{{ __('settings::settings.special_security.roles_help') }}</div>
+        <div class="form-text mb-4">{{ __('settings::settings.special_security.roles_help') }}</div>
 
         <x-form.input name="two_factor_issuer" id="two_factor_issuer" :label="__('settings::settings.special_security.issuer_label')"
             :value="$twoFactor['issuer']" :placeholder="appName()" :help="__('settings::settings.special_security.issuer_help')" />
@@ -64,8 +64,8 @@
 
     {{-- Passwords --}}
     <x-form-section :title="__('settings::settings.special_security.passwords_header')" icon="ph-password">
-        <div class="row">
-            <div class="col-md-6 col-lg-4 mb-3">
+        <div class="grid grid-cols-12 gap-x-6">
+            <div class="col-span-12 mb-4 md:col-span-6 lg:col-span-4">
                 <x-form.input type="number" name="password_min_length" id="password_min_length" min="8" max="128" required
                     :label="__('settings::settings.special_security.min_length_label')" :value="$passwords['min_length']" />
             </div>
@@ -89,18 +89,18 @@
 
     {{-- Sign-in --}}
     <x-form-section :title="__('settings::settings.special_security.sign_in_header')" icon="ph-sign-in">
-        <div class="row g-3">
-            <div class="col-md-4">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-12 md:col-span-4">
                 <x-form.input type="number" name="login_max_attempts" id="login_max_attempts" min="1" max="100" required
                     :label="__('settings::settings.special_security.max_attempts_label')" :value="$maxAttempts"
                     :help="__('settings::settings.special_security.max_attempts_help')" />
             </div>
-            <div class="col-md-4">
+            <div class="col-span-12 md:col-span-4">
                 <x-form.input type="number" name="session_lifetime" id="session_lifetime" min="5" max="43200" required
                     :label="__('settings::settings.special_security.session_lifetime_label')" :value="$sessionLifetime"
                     :help="__('settings::settings.special_security.session_lifetime_help')" />
             </div>
-            <div class="col-md-4">
+            <div class="col-span-12 md:col-span-4">
                 <x-form.input type="number" name="api_token_idle_expiration_minutes" id="api_token_idle_expiration_minutes" min="5" max="525600" required
                     :label="__('settings::settings.special_security.api_token_idle_label')" :value="$apiTokenIdle"
                     :help="__('settings::settings.special_security.api_token_idle_help')" />

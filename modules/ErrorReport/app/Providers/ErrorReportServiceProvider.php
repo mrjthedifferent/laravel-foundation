@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Gate;
 use Modules\ErrorReport\Models\ErrorReport;
 use Modules\ErrorReport\Policies\ErrorReportPolicy;
 use Modules\ErrorReport\Services\ErrorReporterService;
+use Modules\ErrorReport\View\Composers\ErrorReportHealth;
 use Modules\ErrorReport\View\Composers\ErrorReportStatComposer;
 use Mrj\Foundation\Contracts\ErrorReporter;
 use Mrj\Foundation\Support\ModuleServiceProvider;
@@ -19,6 +20,10 @@ class ErrorReportServiceProvider extends ModuleServiceProvider
 
     protected array $dashboardStats = [
         ErrorReportStatComposer::class,
+    ];
+
+    protected array $dashboardHealth = [
+        ErrorReportHealth::class,
     ];
 
     protected array $policies = [

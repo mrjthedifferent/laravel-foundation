@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ $theme['direction'] }}"
-    data-bs-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}"
-    data-color-palette="{{ $theme['palette'] }}">
+    data-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}"
+    data-color-palette="{{ $theme['palette'] }}"
+    data-width="{{ $theme['contentWidth'] ?? 'fluid' }}" data-density="{{ $theme['density'] ?? 'comfortable' }}"
+    data-radius="{{ $theme['radius'] ?? 'rounded' }}">
 
 <head>
     <meta charset="utf-8">
@@ -44,6 +46,7 @@
         @include('layouts.partials.notification')
     @endif
     @include('layouts.partials.right-sidebar')
+    @include('layouts.partials.bottom-nav')
 
     @stack('modals')
 
@@ -51,8 +54,8 @@
     <script src="{{ asset('assets/vendor/select2/select2.min.js') }}"></script>
     @stack('scripts')
 
-    <button type="button" class="btn btn-light btn-icon btn-floating-settings" data-bs-toggle="offcanvas"
-        data-bs-target="#demo_config" aria-label="{{ __('foundation::foundation.theme_config.title') }}">
+    <button type="button" class="btn btn-light btn-icon btn-floating-settings" data-fd-toggle="offcanvas"
+        data-fd-target="#demo_config" aria-label="{{ __('foundation::foundation.theme_config.title') }}">
         <i class="ph-gear"></i>
     </button>
 

@@ -29,7 +29,6 @@
 </script>
 
 <!-- Core JS files -->
-<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/js/foundation.js') }}"></script>
 <!-- /core JS files -->

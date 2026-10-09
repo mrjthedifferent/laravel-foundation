@@ -6,7 +6,7 @@
 
 @section('content')
 <x-search-card>
-    <div class="col-md-12 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-12">
         <x-form.input name="name" label="{{ __('foundation::foundation.common.search') }}" :value="request('name')" placeholder="{{ __('rolepermission::rolepermission.index.search_placeholder') }}" />
     </div>
 </x-search-card>
@@ -18,7 +18,7 @@
                 <x-table-action :href="route('admin.permissions.manage')" class="btn-info" icon="ph-shield" title="{{ __('rolepermission::rolepermission.index.manage_permissions') }}" />
             @endcan
             @can('Create Role')
-                <x-table-action class="btn-primary" icon="ph-plus" title="{{ __('rolepermission::rolepermission.index.create_role') }}" data-bs-toggle="modal" data-bs-target="#createRoleModal" />
+                <x-table-action class="btn-primary" icon="ph-plus" title="{{ __('rolepermission::rolepermission.index.create_role') }}" data-fd-toggle="modal" data-fd-target="#createRoleModal" />
             @endcan
         </x-table-actions>
     </x-slot>
@@ -34,15 +34,15 @@
     <tbody>
         @foreach ($roles as $role)
         <tr>
-            <td class="fw-semibold">{{ $role->name }}</td>
+            <td class="font-semibold">{{ $role->name }}</td>
             <td>
-                <span class="badge bg-info">{{ $role->permissions_count }}</span>
+                <span class="badge badge-info">{{ $role->permissions_count }}</span>
             </td>
             <td>
                 @if ($role->users_count > 0)
-                <span class="badge bg-warning">{{ $role->users_count }}</span>
+                <span class="badge badge-warning">{{ $role->users_count }}</span>
                 @else
-                <span class="badge bg-secondary">0</span>
+                <span class="badge badge-secondary">0</span>
                 @endif
             </td>
             <td class="text-end">
@@ -87,11 +87,11 @@
 <x-modal id="createRoleModal" title="{{ __('rolepermission::rolepermission.index.create_role') }}" size="sm">
     <form action="{{ route('admin.role.store') }}" method="POST" id="createForm">
         @csrf
-        <div class="mb-3">
+        <div class="mb-4">
             <x-form.input name="role_name" label="{{ __('rolepermission::rolepermission.index.role_name_label') }}" required placeholder="{{ __('rolepermission::rolepermission.index.role_name_placeholder') }}" />
         </div>
         <x-slot name="footer">
-            <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
+            <button type="button" class="btn btn-light" data-fd-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
             <button type="submit" form="createForm" class="btn btn-primary">{{ __('rolepermission::rolepermission.index.create_role') }}</button>
         </x-slot>
     </form>
@@ -101,12 +101,12 @@
 <x-modal id="updateRoleModal" title="{{ __('rolepermission::rolepermission.index.edit_role') }}" size="sm">
     <form id="updateForm" method="POST">
         @csrf @method('PUT')
-        <div class="mb-3">
+        <div class="mb-4">
             <x-form.input name="role_name" id="edit_role_name" label="{{ __('rolepermission::rolepermission.index.role_name_label') }}" required placeholder="{{ __('rolepermission::rolepermission.index.role_name_placeholder') }}" />
         </div>
     </form>
     <x-slot name="footer">
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
+        <button type="button" class="btn btn-light" data-fd-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
         <button type="submit" form="updateForm" class="btn btn-primary">{{ __('rolepermission::rolepermission.index.update_role') }}</button>
     </x-slot>
 </x-modal>

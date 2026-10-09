@@ -28,7 +28,7 @@ $userRole = $user?->isSuperAdmin()
     <!-- Brand -->
     <div class="sidebar-header">
         <div class="sidebar-section">
-            <div class="sidebar-section-body d-flex justify-content-between">
+            <div class="sidebar-section-body flex justify-between">
                 <a href="{{ route('admin.dashboard') }}" class="fd-brand">
                     @if ($logo)
                         <img src="{{ $logo }}" alt="">
@@ -39,13 +39,13 @@ $userRole = $user?->isSuperAdmin()
                 </a>
 
                 <button type="button"
-                    class="btn btn-ghost btn-icon btn-sm sidebar-main-resize sidebar-resize-hide d-none d-lg-inline-flex"
+                    class="btn btn-ghost btn-icon btn-sm sidebar-main-resize sidebar-resize-hide hidden lg:inline-flex"
                     title="{{ __('foundation::foundation.sidebar.toggle') }}"
                     aria-label="{{ __('foundation::foundation.sidebar.toggle') }}">
                     <i class="ph-sidebar-simple"></i>
                 </button>
 
-                <button type="button" class="btn btn-ghost btn-icon btn-sm sidebar-mobile-main-toggle d-lg-none"
+                <button type="button" class="btn btn-ghost btn-icon btn-sm sidebar-mobile-main-toggle lg:hidden"
                     aria-label="{{ __('foundation::foundation.common.close') }}">
                     <i class="ph-x"></i>
                 </button>
@@ -123,9 +123,9 @@ $userRole = $user?->isSuperAdmin()
             @else
                 <span class="fd-avatar">{{ $userInitials }}</span>
             @endif
-            <span class="min-width-0 sidebar-resize-hide">
-                <span class="fd-sidebar-name text-truncate d-block">{{ $user->name }}</span>
-                <span class="fs-xs text-truncate d-block">{{ $userRole }}</span>
+            <span class="min-w-0 sidebar-resize-hide">
+                <span class="fd-sidebar-name truncate block">{{ $user->name }}</span>
+                <span class="text-xs truncate block">{{ $userRole }}</span>
             </span>
         </a>
     </div>

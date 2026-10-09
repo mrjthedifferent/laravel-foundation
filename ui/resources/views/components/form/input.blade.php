@@ -33,5 +33,5 @@
     <div class="form-text">{{ $help }}</div>
 @endif
 @error($errorKey)
-    <div class="invalid-feedback d-block">{{ $message }}</div>
+    <div class="invalid-feedback block">{{ $message }}</div>
 @enderror

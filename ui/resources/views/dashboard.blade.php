@@ -11,82 +11,79 @@
             default => __('foundation::foundation.dashboard.greeting_evening'),
         };
 
-        // Windows are a fixed list, not a range: an arbitrary ?days would mean an
-        // arbitrary number of buckets and SVG points.
-        $windows = [14, 30];
-        $days = in_array(request()->integer('days'), $windows, true) ? request()->integer('days') : $windows[0];
-
-        $stats = app(\Mrj\Foundation\Services\Dashboard\StatRegistry::class)->all();
-        $chart = app(\Mrj\Foundation\Services\Dashboard\ChartRegistry::class)->first($days);
-        // Rendered up front: the feed's composer decides whether this viewer sees
-        // anything at all, and an empty card would leave the chart in a narrow column.
-        $feedView = 'activitylog::partials.dashboard-feed';
-        $feed = view()->exists($feedView) ? trim(view($feedView)->render()) : '';
-        $hasFeed = $feed !== '';
+        // The widgets come ready-rendered, in the viewer's own order and widths.
+        // A project replaces this page by creating resources/views/dashboard.blade.php.
+        ['context' => $context, 'items' => $items] = app(\Mrj\Foundation\Services\Dashboard\DashboardPage::class)->build(request());
+        $windows = \Mrj\Foundation\Services\Dashboard\DashboardContext::WINDOWS;
     @endphp
 
-    {{-- A project replaces this page by creating resources/views/dashboard.blade.php. --}}
+    <x-page-header :title="$greeting.', '.Auth::user()->name" :subtitle="now()->translatedFormat('l, j F Y')">
+        <x-slot name="actions">
+            <nav class="fd-segmented" aria-label="{{ __('foundation::foundation.dashboard.range') }}">
+                @foreach ($windows as $window)
+                    <a href="{{ route('admin.dashboard', $context->query(['range' => $window])) }}"
+                        class="@if ($context->days === $window) is-active @endif"
+                        @if ($context->days === $window) aria-current="page"@endif>{{ __('foundation::foundation.dashboard.range_days', ['days' => $window]) }}</a>
+                @endforeach
+            </nav>
+            <a href="{{ route('admin.dashboard', $context->query(['compare' => $context->compare ? null : 1])) }}"
+                class="btn btn-light @if ($context->compare) is-on @endif" role="switch" aria-checked="{{ $context->compare ? 'true' : 'false' }}">
+                <i class="ph-arrows-left-right"></i>{{ __('foundation::foundation.dashboard.compare') }}
+            </a>
+            <span class="fd-edit-controls">
+                <button type="button" class="btn btn-light" data-fd-dash="edit">
+                    <i class="ph-sliders-horizontal"></i>{{ __('foundation::foundation.dashboard.customize') }}
+                </button>
+                <button type="button" class="btn btn-ghost fd-edit-only" data-fd-dash="reset">
+                    <i class="ph-arrow-counter-clockwise"></i>{{ __('foundation::foundation.dashboard.reset_layout') }}
+                </button>
+                <button type="button" class="btn btn-primary fd-edit-only" data-fd-dash="done">
+                    <i class="ph-check"></i>{{ __('foundation::foundation.dashboard.done') }}
+                </button>
+            </span>
+        </x-slot>
+    </x-page-header>
 
-    <x-page-header :title="$greeting.', '.Auth::user()->name" :subtitle="now()->translatedFormat('l, j F Y')" />
+    <div class="fd-dashboard" data-fd-dashboard
+        data-url-save="{{ route('admin.dashboard.layout.update') }}"
+        data-url-reset="{{ route('admin.dashboard.layout.reset') }}"
+        data-msg-error="{{ __('foundation::foundation.dashboard.layout_error') }}"
+        data-msg-reset-title="{{ __('foundation::foundation.dashboard.reset_title') }}"
+        data-msg-reset-text="{{ __('foundation::foundation.dashboard.reset_text') }}">
+        <p class="fd-edit-hint fd-edit-only" role="status">{{ __('foundation::foundation.dashboard.edit_hint') }}</p>
 
-    {{-- Headline stats: every enabled module contributes its own. --}}
-    @if ($stats)
-        <div class="row g-3 mb-4">
-            @foreach ($stats as $stat)
-                <div class="col-sm-6 col-xl-3">
-                    <x-stat-card
-                        :label="$stat['label']"
-                        :value="$stat['value']"
-                        :icon="$stat['icon'] ?? 'ph-chart-bar'"
-                        :color="$stat['color'] ?? 'primary'"
-                        :href="$stat['href'] ?? null"
-                        :change="$stat['change'] ?? null"
-                        :change-up="$stat['changeUp'] ?? true"
-                        :caption="$stat['caption'] ?? null" />
+        @foreach ($items as $item)
+            <section class="fd-widget fd-w-{{ $item['width'] }} @if ($item['hidden']) is-hidden @endif"
+                data-fd-widget data-key="{{ $item['key'] }}" data-width="{{ $item['width'] }}"
+                data-hidden="{{ $item['hidden'] ? 'true' : 'false' }}" aria-label="{{ $item['title'] }}">
+                <div class="fd-widget-bar fd-edit-only">
+                    <span class="fd-widget-handle" draggable="true" title="{{ __('foundation::foundation.dashboard.drag') }}"><i class="ph-dots-six-vertical"></i></span>
+                    <span class="fd-widget-name"><i class="{{ $item['icon'] }}"></i>{{ $item['title'] }}</span>
+                    <span class="fd-widget-tools">
+                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="earlier" aria-label="{{ __('foundation::foundation.dashboard.move_earlier') }}"><i class="ph-arrow-up"></i></button>
+                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="later" aria-label="{{ __('foundation::foundation.dashboard.move_later') }}"><i class="ph-arrow-down"></i></button>
+                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="narrower" aria-label="{{ __('foundation::foundation.dashboard.narrower') }}"><i class="ph-arrows-in-line-horizontal"></i></button>
+                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="wider" aria-label="{{ __('foundation::foundation.dashboard.wider') }}"><i class="ph-arrows-out-line-horizontal"></i></button>
+                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="toggle" aria-label="{{ __('foundation::foundation.dashboard.show_hide') }}"><i class="{{ $item['hidden'] ? 'ph-eye-slash' : 'ph-eye' }}"></i></button>
+                    </span>
                 </div>
-            @endforeach
-        </div>
-    @endif
-
-    @if ($chart || $hasFeed)
-        <div class="row g-3 mb-4">
-            @if ($chart)
-                <div class="{{ $hasFeed ? 'col-xl-8' : 'col-12' }}">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h2 class="card-title">{{ $chart['label'] }}</h2>
-                            <div class="ms-auto nav nav-pills">
-                                @foreach ($windows as $window)
-                                    <a class="nav-link @if ($days === $window) active @endif"
-                                        @if ($days === $window) aria-current="page" @endif
-                                        href="{{ route('admin.dashboard', ['days' => $window]) }}">
-                                        {{ __('foundation::foundation.dashboard.last_days', ['days' => $window]) }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <x-chart-area :series="$chart['series']" :label="$chart['label']" />
-                        </div>
-                    </div>
+                <div class="fd-widget-body">
+                    @if ($item['hidden'])
+                        <p class="fd-widget-hidden-note"><i class="ph-eye-slash"></i>{{ __('foundation::foundation.dashboard.hidden_note') }}</p>
+                    @else
+                        {!! $item['html'] !!}
+                    @endif
                 </div>
-            @endif
-
-            @if ($hasFeed)
-                <div class="{{ $chart ? 'col-xl-4' : 'col-12' }}">
-                    {!! $feed !!}
-                </div>
-            @endif
-        </div>
-    @endif
-
-    {{-- Every enabled module contributes its own widget. --}}
-    <div class="row g-3">
-        @foreach (\Nwidart\Modules\Facades\Module::allEnabled() as $module)
-            @php $widgetView = strtolower($module->getName()) . '::partials.dashboard-widget'; @endphp
-            @if (view()->exists($widgetView))
-                @include($widgetView)
-            @endif
+            </section>
         @endforeach
+
+        @if ($items === [])
+            <div class="fd-widget fd-w-12">
+                <div class="card"><div class="fd-empty">
+                    <span class="fd-empty-icon"><i class="ph-squares-four"></i></span>
+                    <p class="fd-empty-title">{{ __('foundation::foundation.dashboard.nothing_to_show') }}</p>
+                </div></div>
+            </div>
+        @endif
     </div>
 </x-app-layout>

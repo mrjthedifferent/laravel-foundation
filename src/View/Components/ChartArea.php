@@ -32,6 +32,9 @@ final class ChartArea extends Component
 
     public string $areaPath;
 
+    /** The comparison line (the period before), empty when none was given. */
+    public string $previousPath = '';
+
     public string $linePath;
 
     public float $lastX;
@@ -51,8 +54,9 @@ final class ChartArea extends Component
     /**
      * @param  array<string, int>  $series  ['2026-09-10' => 4, …] oldest day first
      * @param  string  $label  what the series counts, for the accessible summary
+     * @param  array<string, int>  $previous  the period before, drawn as a dashed line on the same scale
      */
-    public function __construct(array $series, public string $label = '')
+    public function __construct(array $series, public string $label = '', array $previous = [])
     {
         $this->series = $series;
         $this->gradientId = 'fd-chart-'.(++self::$sequence);
@@ -60,12 +64,14 @@ final class ChartArea extends Component
         $values = array_values($series);
         $this->hasData = $values !== [] && max($values) > 0;
 
-        $peak = $values === [] ? 0 : max($values);
+        $before = array_values($previous);
+        $peak = max($values === [] ? 0 : max($values), $before === [] ? 0 : max($before));
         $step = $this->step($peak);
         $top = (int) (ceil(max($peak, 1) / $step) * $step);
 
         $this->ticks = $this->ticks($top, $step);
         [$this->areaPath, $this->linePath, $this->lastX, $this->lastY] = $this->paths($values, $top);
+        $this->previousPath = $before === [] ? '' : $this->paths($before, $top)[1];
         $this->summary = $this->summary($series);
     }
 

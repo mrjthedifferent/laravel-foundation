@@ -81,27 +81,27 @@ function subscribeToPresenceChannel() {
         const moreEl = document.getElementById('online-users-more');
         if (listEl && emptyEl && itemsEl) {
             if (count === 0) {
-                emptyEl.classList.remove('d-none');
-                itemsEl.classList.add('d-none');
-                if (moreEl) moreEl.classList.add('d-none');
+                emptyEl.classList.remove('hidden');
+                itemsEl.classList.add('hidden');
+                if (moreEl) moreEl.classList.add('hidden');
                 itemsEl.innerHTML = '';
             } else {
-                emptyEl.classList.add('d-none');
-                itemsEl.classList.remove('d-none');
+                emptyEl.classList.add('hidden');
+                itemsEl.classList.remove('hidden');
                 const displayed = onlineUsers.slice(0, MAX_DROPDOWN_USERS);
                 const remaining = count - displayed.length;
                 itemsEl.innerHTML = displayed
                     .map((u) => {
                         const name = (u?.name ?? `User ${u?.id ?? ''}`).replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                        return `<div class="d-flex align-items-center gap-2 py-1"><span class="rounded-circle bg-success p-1" style="width:8px;height:8px;min-width:8px;"></span><span>${name}</span></div>`;
+                        return `<div class="flex items-center gap-2 py-1"><span class="rounded-full bg-success p-1" style="width:8px;height:8px;min-width:8px;"></span><span>${name}</span></div>`;
                     })
                     .join('');
                 if (moreEl) {
                     if (remaining > 0) {
-                        moreEl.classList.remove('d-none');
+                        moreEl.classList.remove('hidden');
                         moreEl.textContent = `and ${remaining.toLocaleString()} more`;
                     } else {
-                        moreEl.classList.add('d-none');
+                        moreEl.classList.add('hidden');
                     }
                 }
             }

@@ -1,6 +1,6 @@
 {
     "name": "mrjthedifferent/laravel-foundation",
-    "description": "The shared base of a Laravel admin application as one updatable package: sign-in, users, roles, settings, notifications, activity logs, backups and a Bootstrap 5 admin UI.",
+    "description": "The shared base of a Laravel admin application as one updatable package: sign-in, users, roles, settings, notifications, activity logs, backups and a Tailwind CSS admin UI.",
     "keywords": [
         "laravel",
         "admin",
@@ -10,7 +10,7 @@
         "roles",
         "permissions",
         "settings",
-        "bootstrap"
+        "tailwindcss"
     ],
     "homepage": "https://github.com/mrjthedifferent/laravel-foundation",
     "type": "library",

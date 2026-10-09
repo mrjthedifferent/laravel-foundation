@@ -26,12 +26,13 @@ final readonly class DailySeries
     /**
      * @param  Builder  $query  a base query builder — pass ->toBase() on an Eloquent one
      * @param  string  $column  the timestamp column to bucket by
+     * @param  int  $shift  move the window back by this many days, to count the period before it
      * @return array<string, int> ['2026-09-10' => 4, …] oldest day first
      */
-    public function count(Builder $query, string $column, int $days): array
+    public function count(Builder $query, string $column, int $days, int $shift = 0): array
     {
         $days = max(1, min($days, self::MAX_DAYS));
-        $end = Carbon::today()->addDay();
+        $end = Carbon::today()->addDay()->subDays(max(0, $shift));
         $start = $end->copy()->subDays($days);
 
         /** @var Connection $connection */

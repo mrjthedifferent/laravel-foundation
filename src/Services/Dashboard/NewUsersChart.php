@@ -44,4 +44,10 @@ final class NewUsersChart extends ChartComposer
     {
         return app(DailySeries::class)->count(User::query()->toBase(), 'created_at', $days);
     }
+
+    #[Override]
+    protected function buildPrevious(int $days): array
+    {
+        return app(DailySeries::class)->count(User::query()->toBase(), 'created_at', $days, $days);
+    }
 }

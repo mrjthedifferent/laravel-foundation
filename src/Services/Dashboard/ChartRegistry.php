@@ -29,9 +29,10 @@ final class ChartRegistry
     }
 
     /**
-     * @return array{label: string, series: array<string, int>}|null
+     * @param  bool  $compare  also return the period before, when the chart supports it
+     * @return array{label: string, series: array<string, int>, previous?: array<string, int>}|null
      */
-    public function first(int $days): ?array
+    public function first(int $days, bool $compare = false): ?array
     {
         $candidates = [];
 
@@ -47,7 +48,13 @@ final class ChartRegistry
             $series = $composer->series($days);
 
             if ($series !== null) {
-                return ['label' => $composer->label($days), 'series' => $series];
+                $chart = ['label' => $composer->label($days), 'series' => $series];
+
+                if ($compare && ($previous = $composer->previousSeries($days)) !== null) {
+                    $chart['previous'] = $previous;
+                }
+
+                return $chart;
             }
         }
 

@@ -11,13 +11,13 @@
             <div>
                 <h2 class="card-title">
                     {{ __('activitylog::activitylog.show.breadcrumb') }}
-                    <span class="badge bg-secondary">{{ $helper::getModelName($audit->auditable_type) }}</span>
+                    <span class="badge badge-secondary">{{ $helper::getModelName($audit->auditable_type) }}</span>
                 </h2>
-                <div class="text-muted fs-sm">{{ __('activitylog::activitylog.show.record_count', ['count' => $audits->total()]) }}</div>
+                <div class="text-muted text-sm">{{ __('activitylog::activitylog.show.record_count', ['count' => $audits->total()]) }}</div>
             </div>
-            <div class="d-flex align-items-center gap-2 ms-auto">
-                <form method="GET" class="d-flex align-items-center gap-2">
-                    <label class="text-muted mb-0 fs-sm">{{ __('activitylog::activitylog.show.per_page') }}</label>
+            <div class="flex items-center gap-2 ms-auto">
+                <form method="GET" class="flex items-center gap-2">
+                    <label class="text-muted mb-0 text-sm">{{ __('activitylog::activitylog.show.per_page') }}</label>
                     <select name="per_page" class="form-select form-select-sm w-auto"
                             onchange="this.form.submit()">
                         @foreach ([10, 20, 50, 100] as $pp)
@@ -33,7 +33,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table table-hover table-borderless align-middle mb-0">
+            <table class="table table-hover align-middle mb-0">
                 <thead>
                 <tr>
                     <th>{{ __('activitylog::activitylog.show.col_event') }}</th>
@@ -53,9 +53,9 @@
                             'deleted'  => 'bg-danger-subtle text-danger border border-danger-subtle',
                             'restored' => 'bg-warning-subtle text-warning border border-warning-subtle',
                             'attach'   => 'bg-info-subtle text-info border border-info-subtle',
-                            'detach'   => 'bg-secondary-subtle text-secondary border border-secondary-subtle',
-                            'sync'     => 'bg-secondary-subtle text-secondary border border-secondary-subtle',
-                            default    => 'bg-secondary-subtle text-secondary border border-secondary-subtle',
+                            'detach'   => 'bg-subtle text-muted border border-line',
+                            'sync'     => 'bg-subtle text-muted border border-line',
+                            default    => 'bg-subtle text-muted border border-line',
                         };
                     @endphp
                     <tr class="align-top">
@@ -70,36 +70,36 @@
                             @if ($audit->user)
                                 @can('view', $audit->user)
                                     <a href="{{ route('admin.users.show', $audit->user_id) }}"
-                                       class="d-flex align-items-center gap-2 text-decoration-none">
+                                       class="flex items-center gap-2 no-underline">
                                         <img src="{{ $audit->user->image }}" class="fd-avatar fd-avatar-sm" alt="">
-                                        <span class="text-body fs-sm">{{ $audit->user->name }}</span>
+                                        <span class="text-body text-sm">{{ $audit->user->name }}</span>
                                     </a>
                                 @else
-                                    <span class="d-flex align-items-center gap-2">
+                                    <span class="flex items-center gap-2">
                                             <img src="{{ $audit->user->image }}" class="fd-avatar fd-avatar-sm" alt="">
-                                            <span class="fs-sm">{{ $audit->user->name }}</span>
+                                            <span class="text-sm">{{ $audit->user->name }}</span>
                                         </span>
                                 @endcan
                             @elseif ($audit->user_id)
-                                <span class="text-muted fs-sm">{{ __('activitylog::activitylog.show.deleted_user', ['id' => $audit->user_id]) }}</span>
+                                <span class="text-muted text-sm">{{ __('activitylog::activitylog.show.deleted_user', ['id' => $audit->user_id]) }}</span>
                             @else
-                                <span class="text-muted fs-sm">{{ __('activitylog::activitylog.show.system') }}</span>
+                                <span class="text-muted text-sm">{{ __('activitylog::activitylog.show.system') }}</span>
                             @endif
                         </td>
 
                         {{-- Time --}}
-                        <td class="text-muted fs-sm text-nowrap">
+                        <td class="text-muted text-sm whitespace-nowrap">
                             {{ $audit->created_at->format(config('foundation.formats.datetime')) }}
                         </td>
 
                         {{-- IP / URL --}}
-                        <td class="fs-sm">
+                        <td class="text-sm">
                             @if ($audit->ip_address)
-                                <a href="#" class="track-ip text-muted font-monospace d-block"
+                                <a href="#" class="track-ip text-muted font-mono block"
                                    data-ip="{{ $audit->ip_address }}">{{ $audit->ip_address }}</a>
                             @endif
                             @if ($audit->url)
-                                <a href="{{ $audit->url }}" class="text-muted d-block text-truncate w-sm"
+                                <a href="{{ $audit->url }}" class="text-muted block truncate w-50"
                                    title="{{ $audit->url }}"
                                    target="_blank" rel="noopener">{{ $audit->url }}</a>
                             @endif
@@ -125,14 +125,14 @@
                                                                ->first(fn($k) => in_array($k, ['name','title','label','slug']), 'id');
                                             @endphp
                                             <dt>{{ $helper::titleCase($rel) }}</dt>
-                                            <dd class="d-flex flex-wrap gap-1">
+                                            <dd class="flex flex-wrap gap-1">
                                                 @foreach ($added as $item)
                                                     <span
-                                                        class="badge bg-success-subtle text-success-emphasis font-monospace">+ {{ is_array($item) ? ($item[$nk] ?? $item['id'] ?? '?') : $item }}</span>
+                                                        class="badge bg-success-subtle text-success-text font-mono">+ {{ is_array($item) ? ($item[$nk] ?? $item['id'] ?? '?') : $item }}</span>
                                                 @endforeach
                                                 @foreach ($removed as $item)
                                                     <span
-                                                        class="badge bg-danger-subtle text-danger-emphasis font-monospace">- {{ is_array($item) ? ($item[$nk] ?? $item['id'] ?? '?') : $item }}</span>
+                                                        class="badge bg-danger-subtle text-danger-text font-mono">- {{ is_array($item) ? ($item[$nk] ?? $item['id'] ?? '?') : $item }}</span>
                                                 @endforeach
                                             </dd>
                                         @endforeach
@@ -151,15 +151,15 @@
                                                     : 'N/A';
                                             @endphp
                                             <dt>{{ $helper::titleCase($attr) }}</dt>
-                                            <dd class="d-flex flex-wrap align-items-baseline gap-1">
-                                                <code class="bg-danger-subtle text-danger-emphasis px-1 rounded">{{ $oldVal }}</code>
-                                                <i class="ph-arrow-right text-muted fs-xs"></i>
-                                                <code class="bg-success-subtle text-success-emphasis px-1 rounded">{{ $newVal }}</code>
+                                            <dd class="flex flex-wrap items-baseline gap-1">
+                                                <code class="bg-danger-subtle text-danger-text px-1 rounded-md">{{ $oldVal }}</code>
+                                                <i class="ph-arrow-right text-muted text-xs"></i>
+                                                <code class="bg-success-subtle text-success-text px-1 rounded-md">{{ $newVal }}</code>
                                             </dd>
                                         @endforeach
                                     </dl>
                                 @else
-                                    <span class="text-muted fs-sm fst-italic">{{ __('activitylog::activitylog.show.no_changes_recorded') }}</span>
+                                    <span class="text-muted text-sm italic">{{ __('activitylog::activitylog.show.no_changes_recorded') }}</span>
                                 @endif
 
                             @elseif (in_array($audit->event, ['created', 'restored']))
@@ -167,7 +167,7 @@
                                     @foreach ($audit->new_values as $attr => $val)
                                         <dt>{{ $helper::titleCase($attr) }}</dt>
                                         <dd>
-                                            <code class="bg-success-subtle text-success-emphasis px-1 rounded">{{ is_array($val) ? json_encode($val) : $val }}</code>
+                                            <code class="bg-success-subtle text-success-text px-1 rounded-md">{{ is_array($val) ? json_encode($val) : $val }}</code>
                                         </dd>
                                     @endforeach
                                 </dl>
@@ -177,13 +177,13 @@
                                     @foreach ($audit->old_values as $attr => $val)
                                         <dt>{{ $helper::titleCase($attr) }}</dt>
                                         <dd>
-                                            <code class="bg-danger-subtle text-danger-emphasis px-1 rounded">{{ is_array($val) ? json_encode($val) : $val }}</code>
+                                            <code class="bg-danger-subtle text-danger-text px-1 rounded-md">{{ is_array($val) ? json_encode($val) : $val }}</code>
                                         </dd>
                                     @endforeach
                                 </dl>
 
                             @else
-                                <span class="text-muted fs-sm fst-italic">—</span>
+                                <span class="text-muted text-sm italic">—</span>
                             @endif
                         </td>
                     </tr>
@@ -202,7 +202,7 @@
         </div>
 
         @if ($audits->hasPages())
-            <div class="fd-table-foot justify-content-end">
+            <div class="fd-table-foot justify-end">
                 {{ $audits->withQueryString()->links() }}
             </div>
         @endif
@@ -220,7 +220,7 @@
                 e.preventDefault();
                 const ip = $(this).data('ip') || $(this).text().trim();
                 $('#track-ip-modal').modal('show');
-                $('#ip-details').html('<div class="text-center py-3"><div class="spinner-border spinner-border-sm"></div></div>');
+                $('#ip-details').html('<div class="text-center py-4"><div class="spinner-border spinner-border-sm"></div></div>');
                 $.ajax({
                     url: "{{ route('admin.track-ip') }}",
                     data: {ip},

@@ -138,4 +138,8 @@ return [
         'firebase_token_required' => 'A Firebase token is required.',
         'device_id_required' => 'A device ID is required.',
     ],
+
+    'quick' => [
+        'send' => 'Send notification',
+    ],
 ];

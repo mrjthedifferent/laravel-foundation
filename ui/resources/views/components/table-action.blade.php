@@ -10,7 +10,7 @@
     <a {{ $attributes->merge([
         'href' => $href,
         'class' => 'btn btn-sm ' . $class,
-        'data-bs-popup' => 'tooltip',
+        'data-fd-toggle' => 'tooltip',
         'title' => $title
     ]) }}>
         @if($icon) <i class="{{ $icon }}"></i> @endif
@@ -20,7 +20,7 @@
     <button {{ $attributes->merge([
         'type' => $type,
         'class' => 'btn btn-sm ' . $class,
-        'data-bs-popup' => 'tooltip',
+        'data-fd-toggle' => 'tooltip',
         'title' => $title
     ]) }}>
         @if($icon) <i class="{{ $icon }}"></i> @endif

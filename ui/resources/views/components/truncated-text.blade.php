@@ -1,4 +1,4 @@
-<div data-bs-popup="tooltip" data-bs-placement="right" data-toggle="tooltip" data-placement="top" title="{{ $text }}">
+<div data-fd-toggle="tooltip" data-fd-placement="right" title="{{ $text }}">
     <span>
         @if(isset($textToShow))
             {{ $textToShow }}

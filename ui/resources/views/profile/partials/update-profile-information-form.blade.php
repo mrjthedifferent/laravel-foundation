@@ -1,43 +1,33 @@
 @php use Illuminate\Contracts\Auth\MustVerifyEmail; @endphp
 <section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('foundation::foundation.profile.information') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('foundation::foundation.profile.information_notice') }}
-        </p>
-    </header>
-
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
 
-    <form method="post" action="{{ route('admin.profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
+    <form method="post" action="{{ route('admin.profile.update') }}" class="fd-fields fd-fields-3" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
         <div>
             <x-input-label for="name" :value="__('foundation::foundation.profile.full_name')"/>
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
+            <x-text-input id="name" name="name" type="text" class="block w-full"
                           :value="old('name', $user->name)"
                           required autofocus autocomplete="name"/>
-            <x-input-error class="mt-2" :messages="$errors->get('name')"/>
+            <x-input-error class="mt-1" :messages="$errors->get('name')"/>
         </div>
 
         @if ($user->phone)
         <div>
             <x-input-label for="phone" :value="__('foundation::foundation.profile.mobile_no')"/>
-            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" disabled :value="$user->phone"/>
+            <x-text-input id="phone" name="phone" type="text" class="block w-full" disabled :value="$user->phone"/>
         </div>
         @endif
 
         <div>
             <x-input-label for="email" :value="__('foundation::foundation.profile.email')"/>
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" disabled
+            <x-text-input id="email" name="email" type="email" class="block w-full" disabled
                           :value="old('email', $user->email)" required autocomplete="username"/>
-            <x-input-error class="mt-2" :messages="$errors->get('email')"/>
+            <x-input-error class="mt-1" :messages="$errors->get('email')"/>
 
             @if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
@@ -60,17 +50,11 @@
         </div>
 
         <div>
-            <x-input-label for="image" :value="__('foundation::foundation.profile.image')"/>
-            <div class="mt-1 flex items-center">
-                @if ($user->image)
-                    <img src="{{ $user->image }}" alt="{{ $user->name }}" class="fd-avatar fd-avatar-lg"/>
-                @endif
-                <input id="image" name="image" type="file" class="mt-1 block w-full"/>
-            </div>
-            <x-input-error class="mt-2" :messages="$errors->get('image')"/>
+            <x-form.file name="image" id="image" accept="image/jpeg,image/png,image/webp"
+                :label="__('foundation::foundation.profile.image')" :current="$user->image" />
         </div>
 
-        <div class="flex items-center gap-4 mt-2">
+        <div class="fd-fields-wide flex items-center gap-4">
             <x-primary-button>{{ __('foundation::foundation.common.save') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')

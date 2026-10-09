@@ -12,7 +12,7 @@
         subtitle="{{ __('settings::settings.special_notifications.subtitle') }}"
         icon="ph-bell-ringing">
         <x-slot name="actions">
-            <button type="submit" class="btn btn-primary px-4">
+            <button type="submit" class="btn btn-primary px-6">
                 <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_notifications.save_changes') }}
             </button>
         </x-slot>
@@ -26,10 +26,10 @@
                         <tr>
                             <th>{{ __('settings::settings.special_notifications.col_notification') }}</th>
                             @foreach ($channels as $channel => $channelLabel)
-                                <th class="text-center text-nowrap">
+                                <th class="text-center whitespace-nowrap">
                                     {{ $channelLabel }}
                                     @if ($channel === 'database')
-                                        <i class="ph-info fs-sm text-muted" data-bs-popup="tooltip"
+                                        <i class="ph-info text-sm text-muted" data-fd-toggle="tooltip"
                                             title="{{ __('settings::settings.special_notifications.database_tooltip') }}"></i>
                                     @endif
                                 </th>
@@ -39,20 +39,20 @@
                     <tbody>
                         @foreach ($rows as $row)
                             <tr>
-                                <td class="fw-semibold fs-sm">{{ display_label($row['label']) }}</td>
+                                <td class="font-semibold text-sm">{{ display_label($row['label']) }}</td>
                                 @foreach ($channels as $channel => $channelLabel)
                                     @php($cell = $row['cells'][$channel])
                                     <td class="text-center">
                                         @if (! $cell['supported'])
                                             <span class="text-muted">&mdash;</span>
                                         @elseif ($cell['locked'])
-                                            <div class="form-check form-switch d-inline-block mb-0"
-                                                data-bs-popup="tooltip" title="{{ __('settings::settings.special_notifications.locked_tooltip') }}">
+                                            <div class="form-check form-switch inline-block mb-0"
+                                                data-fd-toggle="tooltip" title="{{ __('settings::settings.special_notifications.locked_tooltip') }}">
                                                 <input type="checkbox" class="form-check-input" role="switch"
                                                     checked disabled>
                                             </div>
                                         @else
-                                            <div class="form-check form-switch d-inline-block mb-0">
+                                            <div class="form-check form-switch inline-block mb-0">
                                                 <input type="checkbox" class="form-check-input" role="switch"
                                                     id="{{ $cell['key'] }}" name="{{ $cell['key'] }}" value="1"
                                                     {{ $cell['enabled'] ? 'checked' : '' }}>
@@ -68,8 +68,8 @@
         </x-form-section>
     @endforeach
 
-    <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary px-5">
+    <div class="flex justify-end">
+        <button type="submit" class="btn btn-primary px-12">
             <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_notifications.save_changes') }}
         </button>
     </div>

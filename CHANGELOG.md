@@ -4,6 +4,91 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 2.0.0
+
+**Documentation and cleanup.**
+
+- The AI guidelines synced into a project (`.ai/guidelines/foundation/`) are rewritten for the Tailwind UI and gain `foundation-overview.md` (start here),
+  `components-reference.md` (every component with props and slots), `frontend-js.md` (`data-fd-*`, events, the `Foundation` API), `dashboard.md` (every
+  extension point with an example) and `theming.md` (tokens, theme settings, which utilities exist). A test fails when a component or dashboard extension
+  point is added without being documented.
+- Leftovers of the Bootstrap era are removed: unused compatibility classes (`fs-*`, `*-px` sizes, `navbar-brand`, `badge-dark`, `btn-group`,
+  `form-control-feedback`, …), the filter-collapse memory script, the `initTooltips` stub, commented Bootstrap imports and unused translation keys. Row-action
+  tooltips work again (their trigger attribute was left as `data-fd-popup`).
+- `<x-table-view-pagination>` takes `:stack="false"` to keep a wide table scrolling sideways on phones.
+
+**Design pass across every page.**
+
+- **Page width, density and corners** are Theme settings (`theme_content_width` fluid or boxed, `theme_density`
+  comfortable or compact, `theme_radius` sharp, rounded or soft), applied to every page through `<html data-width
+  data-density data-radius>` and the design tokens. Pages are fluid by default: the 1600px cap is now the "boxed" option.
+- **One page header**: `<x-page-header>` (icon, title, subtitle, actions, optional `tabs` slot) now heads the settings pages
+  too, in place of their card headers. List pages keep their title in the table toolbar.
+- **Filter bar**: `<x-search-card>` is one slim row (search, a Filters button, Reset and Filter) with the other fields in a
+  panel and every active filter shown as a chip you can remove. Same slot contract: existing list pages need no change.
+- **Tables**: visible row actions, themed scrollbars, hover emphasis, and on phones each row becomes a labelled card
+  (`table-stack`, on by default for `<x-table-view-pagination>`; add `table-keep` to opt a table out).
+- **Forms**: `<x-form.file>` is a drop zone with a preview and the chosen file's name (same input, same attributes, new
+  optional `current` URL); the Profile page is a sectioned layout with a section nav; `.fd-form-actions` is a sticky
+  Cancel / Save bar, used by the user, setting and notification forms.
+- **Phones**: a bottom navigation bar (Dashboard, three areas, Menu) replaces the footer and the floating gear below `lg`.
+- New components `<x-skeleton>` (shimmering loading placeholder) and `<x-empty-state>`.
+
+**The dashboard** is rebuilt as a customizable grid of widgets. Nothing a module registered before stops
+working: its stats, chart and `dashboard-widget` partial all appear in the new grid.
+
+- Range picker (7, 14, 30, 90 days) and a **Compare** switch that draws the period before as a dashed
+  line, with the total and its change. `?range=` replaces `?days=`, which still works.
+- Stat cards can draw a sparkline: give a stat a `series` of counts. The User and Activity stats do.
+- **Customize**: every viewer can drag, resize (3, 4, 6, 8, 12 of 12), hide and reorder the cards, and reset
+  to the defaults. The layout is stored per user in the new `dashboard_layouts` table (run `php artisan
+  migrate`) and merges with whatever is registered now, so enabling or disabling a module never corrupts it.
+- New module extension points on the service provider: `$dashboardWidgets` (`DashboardWidget`),
+  `$dashboardActions` (`QuickActionComposer`) and `$dashboardHealth` (`HealthCheck`).
+- New cards: Quick actions, System health (what needs attention first; the package checks the queue and
+  maintenance mode, the modules check backups and error reports), Accounts by status (donut), Sign-ins by
+  hour (heatmap) and Changes by type (bars).
+- New components `<x-chart-bar>`, `<x-chart-donut>`, `<x-chart-heatmap>` and `<x-sparkline>`, and
+  `DailySeries::count()` takes a `$shift` to count the period before a window.
+
+**Tailwind**
+
+The admin UI moves from Bootstrap 5.3 to Tailwind CSS 4. The look is unchanged: the same design
+tokens, the same component classes, the same layout. Host apps still need no build step, because
+the compiled stylesheet ships in the package as `assets/css/foundation.css`.
+
+**Changed (breaking)**
+- Bootstrap's CSS and JavaScript are no longer shipped (`bootstrap.min.css`, `bootstrap.rtl.min.css`,
+  `bootstrap.bundle.min.js`). `foundation.css` is now compiled with Tailwind from `ui/resources/css/`
+  (`bin/build-css.sh`); right-to-left follows the `dir` attribute, so there is no second stylesheet.
+- Layout and spacing in the package's views use Tailwind utilities: `d-flex` is `flex`, `me-2` stays
+  `me-2`, `mb-3` is `mb-4`, `row`/`col-md-6` is `grid grid-cols-12 gap-4` / `col-span-12 md:col-span-6`,
+  `fw-semibold` is `font-semibold`, `badge bg-success` is `badge badge-success`, and so on. The
+  breakpoints keep Bootstrap's widths (576, 768, 992, 1200, 1400).
+- `data-bs-*` attributes are now `data-fd-*` (`data-fd-toggle="modal"`, `data-fd-target="#id"`,
+  `data-fd-dismiss="modal"`), and the colour mode attribute is `data-theme` instead of `data-bs-theme`.
+  The `--bs-*` CSS variables are gone; use the `--fd-*` tokens (`--fd-success-subtle`, `--fd-danger-text`).
+- The modal, offcanvas, dropdown, collapse, tab, tooltip, popover and alert behaviour is a small
+  built-in script (`foundation.js`) instead of Bootstrap's. Events are `fd:modal-shown`,
+  `fd:modal-hidden`, `fd:tab-shown`, `fd:collapse-shown` and so on, and `window.bootstrap` no longer
+  exists. `$('#id').modal('show')`, `.tab('show')`, `.collapse()` and `.dropdown()` keep working
+  through jQuery, and `Foundation.modal(el)`, `.offcanvas(el)`, `.tab(el)` are the plain-JS forms.
+
+**Added**
+- `bin/migrate-bootstrap-to-tailwind.mjs` converts a project's own views to the new classes:
+  `node vendor/mrjthedifferent/laravel-foundation/bin/migrate-bootstrap-to-tailwind.mjs resources/views --write`.
+  Run it once per file on a clean git tree and review the diff.
+- `bin/build-css.sh --check` fails when the committed stylesheet is out of date; CI runs it.
+
+**Upgrading**
+- Views that only use the package's components and layouts need no change.
+- Project views that write Bootstrap classes or `data-bs-*` attributes themselves: run the migration
+  script above. Only the Tailwind classes the package itself uses, plus a common layout set
+  (spacing, flex, grid, text, border, rounded, shadow), are in the compiled stylesheet. For anything
+  beyond that, add Tailwind to the project and let it scan the project's own views.
+- Published views that override the package's (`layouts/*`, `components/*`, `pagination/*`) should be
+  re-published or migrated the same way.
+
 ## 1.13.3
 
 **Fixed**

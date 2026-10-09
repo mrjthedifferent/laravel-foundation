@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Mrj\Foundation\Http\Controllers\DashboardLayoutController;
 
 /*
 | The admin dashboard. A project changes the page by creating
@@ -16,4 +17,6 @@ Route::middleware(config('foundation.routing.middleware'))
     ->name('admin.')
     ->group(function (): void {
         Route::view('dashboard', 'dashboard')->name('dashboard');
+        Route::put('dashboard/layout', [DashboardLayoutController::class, 'update'])->name('dashboard.layout.update');
+        Route::delete('dashboard/layout', [DashboardLayoutController::class, 'destroy'])->name('dashboard.layout.reset');
     });

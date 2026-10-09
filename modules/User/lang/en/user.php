@@ -198,6 +198,17 @@ return [
         'view_all' => 'View all',
         'total' => 'Total',
         'new_today' => 'New Today',
+        'status_title' => 'Accounts by status',
+        'status_active' => 'Active',
+        'status_unverified' => 'Email not verified',
+        'status_inactive' => 'Inactive',
+        'heatmap_title' => 'Sign-ins by hour',
+        'heatmap_range' => 'Last :days days',
+    ],
+
+    'quick' => [
+        'add_user' => 'Add user',
+        'import_users' => 'Import users',
     ],
 
     'export' => [

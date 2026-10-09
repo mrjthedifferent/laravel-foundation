@@ -6,28 +6,28 @@
 
 @section('content')
 <x-search-card>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('user::user.index.search_placeholder') }}" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.select class="select" name="role_id[]" label="{{ __('user::user.index.role_label') }}" :options="$roles" :selected="request('role_id')" multiple data-placeholder="{{ __('user::user.index.all_roles') }}" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.select class="select" name="gender" label="{{ __('user::user.index.gender_label') }}" :options="['' => __('user::user.common.all'), 'male' => __('user::user.common.male'), 'female' => __('user::user.common.female'), 'other' => __('user::user.common.other')]" :selected="request('gender')" data-placeholder="{{ __('user::user.index.all_genders') }}" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.select class="select" name="is_active" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('user::user.common.all'), '1' => __('foundation::foundation.common.active'), '0' => __('foundation::foundation.common.inactive')]" :selected="request('is_active')" data-placeholder="{{ __('user::user.common.all') }}" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.select class="select" name="email_verified" label="{{ __('user::user.index.email_verified_label') }}" :options="['' => __('user::user.common.all'), '1' => __('user::user.common.verified'), '0' => __('user::user.index.unverified')]" :selected="request('email_verified')" data-placeholder="{{ __('user::user.common.all') }}" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.select class="select" name="phone_verified" label="{{ __('user::user.index.phone_verified_label') }}" :options="['' => __('user::user.common.all'), '1' => __('user::user.common.verified'), '0' => __('user::user.index.unverified')]" :selected="request('phone_verified')" data-placeholder="{{ __('user::user.common.all') }}" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.input name="date_from" label="{{ __('user::user.index.registered_from') }}" type="date" :value="request('date_from')" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.input name="date_to" label="{{ __('user::user.index.registered_to') }}" type="date" :value="request('date_to')" />
     </div>
 </x-search-card>
@@ -73,7 +73,7 @@
 
     <thead>
         <tr>
-            <th class="w-48px">{{ __('user::user.index.col_photo') }}</th>
+            <th class="w-12">{{ __('user::user.index.col_photo') }}</th>
             <th>{{ __('foundation::foundation.common.name') }}</th>
             <th>{{ __('user::user.index.role_label') }}</th>
             <th>{{ __('user::user.index.col_contacts') }}</th>
@@ -88,24 +88,24 @@
                 <img src="{{ $user->image }}" class="fd-avatar" alt="{{ $user->name }}">
             </td>
             <td>
-                <a href="{{ route('admin.users.show', $user->id) }}" class="fw-semibold text-body">
+                <a href="{{ route('admin.users.show', $user->id) }}" class="font-semibold text-body">
                     {{ $user->name }}
                 </a>
                 @if($user->gender)
-                <div class="text-muted fs-xs">{{ ucfirst($user->gender->value) }}</div>
+                <div class="text-muted text-xs">{{ ucfirst($user->gender->value) }}</div>
                 @endif
             </td>
             <td>
-                <div class="d-flex flex-wrap gap-1">
+                <div class="flex flex-wrap gap-1">
                     @foreach ($user->roles as $role)
-                    <span class="badge bg-primary">{{ $role->name }}</span>
+                    <span class="badge badge-primary">{{ $role->name }}</span>
                     @endforeach
                 </div>
             </td>
             <td>
                 {{-- Email --}}
                 @if ($user->email)
-                <div class="fs-sm d-flex align-items-center gap-1">
+                <div class="text-sm flex items-center gap-1">
                     <i class="ph-envelope text-muted"></i>
                     <span>{{ $user->email }}</span>
 
@@ -119,7 +119,7 @@
 
                 {{-- Phone --}}
                 @if ($user->phone)
-                <div class="fs-sm d-flex align-items-center gap-1 mt-1">
+                <div class="text-sm flex items-center gap-1 mt-1">
                     <i class="ph-device-mobile text-muted"></i>
                     <span>{{ $user->phone }}</span>
 
@@ -135,7 +135,7 @@
             <td>
                 <x-status-badge :active="$user->is_active" />
                 @if ($user->isSuperAdmin())
-                    <span class="badge bg-danger ms-1"><i class="ph-crown"></i>{{ __('user::user.common.super_admin') }}</span>
+                    <span class="badge badge-danger ms-1"><i class="ph-crown"></i>{{ __('user::user.common.super_admin') }}</span>
                 @endif
             </td>
             <td class="text-end">

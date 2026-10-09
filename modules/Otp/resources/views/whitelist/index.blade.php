@@ -31,7 +31,7 @@
                     <td>{{ $whitelist->id }}</td>
                     <td>{{ $whitelist->recipient_type->label() }}</td>
                     <td>{{ $whitelist->recipient }}</td>
-                    <td><code class="fs-sm">{{ $whitelist->fixed_otp }}</code></td>
+                    <td><code class="text-sm">{{ $whitelist->fixed_otp }}</code></td>
                     <td>
                         @if ($whitelist->is_active)
                             <span class="fd-status is-success">{{ __('foundation::foundation.common.active') }}</span>

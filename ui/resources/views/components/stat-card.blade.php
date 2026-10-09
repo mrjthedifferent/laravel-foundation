@@ -7,6 +7,7 @@
     'change' => null,       # {{-- e.g. '+12%' --}}
     'changeUp' => true,
     'caption' => null,      # {{-- what the change is measured against --}}
+    'series'  => null,      # {{-- list<int>, oldest first: draws a sparkline --}}
 ])
 
 @php
@@ -20,18 +21,23 @@
     };
 @endphp
 
-<div class="card h-100">
+<div class="card h-full">
     <div class="fd-stat">
         <div class="fd-stat-head">
             <span class="fd-stat-label">{{ $label }}</span>
             <span class="fd-icon-tile fd-icon-tile-sm {{ $tone }}"><i class="{{ $icon }}"></i></span>
         </div>
 
-        <div class="fd-stat-value">
-            @if($href)
-                <a href="{{ $href }}" class="text-reset text-decoration-none stretched-link">{{ $value }}</a>
-            @else
-                {{ $value }}
+        <div class="fd-stat-body">
+            <div class="fd-stat-value">
+                @if($href)
+                    <a href="{{ $href }}" class="text-inherit no-underline stretched-link">{{ $value }}</a>
+                @else
+                    {{ $value }}
+                @endif
+            </div>
+            @if ($series)
+                <span class="fd-spark-wrap {{ $tone }}"><x-sparkline :series="$series" /></span>
             @endif
         </div>
 

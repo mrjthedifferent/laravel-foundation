@@ -9,6 +9,8 @@ use Modules\BackupCleanup\Console\SystemBackupAndCleanup;
 use Modules\BackupCleanup\Models\Backup;
 use Modules\BackupCleanup\Policies\BackupPolicy;
 use Modules\BackupCleanup\View\Composers\BackupCleanupWidgetComposer;
+use Modules\BackupCleanup\View\Composers\BackupHealth;
+use Modules\BackupCleanup\View\Composers\BackupQuickActions;
 use Modules\BackupCleanup\View\Composers\BackupStatComposer;
 use Mrj\Foundation\Support\ModuleServiceProvider;
 
@@ -24,6 +26,14 @@ class BackupCleanupServiceProvider extends ModuleServiceProvider
 
     protected array $dashboardStats = [
         BackupStatComposer::class,
+    ];
+
+    protected array $dashboardActions = [
+        BackupQuickActions::class,
+    ];
+
+    protected array $dashboardHealth = [
+        BackupHealth::class,
     ];
 
     protected array $composers = [

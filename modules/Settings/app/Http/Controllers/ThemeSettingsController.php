@@ -22,6 +22,9 @@ class ThemeSettingsController extends Controller
         'theme_custom_color',
         'theme_sidebar_color',
         'theme_sidebar_type',
+        'theme_content_width',
+        'theme_density',
+        'theme_radius',
     ];
 
     /** Palette names earlier versions saved, mapped to the curated palette that replaced them. */
@@ -41,6 +44,9 @@ class ThemeSettingsController extends Controller
         'theme_color_palette' => ['indigo', 'blue', 'violet', 'teal', 'green', 'amber', 'rose', 'slate', 'custom'],
         'theme_sidebar_color' => ['light', 'dark'],
         'theme_sidebar_type' => ['default', 'mini'],
+        'theme_content_width' => ['fluid', 'boxed'],
+        'theme_density' => ['comfortable', 'compact'],
+        'theme_radius' => ['sharp', 'rounded', 'soft'],
     ];
 
     /**
@@ -94,6 +100,9 @@ class ThemeSettingsController extends Controller
             'theme_custom_color' => '#4f46e5',
             'theme_sidebar_color' => 'light',
             'theme_sidebar_type' => 'default',
+            'theme_content_width' => 'fluid',
+            'theme_density' => 'comfortable',
+            'theme_radius' => 'rounded',
         ];
     }
 

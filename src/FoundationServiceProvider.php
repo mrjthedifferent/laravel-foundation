@@ -38,8 +38,18 @@ use Mrj\Foundation\Events\TenancyContextChanged;
 use Mrj\Foundation\Models\Audit;
 use Mrj\Foundation\Models\User as FoundationUser;
 use Mrj\Foundation\Services\Dashboard\ChartRegistry;
+use Mrj\Foundation\Services\Dashboard\DashboardCache;
+use Mrj\Foundation\Services\Dashboard\Health\MaintenanceHealth;
+use Mrj\Foundation\Services\Dashboard\Health\QueueHealth;
+use Mrj\Foundation\Services\Dashboard\HealthRegistry;
 use Mrj\Foundation\Services\Dashboard\NewUsersChart;
+use Mrj\Foundation\Services\Dashboard\QuickActionRegistry;
 use Mrj\Foundation\Services\Dashboard\StatRegistry;
+use Mrj\Foundation\Services\Dashboard\WidgetRegistry;
+use Mrj\Foundation\Services\Dashboard\Widgets\HealthWidget;
+use Mrj\Foundation\Services\Dashboard\Widgets\QuickActionsWidget;
+use Mrj\Foundation\Services\Dashboard\Widgets\StatsWidget;
+use Mrj\Foundation\Services\Dashboard\Widgets\TrendWidget;
 use Mrj\Foundation\Services\LocalFileStorage;
 use Mrj\Foundation\Support\ImpersonationAwareAuditUserResolver;
 use Mrj\Foundation\Support\MigrationPaths;
@@ -51,8 +61,12 @@ use Mrj\Foundation\Support\Tenancy;
 use Mrj\Foundation\Sync\SyncRegistry;
 use Mrj\Foundation\View\Components\AppLayout;
 use Mrj\Foundation\View\Components\ChartArea;
+use Mrj\Foundation\View\Components\ChartBar;
+use Mrj\Foundation\View\Components\ChartDonut;
+use Mrj\Foundation\View\Components\ChartHeatmap;
 use Mrj\Foundation\View\Components\GuestLayout;
 use Mrj\Foundation\View\Components\ModuleLayout;
+use Mrj\Foundation\View\Components\Sparkline;
 use Mrj\Foundation\View\Components\StatusBadge;
 use Mrj\Foundation\View\Composers\ThemeComposer;
 use Override;
@@ -76,6 +90,25 @@ final class FoundationServiceProvider extends ServiceProvider
 
         // One registry per request: modules add their dashboard stats and charts as they boot.
         $this->app->singleton(StatRegistry::class);
+        $this->app->singleton(QuickActionRegistry::class);
+        $this->app->singleton(HealthRegistry::class, function ($app): HealthRegistry {
+            $registry = new HealthRegistry($app->make(DashboardCache::class));
+
+            foreach ([QueueHealth::class, MaintenanceHealth::class] as $check) {
+                $registry->register($check);
+            }
+
+            return $registry;
+        });
+        $this->app->singleton(WidgetRegistry::class, function (): WidgetRegistry {
+            $registry = new WidgetRegistry;
+
+            foreach ([StatsWidget::class, TrendWidget::class, QuickActionsWidget::class, HealthWidget::class] as $widget) {
+                $registry->register($widget);
+            }
+
+            return $registry;
+        });
         $this->app->singleton(ChartRegistry::class, function (): ChartRegistry {
             $registry = new ChartRegistry;
             // The fallback, drawn only where no module offers a better series.
@@ -199,7 +232,7 @@ final class FoundationServiceProvider extends ServiceProvider
         // only shows up under production load.
         Model::preventLazyLoading(! $this->app->isProduction());
 
-        // The package ships its own Bootstrap 5 paginator rather than pointing at
+        // The package ships its own paginator rather than pointing at
         // one of Laravel's, whose view names change between majors. A project
         // overrides it with resources/views/pagination/links.blade.php.
         Paginator::defaultView('pagination.links');
@@ -399,6 +432,10 @@ final class FoundationServiceProvider extends ServiceProvider
         Blade::component('module-layout', ModuleLayout::class);
         Blade::component('status-badge', StatusBadge::class);
         Blade::component('chart-area', ChartArea::class);
+        Blade::component('chart-bar', ChartBar::class);
+        Blade::component('chart-donut', ChartDonut::class);
+        Blade::component('chart-heatmap', ChartHeatmap::class);
+        Blade::component('sparkline', Sparkline::class);
 
         View::composer([
             'layouts.app',

@@ -17,18 +17,18 @@
         back-label="{{ __('user::user.bulk_upload.back_label') }}" />
 
     <x-alert type="info" icon="ph-info">
-        <span class="fs-sm">
+        <span class="text-sm">
             <strong>{{ __('user::user.bulk_upload.instructions_label') }}</strong> {!! __('user::user.bulk_upload.instructions') !!}
         </span>
     </x-alert>
 
     <x-form-section title="{{ __('user::user.bulk_upload.section_file_upload') }}" icon="ph-file-xls">
-        <div class="row g-3">
-            <div class="col-md-6">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-12 md:col-span-6">
                 <x-form.file name="users" label="{{ __('user::user.bulk_upload.upload_label') }}" required accept=".xlsx,.xls" />
                 <div class="form-text">{{ __('user::user.bulk_upload.accepted_formats') }}</div>
             </div>
-            <div class="col-md-6">
+            <div class="col-span-12 md:col-span-6">
                 <label class="form-label">{{ __('user::user.bulk_upload.sample_template_label') }}</label>
                 <div>
                     <a class="btn btn-sm btn-light" href="{{ route('admin.users.bulk.sample') }}">
@@ -40,7 +40,7 @@
         </div>
     </x-form-section>
 
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="flex justify-between items-center">
         <a href="{{ route('admin.users.index') }}" class="btn btn-light">
             <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>

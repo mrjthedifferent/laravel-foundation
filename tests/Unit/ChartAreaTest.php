@@ -86,4 +86,16 @@ class ChartAreaTest extends TestCase
         $this->assertStringContainsString('10', $chart->summary);
         $this->assertStringContainsString('40', $chart->summary);
     }
+
+    public function test_the_comparison_line_shares_the_scale_of_the_current_period(): void
+    {
+        $alone = new ChartArea($this->series([10, 20]));
+        $compared = new ChartArea($this->series([10, 20]), '', $this->series([100, 80]));
+
+        $this->assertSame('', $alone->previousPath);
+        $this->assertNotSame('', $compared->previousPath);
+        // The higher previous period raises the shared ceiling, so the current line sits lower.
+        $this->assertGreaterThan($alone->lastY, $compared->lastY);
+        $this->assertSame([100, 75, 50, 25], array_map(fn (array $tick): int => $tick['value'], $compared->ticks));
+    }
 }

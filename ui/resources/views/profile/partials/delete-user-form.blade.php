@@ -1,15 +1,5 @@
-<section class="space-y-6">
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('foundation::foundation.profile.delete_account') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('foundation::foundation.profile.delete_account_notice') }}
-        </p>
-    </header>
-
-    <x-danger-button data-bs-toggle="modal" data-bs-target="#confirm-user-deletion">
+<section>
+    <x-danger-button data-fd-toggle="modal" data-fd-target="#confirm-user-deletion">
         {{ __('foundation::foundation.profile.delete_account') }}
     </x-danger-button>
 
@@ -42,7 +32,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ __('foundation::foundation.common.close') }}</button>
+                <button type="button" class="btn btn-link" data-fd-dismiss="modal">{{ __('foundation::foundation.common.close') }}</button>
                 <x-danger-button>{{ __('foundation::foundation.profile.delete_account') }}</x-danger-button>
             </div>
         </form>
