@@ -41,6 +41,7 @@ class ApiSettingsController extends Controller
         // Where an app links its "Privacy policy" and "Terms" (null when the public pages are off).
         $settings['privacy_policy_url'] = Route::has('legal.privacy_policy') ? route('legal.privacy_policy') : null;
         $settings['terms_conditions_url'] = Route::has('legal.terms_conditions') ? route('legal.terms_conditions') : null;
+        $settings['account_deletion_url'] = Route::has('account.delete') ? route('account.delete') : null;
 
         return JsonResponseFactory::success(__('settings::settings.flash.api_settings_retrieved'), $settings);
     }
