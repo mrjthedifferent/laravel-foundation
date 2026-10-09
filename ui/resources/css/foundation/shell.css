@@ -263,14 +263,14 @@ body:has(> .offcanvas-backdrop) .content-inner { overflow: hidden; }
 .page-header-content { padding: 0; }
 .page-header-content .breadcrumb { padding-block: 0; }
 /* The breadcrumb the layout renders, on the same gutter as the content below it */
-.fd-breadcrumb-row { padding: 1.25rem var(--fd-content-pad) .75rem; width: 100%; max-width: var(--fd-content-max); margin-inline: auto; }
+.fd-breadcrumb-row { padding: .75rem var(--fd-content-pad) .5rem; width: 100%; max-width: var(--fd-content-max); margin-inline: auto; }
 .fd-breadcrumb-row .breadcrumb { margin-bottom: 0; }
 a.breadcrumb-item, .breadcrumb-item > a { display: inline-flex; align-items: center; gap: .25rem; min-height: 1.5rem; min-width: 1.5rem; justify-content: center; }
 .fd-breadcrumb-row:empty { display: none; }
-.fd-page-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
+.fd-page-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .75rem 1rem; margin-bottom: 1rem; }
 .fd-page-head-main { display: flex; align-items: center; gap: .875rem; min-width: 0; }
 .fd-page-title { font-size: 1.375rem; font-weight: 600; letter-spacing: -.02em; line-height: 1.25; margin: 0; color: var(--fd-text-strong); }
-.fd-page-subtitle { font-size: var(--fd-text-base); color: var(--fd-muted); margin: .25rem 0 0; }
+.fd-page-subtitle { font-size: var(--fd-text-base); color: var(--fd-muted); margin: .125rem 0 0; }
 .fd-page-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
 .fd-page-actions .form-control { width: 14rem; max-width: 100%; }
 .fd-page-tabs { flex: 1 0 100%; margin-top: .25rem; }
@@ -472,3 +472,6 @@ a.breadcrumb-item, .breadcrumb-item > a { display: inline-flex; align-items: cen
     .navbar-footer, .btn-floating-settings { display: none !important; }
 }
 @media print { .fd-bottomnav { display: none !important; } }
+
+/* The header's icon tile should not make it taller than its text */
+.fd-page-head .fd-icon-tile-lg { width: 2.5rem; height: 2.5rem; font-size: 1.25rem; }
