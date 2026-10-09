@@ -111,11 +111,10 @@
                     </div>
                 </div>
                 <div id="value_file_container" class="hidden">
-                    <input type="file" class="form-control form-control-sm" name="value_file" id="value_file">
+                    <x-form.file name="value_file" id="value_file" />
                 </div>
                 <div id="value_image_container" class="hidden">
-                    <input type="file" class="form-control form-control-sm" name="value_image" id="value_image"
-                        accept="image/*">
+                    <x-form.file name="value_image" id="value_image" accept="image/*" />
                 </div>
                 <div id="value_json_container" class="hidden">
                     <div id="json-editor" class="border rounded-md"></div>

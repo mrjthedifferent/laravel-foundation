@@ -140,7 +140,7 @@
                             <i class="ph-file-arrow-down"></i>{{ __('settings::settings.edit.view_current_file') }}
                         </a>
                     @endif
-                    <input type="file" class="form-control form-control-sm" name="value_file">
+                    <x-form.file name="value_file" />
                     <div class="form-text">{{ __('settings::settings.edit.leave_empty_file') }}</div>
                 </div>
                 <div id="value_image_container" class="{{ $setting->type === 'image' ? '' : 'hidden' }}">

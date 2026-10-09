@@ -39,16 +39,21 @@ Never hard-code a colour, a radius or a control height. Use `color-mix(in srgb, 
 ### Utilities: what is available
 
 Layout and spacing use **Tailwind utility classes** — but the stylesheet is compiled once, inside the package, so **only classes the package itself uses
-(plus a safelist) exist**. A class not in that set silently does nothing in a project.
+(plus the safelist below) exist**. A class not in that set silently does nothing in a project.
 
-Always available (every breakpoint prefix `sm:` `md:` `lg:` `xl:` `2xl:` works for the first four rows; breakpoints 576 / 768 / 992 / 1200 / 1400):
+Always available (the layout groups also take the responsive prefixes `sm:` `md:` `lg:` `xl:` `2xl:`; breakpoints 576 / 768 / 992 / 1200 / 1400):
 
-- Spacing `m`/`p` + `t b s e x y` + `0 1 2 3 4 6 8 12` (`mb-4`, `px-2`, `ms-auto`, `mx-auto`)
-- Display and flex/grid: `flex inline-flex grid block hidden flex-col flex-row flex-wrap grow shrink-0 items-* justify-* gap-0 1 2 4 6 12 grid-cols-12`, `col-span-1…12`
-- Text and sizing: `text-start/end/center`, `truncate`, `whitespace-nowrap`, `uppercase`, `font-medium/semibold/bold/mono`, `text-xs/sm/base/md/lg`, `w-full h-full w-auto min-w-0 max-w-full`, `overflow-*`, `relative absolute fixed sticky`
-- Colour and shape: `text-muted text-strong text-primary text-success text-warning text-danger text-info`, `bg-surface bg-subtle bg-canvas`, `border border-t/b/s/e border-0 border-line`, `rounded-sm/md/lg/full`, `shadow-sm/md/lg`, `sr-only cursor-pointer`
+- **Spacing:** `m`/`p` + `t b s e x y` + `0 1 2 3 4 5 6 8 10 12 16 20 24` (`mb-4`, `px-2`, `pt-10`), `m*-auto` (`ms-auto`, `mx-auto`), `gap`, `gap-x`, `gap-y` (`0`–`6`, `8`, `10`, `12`)
+- **Display, flex, grid:** `flex inline-flex grid inline-grid block inline-block inline hidden contents table`, `flex-col/row(-reverse)`, `flex-wrap/nowrap`, `flex-1/auto/none`, `grow shrink(-0)`, `items-* justify-* content-* self-*` (`start center end between around evenly stretch baseline`), `grid-cols-1…6,12`, `col-span-1…12,full`, `col-start-*`, `row-span-1…4`, `order-*`
+- **Sizing:** `w-`/`h-` + `full auto screen 1/2 1/3 2/3 1/4 3/4` and `0–6 8 10 12 16 20 24 32 40 48 56 64`, `min-w-0`, `min-h-0`, `max-w-full`, `max-w-xs … max-w-7xl`, `aspect-square`
+- **Position and overflow:** `static relative absolute fixed sticky`, `inset-0`, `top-0 bottom-0 start-0 end-0`, `z-0 10 20 30 40 50`, `overflow-auto/hidden/visible/scroll` (+ `x-`, `y-`)
+- **Typography:** `text-start/end/center`, `text-xs sm base md lg xl 2xl`, `font-light normal medium semibold bold mono`, `leading-*`, `tracking-*`, `truncate whitespace-nowrap uppercase lowercase capitalize italic underline no-underline tabular-nums break-words`
+- **Colour (theme tokens):** `text-body strong muted faint primary primary-text success warning danger info` (+ `-text`), `bg-surface subtle canvas hover primary primary-subtle success-subtle warning-subtle danger-subtle info-subtle transparent`, `border-line line-strong primary success warning danger info transparent`
+- **Borders and effects:** `border border-0 border-2 border-t/b/s/e`, `border-dashed`, `rounded(-t/-b/-s/-e)-none sm md lg xl full`, `shadow-none xs sm md lg`, `opacity-0 25 50 75 100`, `cursor-pointer`, `pointer-events-none`, `select-none`, `sr-only`, `hover:bg-hover hover:text-strong hover:underline`, `print:hidden`
 
-Anything else a package view happens to use also exists (for example `w-8 w-10 w-12 h-6 h-8 w-50 flex-1`), but do not rely on that: **if you need a
+The list lives in `ui/resources/css/safelist.css` (package maintainers add to it when a project needs a class the package does not use itself).
+
+Anything else a package view happens to use also exists, but do not rely on that: **if you need a
 rule the list above does not cover, write plain CSS** in the project's `resources/css/app.css` (or `@push('styles')` for one page), using the tokens:
 
 ```css

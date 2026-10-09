@@ -9,7 +9,7 @@
         $roles = method_exists($user, 'getRoleNames') ? $user->getRoleNames() : collect();
     @endphp
 
-    <x-page-header :title="__('foundation::foundation.profile.breadcrumb')" :subtitle="$user->email" icon="ph-user-circle" />
+    <x-page-header :title="__('foundation::foundation.profile.breadcrumb')" icon="ph-user-circle" />
 
     <div class="fd-form-layout">
         <nav class="fd-form-nav" aria-label="{{ __('foundation::foundation.profile.breadcrumb') }}">

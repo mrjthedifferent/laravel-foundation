@@ -4,6 +4,20 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 2.1.0
+
+**Changed**
+- **Many more utility classes are compiled into `foundation.css`** (`ui/resources/css/safelist.css`): spacing up to 24, sizing (`w-1/3`, `max-w-3xl`…), flex and grid, positions
+  and `z-*`, typography, the token colours (`bg-danger-subtle`, `text-warning-text`, `border-line`), borders, corners, shadows, `hover:` and `print:`, with the responsive
+  prefixes. A project can use them in its own views without building Tailwind (guideline `theming.md` lists them). Anything else still needs plain CSS with the `--fd-*` tokens.
+- `<x-form.file>` is used on the setting create/edit and import pages; the profile header no longer repeats the email; `<x-image>` no longer writes an inline `style`.
+- Drawers keep Tab inside while open, and dropdown menus support ArrowUp, ArrowDown, Home and End (ArrowDown on a closed toggle opens it).
+
+**Added**
+- JavaScript tests for `foundation.js` (`bash bin/test-js.sh`, Node and jsdom), run in CI: modals, dropdowns, tabs, collapse, tooltips, the filter bar and its chips, the file drop
+  zone, stacked tables, the dashboard editor (reorder, resize, hide, save, reset, drag and drop) and keyboard handling.
+- A test that the documented utility classes are in the compiled stylesheet and that no Bootstrap remains in it.
+
 ## 2.0.0
 
 **Documentation and cleanup.**
