@@ -3,6 +3,7 @@
 namespace Modules\Notification\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Notification\Actions\NotifyAction;
 use Modules\Notification\Http\Requests\SendNotificationRequest;
@@ -36,11 +37,27 @@ class ApiPushNotificationController extends Controller
 
             return FirebaseToken::updateOrCreate(
                 ['token' => $data['token'], 'device_id' => $data['device_id']],
-                ['user_id' => $user->id],
+                ['user_id' => $user->id, 'platform' => $data['platform'] ?? null],
             );
         });
 
         return JsonResponseFactory::success(__('notification::notification.api.firebase_token_updated'), $token);
+    }
+
+    /**
+     * Stop pushes to this install (the app calls it when push is turned off or before signing
+     * out). Other devices of the same user keep theirs.
+     */
+    public function removeFirebaseToken(Request $request): JsonResponse
+    {
+        $data = $request->validate(['device_id' => ['required', 'string', 'max:191']]);
+
+        FirebaseToken::query()
+            ->where('user_id', $request->user()->id)
+            ->where('device_id', $data['device_id'])
+            ->delete();
+
+        return JsonResponseFactory::success(__('notification::notification.api.firebase_token_removed'));
     }
 
     /**

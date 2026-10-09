@@ -4,6 +4,40 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.5.0
+
+**Fixed: push notifications**
+- **The project ID on Settings → Firebase is used now.** Before, pushes went only to `FIREBASE_PROJECT_ID`, so with that unset every push was sent to an empty project. The project ID comes from the first of these that is set:
+  1. the setting;
+  2. `FIREBASE_PROJECT_ID`;
+  3. the `project_id` inside the service account JSON.
+- Saving new credentials clears the cached access token.
+- **Dead tokens are removed.** FCM answers `UNREGISTERED` for an app that was uninstalled or a token that rotated, and `NOT_FOUND` / `INVALID_ARGUMENT` for one that is not a token at all. Those tokens are now deleted (`User::forgetPushTokens()`).
+- **The push message:**
+  - Android options: `priority: high` and the `notification.android_channel` channel (`NOTIFICATION_ANDROID_CHANNEL`, default `general`). The app must create a channel with that id.
+  - Nested data values are sent as JSON instead of the string `Array`.
+  - `data.notification_id` is the id of the in-app row, so a tap can open and mark it. The database channel now stores the row under the notification's own id and always runs first.
+  - `AppNotification` takes an `image` URL, which Android shows as the big picture.
+- **The API returns `data.data` as an object (`{}`) even when it is empty.** Before, an empty payload came back as `[]`, which crashed clients that read it as a map.
+
+**Added**
+- `DELETE v1/firebase-token {device_id}` stops pushes to one install.
+- `POST v1/firebase-token` accepts `platform` (`android`, `ios` or `web`), stored on a new `firebase_tokens.platform` column.
+- `POST v1/logout {device_id}` removes only that device's push token. Without `device_id` it still removes all of them, as before.
+- **Admin → Send Notification** sends to one user, all active users, or the active users with a role.
+  - The image and link are now sent: the image as the push picture, the link as `data.url`. Every send carries `data.type = announcement`.
+  - The list shows who each notification went to and how many recipients it had.
+  - `NotifyAction::broadcast` / `BroadcastNotificationJob` skip deactivated accounts and take an optional `role`.
+- **New switches on Settings → Notifications:** "Password Changed" (`password_changed`) and "Account Deletion Request" (`account_deletion`). Account deletion notices are now also sent as push.
+
+**Upgrading**
+- `composer update mrjthedifferent/laravel-foundation`, then `php artisan migrate`. This adds `firebase_tokens.platform` and `push_notifications.recipient_role`.
+- If push used to work only because of `FIREBASE_PROJECT_ID`, nothing changes. If the Firebase page has a different project ID, that one now wins.
+- **Apps:**
+  - Create the Android notification channel `general`, or set `NOTIFICATION_ANDROID_CHANNEL` to one that exists.
+  - Send `device_id` when logging out.
+  - Read `data.notification_id` and `data.type` from a push.
+
 ## 3.4.0
 
 **Changed: account deletion keeps other people's records safe.** Deleting an account used to delete the user row, so database cascades could erase orders, reviews or payments that belong to other people too. Now every path (the app, `/delete-account`, the admin) goes through `Modules\User\Services\AccountDeletion`:

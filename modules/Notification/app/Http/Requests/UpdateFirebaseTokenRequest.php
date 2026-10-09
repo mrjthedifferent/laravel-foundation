@@ -18,7 +18,8 @@ class UpdateFirebaseTokenRequest extends FormRequest
     {
         return [
             'token' => ['required', 'string'],
-            'device_id' => ['required', 'string'],
+            'device_id' => ['required', 'string', 'max:191'],
+            'platform' => ['nullable', 'string', 'in:android,ios,web'],
         ];
     }
 

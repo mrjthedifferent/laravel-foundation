@@ -28,6 +28,7 @@ trait SendsFirebasePush
             'notification' => [
                 'title' => $payload['title'],
                 'body' => $payload['body'],
+                'image' => $payload['image'] ?? null,
             ],
             'data' => $payload['data'] ?? [],
         ];
@@ -36,7 +37,7 @@ trait SendsFirebasePush
     /**
      * The push title, body and optional data payload.
      *
-     * @return array{title: string, body: string, data?: array<string, mixed>}
+     * @return array{title: string, body: string, image?: string|null, data?: array<string, mixed>}
      */
     abstract protected function fcmPayload(object $notifiable): array;
 }

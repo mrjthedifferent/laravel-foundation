@@ -199,3 +199,21 @@ Deleting an account never erases other people's records. `Modules\User\Services\
 - **To serve your own page,** set `foundation.routing.account_deletion_page` to `false` (`FOUNDATION_ACCOUNT_DELETION_PAGE=false`).
 
 Public pages (legal, account deletion) extend `layouts.public`: the app name, one card, a footer, themed, with no login and no Vite. Use `@section('title')` and `@section('content')`, and the `fd-prose` class for long text.
+
+### Notifications (in-app and push)
+
+- **Send** with `NotifyAction::toUser($user, $title, $body, data: ['type' => 'order_shipped', 'order_id' => $id], channels: ['database', 'fcm'])`.
+  - Always put a `type` in `data`: apps route taps by it, and the admin switches match on it.
+  - Write the title and body in the recipient's language.
+- **Let admin switch it** on Settings → Notifications:
+  1. Ship `config/notification_toggles.php` in the module, with entries like `['type' => 'order_shipped', 'label' => 'Order shipped', 'group' => 'Orders', 'class' => AppNotification::class, 'app_type' => 'order_shipped', 'channels' => ['database', 'fcm']]`.
+  2. Merge `NotificationToggleRegistry::settingsFor(require __DIR__.'/notification_toggles.php')` into the module's `config/settings.php`.
+  3. An event without an entry always sends.
+- **Push (FCM HTTP v1):**
+  - Settings → Firebase holds the service account JSON and the project ID.
+  - Apps register with `POST v1/firebase-token {token, device_id, platform}`.
+  - They stop pushes with `DELETE v1/firebase-token {device_id}`, or `POST v1/logout {device_id}`.
+  - The push data carries the caller's `data`, plus `notification_id` (the in-app row).
+  - On Android it goes to the channel `notification.android_channel` (default `general`).
+  - Tokens FCM reports as dead are deleted.
+- **Broadcasts:** admin → Send Notification goes to one user, all active users or a role. In code, use `NotifyAction::broadcast()`.

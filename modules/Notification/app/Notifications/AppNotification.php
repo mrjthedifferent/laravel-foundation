@@ -19,6 +19,7 @@ class AppNotification extends Notification
      * @param  list<string>|null  $channels  null = use config default
      * @param  Mailable|null  $mailTemplate  When provided, used as-is for the mail channel.
      *                                       When null, a plain MailMessage is built from $title/$body.
+     * @param  string|null  $image  A public image URL shown in the push (Android big picture).
      */
     public function __construct(
         public readonly string $title,
@@ -27,6 +28,7 @@ class AppNotification extends Notification
         public readonly array $data = [],
         public readonly ?array $channels = null,
         public readonly ?Mailable $mailTemplate = null,
+        public readonly ?string $image = null,
     ) {}
 
     /**
@@ -34,7 +36,10 @@ class AppNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        $channels = $this->channels ?? config('notification.channels', ['database', 'fcm']);
+        $channels = array_values($this->channels ?? config('notification.channels', ['database', 'fcm']));
+
+        // The stored row goes first so the push can carry its id (the app marks it read on tap).
+        usort($channels, static fn (string $a, string $b): int => ($b === 'database') <=> ($a === 'database'));
 
         if (! in_array('broadcast', $channels, true)
             && config('broadcasting.default') !== 'null') {
@@ -57,14 +62,18 @@ class AppNotification extends Notification
     }
 
     /**
-     * @return array{title: string, body: string, data: array<string, mixed>}
+     * The push carries the caller's data plus `notification_id` (the in-app row, which shares
+     * this notification's id) so a tap can open and mark the right item.
+     *
+     * @return array{title: string, body: string, image: string|null, data: array<string, mixed>}
      */
     protected function fcmPayload(object $notifiable): array
     {
         return [
             'title' => $this->title,
             'body' => $this->body,
-            'data' => $this->data,
+            'image' => $this->image,
+            'data' => array_filter([...$this->data, 'notification_id' => $this->id], static fn ($v) => $v !== null),
         ];
     }
 

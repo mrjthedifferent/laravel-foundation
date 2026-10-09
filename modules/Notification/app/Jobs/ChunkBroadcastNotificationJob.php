@@ -32,6 +32,7 @@ class ChunkBroadcastNotificationJob implements ShouldQueue
         public readonly ?array $data = null,
         public readonly array $userIds = [],
         public readonly array $channels = ['fcm'],
+        public readonly ?string $image = null,
     ) {
         $this->onQueue(config('notification.queue', 'notifications'));
         $this->onConnection(config('notification.queue_connection'));
@@ -44,6 +45,7 @@ class ChunkBroadcastNotificationJob implements ShouldQueue
             body: $this->body,
             data: $this->data ?? [],
             channels: $this->channels,
+            image: $this->image,
         );
 
         User::query()

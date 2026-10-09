@@ -10,6 +10,17 @@ use Modules\Notification\Database\Factories\PushNotificationFactory;
 use Mrj\Foundation\Services\FileManagerService;
 use Override;
 
+/**
+ * @property int $id
+ * @property string $title
+ * @property string $body
+ * @property string|null $url
+ * @property string|null $description
+ * @property string $recipient_type specific · all · role
+ * @property string|null $recipient_role
+ * @property int|null $user_id
+ * @property array<string, mixed>|null $result
+ */
 class PushNotification extends Model
 {
     use HasFactory;
@@ -28,6 +39,7 @@ class PushNotification extends Model
         'description',
         'result',
         'recipient_type',
+        'recipient_role',
         'user_id',
     ];
 

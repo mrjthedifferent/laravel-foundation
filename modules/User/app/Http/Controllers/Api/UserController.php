@@ -131,7 +131,10 @@ class UserController extends Controller
             return JsonResponseFactory::unauthorized(__('user::user.errors.user_not_authenticated'));
         }
 
-        $user->firebaseTokens()->delete();
+        // With device_id only this install stops getting pushes; the user's other devices keep
+        // theirs. Without it every push token goes (the behaviour before device_id existed).
+        $deviceId = $request->string('device_id')->trim()->value();
+        $user->firebaseTokens()->when($deviceId !== '', fn ($q) => $q->where('device_id', $deviceId))->delete();
 
         $this->revokeCurrentToken($user);
 

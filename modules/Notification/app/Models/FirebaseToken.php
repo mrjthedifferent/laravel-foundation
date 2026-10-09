@@ -25,6 +25,7 @@ class FirebaseToken extends Model
     protected $fillable = [
         'token',
         'device_id',
+        'platform',
         'user_id',
     ];
 

@@ -46,5 +46,7 @@ return [
     ['type' => 'password_reset', 'label' => 'Password Reset', 'group' => 'Account & Security', 'class' => AppNotification::class, 'app_type' => 'password_reset', 'channels' => ['mail', 'database', 'fcm', 'sms']],
     ['type' => 'roles_changed', 'label' => 'Role Changed', 'group' => 'Account & Security', 'class' => AppNotification::class, 'app_type' => 'roles_changed', 'channels' => ['mail', 'database', 'fcm', 'sms']],
     ['type' => 'account_deactivated', 'label' => 'Account Deactivated', 'group' => 'Account & Security', 'class' => AppNotification::class, 'app_type' => 'account_deactivated', 'channels' => ['mail', 'database', 'fcm', 'sms']],
+    ['type' => 'password_changed', 'label' => 'Password Changed', 'group' => 'Account & Security', 'class' => AppNotification::class, 'app_type' => 'password_changed', 'channels' => ['database', 'fcm']],
+    ['type' => 'account_deletion', 'label' => 'Account Deletion Request', 'group' => 'Account & Security', 'class' => AppNotification::class, 'app_type' => 'account_deletion', 'channels' => ['database', 'fcm']],
     ['type' => 'new_device_login', 'label' => 'New Device Login Alert', 'group' => 'Account & Security', 'class' => AppNotification::class, 'app_type' => 'new_device_login', 'channels' => ['mail', 'database', 'fcm', 'sms']],
 ];

@@ -26,7 +26,9 @@ class NotificationResource extends JsonResource
             // Convenience fields extracted from the JSON data payload
             'title' => $data['title'] ?? null,
             'body' => $data['body'] ?? null,
-            'data' => $data,
+            // The caller's payload is always a JSON object: an empty PHP array would otherwise
+            // be sent as [] and break clients that read data.data as a map.
+            'data' => [...$data, 'data' => (object) ($data['data'] ?? [])],
             'is_read' => $this->read(),
             'read_at' => $this->read_at?->toIso8601String(),
             'created_at' => $this->created_at?->toIso8601String(),

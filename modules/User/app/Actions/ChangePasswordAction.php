@@ -22,6 +22,7 @@ final readonly class ChangePasswordAction
         $user->notify(new AppNotification(
             title: __('user::user.notifications.password_changed_title'),
             body: __('user::user.notifications.password_changed_body'),
+            data: ['type' => 'password_changed'],
             channels: ['database', 'fcm'],
         ));
     }

@@ -21,5 +21,6 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->prefix(config('foundation.r
 
     // Firebase token & FCM
     Route::post('firebase-token', [ApiPushNotificationController::class, 'updateFirebaseToken']);
+    Route::delete('firebase-token', [ApiPushNotificationController::class, 'removeFirebaseToken']);
     Route::post('notification/send', [ApiPushNotificationController::class, 'send'])->middleware('throttle:6,1');
 });

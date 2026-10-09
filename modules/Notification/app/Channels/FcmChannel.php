@@ -45,17 +45,29 @@ class FcmChannel implements PushSender
             return false;
         }
 
-        $url = sprintf(self::FCM_URL, config('notification.project_id'));
+        $projectId = $this->projectId();
+        if ($projectId === '') {
+            Log::channel('daily_notification')->error('Firebase project ID is not configured (Settings → Firebase).');
+
+            return false;
+        }
+
+        $url = sprintf(self::FCM_URL, $projectId);
         $headers = [
             'Authorization' => 'Bearer '.$accessToken,
             'Content-Type' => 'application/json',
         ];
 
-        $notificationPayload = $message['notification'];
+        $notificationPayload = array_filter($message['notification'], static fn ($v) => $v !== null && $v !== '');
         $dataPayload = ! empty($message['data']) ? $this->stringifyValues($message['data']) : null;
+        $android = ['priority' => 'high', 'notification' => array_filter([
+            'channel_id' => config('notification.android_channel', 'general'),
+            'sound' => 'default',
+        ])];
 
         $responses = [];
         $errors = [];
+        $deadTokens = [];
 
         // Sent concurrently per chunk via Http::pool(), rather than one request
         // after another — the previous sequential loop only ever "batched" in
@@ -70,11 +82,12 @@ class FcmChannel implements PushSender
                             'token' => $token,
                             'notification' => $notificationPayload,
                             'data' => $dataPayload,
+                            'android' => $android,
                         ]),
                     ])
             )->all());
 
-            foreach ($chunkResponses as $response) {
+            foreach ($chunkResponses as $i => $response) {
                 if ($response instanceof Throwable) {
                     $errors[] = $response->getMessage();
 
@@ -82,6 +95,9 @@ class FcmChannel implements PushSender
                 }
 
                 if ($response->failed()) {
+                    if ($this->isDeadToken($response->json())) {
+                        $deadTokens[] = $chunk[$i];
+                    }
                     $errors[] = 'HTTP '.$response->status().': '.$response->body();
 
                     continue;
@@ -89,6 +105,10 @@ class FcmChannel implements PushSender
 
                 $responses[] = $response->json();
             }
+        }
+
+        if ($deadTokens !== [] && method_exists($notifiable, 'forgetPushTokens')) {
+            $notifiable->forgetPushTokens($deadTokens);
         }
 
         $context = ['phone' => $notifiable->phone ?? null, 'message' => $message];
@@ -110,10 +130,69 @@ class FcmChannel implements PushSender
         return true;
     }
 
-    /** Cast every data-payload value to string (FCM requirement). */
+    /**
+     * Every data-payload value must be a string (FCM requirement): scalars are cast, arrays and
+     * objects are sent as JSON, and nulls are left out.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, string>
+     */
     private function stringifyValues(array $data): array
     {
-        return array_map(static fn ($v) => (string) $v, $data);
+        $out = [];
+        foreach ($data as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+            $out[(string) $key] = match (true) {
+                is_bool($value) => $value ? '1' : '0',
+                is_scalar($value) => (string) $value,
+                default => (string) json_encode($value, JSON_UNESCAPED_UNICODE),
+            };
+        }
+
+        return $out;
+    }
+
+    /**
+     * FCM's answer for a token that will never work again: the app was uninstalled or the token
+     * rotated (UNREGISTERED), or it is not a token at all (INVALID_ARGUMENT naming the token).
+     *
+     * @param  array<string, mixed>|null  $body
+     */
+    private function isDeadToken(?array $body): bool
+    {
+        $error = $body['error'] ?? [];
+        foreach ((array) ($error['details'] ?? []) as $detail) {
+            if (($detail['errorCode'] ?? null) === 'UNREGISTERED') {
+                return true;
+            }
+        }
+
+        return ($error['status'] ?? null) === 'NOT_FOUND'
+            || (($error['status'] ?? null) === 'INVALID_ARGUMENT' && str_contains((string) ($error['message'] ?? ''), 'registration token'));
+    }
+
+    /**
+     * Settings → Firebase first, then FIREBASE_PROJECT_ID, then the service account itself
+     * (its JSON names the project).
+     */
+    public function projectId(): string
+    {
+        $settings = app(SettingsRepository::class);
+        $fromSettings = trim((string) $settings->get('firebase_project_id'));
+        if ($fromSettings !== '') {
+            return $fromSettings;
+        }
+
+        $fromEnv = trim((string) config('notification.project_id'));
+        if ($fromEnv !== '') {
+            return $fromEnv;
+        }
+
+        $credentials = json_decode((string) $settings->get('firebase_credentials_json'), true);
+
+        return is_array($credentials) ? trim((string) ($credentials['project_id'] ?? '')) : '';
     }
 
     private function getAccessToken(): ?string
