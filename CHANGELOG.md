@@ -4,6 +4,17 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.1.0
+
+**Added**
+- **Sidebar items declared by `url` now show as active.** Until now only `route`/`routes` matched, so a page linked by `url` never highlighted its item or opened its parent. That includes pages that share one route and differ by its parameters, such as a generic `admin/manage/{resource}` controller.
+  - With no route match, a `url` item is active on its URL and on every page under it (`/5`, `/5/edit`, `/create`).
+  - The longest matching URL wins, `things` doesn't match `thing-types`, and links to another host never match.
+  - `SidebarMenu::forUser()` takes an optional `$currentPath` (default: the current request's).
+
+**Upgrading**
+- `composer update mrjthedifferent/laravel-foundation`. Nothing else is needed; items declared by `route` behave as before.
+
 ## 3.0.1
 
 **Fixed**
