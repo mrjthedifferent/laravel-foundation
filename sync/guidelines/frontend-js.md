@@ -1,6 +1,6 @@
 ## Front-end Behaviour (JavaScript)
 
-The package ships its own small script, `assets/js/foundation.js` (loaded in the layout with jQuery). It replaces what Bootstrap's JavaScript used to do.
+The package ships its own small script, `assets/js/foundation.js` (minified; its readable source is `foundation.src.js` in the package, which a project never edits), loaded in the layout with jQuery. It replaces what Bootstrap's JavaScript used to do.
 **There is no Bootstrap: `data-bs-*` attributes, `window.bootstrap` and `shown.bs.*` events do not exist.** Behaviour is declared in markup with
 `data-fd-*` attributes and `swal-*` classes; write script only when markup cannot express it.
 

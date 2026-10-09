@@ -144,15 +144,8 @@
                     <div class="form-text">{{ __('settings::settings.edit.leave_empty_file') }}</div>
                 </div>
                 <div id="value_image_container" class="{{ $setting->type === 'image' ? '' : 'hidden' }}">
-                    @if ($setting->type === 'image' && $setting->value)
-                        <img src="{{ $setting->value }}" alt="{{ $setting->key }}" id="img-preview"
-                            class="img-thumbnail block mb-2 fd-thumb">
-                    @else
-                        <img src="" alt="" id="img-preview"
-                            class="img-thumbnail hidden mb-2 fd-thumb">
-                    @endif
-                    <input type="file" class="form-control form-control-sm" name="value_image" id="value_image_input"
-                        accept="image/*">
+                    <x-form.file name="value_image" id="value_image_input" accept="image/*"
+                        :current="$setting->type === 'image' ? $setting->value : null" />
                     <div class="form-text">{{ __('settings::settings.edit.leave_empty_image') }}</div>
                 </div>
                 <div id="value_json_container" class="{{ $setting->type === 'json' ? '' : 'hidden' }}">
@@ -311,17 +304,6 @@
                     allowClear: false
                 });
             @endif
-
-            $('#value_image_input').on('change', function() {
-                var file = this.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        $('#img-preview').attr('src', e.target.result).removeClass('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
 
             @if ($setting->type === 'json')
                 initJsonEditor();

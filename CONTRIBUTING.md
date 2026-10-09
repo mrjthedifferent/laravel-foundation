@@ -54,13 +54,16 @@ vendor/bin/rector process --dry-run --no-progress-bar
 
 ## The UI: stylesheet and JavaScript
 
-The admin UI's stylesheet is compiled with Tailwind **inside this repository** and committed, so projects need no build step.
+The admin UI's stylesheet (Tailwind) and script (`foundation.src.js`, minified with esbuild) are built **inside this repository** and the results committed, so projects need no build step.
+Edit `ui/resources/js/foundation.src.js`, never the minified `ui/public/assets/js/foundation.js`.
 Change `ui/resources/css/**` or any Blade view, JavaScript string or PHP class that carries class names, then rebuild:
 
 ```bash
 bash bin/build-css.sh           # writes ui/public/assets/css/foundation.css
 bash bin/build-css.sh --check   # what CI runs: fails if the committed file is stale
-bash bin/test-js.sh             # behaviour tests for ui/public/assets/js/foundation.js (Node + jsdom)
+bash bin/build-js.sh            # minifies ui/resources/js/foundation.src.js to ui/public/assets/js/foundation.js
+bash bin/build-js.sh --check    # what CI runs: fails if the committed file is stale
+bash bin/test-js.sh             # behaviour tests, run against the minified file that ships (Node + jsdom)
 ```
 
 A utility class a project may use without building Tailwind itself belongs in `ui/resources/css/safelist.css`. The guidelines in

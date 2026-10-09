@@ -2,8 +2,8 @@
 #
 # Rebuilds the third-party files under ui/public/assets from npm, at the versions
 # pinned below. Run it to upgrade a library, then update THIRD-PARTY-NOTICES.md.
-# foundation.js and the images are hand-written and left alone. foundation.css is compiled by
-# bin/build-css.sh (Tailwind), not copied from here.
+# The images are hand-written and left alone. foundation.css is compiled by bin/build-css.sh (Tailwind) and
+# foundation.js is minified by bin/build-js.sh from ui/resources/js/foundation.src.js; neither is copied from here.
 
 set -euo pipefail
 

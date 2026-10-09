@@ -4,6 +4,16 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 2.1.1
+
+**Changed**
+- `foundation.js` is minified: 25 KB instead of 52 KB. Its readable source is `ui/resources/js/foundation.src.js`; `bash bin/build-js.sh` rebuilds it and CI checks it is current.
+  Projects load the same `assets/js/foundation.js`, so nothing changes for them.
+- The setting edit page's image field is the same drop zone as everywhere else (stored image as the starting preview), replacing its own preview script.
+
+**Removed**
+- The unused `.fd-thumb` class.
+
 ## 2.1.0
 
 **Changed**
