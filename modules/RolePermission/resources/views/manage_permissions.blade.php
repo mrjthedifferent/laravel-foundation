@@ -18,7 +18,7 @@
     <x-slot name="actions">
         <x-table-action id="bulk-delete-btn" class="btn-danger btn-sm d-none" icon="ph-trash" title="{{ __('rolepermission::rolepermission.manage_permissions.delete_selected') }}" />
         <x-table-action class="btn-primary btn-sm" icon="ph-plus" title="{{ __('rolepermission::rolepermission.manage_permissions.create_permission') }}" data-bs-toggle="modal" data-bs-target="#createPermissionModal" />
-        <x-table-action :href="route('admin.permission.sync')" class="btn-success btn-sm swal-post" icon="ph-eject" title="{{ __('rolepermission::rolepermission.manage_permissions.sync_permissions') }}" data-text="{{ __('rolepermission::rolepermission.manage_permissions.sync_permissions_confirm') }}" />
+        <x-table-action :href="route('admin.permission.sync')" class="btn-success btn-sm swal-post" icon="ph-eject" title="{{ __('rolepermission::rolepermission.manage_permissions.sync_permissions') }}" :data-text="__('rolepermission::rolepermission.manage_permissions.sync_permissions_confirm')" />
     </x-slot>
 
     <thead>

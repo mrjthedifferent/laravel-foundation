@@ -83,4 +83,14 @@ class UiTest extends TestCase
             $this->assertFileExists($compiler->getCompiledPath($file->getPathname()));
         }
     }
+
+    public function test_translated_titles_are_not_escaped_twice(): void
+    {
+        $this->actingAs(User::factory()->superAdmin()->create());
+
+        foreach (['/admin/users/create', '/admin/permissions'] as $url) {
+            $this->get($url)->assertOk()->assertDontSee('&amp;amp;', false)->assertDontSee('&amp;#039;', false);
+        }
+        $this->get('/admin/users/create')->assertSee('Contact &amp; Credentials', false);
+    }
 }

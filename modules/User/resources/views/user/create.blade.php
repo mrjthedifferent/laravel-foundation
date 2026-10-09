@@ -61,7 +61,7 @@
     </div>
 </x-form-section>
 
-<x-form-section title="{{ __('user::user.create.section_contact') }}" icon="ph-envelope">
+<x-form-section :title="__('user::user.create.section_contact')" icon="ph-envelope">
     <div class="row g-3">
         <div class="col-md-3">
             <x-form.input type="email" name="email" label="{{ __('user::user.create.email_label') }}" required placeholder="{{ __('user::user.create.email_placeholder') }}" />
@@ -101,7 +101,7 @@
     </div>
 </x-form-section>
 
-<x-form-section title="{{ __('user::user.create.section_access') }}" icon="ph-shield-check">
+<x-form-section :title="__('user::user.create.section_access')" icon="ph-shield-check">
     <div class="row g-3">
         <div class="col-md-6">
             <x-form.select class="select" name="roles[]" id="roles" label="{{ __('user::user.create.roles_label') }}" required multiple :options="$roles" :selected="null" data-placeholder="{{ __('user::user.create.select_roles_placeholder') }}" />

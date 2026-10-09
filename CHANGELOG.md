@@ -4,6 +4,13 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.13.3
+
+**Fixed**
+- Headings and confirmation texts with `&` or an apostrophe ("Contact & Credentials", "Access & Status"
+  on the user form, the Sync Permissions confirmation) showed `&amp;` and `&#039;`: they were
+  escaped twice on the way into a component.
+
 ## 1.13.2
 
 **Changed**
