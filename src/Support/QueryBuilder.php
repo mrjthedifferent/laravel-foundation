@@ -43,18 +43,30 @@ abstract class QueryBuilder
      */
     protected function whereLike(array $columns, string $term): static
     {
-        $like = '%'.escapeLike($term).'%';
-        $pgsql = $this->query->getModel()->getConnection()->getDriverName() === 'pgsql';
+        self::applyLike($this->query, $columns, $term);
 
-        $this->query->where(function (Builder $q) use ($columns, $like, $pgsql): void {
+        return $this;
+    }
+
+    /**
+     * The same escaped, driver-aware LIKE search for code that holds a plain
+     * Eloquent builder rather than a QueryBuilder subclass.
+     *
+     * @param  Builder<*>  $query
+     * @param  list<string>  $columns
+     */
+    public static function applyLike(Builder $query, array $columns, string $term): void
+    {
+        $like = '%'.escapeLike($term).'%';
+        $pgsql = $query->getModel()->getConnection()->getDriverName() === 'pgsql';
+
+        $query->where(function (Builder $q) use ($columns, $like, $pgsql): void {
             foreach ($columns as $index => $column) {
                 $method = $index === 0 ? 'whereRaw' : 'orWhereRaw';
                 $sql = $pgsql ? "CAST({$column} AS TEXT) ILIKE ? ESCAPE ?" : "{$column} LIKE ? ESCAPE ?";
                 $q->{$method}($sql, [$like, '\\']);
             }
         });
-
-        return $this;
     }
 
     public function paginate(?int $perPage = null): LengthAwarePaginator

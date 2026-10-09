@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Modules\Notification\Support\NotificationToggleRegistry;
+use Modules\Settings\Actions\SaveSettingAction;
 use Modules\Settings\Models\Setting;
 use Mrj\Foundation\Contracts\SettingsRepository;
 use Mrj\Foundation\Http\Controllers\Controller;
@@ -83,16 +84,13 @@ class NotificationSettingsController extends Controller
 
                 $key = NotificationToggleRegistry::settingKey($entry, $channel);
 
-                Setting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'group' => $channel === 'mail' ? 'Email Notifications' : 'Notification Channels',
-                        'type' => 'boolean',
-                        'value' => $request->boolean($key) ? '1' : '0',
-                        'is_visible' => false,
-                        // Stored in English; the settings pages translate it at display time.
-                        'description' => NotificationToggleRegistry::description($entry, $channel),
-                    ],
+                SaveSettingAction::hidden(
+                    $key,
+                    $request->boolean($key) ? '1' : '0',
+                    'boolean',
+                    $channel === 'mail' ? 'Email Notifications' : 'Notification Channels',
+                    // Stored in English; the settings pages translate it at display time.
+                    ['description' => NotificationToggleRegistry::description($entry, $channel)],
                 );
             }
         }

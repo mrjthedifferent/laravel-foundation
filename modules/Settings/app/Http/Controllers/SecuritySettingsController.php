@@ -6,6 +6,7 @@ namespace Modules\Settings\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
+use Modules\Settings\Actions\SaveSettingAction;
 use Modules\Settings\Http\Requests\UpdateSecuritySettingsRequest;
 use Modules\Settings\Models\Setting;
 use Mrj\Foundation\Contracts\SettingsRepository;
@@ -75,14 +76,10 @@ class SecuritySettingsController extends Controller
         foreach ($values as $key => $value) {
             $definition = $definitions[$key] ?? [];
 
-            Setting::updateOrCreate(['key' => $key], [
-                'group' => $definition['group'] ?? 'Security',
-                'type' => $definition['type'] ?? 'text',
+            SaveSettingAction::hidden($key, $value, $definition['type'] ?? 'text', $definition['group'] ?? 'Security', [
                 // Stored in English; the settings pages translate it at display time.
                 'description' => $definition['description'] ?? null,
-                'value' => $value,
                 'options' => $key === 'two_factor_required_roles' ? json_encode(array_combine($roles, $roles) ?: []) : null,
-                'is_visible' => false,
                 'is_required' => false,
             ]);
         }

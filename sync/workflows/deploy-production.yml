@@ -26,6 +26,10 @@ jobs:
         run: composer validate --no-check-all --no-check-publish
 
       - name: Composer install
+        env:
+          # Read-only token for the private foundation package:
+          # {"github-oauth": {"github.com": "<token>"}}
+          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
         run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Prepare environment

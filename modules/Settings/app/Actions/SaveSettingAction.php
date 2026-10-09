@@ -9,6 +9,23 @@ use Mrj\Foundation\Services\FileManagerService;
 final readonly class SaveSettingAction
 {
     /**
+     * Create or update a setting that has no field on the generic settings form
+     * (it is edited from a dedicated page). `type` is assigned ahead of `value`
+     * because the Setting model's value mutator reads the sibling `type`
+     * attribute to decide whether to encrypt, and Eloquent's fill() assigns
+     * attributes in array order.
+     *
+     * @param  array<string, mixed>  $extra  further attributes, e.g. description or options
+     */
+    public static function hidden(string $key, mixed $value, string $type, string $group, array $extra = []): Setting
+    {
+        return Setting::updateOrCreate(
+            ['key' => $key],
+            ['type' => $type, 'value' => $value, 'group' => $group, 'is_visible' => false, ...$extra],
+        );
+    }
+
+    /**
      * Persist all visible settings submitted from the system settings form.
      */
     public function saveAll(Request $request): void

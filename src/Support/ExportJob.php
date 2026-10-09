@@ -47,13 +47,15 @@ abstract class ExportJob implements ShouldQueue
 
     public function handle(): void
     {
+        $tracker = app(ImportTracker::class);
+
         try {
-            app(ImportTracker::class)->processing($this->importDownloadManagerId);
+            $tracker->processing($this->importDownloadManagerId);
 
             $exportData = $this->buildData();
 
             if ($exportData === []) {
-                app(ImportTracker::class)->fail($this->importDownloadManagerId, $this->emptyMessage());
+                $tracker->fail($this->importDownloadManagerId, $this->emptyMessage());
 
                 return;
             }
@@ -92,17 +94,21 @@ abstract class ExportJob implements ShouldQueue
                 (new FastExcel($exportData))->export($fullPath);
             }
 
-            app(ImportTracker::class)->complete($this->importDownloadManagerId, 'completed', $filePath);
+            $tracker->complete($this->importDownloadManagerId, 'completed', $filePath);
         } catch (Throwable $e) {
-            app(ImportTracker::class)->fail($this->importDownloadManagerId, $e->getMessage());
-            Log::error($this->title().' export failed', ['error' => $e->getMessage()]);
+            $this->markFailed($tracker, $e, 'export failed');
         }
     }
 
     public function failed(Throwable $exception): void
     {
-        app(ImportTracker::class)->fail($this->importDownloadManagerId, $exception->getMessage());
-        Log::error($this->title().' export job failed', ['error' => $exception->getMessage()]);
+        $this->markFailed(app(ImportTracker::class), $exception, 'export job failed');
+    }
+
+    private function markFailed(ImportTracker $tracker, Throwable $e, string $logMessage): void
+    {
+        $tracker->fail($this->importDownloadManagerId, $e->getMessage());
+        Log::error($this->title().' '.$logMessage, ['error' => $e->getMessage()]);
     }
 
     /**

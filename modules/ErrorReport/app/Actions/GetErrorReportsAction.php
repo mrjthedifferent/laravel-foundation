@@ -5,6 +5,7 @@ namespace Modules\ErrorReport\Actions;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Modules\ErrorReport\Models\ErrorReport;
+use Mrj\Foundation\Support\QueryBuilder;
 
 final readonly class GetErrorReportsAction
 {
@@ -12,13 +13,7 @@ final readonly class GetErrorReportsAction
     {
         return ErrorReport::query()
             ->when($request->filled('search'), function ($q) use ($request): void {
-                $search = '%'.escapeLike($request->search).'%';
-
-                $q->where(function ($query) use ($search): void {
-                    $query->whereRaw('message LIKE ? ESCAPE ?', [$search, '\\'])
-                        ->orWhereRaw('exception_class LIKE ? ESCAPE ?', [$search, '\\'])
-                        ->orWhereRaw('file LIKE ? ESCAPE ?', [$search, '\\']);
-                });
+                QueryBuilder::applyLike($q, ['message', 'exception_class', 'file'], (string) $request->search);
             })
             ->when($request->filled('resolved'), function ($q) use ($request): void {
                 if ($request->resolved === '1') {

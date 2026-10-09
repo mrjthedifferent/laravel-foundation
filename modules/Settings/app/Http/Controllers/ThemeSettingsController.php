@@ -5,9 +5,9 @@ namespace Modules\Settings\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use Modules\Settings\Actions\SaveSettingAction;
 use Modules\Settings\Models\Setting;
-use Modules\Settings\Providers\SettingsServiceProvider;
+use Mrj\Foundation\Contracts\SettingsRepository;
 use Mrj\Foundation\Http\Controllers\Controller;
 
 class ThemeSettingsController extends Controller
@@ -72,18 +72,10 @@ class ThemeSettingsController extends Controller
         foreach (self::THEME_KEYS as $key) {
             $value = $this->normalize($key, $request->input($key, $defaults[$key] ?? ''));
 
-            Setting::updateOrCreate(
-                ['key' => $key],
-                [
-                    'value' => $value,
-                    'group' => 'Theme',
-                    'type' => $this->keyType($key),
-                    'is_visible' => false,
-                ]
-            );
+            SaveSettingAction::hidden($key, $value, $this->keyType($key), 'Theme');
         }
 
-        Cache::forget(SettingsServiceProvider::cacheKey());
+        app(SettingsRepository::class)->forget();
 
         return redirect()->back()->with('success', __('settings::settings.flash.theme_updated'));
     }

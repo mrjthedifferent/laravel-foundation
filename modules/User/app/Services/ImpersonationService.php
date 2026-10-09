@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Event;
 use Laravel\Sanctum\PersonalAccessToken;
 use Modules\User\Actions\StopImpersonationAction;
 use Mrj\Foundation\Contracts\ImpersonationContext;
+use Mrj\Foundation\Contracts\ResolvesImpersonatorId;
 use OwenIt\Auditing\Events\AuditCustom;
 
 /**
@@ -19,13 +20,9 @@ use OwenIt\Auditing\Events\AuditCustom;
  * Shared by the impersonation actions, UserPolicy, CheckUserIsActive, the audit
  * user resolver / tagging, the request log and the layout banner.
  */
-final readonly class ImpersonationService implements ImpersonationContext
+final readonly class ImpersonationService implements ImpersonationContext, ResolvesImpersonatorId
 {
     public const string SESSION_KEY = 'impersonator_id';
-
-    public const string STARTED_EVENT = 'impersonation_started';
-
-    public const string ENDED_EVENT = 'impersonation_ended';
 
     private const string TOKEN_ABILITY_PREFIX = 'impersonator:';
 

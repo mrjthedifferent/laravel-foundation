@@ -129,6 +129,27 @@ return [
     ],
 
     /*
+    | Default length for string columns created by migrations. 191 keeps indexed
+    | utf8mb4 columns within the key-length limit of older MariaDB/MySQL; set to
+    | null to keep Laravel's own default (255) on a modern database.
+    */
+    'schema' => [
+        'string_length' => env('FOUNDATION_SCHEMA_STRING_LENGTH', 191) === null
+            ? null
+            : (int) env('FOUNDATION_SCHEMA_STRING_LENGTH', 191),
+    ],
+
+    /*
+    | Requests per minute for the 'auth' (per IP) and 'api' limiters. The
+    | per-login-name limit for 'auth' is foundation.login.max_attempts.
+    */
+    'rate_limits' => [
+        'auth_ip' => (int) env('FOUNDATION_RATE_LIMIT_AUTH_IP', 30),
+        'api_user' => (int) env('FOUNDATION_RATE_LIMIT_API_USER', 120),
+        'api_guest' => (int) env('FOUNDATION_RATE_LIMIT_API_GUEST', 30),
+    ],
+
+    /*
     | The web admin panel's URL prefix, domain and middleware, and the API's URL
     | prefix. Route NAMES (admin.users.index, ...) stay fixed regardless — only
     | change these if a consuming app already owns the prefix or needs the admin

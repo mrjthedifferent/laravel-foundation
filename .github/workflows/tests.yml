@@ -4,6 +4,16 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    # Weekly, to catch breakage from upstream releases when nothing here changed.
+    - cron: '17 5 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   tests:
@@ -34,6 +44,12 @@ jobs:
         with:
           dependency-versions: ${{ matrix.dependencies }}
           composer-options: --prefer-dist
+
+      - name: Security advisories
+        if: matrix.php == '8.4' && matrix.dependencies == 'highest'
+        # Advisory data changes without a commit here, so report it without failing the build.
+        continue-on-error: true
+        run: composer audit --no-interaction
 
       - name: Code style
         if: matrix.php == '8.4' && matrix.dependencies == 'highest'

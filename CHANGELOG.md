@@ -4,6 +4,41 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## Unreleased
+
+**Added**
+- `foundation.rate_limits.*` (`auth_ip`, `api_user`, `api_guest`) set the requests per
+  minute of the `auth` and `api` limiters. The defaults match the previous fixed values.
+- `foundation.schema.string_length` sets the default string column length (191 by default,
+  as before). Set `FOUNDATION_SCHEMA_STRING_LENGTH=null` to keep Laravel's 255 on a modern
+  database.
+- `QueryBuilder::applyLike()` runs the escaped, PostgreSQL-aware LIKE search on a plain
+  Eloquent builder.
+- `SaveSettingAction::hidden()` creates or updates a setting that has no field on the
+  generic settings form.
+- `Contracts\ResolvesImpersonatorId` returns the impersonator's id without loading the user.
+  `ImpersonationContext::STARTED_EVENT` and `ENDED_EVENT` are now defined on the contract
+  (`ImpersonationService` still exposes them).
+
+**Changed**
+- Searches in Error Reports, the global user search and Roles use the shared LIKE helper, so
+  they are case-insensitive and cast columns on PostgreSQL like the other lists.
+- The request log and the activity log depend on the `ImpersonationContext` contract instead
+  of the User module's service, so ActivityLog works without the User module.
+- The Settings, Theme, Security, Notification and Error Report pages save through
+  `SaveSettingAction::hidden()` and clear the settings cache through
+  `SettingsRepository::forget()`.
+- `bacon/bacon-qr-code` and `pragmarx/google2fa` accept any compatible release (`^3.0`,
+  `^9.0`) instead of one exact version.
+- The deploy workflow templates synced into new projects pass `COMPOSER_AUTH`, as the
+  skeleton's own do. CI runs weekly, cancels superseded runs, and reports `composer audit`.
+
+**Upgrading**
+
+```bash
+composer update mrjthedifferent/laravel-foundation
+```
+
 ## 1.12.0
 
 **Added**

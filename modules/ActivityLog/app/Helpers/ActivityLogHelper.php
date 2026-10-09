@@ -3,7 +3,7 @@
 namespace Modules\ActivityLog\Helpers;
 
 use Exception;
-use Modules\User\Services\ImpersonationService;
+use Mrj\Foundation\Contracts\ImpersonationContext;
 use Mrj\Foundation\Models\Audit;
 
 class ActivityLogHelper
@@ -39,7 +39,7 @@ class ActivityLogHelper
     {
         return [
             'created', 'updated', 'deleted', 'restored', 'attach', 'detach', 'sync',
-            ImpersonationService::STARTED_EVENT, ImpersonationService::ENDED_EVENT,
+            ImpersonationContext::STARTED_EVENT, ImpersonationContext::ENDED_EVENT,
         ];
     }
 

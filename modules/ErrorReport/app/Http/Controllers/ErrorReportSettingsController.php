@@ -4,10 +4,10 @@ namespace Modules\ErrorReport\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Cache;
 use Modules\ErrorReport\Http\Requests\UpdateErrorReportSettingsRequest;
+use Modules\Settings\Actions\SaveSettingAction;
 use Modules\Settings\Models\Setting;
-use Modules\Settings\Providers\SettingsServiceProvider;
+use Mrj\Foundation\Contracts\SettingsRepository;
 use Mrj\Foundation\Http\Controllers\Controller;
 
 class ErrorReportSettingsController extends Controller
@@ -49,24 +49,13 @@ class ErrorReportSettingsController extends Controller
         $dontReportArray = array_values(array_filter(array_map('trim', explode("\n", (string) $dontReport))));
         $this->saveSetting('error_report_dont_report', json_encode($dontReportArray));
 
-        Cache::forget(SettingsServiceProvider::cacheKey());
+        app(SettingsRepository::class)->forget();
 
         return redirect()->back()->with('success', __('errorreport::errorreport.flash.settings_updated'));
     }
 
     private function saveSetting(string $key, string $value, string $type = 'text'): void
     {
-        // 'type' must be filled before 'value': Setting::setValueAttribute()
-        // reads the sibling 'type' attribute to decide whether to encrypt, and
-        // Eloquent's fill() assigns attributes in array order.
-        Setting::updateOrCreate(
-            ['key' => $key],
-            [
-                'type' => $type,
-                'value' => $value,
-                'group' => 'Error Report',
-                'is_visible' => false,
-            ]
-        );
+        SaveSettingAction::hidden($key, $value, $type, 'Error Report');
     }
 }
