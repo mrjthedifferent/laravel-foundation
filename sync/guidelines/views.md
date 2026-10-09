@@ -331,4 +331,8 @@ return [
 - `group` must match a key in the project's `config/sidebar.php`, which fixes the order, label and icon of the parents. Add a new parent there when none fits.
 - An item is hidden when its route does not exist, so a disabled module contributes nothing.
 - Use `url` (with optional `target`) instead of `route` for an external link.
+- Also use `url` for pages that share one route and differ by its parameters, e.g. a generic
+  `admin/manage/{resource}` controller: `'url' => 'admin/manage/things'`. With no route match, the
+  item is active on that URL and on every page under it (`/5`, `/5/edit`, `/create`), and the
+  longest matching URL wins.
 - Never build sidebar markup in a module. The layout renders the tree from this config.

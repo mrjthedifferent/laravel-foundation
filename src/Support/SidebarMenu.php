@@ -24,13 +24,30 @@ use Nwidart\Modules\Facades\Module;
 final readonly class SidebarMenu
 {
     /**
+     * An item is active when the current route is its `route` or one of its `routes`. When none
+     * is, an item declared by `url` is active if the current page is that URL or sits under it
+     * (`admin/things` covers `admin/things/5/edit`); the longest such URL wins. That covers pages
+     * that share one route name and differ only by its parameters.
+     *
+     * @param  string|null  $currentPath  the request path; defaults to the current request's
      * @return list<array{key: string, label: string, icon: string, single: bool, open: bool, items: list<array{label: string, icon: string, href: string, target: ?string, active: bool}>}>
      */
-    public function forUser(?User $user, ?string $currentRoute): array
+    public function forUser(?User $user, ?string $currentRoute, ?string $currentPath = null): array
     {
         if ($user === null) {
             return [];
         }
+
+        $tree = $this->tree($user, $currentRoute);
+
+        return $this->markUrlMatch($tree, $currentPath ?? request()->path());
+    }
+
+    /**
+     * @return list<array{key: string, label: string, icon: string, single: bool, open: bool, items: list<array{label: string, icon: string, href: string, target: ?string, active: bool}>}>
+     */
+    private function tree(User $user, ?string $currentRoute): array
+    {
 
         $byParent = [];
 
@@ -77,6 +94,54 @@ final readonly class SidebarMenu
                 'open' => $open,
                 'items' => $rendered,
             ];
+        }
+
+        return $tree;
+    }
+
+    /**
+     * With no item active by route, marks the item whose own URL is the longest one the
+     * current path equals or sits under, and opens its parent. Other hosts never match.
+     *
+     * @param  list<array{key: string, label: string, icon: string, single: bool, open: bool, items: list<array{label: string, icon: string, href: string, target: ?string, active: bool}>}>  $tree
+     * @return list<array{key: string, label: string, icon: string, single: bool, open: bool, items: list<array{label: string, icon: string, href: string, target: ?string, active: bool}>}>
+     */
+    private function markUrlMatch(array $tree, string $currentPath): array
+    {
+        foreach ($tree as $group) {
+            foreach ($group['items'] as $item) {
+                if ($item['active']) {
+                    return $tree;
+                }
+            }
+        }
+
+        $current = trim($currentPath, '/');
+        $host = parse_url(url('/'), PHP_URL_HOST);
+        $best = null;
+        $bestLength = -1;
+
+        foreach ($tree as $g => $group) {
+            foreach ($group['items'] as $i => $item) {
+                $parts = parse_url($item['href']);
+                if (($parts['host'] ?? $host) !== $host) {
+                    continue;
+                }
+
+                $path = trim($parts['path'] ?? '', '/');
+                $matches = $path === $current || ($path !== '' && str_starts_with($current, $path.'/'));
+
+                if ($matches && strlen($path) > $bestLength) {
+                    $best = [$g, $i];
+                    $bestLength = strlen($path);
+                }
+            }
+        }
+
+        if ($best !== null) {
+            [$g, $i] = $best;
+            $tree[$g]['items'][$i]['active'] = true;
+            $tree[$g]['open'] = true;
         }
 
         return $tree;
