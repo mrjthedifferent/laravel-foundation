@@ -4,7 +4,7 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
-## Unreleased
+## 1.13.0
 
 **Added**
 - `foundation.rate_limits.*` (`auth_ip`, `api_user`, `api_guest`) set the requests per
