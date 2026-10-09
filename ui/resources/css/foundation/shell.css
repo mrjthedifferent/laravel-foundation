@@ -352,7 +352,7 @@ a.breadcrumb-item, .breadcrumb-item > a { display: inline-flex; align-items: cen
 /* ===========================================================================
  * 6. Overlays: notifications, toasts, command palette
  * ======================================================================== */
-.notification-item { cursor: pointer; border-radius: var(--fd-radius); padding: .75rem; display: flex; gap: .75rem; transition: background-color var(--fd-duration) var(--fd-ease); }
+.notification-item { cursor: pointer; color: inherit; text-decoration: none; border-radius: var(--fd-radius); padding: .75rem; display: flex; gap: .75rem; transition: background-color var(--fd-duration) var(--fd-ease); }
 .notification-item:hover { background: var(--fd-hover); }
 .notification-item.is-unread { position: relative; }
 .notification-item.is-unread::after { content: ""; position: absolute; top: 1.125rem; inset-inline-end: .75rem; width: .5rem; height: .5rem; border-radius: 50%; background: var(--fd-accent); }

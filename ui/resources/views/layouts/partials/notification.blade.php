@@ -72,19 +72,24 @@
                 const timeAgo = new Date(notification.created_at).toLocaleDateString();
 
                 html += `
-                    <div class="notification-item ${isRead ? '' : 'is-unread'}" data-id="${notification.id}">
+                    <a href="${notificationUrl(notification.id)}" class="notification-item no-underline ${isRead ? '' : 'is-unread'}" data-id="${notification.id}">
                         <span class="fd-icon-tile fd-icon-tile-sm ${getNotificationTone(notification.type)}">
-                            <i class="ph-${getNotificationIcon(notification.type)}"></i>
+                            <i class="ph ph-${getNotificationIcon(notification.type)}"></i>
                         </span>
                         <div class="min-w-0 flex-auto">
                             <div class="text-sm font-semibold text-strong">${notificationData.title || @js(__('foundation::foundation.notification.default_title'))}</div>
                             <div class="text-xs text-muted">${notificationData.body || @js(__('foundation::foundation.notification.default_body'))} · ${timeAgo}</div>
                         </div>
-                    </div>
+                    </a>
                 `;
             });
 
             notificationList.html(html);
+        }
+
+        // Opening a notification shows it in full and marks it read (NotificationController::show).
+        function notificationUrl(id) {
+            return @js(route('admin.notification.show', '__ID__')).replace('__ID__', encodeURIComponent(id));
         }
 
         function updateNotificationCount(notifications) {
@@ -142,21 +147,6 @@
                 }
             });
 
-            $(document).on('click', '.notification-item', function() {
-                const notificationId = $(this).data('id');
-                if (notificationId) {
-                    $.ajax({
-                        url: `{{ url('notification') }}/${notificationId}/mark-as-read`,
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function() {
-                            loadNewNotification();
-                        }
-                    });
-                }
-            });
         });
     </script>
 @endpush

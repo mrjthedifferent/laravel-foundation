@@ -205,4 +205,25 @@ class NotificationControllerTest extends TestCase
         $response->assertJsonPath('data.total', 3);
         $response->assertJsonPath('data.unread', 2);
     }
+
+    // --- Navbar ---
+
+    /**
+     * The bell's list opened nothing: each item only posted "mark as read" to a URL without
+     * the panel prefix (and POST where the route is PATCH). Items now link to the
+     * notification itself, which also marks it read.
+     */
+    public function test_the_navbar_list_links_each_notification_to_its_page(): void
+    {
+        $notification = $this->notificationFor($this->user);
+        $template = route('admin.notification.show', '__ID__');
+
+        $this->actingAs($this->user)->get(route('admin.notification.index'))
+            ->assertOk()
+            ->assertSee(str_replace('/', '\/', $template)."'.replace('__ID__'", false)
+            ->assertDontSee("url('notification')", false);
+
+        $this->get(str_replace('__ID__', (string) $notification->getKey(), $template))->assertOk();
+        $this->assertNotNull($notification->fresh()?->getAttribute('read_at'));
+    }
 }
