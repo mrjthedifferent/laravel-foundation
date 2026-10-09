@@ -17,10 +17,12 @@ use Modules\User\Actions\TrackLoginAction;
 use Modules\User\Actions\UpdateUserAction;
 use Modules\User\Data\UserData;
 use Modules\User\Enum\AccountAction;
+use Modules\User\Exceptions\AccountDeletionBlocked;
 use Modules\User\Http\Requests\ChangePasswordRequest;
 use Modules\User\Http\Requests\LoginRequest;
 use Modules\User\Http\Requests\ManageUserAccountRequest;
 use Modules\User\Http\Requests\UpdateProfileRequest;
+use Modules\User\Services\AccountDeletion;
 use Modules\User\Transformers\UserResource;
 use Mrj\Foundation\Contracts\OtpVerifier;
 use Mrj\Foundation\Http\Responses\JsonResponseFactory;
@@ -164,21 +166,34 @@ class UserController extends Controller
         }
 
         $accountAction = AccountAction::from($request->validated('action'));
-        $result = $action->execute($user, $accountAction);
 
-        if (! $result) {
+        // Deleting your own account is a request (grace period, staff review when automatic
+        // deletion is off), the same as POST account/deletion.
+        if ($accountAction === AccountAction::Delete && (int) $userId === $request->user()->id) {
+            try {
+                $deletion = app(AccountDeletion::class)->request($user, 'app');
+            } catch (AccountDeletionBlocked $e) {
+                return JsonResponseFactory::error(__('user::user.deletion.blocked'), ['blockers' => $e->blockers], 422);
+            }
+
+            return JsonResponseFactory::success(__('user::user.deletion.requested'), [
+                'status' => $deletion->status->value,
+                'scheduled_for' => $deletion->scheduled_for?->toIso8601String(),
+            ]);
+        }
+
+        // Staff deleting someone else anonymizes them: their payments, orders and logs stay intact.
+        if ($accountAction === AccountAction::Delete) {
+            app(AccountDeletion::class)->anonymize($user);
+
+            return JsonResponseFactory::success(__('user::user.flash.account_deleted_api'));
+        }
+
+        if (! $action->execute($user, $accountAction)) {
             return JsonResponseFactory::serverError(__('user::user.errors.manage_account_failed_api'));
         }
 
-        $message = $accountAction === AccountAction::Reset
-            ? __('user::user.flash.account_reset_api')
-            : __('user::user.flash.account_deleted_api');
-
-        if ($accountAction === AccountAction::Delete && (int) $userId === $request->user()->id) {
-            $request->user()->tokens()->delete();
-        }
-
-        return JsonResponseFactory::success($message);
+        return JsonResponseFactory::success(__('user::user.flash.account_reset_api'));
     }
 
     /**

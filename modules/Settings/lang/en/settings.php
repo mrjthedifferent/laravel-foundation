@@ -292,6 +292,12 @@ return [
         'session_lifetime_help' => 'An inactive panel session ends after this many minutes.',
         'api_token_idle_label' => 'API token lifetime (minutes)',
         'api_token_idle_help' => 'A mobile/API token unused for this long expires. Each request extends it. 43200 = 30 days.',
+        'account_deletion_header' => 'Account deletion',
+        'account_deletion_info' => 'People can ask to delete their account from the app or the public delete-account page. They are signed out at once; after the grace period their personal details are removed, while payments, shared orders and logs are kept without them.',
+        'account_deletion_automatic_label' => 'Automatic account deletion',
+        'account_deletion_automatic_help' => 'When off, every request waits under Administration → Deletion requests until staff approve or reject it.',
+        'account_deletion_grace_label' => 'Grace period (days)',
+        'account_deletion_grace_help' => 'Days between an accepted request and the deletion. Signing in meanwhile cancels it. 0 deletes at the next daily run.',
     ],
 
     'special_firebase' => [

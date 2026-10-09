@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Modules\User\Providers;
 
 use App\Models\User;
+use Modules\User\Console\PurgeDeletedAccounts;
 use Modules\User\Events\UserRolesChanged;
 use Modules\User\Listeners\NotifyUserRolesChanged;
+use Modules\User\Models\AccountDeletionRequest;
 use Modules\User\Models\UserDocument;
 use Modules\User\Models\UserLoginHistory;
 use Modules\User\Policies\UserPolicy;
@@ -30,6 +32,11 @@ class UserServiceProvider extends ModuleServiceProvider
     protected array $morphMap = [
         'user_login_history' => UserLoginHistory::class,
         'user_document' => UserDocument::class,
+        'account_deletion_request' => AccountDeletionRequest::class,
+    ];
+
+    protected array $commands = [
+        PurgeDeletedAccounts::class,
     ];
 
     protected array $policies = [

@@ -4,6 +4,36 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.4.0
+
+**Changed: account deletion keeps other people's records safe.** Deleting an account used to delete the user row, so database cascades could erase orders, reviews or payments that belong to other people too. Now every path (the app, `/delete-account`, the admin) goes through `Modules\User\Services\AccountDeletion`:
+- **A request, not a delete.** The person is signed out everywhere at once. After a grace period (`foundation.account_deletion.grace_days`, default 30) the account is **anonymized**:
+  - the user row stays, so foreign keys keep working;
+  - name, phone, email, photo, password, two-factor secrets, roles, tokens, devices, documents and the profile's audits go;
+  - `users.anonymized_at` is set, and the phone and email can sign up again.
+- **Signing in again cancels it,** on every sign-in path. The person is notified.
+- **Blockers:** `Foundation::accountDeletionBlocker(callable(User): ?string)` lets a project refuse deletion while something is open (an order, a team, a paid plan), with a message saying what to do. Super Admins are always blocked.
+- **Staff review:** the new Security setting "Automatic account deletion" (`foundation.account_deletion.automatic`, default on). When it's off, each request waits under the new **Administration → Deletion requests** page (permission `Review Account Deletion`) until staff approve it or reject it with a reason. `Anonymize Account` lets staff delete at once.
+- **Daily `accounts:purge-deleted`** (scheduled by the package):
+  - anonymizes due requests, re-checking blockers first and telling staff when something now blocks one;
+  - drops login history and audits of anonymized accounts after `foundation.account_deletion.security_log_days` (365).
+- **Events for project data:** `AccountDeletionRequested`, `AccountDeletionCancelled`, `AccountDeleting` (fired before anonymizing, while the person's details are still there).
+- **API:**
+  - `GET v1/account/deletion` returns status, blockers, `needs_review` and `grace_days`;
+  - `POST v1/account/deletion {password}` returns 201, or 422 with `errors.blockers`;
+  - `manage-account {action: delete}` on yourself now makes a request with the same responses. On another user, and the Users page's account delete, it anonymizes.
+- **The `/delete-account` page** shows the blockers, "sent for review" or the deletion date, and what is kept (`account_deletion.kept_items`).
+- The Users list shows a "Deletion pending review/scheduled" badge.
+
+**Upgrading**
+- `composer update mrjthedifferent/laravel-foundation`, then `php artisan migrate` (adds `account_deletion_requests` and `users.anonymized_at`).
+- Seed permissions (`RolePermissionPermissionsSeeder`) so `Review Account Deletion` and `Anonymize Account` exist.
+- **Run the scheduler** (`schedule:run` every minute) if you don't already; otherwise nothing is ever anonymized.
+- **Move your own cleanup** from `deleting`/cascades on the user to an `AccountDeleting` listener. Change foreign keys on records shared with other people to `restrictOnDelete()`.
+- **Register blockers** for anything that must be settled first.
+- **Lang overrides:** `account_deletion.permanent`, `.done` and `.super_admin` are gone. The page uses `kept`, `kept_items`, `grace`, `done_review`, `done_scheduled` and `cancel_hint`.
+- **Apps:** `manage-account {action: delete}` on yourself now answers with `{status, scheduled_for}` (or 422 with blockers) instead of deleting at once.
+
 ## 3.3.0
 
 **Added**

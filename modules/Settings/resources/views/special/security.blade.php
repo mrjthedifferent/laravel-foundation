@@ -110,5 +110,25 @@
         </div>
     </x-form-section>
 
+    {{-- Account deletion --}}
+    <x-form-section :title="__('settings::settings.special_security.account_deletion_header')" icon="ph ph-user-minus">
+        <p class="text-muted text-sm">{{ __('settings::settings.special_security.account_deletion_info') }}</p>
+
+        @include('settings::special.partials.switch', [
+            'name' => 'account_deletion_automatic',
+            'checked' => $accountDeletion['automatic'],
+            'label' => __('settings::settings.special_security.account_deletion_automatic_label'),
+            'help' => __('settings::settings.special_security.account_deletion_automatic_help'),
+        ])
+
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-12 md:col-span-4">
+                <x-form.input type="number" name="account_deletion_grace_days" id="account_deletion_grace_days" min="0" max="365" required
+                    :label="__('settings::settings.special_security.account_deletion_grace_label')" :value="$accountDeletion['grace_days']"
+                    :help="__('settings::settings.special_security.account_deletion_grace_help')" />
+            </div>
+        </div>
+    </x-form-section>
+
     </form>
 @endsection

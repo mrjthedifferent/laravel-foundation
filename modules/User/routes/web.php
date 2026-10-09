@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use Modules\User\Http\Controllers\AccountDeletionController;
+use Modules\User\Http\Controllers\DeletionRequestController;
 use Modules\User\Http\Controllers\DocumentController;
 use Modules\User\Http\Controllers\GlobalSearchController;
 use Modules\User\Http\Controllers\ImpersonationController;
@@ -68,6 +69,14 @@ Route::middleware(config('foundation.routing.middleware'))
 
         // User account management route (reset/delete)
         Route::post('users/{user}/manage-account', [UserController::class, 'manageAccount'])->name('users.account.manage');
+
+        // Account deletion requests (Review Account Deletion; deleting now needs Anonymize Account)
+        Route::get('deletion-requests', [DeletionRequestController::class, 'index'])->name('deletion-requests.index');
+        Route::post('deletion-requests/{deletionRequest}/approve', [DeletionRequestController::class, 'approve'])->name('deletion-requests.approve');
+        Route::post('deletion-requests/{deletionRequest}/reject', [DeletionRequestController::class, 'reject'])->name('deletion-requests.reject');
+        Route::post('deletion-requests/{deletionRequest}/anonymize', [DeletionRequestController::class, 'anonymize'])
+            ->middleware(RequireRecentPasswordConfirmation::class)
+            ->name('deletion-requests.anonymize');
 
         // Impersonation (Super Admin only — see UserPolicy::impersonate)
         Route::post('users/{user}/impersonate', [ImpersonationController::class, 'store'])

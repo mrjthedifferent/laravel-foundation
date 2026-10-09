@@ -170,13 +170,31 @@ Admins write both texts under Settings → Privacy Policy / Terms & Conditions (
 - **No text yet:** a page that has none is a 404.
 - **To serve your own pages instead,** set `foundation.routing.legal_pages` to `false` (`FOUNDATION_LEGAL_PAGES=false`).
 
+### Account deletion
+
+Deleting an account never erases other people's records. `Modules\User\Services\AccountDeletion` runs every path (app, web page, admin):
+1. **Request:** refused while a blocker applies. Otherwise the person is signed out everywhere (API tokens and database sessions) and `AccountDeletionRequested` fires.
+2. **Review:** with the Security setting "Automatic account deletion" off (`foundation.account_deletion.automatic`), the request waits under Administration → Deletion requests. Staff with `Review Account Deletion` approve or reject it, with a reason that is sent to the person.
+3. **Grace period:** `foundation.account_deletion.grace_days` (default 30; also on the Security page). Signing in again in any way cancels the request (`AccountDeletionCancelled`).
+4. **Anonymize:** the daily `accounts:purge-deleted` command re-checks blockers, then fires `AccountDeleting` and anonymizes the account.
+   - The user row stays, so payments, orders and logs keep their foreign keys.
+   - Name becomes "Deleted user". Phone, email, photo, password, 2FA, roles, tokens, devices, documents and the audits of the profile are removed, and `users.anonymized_at` is set. The phone and email are free to sign up again.
+   - Login history and audits of anonymized accounts are dropped after `security_log_days` (365).
+
+**What a project adds:**
+- **Blockers:** `Foundation::accountDeletionBlocker(fn (User $user) => $hasOpenOrders ? __('…what to do…') : null)` in a service provider's `boot()`. Super Admins are always blocked.
+- **Its own data:** listen to `AccountDeleting` to delete what only the person used and to clear their details from shared records. Listen to `AccountDeletionRequested` to hide their public content at once.
+- **Safe foreign keys:** use `restrictOnDelete()` on records shared with other people (orders, reviews), so a stray hard delete fails instead of erasing them.
+- `Anonymize Account` lets staff delete an account at once from Deletion requests (password confirmed). The API's `manage-account {action: delete}` on another user, and the Users page's account delete, anonymize too.
+
+**API:** `GET v1/account/deletion` returns `{status, scheduled_for, requested_at, blockers[], needs_review, grace_days}`. `POST v1/account/deletion {password}` returns 201 with `status` and `scheduled_for`, or 422 with `errors.blockers`. `POST v1/manage-account {action: delete}` on yourself does the same.
+
 ### Account deletion page (public)
 
-`/delete-account` (route `account.delete`) lets anyone delete their own account without the app. App stores (Google Play) require this web link next to in-app deletion.
+`/delete-account` (route `account.delete`) lets anyone ask for their account to be deleted without the app. App stores (Google Play) require this web link next to in-app deletion.
 - **Who it lets in:** the person signs in on the page with email or phone and password, plus their two-factor code if they use one. It's throttled like sign-in.
-- **What it deletes:** the same as the API's `POST v1/manage-account {action: delete, password}`, which is what an app calls for in-app deletion. Database foreign keys decide what goes with the user, so declare `cascadeOnDelete()` on tables a user owns.
-- **Super Admin accounts are refused.**
-- **Describe your own data:** override `account_deletion.items` (one item per line, plus any other line) in `lang/vendor/user/{locale}/user.php`.
+- **What it does:** makes the same request as the app (see above). It shows the blockers, "sent for review" or the date of deletion.
+- **Describe your own data:** override `account_deletion.items` and `account_deletion.kept_items` (one item per line, plus any other line) in `lang/vendor/user/{locale}/user.php`.
 - **Mobile apps** get the URL from `GET /api/v1/settings/app` (`account_deletion_url`).
 - **To serve your own page,** set `foundation.routing.account_deletion_page` to `false` (`FOUNDATION_ACCOUNT_DELETION_PAGE=false`).
 

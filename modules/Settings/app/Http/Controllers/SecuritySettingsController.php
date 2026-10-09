@@ -45,6 +45,10 @@ class SecuritySettingsController extends Controller
             'maxAttempts' => (int) config('foundation.login.max_attempts', 5),
             'sessionLifetime' => (int) config('session.lifetime', 120),
             'apiTokenIdle' => apiTokenIdleExpirationMinutes(),
+            'accountDeletion' => [
+                'automatic' => (bool) config('foundation.account_deletion.automatic', true),
+                'grace_days' => (int) config('foundation.account_deletion.grace_days', 30),
+            ],
             'roles' => $this->roles(),
         ]);
     }
@@ -69,6 +73,8 @@ class SecuritySettingsController extends Controller
             'login_max_attempts' => (string) $request->integer('login_max_attempts'),
             'session_lifetime' => (string) $request->integer('session_lifetime'),
             'api_token_idle_expiration_minutes' => (string) $request->integer('api_token_idle_expiration_minutes'),
+            'account_deletion_automatic' => $flag('account_deletion_automatic'),
+            'account_deletion_grace_days' => (string) $request->integer('account_deletion_grace_days', (int) config('foundation.account_deletion.grace_days', 30)),
         ];
 
         $definitions = (array) config('settings.settings', []);

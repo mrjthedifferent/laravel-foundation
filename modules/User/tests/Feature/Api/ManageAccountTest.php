@@ -65,7 +65,7 @@ class ManageAccountTest extends TestCase
             'password' => 'password',
         ])->assertOk();
 
-        $this->assertDatabaseMissing('users', ['id' => $victim->id]);
+        $this->assertNotNull($victim->fresh()->anonymized_at); // kept as a tombstone, personal details gone
     }
 
     public function test_managing_another_users_account_is_blocked_in_production_even_with_permission(): void
@@ -99,7 +99,7 @@ class ManageAccountTest extends TestCase
             'password' => 'password',
         ])->assertOk();
 
-        $this->assertDatabaseMissing('users', ['id' => $user->id]);
+        $this->assertDatabaseHas('account_deletion_requests', ['user_id' => $user->id, 'status' => 'scheduled']);
     }
 
     public function test_self_service_delete_still_requires_the_correct_password(): void

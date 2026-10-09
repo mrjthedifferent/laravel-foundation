@@ -2,6 +2,7 @@
 
 namespace Mrj\Foundation;
 
+use App\Models\User as AppUser;
 use Closure;
 use Composer\InstalledVersions;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -32,6 +33,9 @@ final class Foundation
 
     /** @var (Closure(array<string, mixed>, User): ?bool)|null */
     private static ?Closure $sidebarVisibility = null;
+
+    /** @var list<Closure(AppUser): ?string> */
+    private static array $accountDeletionBlockers = [];
 
     /**
      * For ->withMiddleware(). Foundation defaults and the project's additions
@@ -123,6 +127,44 @@ final class Foundation
     public static function resolveSidebarVisibility(array $item, User $user): ?bool
     {
         return self::$sidebarVisibility === null ? null : (self::$sidebarVisibility)($item, $user);
+    }
+
+    /**
+     * Something that must be settled before an account can be deleted: an open order, a team
+     * that would lose its data, a paid plan. Return a message saying what to do, or null when
+     * this rule doesn't block. Register in a service provider's boot().
+     *
+     * @param  callable(AppUser): ?string  $blocker
+     */
+    public static function accountDeletionBlocker(callable $blocker): void
+    {
+        self::$accountDeletionBlockers[] = $blocker(...);
+    }
+
+    /**
+     * Messages from every registered blocker that applies to this user.
+     *
+     * @return list<string>
+     */
+    public static function resolveAccountDeletionBlockers(AppUser $user): array
+    {
+        $messages = [];
+        foreach (self::$accountDeletionBlockers as $blocker) {
+            $message = $blocker($user);
+            if (is_string($message) && $message !== '') {
+                $messages[] = $message;
+            }
+        }
+
+        return $messages;
+    }
+
+    /**
+     * Drops every registered blocker (tests).
+     */
+    public static function flushAccountDeletionBlockers(): void
+    {
+        self::$accountDeletionBlockers = [];
     }
 
     public static function path(string $path = ''): string

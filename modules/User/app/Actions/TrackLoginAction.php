@@ -7,16 +7,22 @@ use Illuminate\Http\Request;
 use Modules\Notification\Actions\NotifyAction;
 use Modules\Notification\Enum\NotificationType;
 use Modules\User\Models\UserLoginHistory;
+use Modules\User\Services\AccountDeletion;
 use Modules\User\Services\UserAgentParser;
 
 final readonly class TrackLoginAction
 {
     public function __construct(
         private UserAgentParser $parser,
+        private AccountDeletion $deletion,
     ) {}
 
     public function execute(User $user, Request $request): UserLoginHistory
     {
+        // Every sign-in (password, OTP, two-factor; web and API) ends here: signing in again is
+        // how a person takes back a deletion request (they are told by notification).
+        $this->deletion->cancel($user, bySignIn: true);
+
         $userAgent = $request->userAgent();
         $browser = $this->parser->detectBrowser($userAgent);
         $platform = $this->parser->detectPlatform($userAgent);

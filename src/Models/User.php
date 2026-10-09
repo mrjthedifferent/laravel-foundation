@@ -52,6 +52,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property int|null $created_by
  * @property int|null $updated_by
  * @property string|null $remember_token
+ * @property Carbon|null $anonymized_at Set when the account was deleted; the row stays as a tombstone
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -163,6 +164,7 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
             'two_factor_secret' => 'encrypted',
             'two_factor_recovery_codes' => 'encrypted:array',
             'two_factor_confirmed_at' => 'datetime',
+            'anonymized_at' => 'datetime',
         ];
     }
 
