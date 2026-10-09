@@ -4,6 +4,12 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.5.1
+
+**Fixed**
+- **The navbar's notification list opens notifications.** Clicking one only posted "mark as read" to a URL without the panel prefix, using POST where the route is PATCH, so nothing happened. Each item is now a link to its notification page, which also marks it read.
+- Icons in that list were blank since Phosphor 2: the `ph` class was missing.
+
 ## 3.5.0
 
 **Fixed: push notifications**
