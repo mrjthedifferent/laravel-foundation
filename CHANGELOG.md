@@ -4,6 +4,14 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 2.1.2
+
+**Fixed**
+- `bin/migrate-bootstrap-to-tailwind.mjs` is now in the installed package. The 2.0.0 upgrade steps run it as
+  `node vendor/mrjthedifferent/laravel-foundation/bin/migrate-bootstrap-to-tailwind.mjs`, but `.gitattributes` left the
+  whole `bin/` folder out of the archive Packagist serves, so the file wasn't there. The shell build scripts in `bin/`
+  still stay out. A test now checks that every file the docs run from `vendor/` ships.
+
 ## 2.1.1
 
 **Changed**
