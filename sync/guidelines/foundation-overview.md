@@ -84,4 +84,4 @@ The bundled libraries moved to their latest releases. Two of them change a proje
 - **jQuery 4** removed long-deprecated helpers (`$.trim`, `$.isArray`, `$.isFunction`, `$.parseJSON`, `$.type`, `$.now`…). Replace them in a project's own scripts
   with plain JavaScript (`str.trim()`, `Array.isArray()`, `typeof f === 'function'`, `JSON.parse()`, `Date.now()`).
 
-Then run `php artisan foundation:publish --force`.
+Then run `php artisan foundation:publish --force` and rebuild the Vite bundle (`npm run build`): the ⌘K search palette in `@foundation/js/app.js` carries its own icon.

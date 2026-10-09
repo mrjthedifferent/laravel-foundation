@@ -4,6 +4,20 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.0.1
+
+**Fixed**
+- **Icons could stay blank after updating to 3.0** in browsers that had visited before. Phosphor 1 and 2 both ship `fonts/Phosphor.woff2`, so a browser kept its cached 1.x font: right stylesheet, wrong glyphs.
+  - Every published asset the layouts load now carries the package version, e.g. `foundation.css?v=v3.0.1@…`. A cached copy is replaced as soon as the package updates.
+  - The icon stylesheets request their fonts with `?v=2.1.2`.
+
+**Added**
+- `foundation_asset($path)` returns a published asset's URL with the package version, and `Foundation::assetVersion()` returns the stamp it uses (the same one `foundation:publish` writes). Use the helper for any foundation asset a project links itself, e.g. `phosphor-duotone.css`.
+
+**Upgrading**
+- `composer update mrjthedifferent/laravel-foundation`, then `php artisan foundation:publish --force`.
+- Coming from 2.x, also run `npm run build`. The ⌘K search palette comes from the Vite bundle (`@foundation/js/app.js`), so a bundle built before 3.0 still shows its old icon. This step is now in the 3.0 upgrade notes.
+
 ## 3.0.0
 
 The bundled libraries move to their latest releases, pinned exactly in `bin/build-assets.sh`.
@@ -32,6 +46,7 @@ The bundled libraries move to their latest releases, pinned exactly in `bin/buil
 2. `node vendor/mrjthedifferent/laravel-foundation/bin/migrate-phosphor-2.mjs Modules resources config app --write`, then review the diff. Add any other folder that names icons; your published `config/sidebar.php` is covered by `config`.
 3. In your own scripts, replace any jQuery helper that 4.0 removed (see above) with plain JavaScript.
 4. `php artisan foundation:publish --force` and `php artisan foundation:sync`.
+5. `npm run build`: the ⌘K search palette in the Vite bundle (`@foundation/js/app.js`) has its own icon.
 
 ## 2.1.2
 

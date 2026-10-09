@@ -795,7 +795,7 @@ Never use `window.confirm()`, hand-built toasts, or inline `Swal.fire()` calls â
 
   ```blade
   @push('styles')
-      <link href="{{ asset('assets/icons/phosphor/phosphor-duotone.css') }}" rel="stylesheet">
+      <link href="{{ foundation_asset('assets/icons/phosphor/phosphor-duotone.css') }}" rel="stylesheet">
   @endpush
   ```
 - Each weight's font downloads only once an icon in that weight is shown.

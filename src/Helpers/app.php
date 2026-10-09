@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Mrj\Foundation\Foundation;
+
 if (! function_exists('apiTokenIdleExpirationMinutes')) {
     /**
      * Minutes of inactivity before a Sanctum API token expires (sliding window):
@@ -24,5 +26,18 @@ if (! function_exists('appName')) {
     function appName(): string
     {
         return (string) (config('settings.app_name.value') ?: config('app.name', 'App'));
+    }
+}
+
+if (! function_exists('foundation_asset')) {
+    /**
+     * URL of a file the foundation publishes to public/assets, with the package version
+     * appended (`?v=…`). A browser then drops its cached copy when the package updates,
+     * instead of mixing old and new files. The layouts load every foundation asset this way:
+     * foundation_asset('assets/css/foundation.css').
+     */
+    function foundation_asset(string $path): string
+    {
+        return asset($path).'?v='.rawurlencode(Foundation::assetVersion());
     }
 }

@@ -52,9 +52,10 @@ const out = 'ui/public/assets/icons/phosphor';
 const head = '/*! Phosphor Icons 2.1.2 | MIT License | https://phosphoricons.com */\n';
 const weight = (w) => {
     let css = fs.readFileSync(`${src}/${w}/style.css`, 'utf8');
-    // Load the font from the shared fonts/ folder, woff2 and woff only.
+    // Load the font from the shared fonts/ folder, woff2 and woff only. The version query keeps a
+    // browser from reusing a cached font of another version: Phosphor 1 used the same file name.
     css = css.replace(/src:[^;]*?url\("\.\/([^"]+)\.woff2"\)[^;]*;/, (_, file) =>
-        `src:url("fonts/${file}.woff2") format("woff2"),url("fonts/${file}.woff") format("woff");`);
+        `src:url("fonts/${file}.woff2?v=2.1.2") format("woff2"),url("fonts/${file}.woff?v=2.1.2") format("woff");`);
     return css.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').replace(/\s*([{};:,>])\s*/g, '$1').replace(/;}/g, '}').trim();
 };
 fs.writeFileSync(`${out}/phosphor.css`, head + ['regular', 'bold', 'fill'].map(weight).join('\n') + '\n');

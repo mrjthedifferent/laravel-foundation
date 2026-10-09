@@ -170,3 +170,4 @@ All charts are inline SVG/HTML with a screen-reader summary and take their colou
 | `form_old_key($name)` | `roles[]` → `roles` (used by the form components) |
 | `escapeLike($s)` · `snakeCase($s)` | Query and key helpers |
 | `appName()` · `mailAppName()` · `mailLogoUrl()` | Application name and logo |
+| `foundation_asset($path)` | URL of a published foundation asset with the package version appended, so browsers drop cached copies after an update: `foundation_asset('assets/icons/phosphor/phosphor-duotone.css')` |

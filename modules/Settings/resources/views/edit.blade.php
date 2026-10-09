@@ -250,7 +250,7 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/vendor/ace/ace.js') }}"></script>
+    <script src="{{ foundation_asset('assets/vendor/ace/ace.js') }}"></script>
     <script>
         $(document).ready(function() {
             var currentGroup = '{{ $setting->group }}';

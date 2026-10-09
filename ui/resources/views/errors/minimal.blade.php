@@ -23,7 +23,7 @@
 
     @include('layouts.partials.head-styles', ['theme' => $theme])
 
-    <script src="{{ asset('assets/js/foundation.js') }}"></script>
+    <script src="{{ foundation_asset('assets/js/foundation.js') }}"></script>
 </head>
 <body class="auth-backdrop">
 <div class="fd-error">
