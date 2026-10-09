@@ -33,12 +33,17 @@
                     <td>
                         @if ($notification->user)
                             <span class="badge badge-info">{{ $notification->user->name }}</span>
+                        @elseif ($notification->recipient_role)
+                            <span class="badge badge-primary">{{ __('notification::notification.push_notification_index.role_users', ['role' => $notification->recipient_role]) }}</span>
                         @else
                             <span class="badge badge-secondary">{{ __('notification::notification.push_notification_index.all_users') }}</span>
                         @endif
+                        @isset($notification->result['recipients'])
+                            <div class="text-muted text-sm">{{ __('notification::notification.push_notification_index.recipients', ['count' => $notification->result['recipients']]) }}</div>
+                        @endisset
                     </td>
                     <td>
-                        @if ($notification->image)
+                        @if ($notification->getRawOriginal('image'))
                             <x-image :src="$notification->image" alt="{{ __('notification::notification.push_notification_index.col_image') }}" maxWidth="40" />
                         @else
                             <span class="text-muted">—</span>

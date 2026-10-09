@@ -17,7 +17,10 @@ class DatabaseChannel
 
         $type = $notification->type ?? NotificationType::Info;
 
-        Notification::create([
+        // Same id as the notification itself (Laravel gives each one a UUID before sending), so the
+        // push of the same notification can point at this row.
+        Notification::query()->forceCreate([
+            'id' => $notification->id ?? null,
             'notifiable_type' => get_class($notifiable),
             'notifiable_id' => $notifiable->id,
             'type' => $type instanceof NotificationType ? $type->value : (string) $type,

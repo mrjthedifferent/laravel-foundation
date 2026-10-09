@@ -283,4 +283,15 @@ abstract class User extends Authenticatable implements \OwenIt\Auditing\Contract
         $this->firebaseTokens()->delete();
         $this->deviceTokens()->delete();
     }
+
+    /**
+     * Forget tokens FCM reported as dead (app uninstalled, token rotated).
+     *
+     * @param  list<string>  $tokens
+     */
+    public function forgetPushTokens(array $tokens): void
+    {
+        $this->firebaseTokens()->whereIn('token', $tokens)->delete();
+        $this->deviceTokens()->whereIn('token', $tokens)->delete();
+    }
 }

@@ -187,43 +187,7 @@ parameters:
 			path: modules/ImportDownloadManager/app/Support/ImportFileDisk.php
 
 		-
-			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$body\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Notification/app/Actions/SendPushNotificationAction.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$description\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Notification/app/Actions/SendPushNotificationAction.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$recipient_type\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Notification/app/Actions/SendPushNotificationAction.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$title\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Notification/app/Actions/SendPushNotificationAction.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Notification/app/Actions/SendPushNotificationAction.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Notification\\Models\\PushNotification\:\:\$user_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Notification/app/Actions/SendPushNotificationAction.php
-
-		-
-			message: '#^Offset ''data'' on array\{title\: string, body\: string, data\: array\<string, mixed\>\} on left side of \?\? always exists and is not nullable\.$#'
+			message: '#^Offset ''data'' on array\{title\: string, body\: string, image\: string\|null, data\: array\<string, mixed\>\} on left side of \?\? always exists and is not nullable\.$#'
 			identifier: nullCoalesce.offset
 			count: 1
 			path: modules/Notification/app/Concerns/SendsFirebasePush.php

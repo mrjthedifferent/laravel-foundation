@@ -30,10 +30,20 @@ return [
     |--------------------------------------------------------------------------
     | Firebase Project ID
     |--------------------------------------------------------------------------
-    | The Firebase/Google Cloud project ID used for FCM v1 API calls.
-    | Set FIREBASE_PROJECT_ID in your .env file.
+    | The Firebase/Google Cloud project ID used for FCM v1 API calls. Settings →
+    | Firebase wins; this is the fallback, and without either the project named
+    | in the service account JSON is used.
     */
     'project_id' => env('FIREBASE_PROJECT_ID'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Android Notification Channel
+    |--------------------------------------------------------------------------
+    | The channel id pushes are posted to on Android. The app must create a
+    | channel with this id (high importance for heads-up notifications).
+    */
+    'android_channel' => env('NOTIFICATION_ANDROID_CHANNEL', 'general'),
 
     /*
     |--------------------------------------------------------------------------

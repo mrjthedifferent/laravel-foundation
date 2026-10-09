@@ -8,6 +8,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
@@ -317,6 +318,9 @@ class SpecialSettingsController extends Controller
             // reads the sibling 'type' attribute to decide whether to encrypt.
             SaveSettingAction::hidden($key, $request->validated($key, ''), $key === 'firebase_credentials_json' ? 'encrypted' : 'text', 'Firebase', ['description' => $meta['description']]);
         }
+
+        // A cached access token belongs to the old service account.
+        Cache::forget('firebase_access_token');
 
         return redirect()->back()->with('success', __('settings::settings.flash.firebase_updated'));
     }

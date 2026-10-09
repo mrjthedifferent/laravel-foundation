@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
+use Modules\Notification\Actions\SendPushNotificationAction;
 use Modules\Notification\Notifications\AppNotification;
 
 /**
@@ -36,6 +37,8 @@ class BroadcastNotificationJob implements ShouldQueue
         public readonly ?array $data = null,
         public readonly ?int $userId = null,
         public readonly array $channels = ['fcm'],
+        public readonly ?string $role = null,
+        public readonly ?string $image = null,
     ) {
         $this->onQueue(config('notification.queue', 'notifications'));
         $this->onConnection(config('notification.queue_connection'));
@@ -54,15 +57,17 @@ class BroadcastNotificationJob implements ShouldQueue
 
     private function broadcastToAll(): void
     {
-        User::query()
+        // Active accounts only, and only those holding $role when one is given.
+        SendPushNotificationAction::recipients($this->role === null ? 'all' : 'role', role: $this->role)
             ->select('id')
-            ->chunk(self::CHUNK_SIZE, function ($users): void {
+            ->chunkById(self::CHUNK_SIZE, function ($users): void {
                 ChunkBroadcastNotificationJob::dispatch(
                     title: $this->title,
                     body: $this->body,
                     data: $this->data,
                     userIds: $users->pluck('id')->all(),
                     channels: $this->channels,
+                    image: $this->image,
                 );
             });
     }
@@ -83,6 +88,7 @@ class BroadcastNotificationJob implements ShouldQueue
                 body: $this->body,
                 data: $this->data ?? [],
                 channels: $this->channels,
+                image: $this->image,
             ));
         } catch (Exception $e) {
             Log::error('Notification failed for user '.$user->id.': '.$e->getMessage());

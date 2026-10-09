@@ -268,7 +268,7 @@ final class AccountDeletion
     private function notify(User $user, string $title, string $body, array $replace = []): void
     {
         try {
-            NotifyAction::toUser($user, __("user::user.{$title}"), __("user::user.{$body}", $replace), NotificationType::Info, ['type' => 'account_deletion'], ['database']);
+            NotifyAction::toUser($user, __("user::user.{$title}"), __("user::user.{$body}", $replace), NotificationType::Info, ['type' => 'account_deletion'], ['database', 'fcm']);
         } catch (Throwable $e) {
             Log::warning('Account deletion notice not sent: '.$e->getMessage());
         }

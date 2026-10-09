@@ -11,6 +11,7 @@ use Modules\Notification\Http\Requests\StorePushNotificationRequest;
 use Modules\Notification\Models\PushNotification;
 use Modules\Notification\Queries\PushNotificationQuery;
 use Mrj\Foundation\Http\Controllers\Controller;
+use Spatie\Permission\Models\Role;
 
 class PushNotificationController extends Controller
 {
@@ -33,11 +34,13 @@ class PushNotificationController extends Controller
         $this->authorize('create', PushNotification::class);
 
         $users = User::query()
+            ->where('is_active', true)
             ->orderBy('name')
-            ->get(['id', 'name', 'email']);
+            ->get(['id', 'name', 'email', 'phone']);
 
         return view('notification::push-notification.create', [
             'users' => $users,
+            'roles' => Role::query()->where('guard_name', 'web')->orderBy('name')->pluck('name')->all(),
         ]);
     }
 
