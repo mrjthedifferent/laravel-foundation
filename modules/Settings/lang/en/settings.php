@@ -239,6 +239,14 @@ return [
         'submit' => 'Save Terms & Conditions',
     ],
 
+    // The public pages (/privacy-policy, /terms-conditions)
+    'legal' => [
+        'privacy_policy' => 'Privacy Policy',
+        'terms_conditions' => 'Terms & Conditions',
+        'updated' => 'Last updated :date',
+        'public_page' => 'Public page',
+    ],
+
     'special_notifications' => [
         'breadcrumb' => 'Notification Settings',
         'title' => 'Notification Settings',

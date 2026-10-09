@@ -6,6 +6,13 @@
 
 @section('content')
 <x-page-header title="{{ __('settings::settings.special_terms_conditions.title') }}" subtitle="{{ __('settings::settings.special_terms_conditions.subtitle') }}" icon="ph ph-scroll">
+    @if (Route::has('legal.terms_conditions'))
+        <x-slot name="actions">
+            <a href="{{ route('legal.terms_conditions') }}" target="_blank" rel="noopener" class="btn btn-light">
+                <i class="ph ph-arrow-square-out"></i>{{ __('settings::settings.legal.public_page') }}
+            </a>
+        </x-slot>
+    @endif
 </x-page-header>
 
 <div class="card">

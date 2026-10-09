@@ -469,12 +469,6 @@ parameters:
 			path: modules/Settings/app/Http/Controllers/Api/ApiSettingsController.php
 
 		-
-			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$updated_at\.$#'
-			identifier: property.notFound
-			count: 2
-			path: modules/Settings/app/Http/Controllers/Api/ApiSettingsController.php
-
-		-
 			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$group\.$#'
 			identifier: property.notFound
 			count: 1
@@ -599,12 +593,6 @@ parameters:
 			identifier: assign.propertyType
 			count: 1
 			path: modules/Settings/tests/Feature/PrivacyPolicyTest.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Settings\\Models\\Setting\:\:\$updated_at\.$#'
-			identifier: property.notFound
-			count: 1
-			path: modules/Settings/tests/Feature/SettingsApiTest.php
 
 		-
 			message: '#^Property Modules\\Settings\\Tests\\Feature\\SettingsCrudTest\:\:\$developerRole \(Spatie\\Permission\\Models\\Role\) does not accept Spatie\\Permission\\Contracts\\Role\.$#'

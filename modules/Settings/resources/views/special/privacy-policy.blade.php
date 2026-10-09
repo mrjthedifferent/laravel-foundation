@@ -6,6 +6,13 @@
 
 @section('content')
 <x-page-header title="{{ __('settings::settings.special_privacy_policy.title') }}" subtitle="{{ __('settings::settings.special_privacy_policy.subtitle') }}" icon="ph ph-file-text">
+    @if (Route::has('legal.privacy_policy'))
+        <x-slot name="actions">
+            <a href="{{ route('legal.privacy_policy') }}" target="_blank" rel="noopener" class="btn btn-light">
+                <i class="ph ph-arrow-square-out"></i>{{ __('settings::settings.legal.public_page') }}
+            </a>
+        </x-slot>
+    @endif
 </x-page-header>
 
 <div class="card">

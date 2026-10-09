@@ -4,6 +4,7 @@ namespace Modules\Settings\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use JsonException;
 use Modules\Settings\Contracts\SecretCipher;
@@ -14,6 +15,10 @@ use Mrj\Foundation\Services\FileManagerService;
 use Override;
 use OwenIt\Auditing\Auditable;
 
+/**
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 class Setting extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
     use Auditable, HasFactory;

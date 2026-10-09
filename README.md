@@ -31,7 +31,7 @@ kits drift apart; a package does not.
 |---|---|
 | User | Sign-in by email or phone, password reset by email, profile, user management, bulk upload, documents, login history, impersonation, API session endpoints |
 | RolePermission | Roles and permissions ([spatie/laravel-permission](https://github.com/spatie/laravel-permission)) with a management UI |
-| Settings | Database-backed settings, mail and SMS gateways, social sign-in keys, theme, privacy policy and terms pages |
+| Settings | Database-backed settings, mail and SMS gateways, social sign-in keys, theme, and the privacy policy and terms, served publicly at `/privacy-policy` and `/terms-conditions` |
 | Notification | In-app, email, SMS and push (FCM) notifications with per-channel switches |
 | ActivityLog | Audit trail ([owen-it/laravel-auditing](https://github.com/owen-it/laravel-auditing)), request, email and SMS logs, log viewer |
 | BackupCleanup | Database and file backups, scheduled clean-up |
