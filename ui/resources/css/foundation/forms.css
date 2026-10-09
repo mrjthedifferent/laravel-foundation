@@ -1,0 +1,55 @@
+/* Forms: the file drop zone, profile layout and the sticky action bar. */
+
+/* File drop zone. The input is transparent and covers the zone, so it stays the real control. */
+.fd-drop {
+    position: relative; display: flex; align-items: center; gap: .875rem; min-height: 4.25rem; padding: .75rem 1rem;
+    background: var(--fd-surface); border: 1.5px dashed var(--fd-border-strong); border-radius: var(--fd-radius);
+    transition: border-color var(--fd-duration) var(--fd-ease), background-color var(--fd-duration) var(--fd-ease);
+}
+.fd-drop:hover, .fd-drop:focus-within, .fd-drop.is-dragover { border-color: var(--fd-accent); background: var(--fd-accent-subtle); }
+.fd-drop.is-invalid { border-color: var(--fd-danger); }
+.fd-drop-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.fd-drop-input::file-selector-button { cursor: pointer; }
+.fd-drop-preview { width: 2.75rem; height: 2.75rem; flex: 0 0 auto; object-fit: cover; border-radius: var(--fd-radius-sm); box-shadow: 0 0 0 1px var(--fd-border); }
+.fd-drop-body { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.fd-drop-icon { font-size: 1.5rem; color: var(--fd-muted); flex: 0 0 auto; }
+.fd-drop:hover .fd-drop-icon, .fd-drop.is-dragover .fd-drop-icon { color: var(--fd-accent); }
+.fd-drop-text { display: flex; flex-direction: column; font-size: var(--fd-text-sm); line-height: 1.3; color: var(--fd-text-strong); }
+.fd-drop-or { color: var(--fd-muted); font-size: var(--fd-text-xs); }
+.fd-drop-file { font-size: var(--fd-text-sm); font-weight: 500; color: var(--fd-text-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fd-drop.has-file .fd-drop-text { display: none; }
+.fd-drop.has-file .fd-drop-icon { color: var(--fd-success); }
+
+/* Profile and other long forms: a section nav that follows you, and the sections beside it */
+.fd-form-layout { display: grid; gap: 1.25rem; align-items: start; }
+@media (min-width: 62rem) { .fd-form-layout { grid-template-columns: 14rem minmax(0, 1fr); gap: 1.5rem; } }
+.fd-form-nav { position: sticky; top: 1rem; display: none; flex-direction: column; gap: .125rem; }
+@media (min-width: 62rem) { .fd-form-nav { display: flex; } }
+.fd-form-nav > a {
+    display: flex; align-items: center; gap: .625rem; padding: .4375rem .625rem; border-radius: var(--fd-radius);
+    font-size: var(--fd-text-base); font-weight: 500; color: var(--fd-muted); text-decoration: none !important;
+}
+.fd-form-nav > a:hover { background: var(--fd-hover); color: var(--fd-text-strong); }
+.fd-form-nav > a.is-active { background: var(--fd-surface); color: var(--fd-text-strong); box-shadow: 0 0 0 1px var(--fd-border), var(--fd-shadow-xs); }
+.fd-form-nav > a > i { font-size: 1.125rem; }
+.fd-form-sections { display: grid; gap: 1.25rem; min-width: 0; }
+.fd-form-sections > section { scroll-margin-top: 1rem; }
+.fd-form-sections .card { margin-bottom: 0; }
+.fd-section-body { display: grid; gap: 1rem; max-width: 40rem; }
+
+/* Identity strip at the top of the profile */
+.fd-identity { display: flex; align-items: center; gap: 1rem; padding: 1rem var(--fd-card-pad); }
+.fd-identity-avatar { width: 4rem; height: 4rem; flex: 0 0 auto; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px var(--fd-border); background: var(--fd-subtle); }
+.fd-identity-name { font-size: var(--fd-text-lg); font-weight: 600; color: var(--fd-text-strong); line-height: 1.25; }
+.fd-identity-meta { font-size: var(--fd-text-sm); color: var(--fd-muted); }
+.fd-identity-badges { display: flex; flex-wrap: wrap; gap: .375rem; margin-top: .375rem; }
+
+/* A bar that keeps Cancel / Save in reach on a long form */
+.fd-form-actions {
+    position: sticky; bottom: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem;
+    margin-top: 1.25rem; padding: .75rem var(--fd-card-pad);
+    background: color-mix(in srgb, var(--fd-surface) 88%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--fd-border); border-radius: var(--fd-radius-lg); box-shadow: var(--fd-shadow-md);
+}
+.fd-form-actions > .btn:only-child { margin-inline-start: auto; }
+.fd-avatar-fallback { display: inline-flex; align-items: center; justify-content: center; color: var(--fd-faint); font-size: 1.75rem; }

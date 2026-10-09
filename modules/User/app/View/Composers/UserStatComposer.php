@@ -7,6 +7,7 @@ namespace Modules\User\View\Composers;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Modules\User\Models\UserLoginHistory;
+use Mrj\Foundation\Services\Dashboard\DailySeries;
 use Mrj\Foundation\Support\StatComposer;
 use Override;
 
@@ -59,6 +60,7 @@ final class UserStatComposer extends StatComposer
             'change' => $this->percentage($thisWeek, $lastWeek),
             'changeUp' => $thisWeek >= $lastWeek,
             'caption' => __('user::user.stat.vs_last_week'),
+            'series' => array_values(app(DailySeries::class)->count(User::query()->toBase(), 'created_at', 14)),
         ];
     }
 
@@ -78,6 +80,7 @@ final class UserStatComposer extends StatComposer
             'change' => $this->percentage($today, $yesterday),
             'changeUp' => $today >= $yesterday,
             'caption' => __('user::user.stat.vs_yesterday'),
+            'series' => array_values(app(DailySeries::class)->count(UserLoginHistory::query()->toBase(), 'logged_in_at', 14)),
         ];
     }
 

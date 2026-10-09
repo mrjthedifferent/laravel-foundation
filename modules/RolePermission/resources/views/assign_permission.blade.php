@@ -16,20 +16,20 @@
         :back-url="route('admin.role.index')"
         back-label="{{ __('rolepermission::rolepermission.assign_permission.back_to_roles') }}">
         <x-slot name="actions">
-            <label class="d-flex align-items-center gap-2 mb-0 cursor-pointer">
+            <label class="flex items-center gap-2 mb-0 cursor-pointer">
                 <input type="checkbox" class="form-check-input mt-0" id="checkAll">
-                <span class="fs-sm fw-semibold">{{ __('rolepermission::rolepermission.assign_permission.check_all') }}</span>
+                <span class="text-sm font-semibold">{{ __('rolepermission::rolepermission.assign_permission.check_all') }}</span>
             </label>
-            <x-primary-button id="submit-button" class="px-4">
+            <x-primary-button id="submit-button" class="px-6">
                 <i class="ph-floppy-disk"></i>{{ __('rolepermission::rolepermission.assign_permission.save_permissions') }}
             </x-primary-button>
         </x-slot>
     </x-page-header>
 
-    <div class="row g-3">
+    <div class="grid grid-cols-12 gap-4">
         @foreach($all_permissions as $key => $permission)
-            <div class="col-md-4">
-                <div class="card h-100">
+            <div class="col-span-12 md:col-span-4">
+                <div class="card h-full">
                     <div class="card-header">
                         <span class="fd-overline">{{ display_label($key) }}</span>
                         <input type="checkbox"
@@ -39,14 +39,14 @@
                     </div>
                     <div class="card-body py-2">
                         @foreach($permission as $item)
-                            <div class="d-flex align-items-center gap-2 py-1">
+                            <div class="flex items-center gap-2 py-1">
                                 <input class="form-check-input inputCheckbox {{ str_replace(' ', '-', $key) }}"
                                        type="checkbox"
                                        name="permissions[]"
                                        value="{{ $item->name }}"
                                        {{ $role->hasPermissionTo($item->name) ? 'checked' : '' }}
                                        id="checkBox{{ $item->id }}">
-                                <label class="form-check-label fs-sm" for="checkBox{{ $item->id }}">
+                                <label class="form-check-label text-sm" for="checkBox{{ $item->id }}">
                                     {{ display_label($item->name) }}
                                 </label>
                             </div>
@@ -57,8 +57,8 @@
         @endforeach
     </div>
 
-    <div class="d-flex justify-content-end mt-3">
-        <x-primary-button class="px-5">
+    <div class="flex justify-end mt-4">
+        <x-primary-button class="px-12">
             <i class="ph-floppy-disk"></i>{{ __('rolepermission::rolepermission.assign_permission.save_permissions') }}
         </x-primary-button>
     </div>

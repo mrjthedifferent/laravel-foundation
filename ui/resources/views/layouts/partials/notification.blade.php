@@ -2,19 +2,15 @@
 <div class="offcanvas offcanvas-end" tabindex="-1" id="notifications" aria-labelledby="notifications-title">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="notifications-title">{{ __('foundation::foundation.notification.title') }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+        <button type="button" class="btn-close" data-fd-dismiss="offcanvas"
             aria-label="{{ __('foundation::foundation.common.close') }}"></button>
     </div>
 
     <div class="offcanvas-body p-2" id="notification-list">
-        <div class="text-center py-4">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">{{ __('foundation::foundation.notification.loading') }}</span>
-            </div>
-        </div>
+        <x-skeleton :rows="4" />
     </div>
 
-    <div class="offcanvas-footer p-2 d-flex gap-2">
+    <div class="offcanvas-footer p-2 flex gap-2">
         <button type="button" class="btn btn-ghost btn-sm swal-post"
             data-url="{{ route('admin.notification.mark-all-as-read') }}"
             data-method="PATCH"
@@ -80,9 +76,9 @@
                         <span class="fd-icon-tile fd-icon-tile-sm ${getNotificationTone(notification.type)}">
                             <i class="ph-${getNotificationIcon(notification.type)}"></i>
                         </span>
-                        <div class="min-width-0 flex-fill">
-                            <div class="fs-sm fw-semibold text-strong">${notificationData.title || @js(__('foundation::foundation.notification.default_title'))}</div>
-                            <div class="fs-xs text-muted">${notificationData.body || @js(__('foundation::foundation.notification.default_body'))} · ${timeAgo}</div>
+                        <div class="min-w-0 flex-auto">
+                            <div class="text-sm font-semibold text-strong">${notificationData.title || @js(__('foundation::foundation.notification.default_title'))}</div>
+                            <div class="text-xs text-muted">${notificationData.body || @js(__('foundation::foundation.notification.default_body'))} · ${timeAgo}</div>
                         </div>
                     </div>
                 `;

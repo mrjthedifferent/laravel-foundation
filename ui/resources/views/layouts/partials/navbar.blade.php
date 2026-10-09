@@ -1,9 +1,9 @@
 <!-- Main navbar -->
-<div class="navbar navbar-expand-lg navbar-static" id="main-navbar">
+<div class="navbar navbar-static" id="main-navbar">
     <div class="container-fluid">
 
         <div class="navbar-group">
-            <button type="button" class="navbar-toggler sidebar-mobile-main-toggle d-lg-none"
+            <button type="button" class="navbar-toggler sidebar-mobile-main-toggle lg:hidden"
                 aria-label="{{ __('foundation::foundation.sidebar.navigation') }}">
                 <i class="ph-list"></i>
             </button>
@@ -31,9 +31,9 @@
 
             {{-- Only super admins get past EnsurePanelIsAvailable, so only they see this. --}}
             @if (config('settings.maintenance_mode.value'))
-            <li class="nav-item d-flex align-items-center">
+            <li class="nav-item flex items-center">
                 <a href="{{ Route::has('admin.settings.index') ? route('admin.settings.index') : '#' }}"
-                    class="badge bg-warning text-dark text-decoration-none"
+                    class="badge badge-warning text-strong no-underline"
                     title="{{ __('foundation::foundation.navbar.maintenance_on_help') }}">
                     <i class="ph-wrench"></i> {{ __('foundation::foundation.navbar.maintenance_on') }}
                 </a>
@@ -41,22 +41,22 @@
             @endif
 
             @if(config('broadcasting.default') === 'reverb' && filled(config('reverb.apps.apps.0.key')))
-            <li class="nav-item dropdown d-none d-sm-flex align-items-center">
-                <a href="#" id="online-user-count" class="navbar-nav-link online-indicator rounded-pill gap-2"
-                    data-bs-toggle="dropdown" data-bs-auto-close="outside"
+            <li class="nav-item dropdown hidden sm:flex items-center">
+                <a href="#" id="online-user-count" class="navbar-nav-link online-indicator rounded-full gap-2"
+                    data-fd-toggle="dropdown" data-fd-auto-close="outside"
                     title="{{ __('foundation::foundation.navbar.users_online') }}">
                     <span class="fd-status is-success online-pulse"></span>
-                    <span class="online-count fw-semibold">0</span>
+                    <span class="online-count font-semibold">0</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end py-2" id="online-users-dropdown">
                     <h6 class="dropdown-header">
                         <i class="ph-users-three me-2"></i>{{ __('foundation::foundation.navbar.online_now') }}
                     </h6>
                     <div class="dropdown-divider my-1"></div>
-                    <div id="online-users-list" class="px-3 py-2 text-muted fs-sm fd-scroll-y">
+                    <div id="online-users-list" class="px-4 py-2 text-muted text-sm fd-scroll-y">
                         <span class="online-users-empty">{{ __('foundation::foundation.navbar.no_users_online') }}</span>
-                        <div id="online-users-items" class="d-none"></div>
-                        <div id="online-users-more" class="fs-sm text-muted pt-1 mt-1 border-top d-none"></div>
+                        <div id="online-users-items" class="hidden"></div>
+                        <div id="online-users-more" class="text-sm text-muted pt-1 mt-1 border-t hidden"></div>
                     </div>
                 </div>
             </li>
@@ -64,8 +64,8 @@
 
             @if (Route::has('admin.notification.index'))
             <li class="nav-item">
-                <a href="#" class="navbar-nav-link navbar-nav-link-icon" data-bs-toggle="offcanvas"
-                    data-bs-target="#notifications" aria-label="{{ __('foundation::foundation.navbar.notifications') }}">
+                <a href="#" class="navbar-nav-link navbar-nav-link-icon" data-fd-toggle="offcanvas"
+                    data-fd-target="#notifications" aria-label="{{ __('foundation::foundation.navbar.notifications') }}">
                     <i class="ph-bell"></i>
                     <span id="notification-count" class="fd-notify-dot" data-count="0"></span>
                 </a>
@@ -73,7 +73,7 @@
             @endif
 
             <li class="nav-item dropdown">
-                <a href="#" class="navbar-nav-link px-1" data-bs-toggle="dropdown"
+                <a href="#" class="navbar-nav-link px-1" data-fd-toggle="dropdown"
                     aria-label="{{ __('foundation::foundation.navbar.my_profile') }}">
                     @if (Auth::user()?->image)
                         <img src="{{ Auth::user()->image }}" class="fd-avatar" alt="{{ Auth::user()->name }}">
@@ -83,7 +83,7 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    <div class="dropdown-header text-truncate">{{ Auth::user()?->email }}</div>
+                    <div class="dropdown-header truncate">{{ Auth::user()?->email }}</div>
                     @if (Route::has('admin.profile.edit'))
                     <a href="{{ route('admin.profile.edit') }}" class="dropdown-item">
                         <i class="ph-user-circle"></i>

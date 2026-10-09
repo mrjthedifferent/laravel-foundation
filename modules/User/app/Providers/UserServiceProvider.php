@@ -12,8 +12,11 @@ use Modules\User\Models\UserLoginHistory;
 use Modules\User\Policies\UserPolicy;
 use Modules\User\Services\ImpersonationService;
 use Modules\User\View\Composers\SignInsChart;
+use Modules\User\View\Composers\UserQuickActions;
 use Modules\User\View\Composers\UserStatComposer;
 use Modules\User\View\Composers\UserWidgetComposer;
+use Modules\User\View\Widgets\SignInHeatmapWidget;
+use Modules\User\View\Widgets\UserStatusWidget;
 use Mrj\Foundation\Contracts\ImpersonationContext;
 use Mrj\Foundation\Support\ModuleServiceProvider;
 use Override;
@@ -43,6 +46,15 @@ class UserServiceProvider extends ModuleServiceProvider
 
     protected array $dashboardCharts = [
         SignInsChart::class,
+    ];
+
+    protected array $dashboardWidgets = [
+        UserStatusWidget::class,
+        SignInHeatmapWidget::class,
+    ];
+
+    protected array $dashboardActions = [
+        UserQuickActions::class,
     ];
 
     protected array $listen = [

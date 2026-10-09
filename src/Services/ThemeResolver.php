@@ -29,6 +29,9 @@ final readonly class ThemeResolver
         $palette = $this->sanitizePalette(config('settings.theme_color_palette.value', 'indigo'));
         $sidebarColor = $this->sanitizeOne(config('settings.theme_sidebar_color.value', 'light'), ['light', 'dark'], 'light');
         $sidebarType = $this->sanitizeOne(config('settings.theme_sidebar_type.value', 'default'), ['default', 'mini'], 'default');
+        $contentWidth = $this->sanitizeOne(config('settings.theme_content_width.value', 'fluid'), ['fluid', 'boxed'], 'fluid');
+        $density = $this->sanitizeOne(config('settings.theme_density.value', 'comfortable'), ['comfortable', 'compact'], 'comfortable');
+        $radius = $this->sanitizeOne(config('settings.theme_radius.value', 'rounded'), ['sharp', 'rounded', 'soft'], 'rounded');
         $customColor = $this->sanitizeHex(config('settings.theme_custom_color.value', '#4f46e5'), '#4f46e5');
 
         [$ccR, $ccG, $ccB] = $this->hexToRgb($customColor);
@@ -39,6 +42,9 @@ final readonly class ThemeResolver
             'palette' => $palette,
             'sidebarColor' => $sidebarColor,
             'sidebarType' => $sidebarType,
+            'contentWidth' => $contentWidth,
+            'density' => $density,
+            'radius' => $radius,
             'customColor' => $customColor,
             'customColorDark' => $this->darkenHex($customColor, 0.88),
             'ccR' => $ccR,
@@ -52,6 +58,9 @@ final readonly class ThemeResolver
                 'palette' => $palette,
                 'sidebarColor' => $sidebarColor,
                 'sidebarType' => $sidebarType,
+                'contentWidth' => $contentWidth,
+                'density' => $density,
+                'radius' => $radius,
                 'customColor' => $customColor,
             ],
         ];
@@ -67,6 +76,8 @@ final readonly class ThemeResolver
                 'colorMode' => $theme['colorMode'],
                 'direction' => $theme['direction'],
                 'palette' => $theme['palette'],
+                'density' => $theme['density'],
+                'radius' => $theme['radius'],
                 'customColor' => $theme['customColor'],
             ],
         ];

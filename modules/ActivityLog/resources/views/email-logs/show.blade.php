@@ -13,7 +13,7 @@
 <x-page-header title="{{ __('activitylog::activitylog.email_logs_show.title', ['id' => $emailLog->id]) }}" icon="ph-envelope"
     :back-url="route('admin.email-logs.index')" back-label="{{ __('activitylog::activitylog.email_logs_show.back_label') }}">
     <x-slot name="actions">
-        <span class="badge bg-{{ $statusBadge[$emailLog->status] ?? 'secondary' }} fs-sm">
+        <span class="badge badge-{{ $statusBadge[$emailLog->status] ?? 'secondary' }} text-sm">
             {{ ucfirst($emailLog->status) }}
         </span>
     </x-slot>
@@ -55,7 +55,7 @@
         @if ($emailLog->error)
         <dt class="text-danger">{{ __('activitylog::activitylog.email_logs_show.error') }}</dt>
         <dd>
-            <pre class="bg-danger-subtle text-danger-emphasis p-2 rounded mb-0 overflow-auto">{{ $emailLog->error }}</pre>
+            <pre class="bg-danger-subtle text-danger-text p-2 rounded-md mb-0 overflow-auto">{{ $emailLog->error }}</pre>
         </dd>
         @endif
     </dl>
@@ -63,9 +63,9 @@
 
 <x-form-section title="{{ __('activitylog::activitylog.email_logs_show.body') }}" icon="ph-file-text">
     @if ($emailLog->body)
-    <iframe sandbox srcdoc="{{ $emailLog->body }}" height="480" class="w-100 border rounded" title="{{ __('activitylog::activitylog.email_logs_show.email_body_title') }}"></iframe>
+    <iframe sandbox srcdoc="{{ $emailLog->body }}" height="480" class="w-full border rounded-md" title="{{ __('activitylog::activitylog.email_logs_show.email_body_title') }}"></iframe>
     @else
-    <span class="text-muted fst-italic">{{ __('activitylog::activitylog.email_logs_show.no_body_recorded') }}</span>
+    <span class="text-muted italic">{{ __('activitylog::activitylog.email_logs_show.no_body_recorded') }}</span>
     @endif
 </x-form-section>
 @endsection

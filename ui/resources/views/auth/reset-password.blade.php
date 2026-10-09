@@ -7,7 +7,7 @@
         <h1 class="fd-auth-title">{{ __('foundation::foundation.auth.set_new_password') }}</h1>
         <p class="fd-auth-lead">{{ __('foundation::foundation.auth.enter_account_details') }}</p>
 
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="email" class="form-label">{{ __('foundation::foundation.auth.email') }}</label>
             <input id="email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror"
                 name="email" value="{{ old('email', $email ?? '') }}" required autocomplete="username" autofocus>
@@ -16,7 +16,7 @@
             @enderror
         </div>
 
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="password" class="form-label">{{ __('foundation::foundation.auth.new_password') }}</label>
             <input id="password" type="password" class="form-control form-control-lg @error('password') is-invalid @enderror"
                 name="password" required autocomplete="new-password">
@@ -25,16 +25,16 @@
             @enderror
         </div>
 
-        <div class="mb-4">
+        <div class="mb-6">
             <label for="password-confirm" class="form-label">{{ __('foundation::foundation.auth.confirm_password') }}</label>
             <input id="password-confirm" type="password" class="form-control form-control-lg"
                 name="password_confirmation" required autocomplete="new-password">
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg w-100">{{ __('foundation::foundation.auth.reset_password_button') }}</button>
+        <button type="submit" class="btn btn-primary btn-lg w-full">{{ __('foundation::foundation.auth.reset_password_button') }}</button>
 
-        <div class="text-center mt-3">
-            <a href="{{ route('login') }}" class="fs-sm">{{ __('foundation::foundation.auth.back_to_login') }}</a>
+        <div class="text-center mt-4">
+            <a href="{{ route('login') }}" class="text-sm">{{ __('foundation::foundation.auth.back_to_login') }}</a>
         </div>
     </form>
 </x-guest-layout>

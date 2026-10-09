@@ -9,7 +9,7 @@
         <h1 class="fd-auth-title">{{ __('foundation::foundation.auth.password_recovery') }}</h1>
         <p class="fd-auth-lead">{{ __('foundation::foundation.auth.password_recovery_desc') }}</p>
 
-        <div class="mb-4">
+        <div class="mb-6">
             <label for="email" class="form-label">{{ __('foundation::foundation.auth.email') }}</label>
             <input id="email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror"
                 name="email" value="{{ old('email') }}" required autocomplete="username" autofocus>
@@ -18,10 +18,10 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg w-100">{{ __('foundation::foundation.auth.send_reset_link') }}</button>
+        <button type="submit" class="btn btn-primary btn-lg w-full">{{ __('foundation::foundation.auth.send_reset_link') }}</button>
 
-        <div class="text-center mt-3">
-            <a href="{{ route('login') }}" class="fs-sm">{{ __('foundation::foundation.auth.back_to_sign_in') }}</a>
+        <div class="text-center mt-4">
+            <a href="{{ route('login') }}" class="text-sm">{{ __('foundation::foundation.auth.back_to_sign_in') }}</a>
         </div>
     </form>
 </x-guest-layout>

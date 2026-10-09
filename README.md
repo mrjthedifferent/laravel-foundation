@@ -14,14 +14,14 @@
 
 The part of an admin application you would otherwise rebuild, or copy, for every project:
 sign-in, users, roles and permissions, settings, notifications, activity logs, backups,
-import and export jobs, and a Bootstrap 5 admin UI.
+import and export jobs, and a Tailwind CSS admin UI.
 
 It ships as one Composer package. A project requires it and never copies its files, so a fix
 made here reaches every project with `composer update`. That is the point: copied starter
 kits drift apart; a package does not.
 
 - Laravel 13, PHP 8.3+, built on [nwidart/laravel-modules](https://github.com/nWidart/laravel-modules)
-- Server-rendered Blade, Bootstrap 5.3, no build step required for the admin theme
+- Server-rendered Blade, Tailwind CSS 4 (compiled into the package's stylesheet), no build step required for the admin theme
 - Light and dark mode, RTL, 8 accent palettes (or your own brand colour), collapsible sidebar
 - Everything a project needs to change is overridable without forking
 
@@ -101,12 +101,16 @@ The dashboard route (`admin.dashboard`) and the sidebar's parent groups come fro
 To change the groups, `php artisan vendor:publish --tag=foundation-sidebar`; to use your own
 dashboard page, create `resources/views/dashboard.blade.php`.
 
-The dashboard shows headline stats, a chart of sign-ins and a recent-activity feed, then one
-widget per module. A module joins in without touching the page: a `StatComposer` listed in
-`$dashboardStats` adds a headline stat, a `ChartComposer` in `$dashboardCharts` supplies the
-chart's series (lowest priority wins), and a `partials/dashboard-widget.blade.php` view adds a
-card. Each is permission-gated and cached the same way, and contributes nothing when the viewer
-may not see it.
+The dashboard is a grid of widgets: headline stats with sparklines, a trend chart (7, 14, 30 or
+90 days, optionally against the period before), quick actions, system health, a recent-activity
+feed and charts, then one card per module. Each viewer can press **Customize** to drag, resize,
+hide and reorder the cards; the arrangement is saved per user and survives modules being enabled
+or disabled. A module joins in without touching the page: a `StatComposer` in `$dashboardStats`
+adds a headline stat, a `ChartComposer` in `$dashboardCharts` supplies the trend (lowest priority
+wins), a `DashboardWidget` in `$dashboardWidgets` adds a card, a `QuickActionComposer` in
+`$dashboardActions` adds shortcuts, a `HealthCheck` in `$dashboardHealth` adds a line to system
+health, and a `partials/dashboard-widget.blade.php` view still adds a card as before. Each is
+permission-gated and cached the same way, and contributes nothing when the viewer may not see it.
 
 ## Your own modules
 

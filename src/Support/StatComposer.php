@@ -57,7 +57,8 @@ abstract class StatComposer
 
     /**
      * The stats to cache, each a prop array for <x-stat-card>: label, value and
-     * icon, plus optional color, href, change, changeUp and caption.
+     * icon, plus optional color, href, change, changeUp, caption and series (a list of
+     * counts, oldest first, drawn as a sparkline).
      *
      * Scalars and arrays only. Laravel 13 apps ship `cache.serializable_classes
      * => false`, so a model or collection read back from a shared cache store is

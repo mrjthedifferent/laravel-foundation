@@ -1,0 +1,32 @@
+/* Filter bar: search box, Filters button, active filter chips, and a panel for the rest. */
+.fd-filterbar > form { display: block; }
+.fd-filterbar-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: .625rem .75rem; }
+.fd-filterbar-search { position: relative; flex: 1 1 16rem; min-width: 0; max-width: 28rem; }
+.fd-filterbar-search > i { position: absolute; inset-inline-start: .75rem; top: 50%; transform: translateY(-50%); color: var(--fd-faint); pointer-events: none; }
+.fd-filterbar-search > .form-control { padding-inline-start: 2.25rem; }
+.fd-filterbar-actions { display: flex; align-items: center; gap: .5rem; margin-inline-start: auto; }
+.fd-filterbar-toggle .badge { margin-inline-start: .125rem; }
+.fd-filterbar.is-open .fd-filterbar-toggle { --btn-bg: var(--fd-accent-subtle); --btn-border: var(--fd-accent-muted); --btn-color: var(--fd-accent-text); }
+
+.fd-filterbar-chips { display: flex; flex-wrap: wrap; gap: .375rem; padding: 0 .75rem .625rem; }
+.fd-chip {
+    display: inline-flex; align-items: center; gap: .375rem; max-width: 100%;
+    padding: .1875rem .5rem; font-size: var(--fd-text-xs);
+    color: var(--fd-accent-text); background: var(--fd-accent-subtle); border: 1px solid var(--fd-accent-muted); border-radius: 999px;
+    cursor: pointer; transition: background-color var(--fd-duration) var(--fd-ease);
+}
+.fd-chip:hover { background: var(--fd-accent-muted); }
+.fd-chip-name { font-weight: 500; }
+.fd-chip-name::after { content: ":"; }
+.fd-chip-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fd-chip > i { font-size: .875em; opacity: .7; }
+
+.fd-filterbar-panel { padding: .75rem .75rem .25rem; border-top: 1px solid var(--fd-border); }
+.fd-filterbar.is-enhanced:not(.is-open) .fd-filterbar-panel { display: none; }
+
+@media (max-width: 47.99rem) {
+    .fd-filterbar-search { flex-basis: 100%; max-width: none; }
+    .fd-filterbar-toggle { flex: 1 1 auto; }
+    .fd-filterbar-actions { margin-inline-start: 0; flex: 1 1 auto; }
+    .fd-filterbar-actions > .btn { flex: 1 1 0; }
+}

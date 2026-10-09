@@ -9,6 +9,12 @@ return [
         'new_this_week' => ':count new this week',
     ],
 
+    'health' => [
+        'label' => 'Error reports',
+        'none' => 'No open error reports.',
+        'open' => '{1} :count open error report|[2,*] :count open error reports',
+    ],
+
     'index' => [
         'breadcrumb' => 'All Errors',
         'title' => 'Error Reports',

@@ -10,7 +10,7 @@
 @if(session('import_errors'))
 <x-alert type="warning" icon="ph-warning">
     <strong>{{ __('settings::settings.manage.import_errors_title') }}</strong>
-    <ul class="mb-0 mt-1 ps-3 fs-sm">
+    <ul class="mb-0 mt-1 ps-4 text-sm">
         @foreach(session('import_errors') as $error)
         <li>{{ $error }}</li>
         @endforeach
@@ -22,7 +22,7 @@
 <div class="card">
     <div class="card-header">
         <h2 class="card-title">{{ __('settings::settings.manage.title') }}</h2>
-        <div class="d-flex flex-wrap gap-2 ms-auto">
+        <div class="flex flex-wrap gap-2 ms-auto">
             <a href="{{ route('admin.settings.sync') }}" class="btn btn-light swal-post"
                 data-text="{{ __('settings::settings.manage.sync_confirm') }}">
                 <i class="ph-eject"></i>{{ __('settings::settings.manage.sync') }}
@@ -68,8 +68,8 @@
     </div>
 
     {{-- Bulk action bar --}}
-    <div id="bulk-bar" class="fd-toolbar d-none">
-        <span class="fw-medium fs-sm">
+    <div id="bulk-bar" class="fd-toolbar hidden">
+        <span class="font-medium text-sm">
             <i class="ph-check-square"></i> <span id="selected-count">0</span> {{ __('settings::settings.manage.selected') }}
         </span>
         <select id="bulk-action" class="form-select" aria-label="{{ __('settings::settings.manage.choose_action') }}">
@@ -78,17 +78,17 @@
             <option value="group">{{ __('settings::settings.manage.action_group') }}</option>
             <option value="delete">{{ __('settings::settings.manage.action_delete') }}</option>
         </select>
-        <select id="bulk-visibility" class="form-select d-none" aria-label="{{ __('settings::settings.manage.action_visibility') }}">
+        <select id="bulk-visibility" class="form-select hidden" aria-label="{{ __('settings::settings.manage.action_visibility') }}">
             <option value="1">{{ __('settings::settings.manage.make_visible') }}</option>
             <option value="0">{{ __('settings::settings.manage.make_hidden') }}</option>
         </select>
-        <select id="bulk-group" class="form-select d-none" aria-label="{{ __('settings::settings.manage.action_group') }}">
+        <select id="bulk-group" class="form-select hidden" aria-label="{{ __('settings::settings.manage.action_group') }}">
             @foreach($settings->pluck('group')->unique()->sort()->values() as $group)
             <option value="{{ $group }}">{{ display_label($group) }}</option>
             @endforeach
             <option value="new">{{ __('settings::settings.manage.new_group_option') }}</option>
         </select>
-        <input type="text" id="bulk-new-group" class="form-control d-none"
+        <input type="text" id="bulk-new-group" class="form-control hidden"
             aria-label="{{ __('settings::settings.manage.new_group_placeholder') }}"
             placeholder="{{ __('settings::settings.manage.new_group_placeholder') }}">
         <button type="button" id="apply-bulk-action" class="btn btn-primary btn-sm">{{ __('settings::settings.manage.apply') }}</button>
@@ -141,19 +141,19 @@
                     data-id="{{ $setting->id }}">
                     <td><input class="form-check-input setting-checkbox" type="checkbox" value="{{ $setting->id }}"></td>
                     <td>
-                        <code class="text-body fs-sm">{{ $setting->key }}</code>
+                        <code class="text-body text-sm">{{ $setting->key }}</code>
                     </td>
                     <td>
-                        <span class="badge bg-secondary">{{ display_label($setting->group) }}</span>
+                        <span class="badge badge-secondary">{{ display_label($setting->group) }}</span>
                     </td>
                     <td>
-                        <span class="badge bg-{{ $c }} text-uppercase">{{ $setting->type }}</span>
+                        <span class="badge badge-{{ $c }} uppercase">{{ $setting->type }}</span>
                     </td>
                     <td>
                         @if($setting->type === 'image' && $setting->value)
-                        <img src="{{ $setting->value }}" class="rounded h-24px" alt="{{ $setting->key }}">
+                        <img src="{{ $setting->value }}" class="rounded-md h-6" alt="{{ $setting->key }}">
                         @elseif($setting->type === 'file' && $setting->value)
-                        <a href="{{ $setting->value }}" target="_blank" class="fs-sm">
+                        <a href="{{ $setting->value }}" target="_blank" class="text-sm">
                             <i class="ph-file"></i> {{ __('settings::settings.index.view_current_file') }}
                         </a>
                         @elseif($setting->type === 'boolean')
@@ -163,13 +163,13 @@
                         <span class="fd-status is-danger">{{ __('settings::settings.manage.disabled') }}</span>
                         @endif
                         @elseif(in_array($setting->type, ['json','array']))
-                        <span class="badge bg-{{ $c }} text-uppercase">{{ strtoupper($setting->type) }}</span>
+                        <span class="badge badge-{{ $c }} uppercase">{{ strtoupper($setting->type) }}</span>
                         @else
-                        <span class="text-muted fs-sm">{{ Str::limit(is_array($setting->value) ? implode(', ', $setting->value) : $setting->value, 35) }}</span>
+                        <span class="text-muted text-sm">{{ Str::limit(is_array($setting->value) ? implode(', ', $setting->value) : $setting->value, 35) }}</span>
                         @endif
                     </td>
                     <td>
-                        <span class="text-muted fs-sm">{{ Str::limit(display_label($setting->description), 40) }}</span>
+                        <span class="text-muted text-sm">{{ Str::limit(display_label($setting->description), 40) }}</span>
                     </td>
                     <td class="text-center">
                         @if($setting->is_visible)
@@ -201,7 +201,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="9" class="text-center py-4 text-muted">
+                    <td colspan="9" class="text-center py-6 text-muted">
                         {{ __('settings::settings.manage.no_settings_found') }}
                     </td>
                 </tr>
@@ -210,7 +210,7 @@
         </table>
     </div>
 
-    <div id="no-results" class="fd-empty d-none">
+    <div id="no-results" class="fd-empty hidden">
         <span class="fd-empty-icon"><i class="ph-magnifying-glass"></i></span>
         <div class="fd-empty-title">{{ __('settings::settings.manage.no_results') }}</div>
     </div>
@@ -224,19 +224,19 @@
     </div>
 
     {{-- Hidden bulk forms --}}
-    <form id="bulk-visibility-form" action="{{ route('admin.settings.bulk_update') }}" method="POST" class="d-none">
+    <form id="bulk-visibility-form" action="{{ route('admin.settings.bulk_update') }}" method="POST" class="hidden">
         @csrf @method('PUT')
         <input type="hidden" name="action" value="visibility">
         <input type="hidden" name="visibility" id="visibility-value">
         <div id="visibility-ids-container"></div>
     </form>
-    <form id="bulk-group-form" action="{{ route('admin.settings.bulk_update') }}" method="POST" class="d-none">
+    <form id="bulk-group-form" action="{{ route('admin.settings.bulk_update') }}" method="POST" class="hidden">
         @csrf @method('PUT')
         <input type="hidden" name="action" value="group">
         <input type="hidden" name="group" id="group-value">
         <div id="group-ids-container"></div>
     </form>
-    <form id="bulk-delete-form" action="{{ route('admin.settings.bulk_delete') }}" method="POST" class="d-none">
+    <form id="bulk-delete-form" action="{{ route('admin.settings.bulk_delete') }}" method="POST" class="hidden">
         @csrf @method('DELETE')
         <div id="delete-ids-container"></div>
     </form>
@@ -277,7 +277,7 @@
             });
             visibleCountEl.textContent = count;
             table.closest('.table-responsive').style.display = count ? '' : 'none';
-            noResults.classList.toggle('d-none', count > 0);
+            noResults.classList.toggle('hidden', count > 0);
             syncCheckAll();
         }
 
@@ -312,12 +312,12 @@
             checkAll.indeterminate = cr.length > 0 && cr.length < vr.length;
             selectedCountEl.textContent = cr.length;
             if (cr.length > 0) {
-                bulkBar.classList.remove('d-none');
-                bulkBar.classList.add('d-flex');
+                bulkBar.classList.remove('hidden');
+                bulkBar.classList.add('flex');
                 selectBar.style.display = 'none';
             } else {
-                bulkBar.classList.add('d-none');
-                bulkBar.classList.remove('d-flex');
+                bulkBar.classList.add('hidden');
+                bulkBar.classList.remove('flex');
                 selectBar.style.display = '';
             }
         }
@@ -337,12 +337,12 @@
         });
 
         bulkAction.addEventListener('change', function() {
-            bulkVisibility.classList.toggle('d-none', this.value !== 'visibility');
-            bulkGroup.classList.toggle('d-none', this.value !== 'group');
-            bulkNewGroup.classList.add('d-none');
+            bulkVisibility.classList.toggle('hidden', this.value !== 'visibility');
+            bulkGroup.classList.toggle('hidden', this.value !== 'group');
+            bulkNewGroup.classList.add('hidden');
         });
         bulkGroup.addEventListener('change', function() {
-            bulkNewGroup.classList.toggle('d-none', this.value !== 'new');
+            bulkNewGroup.classList.toggle('hidden', this.value !== 'new');
         });
 
         document.getElementById('apply-bulk-action').addEventListener('click', function() {

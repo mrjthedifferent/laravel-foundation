@@ -4,8 +4,10 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
       dir="{{ $theme['direction'] }}"
-      data-bs-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}"
-      data-color-palette="{{ $theme['palette'] }}">
+      data-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}"
+      data-color-palette="{{ $theme['palette'] }}"
+      data-width="{{ $theme['contentWidth'] ?? 'fluid' }}" data-density="{{ $theme['density'] ?? 'comfortable' }}"
+      data-radius="{{ $theme['radius'] ?? 'rounded' }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,7 +32,7 @@
     <h1 class="fd-error-title">@yield('message', __('foundation::foundation.errors.service_unavailable'))</h1>
     <p class="fd-error-text">@yield('description', __('foundation::foundation.errors.description'))</p>
 
-    <div class="d-flex flex-wrap justify-content-center gap-2">
+    <div class="flex flex-wrap justify-center gap-2">
         <a href="{{ url()->previous('/') }}" class="btn btn-light">
             <i class="ph-arrow-left"></i>{{ __('foundation::foundation.errors.go_back') }}
         </a>

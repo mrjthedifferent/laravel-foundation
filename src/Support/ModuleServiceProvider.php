@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Mrj\Foundation\Enums\ModuleContext;
 use Mrj\Foundation\Services\Dashboard\ChartRegistry;
+use Mrj\Foundation\Services\Dashboard\HealthRegistry;
+use Mrj\Foundation\Services\Dashboard\QuickActionRegistry;
 use Mrj\Foundation\Services\Dashboard\StatRegistry;
+use Mrj\Foundation\Services\Dashboard\WidgetRegistry;
 use Nwidart\Modules\Traits\PathNamespace;
 use Symfony\Component\Finder\Finder;
 
@@ -58,6 +61,15 @@ abstract class ModuleServiceProvider extends ServiceProvider
     /** @var list<class-string<ChartComposer>> dashboard charts */
     protected array $dashboardCharts = [];
 
+    /** @var list<class-string<DashboardWidget>> cards on the dashboard grid */
+    protected array $dashboardWidgets = [];
+
+    /** @var list<class-string<QuickActionComposer>> dashboard shortcuts */
+    protected array $dashboardActions = [];
+
+    /** @var list<class-string<HealthCheck>> lines of the dashboard's system health card */
+    protected array $dashboardHealth = [];
+
     /** @var list<class-string> */
     protected array $commands = [];
 
@@ -98,6 +110,18 @@ abstract class ModuleServiceProvider extends ServiceProvider
 
         foreach ($this->dashboardCharts as $chartComposer) {
             app(ChartRegistry::class)->register($chartComposer, $this->moduleContext());
+        }
+
+        foreach ($this->dashboardWidgets as $widget) {
+            app(WidgetRegistry::class)->register($widget, $this->moduleContext());
+        }
+
+        foreach ($this->dashboardActions as $actions) {
+            app(QuickActionRegistry::class)->register($actions, $this->moduleContext());
+        }
+
+        foreach ($this->dashboardHealth as $check) {
+            app(HealthRegistry::class)->register($check, $this->moduleContext());
         }
 
         foreach ($this->listen as $event => $listeners) {

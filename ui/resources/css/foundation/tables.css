@@ -1,0 +1,50 @@
+/* Tables: calmer scrollbars, visible row actions, and a stacked card layout on phones. */
+
+/* Scrollbars that match the theme instead of the operating system's chunky ones */
+.table-responsive, .fd-scroll, .content-inner, .sidebar-content, .dropdown-menu-scrollable-lg {
+    scrollbar-width: thin;
+    scrollbar-color: var(--fd-border-strong) transparent;
+}
+.table-responsive::-webkit-scrollbar, .fd-scroll::-webkit-scrollbar, .content-inner::-webkit-scrollbar { width: .5rem; height: .5rem; }
+.table-responsive::-webkit-scrollbar-thumb, .fd-scroll::-webkit-scrollbar-thumb, .content-inner::-webkit-scrollbar-thumb {
+    background: var(--fd-border-strong); border-radius: 999px; border: 2px solid transparent; background-clip: content-box;
+}
+.table-responsive::-webkit-scrollbar-track, .fd-scroll::-webkit-scrollbar-track, .content-inner::-webkit-scrollbar-track { background: transparent; }
+
+/* Row hover that is visible in both themes, and a header that stays put */
+.table-hover > tbody > tr:hover > * { background-color: color-mix(in srgb, var(--fd-accent) 4%, var(--fd-hover)); }
+.table > thead > tr > th { box-shadow: inset 0 -1px 0 var(--fd-border); border-bottom: 0; }
+.table td, .table th { vertical-align: middle; }
+
+/* Row actions: the kebab and the icon buttons are real controls, not faint decoration */
+.table td .btn-icon, .table td .dropdown > .btn { color: var(--fd-text); }
+.table td .btn-icon i, .table td .dropdown > .btn i { font-size: 1.125rem; }
+.table td .btn-ghost.btn-icon:hover, .table td .dropdown > .btn:hover { background: var(--fd-subtle); color: var(--fd-text-strong); }
+.table td [data-fd-toggle="dropdown"].btn-icon, .table td .dropdown > .btn-sm.btn-light {
+    border: 1px solid var(--fd-border); background: var(--fd-surface);
+}
+.table td .dropdown-toggle.btn-light::after, .table td .btn-icon.dropdown-toggle::after { display: none; }
+.table-actions-wrapper { justify-content: flex-end; }
+
+/* Phones: each row becomes a labelled card instead of scrolling sideways. foundation.js copies
+   the column headings onto the cells as data-label. A table opts out with `table-keep`. */
+@media (max-width: 47.99rem) {
+    .table-stack:not(.table-keep) { display: block; }
+    .table-stack:not(.table-keep) > thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+    .table-stack:not(.table-keep) > tbody, .table-stack:not(.table-keep) > tbody > tr, .table-stack:not(.table-keep) > tbody > tr > td { display: block; }
+    .table-stack:not(.table-keep) > tbody > tr { padding: .5rem 0; border-bottom: 8px solid var(--fd-subtle); }
+    .table-stack:not(.table-keep) > tbody > tr:last-child { border-bottom: 0; }
+    .table-stack:not(.table-keep) > tbody > tr > * { border-bottom: 0; padding: .375rem var(--fd-card-pad); }
+    .table-stack:not(.table-keep) > tbody > tr > td {
+        display: flex; align-items: center; justify-content: space-between; gap: 1rem; text-align: end; min-height: 2rem;
+    }
+    .table-stack:not(.table-keep) > tbody > tr > td::before {
+        content: attr(data-label); flex: 0 0 auto; max-width: 40%;
+        font-size: var(--fd-text-xs); font-weight: 500; color: var(--fd-muted); text-align: start;
+    }
+    .table-stack:not(.table-keep) > tbody > tr > td[data-label=""]::before, .table-stack:not(.table-keep) > tbody > tr > td:not([data-label])::before { content: none; }
+    .table-stack:not(.table-keep) > tbody > tr > td[colspan] { display: block; text-align: center; }
+    .table-stack:not(.table-keep) > tbody > tr > td > * { text-align: start; }
+    .table-stack .table-actions-wrapper { margin-inline-start: auto; }
+    .table-stack:not(.table-keep) > tbody > tr > td[data-empty] { display: none; }
+}

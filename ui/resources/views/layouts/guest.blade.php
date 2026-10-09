@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ $theme['direction'] }}"
-    data-bs-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}"
-    data-color-palette="{{ $theme['palette'] }}">
+    data-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}"
+    data-color-palette="{{ $theme['palette'] }}"
+    data-width="{{ $theme['contentWidth'] ?? 'fluid' }}" data-density="{{ $theme['density'] ?? 'comfortable' }}"
+    data-radius="{{ $theme['radius'] ?? 'rounded' }}">
 
 <head>
     <meta charset="utf-8">
@@ -39,7 +41,7 @@
                 <p class="fd-auth-quote-meta">{{ __('foundation::foundation.auth.tagline_meta', ['app' => mailAppName()]) }}</p>
             </div>
 
-            <div class="fs-xs fd-auth-copyright">
+            <div class="text-xs fd-auth-copyright">
                 &copy; @if(date('Y') == config('app.copyright_year', date('Y'))) {{ date('Y') }} @else {{ config('app.copyright_year') }} - {{ date('Y') }} @endif {{ appName() }}
             </div>
         </aside>
@@ -50,7 +52,7 @@
 
                 @auth
                     @if (Route::has('logout'))
-                        <form method="POST" action="{{ route('logout') }}" class="text-center mt-4">
+                        <form method="POST" action="{{ route('logout') }}" class="text-center mt-6">
                             @csrf
                             <button type="submit" class="btn btn-ghost btn-sm">
                                 <i class="ph-sign-out"></i>{{ __('foundation::foundation.layout.logout') }}

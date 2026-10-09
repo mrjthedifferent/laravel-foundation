@@ -28,13 +28,13 @@
             @foreach($notifications as $notification)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td class="fw-semibold">{{ $notification->title }}</td>
-                    <td class="fs-sm text-muted">{{ Str::limit($notification->body, 60) }}</td>
+                    <td class="font-semibold">{{ $notification->title }}</td>
+                    <td class="text-sm text-muted">{{ Str::limit($notification->body, 60) }}</td>
                     <td>
                         @if ($notification->user)
-                            <span class="badge bg-info">{{ $notification->user->name }}</span>
+                            <span class="badge badge-info">{{ $notification->user->name }}</span>
                         @else
-                            <span class="badge bg-secondary">{{ __('notification::notification.push_notification_index.all_users') }}</span>
+                            <span class="badge badge-secondary">{{ __('notification::notification.push_notification_index.all_users') }}</span>
                         @endif
                     </td>
                     <td>
@@ -44,7 +44,7 @@
                             <span class="text-muted">—</span>
                         @endif
                     </td>
-                    <td class="text-nowrap fs-sm">{{ $notification->created_at->format('Y-m-d H:i') }}</td>
+                    <td class="whitespace-nowrap text-sm">{{ $notification->created_at->format('Y-m-d H:i') }}</td>
                 </tr>
             @endforeach
         </tbody>

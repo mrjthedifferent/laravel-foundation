@@ -3,7 +3,7 @@
     <div class="breadcrumb">
         <a href="{{ route('admin.dashboard') }}" class="breadcrumb-item">
             <i class="ph-house"></i>
-            <span class="visually-hidden">{{ __('foundation::foundation.layout.home') }}</span>
+            <span class="sr-only">{{ __('foundation::foundation.layout.home') }}</span>
         </a>
         {{ $breadcrumbs ?? '' }}
     </div>

@@ -63,6 +63,10 @@ jobs:
         if: matrix.php == '8.4' && matrix.dependencies == 'highest'
         run: vendor/bin/rector process --dry-run --no-progress-bar
 
+      - name: Compiled Tailwind CSS is up to date
+        if: matrix.php == '8.4' && matrix.dependencies == 'highest'
+        run: bash bin/build-css.sh --check
+
       - name: Tests
         run: vendor/bin/phpunit
 

@@ -13,9 +13,9 @@
             :back-url="route('admin.settings.manage')" back-label="{{ __('settings::settings.create.back') }}" />
 
         <x-form-section title="{{ __('settings::settings.create.section_identity') }}" icon="ph-identification-card">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold fs-sm required">{{ __('settings::settings.create.key_label') }}</label>
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6">
+                    <label class="form-label font-semibold text-sm required">{{ __('settings::settings.create.key_label') }}</label>
                     <input type="text" class="form-control form-control-sm @error('key') is-invalid @enderror"
                         name="key" id="key" value="{{ old('key') }}" placeholder="{{ __('settings::settings.create.key_placeholder') }}" required>
                     <div class="form-text">{{ __('settings::settings.create.key_help') }}</div>
@@ -23,7 +23,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                <div class="col-md-6">
+                <div class="col-span-12 md:col-span-6">
                     <x-form.select
                         class="select"
                         name="existing_group"
@@ -33,9 +33,9 @@
                         :selected="null"
                         data-placeholder="{{ __('settings::settings.create.group_select_placeholder') }}"
                     />
-                    <x-form.input name="group" id="group" :value="old('group')" class="mt-2 d-none" placeholder="{{ __('settings::settings.create.group_new_placeholder') }}" />
+                    <x-form.input name="group" id="group" :value="old('group')" class="mt-2 hidden" placeholder="{{ __('settings::settings.create.group_new_placeholder') }}" />
                 </div>
-                <div class="col-md-6">
+                <div class="col-span-12 md:col-span-6">
                     <x-form.select
                         class="select"
                         name="type"
@@ -47,30 +47,30 @@
                         data-placeholder="{{ __('settings::settings.create.type_select_placeholder') }}"
                     />
                 </div>
-                <div class="col-md-6">
+                <div class="col-span-12 md:col-span-6">
                     <x-form.input name="description" id="description" label="{{ __('foundation::foundation.common.description') }}" :value="old('description')" placeholder="{{ __('settings::settings.create.description_placeholder') }}" />
                 </div>
             </div>
         </x-form-section>
 
         <x-form-section title="{{ __('settings::settings.create.section_flags') }}" icon="ph-toggle-right">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <div class="d-flex align-items-center justify-content-between p-3 rounded border">
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6">
+                    <div class="flex items-center justify-between p-4 rounded-md border">
                         <div>
-                            <div class="fw-semibold fs-sm">{{ __('settings::settings.create.visible_title') }}</div>
-                            <div class="text-muted fs-xs">{{ __('settings::settings.create.visible_desc') }}</div>
+                            <div class="font-semibold text-sm">{{ __('settings::settings.create.visible_title') }}</div>
+                            <div class="text-muted text-xs">{{ __('settings::settings.create.visible_desc') }}</div>
                         </div>
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" id="is_visible" name="is_visible" checked>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="d-flex align-items-center justify-content-between p-3 rounded border">
+                <div class="col-span-12 md:col-span-6">
+                    <div class="flex items-center justify-between p-4 rounded-md border">
                         <div>
-                            <div class="fw-semibold fs-sm">{{ __('settings::settings.create.required_title') }}</div>
-                            <div class="text-muted fs-xs">{{ __('settings::settings.create.required_desc') }}</div>
+                            <div class="font-semibold text-sm">{{ __('settings::settings.create.required_title') }}</div>
+                            <div class="text-muted text-xs">{{ __('settings::settings.create.required_desc') }}</div>
                         </div>
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" id="is_required" name="is_required" checked>
@@ -80,65 +80,65 @@
             </div>
         </x-form-section>
 
-        <div class="card mb-3 d-none" id="value_container">
+        <div class="card mb-4 hidden" id="value_container">
             <div class="card-header">
                 <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-pencil-line"></i></span>
                 <span class="fd-overline">{{ __('settings::settings.create.value_header') }}</span>
             </div>
             <div class="card-body">
-                <div id="value_text_container" class="d-none">
+                <div id="value_text_container" class="hidden">
                     <x-form.input name="value_text" id="value_text" :value="old('value_text')" placeholder="{{ __('settings::settings.create.value_text_placeholder') }}" />
                 </div>
-                <div id="value_textarea_container" class="d-none">
+                <div id="value_textarea_container" class="hidden">
                     <x-form.textarea name="value_textarea" id="value_textarea" :value="old('value_textarea')" :rows="4" placeholder="{{ __('settings::settings.create.value_textarea_placeholder') }}" />
                 </div>
-                <div id="value_encrypted_container" class="d-none">
+                <div id="value_encrypted_container" class="hidden">
                     <x-form.input type="password" name="value_encrypted" id="value_encrypted" placeholder="{{ __('settings::settings.create.value_encrypted_placeholder') }}" />
                 </div>
-                <div id="value_integer_container" class="d-none">
+                <div id="value_integer_container" class="hidden">
                     <x-form.input type="number" name="value_integer" id="value_integer" :value="old('value_integer', 0)" />
                 </div>
-                <div id="value_float_container" class="d-none">
+                <div id="value_float_container" class="hidden">
                     <x-form.input type="number" name="value_float" id="value_float" :value="old('value_float', '0.00')" step="0.01" />
                 </div>
-                <div id="value_boolean_container" class="d-none">
-                    <div class="d-flex align-items-center gap-3 p-3 border rounded">
+                <div id="value_boolean_container" class="hidden">
+                    <div class="flex items-center gap-4 p-4 border rounded-md">
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" id="value_boolean" name="value_boolean"
                                 {{ old('value_boolean') ? 'checked' : '' }}>
                         </div>
-                        <label class="form-check-label fw-medium" for="value_boolean">{{ __('settings::settings.create.value_boolean_label') }}</label>
+                        <label class="form-check-label font-medium" for="value_boolean">{{ __('settings::settings.create.value_boolean_label') }}</label>
                     </div>
                 </div>
-                <div id="value_file_container" class="d-none">
+                <div id="value_file_container" class="hidden">
                     <input type="file" class="form-control form-control-sm" name="value_file" id="value_file">
                 </div>
-                <div id="value_image_container" class="d-none">
+                <div id="value_image_container" class="hidden">
                     <input type="file" class="form-control form-control-sm" name="value_image" id="value_image"
                         accept="image/*">
                 </div>
-                <div id="value_json_container" class="d-none">
-                    <div id="json-editor" class="border rounded"></div>
+                <div id="value_json_container" class="hidden">
+                    <div id="json-editor" class="border rounded-md"></div>
                     <x-form.input type="hidden" name="value_json" id="value_json" :value="old('value_json', '{}')" />
-                    <div class="d-flex align-items-center gap-2 mt-2">
+                    <div class="flex items-center gap-2 mt-2">
                         <button type="button" class="btn btn-sm btn-light" id="format-json"><i
                                 class="ph-brackets-curly"></i>{{ __('settings::settings.create.json_format') }}</button>
                         <button type="button" class="btn btn-sm btn-light" id="validate-json"><i
                                 class="ph-check"></i>{{ __('settings::settings.create.json_validate') }}</button>
-                        <span id="json-validation-result" class="ms-1 fs-sm"></span>
+                        <span id="json-validation-result" class="ms-1 text-sm"></span>
                     </div>
                 </div>
-                <div id="value_select_container" class="d-none">
+                <div id="value_select_container" class="hidden">
                     <x-alert type="info" icon="ph-info" class="mb-0">
-                        <span class="fs-sm">{{ __('settings::settings.create.select_hint') }}</span>
+                        <span class="text-sm">{{ __('settings::settings.create.select_hint') }}</span>
                     </x-alert>
                 </div>
-                <div id="value_multi-select_container" class="d-none">
+                <div id="value_multi-select_container" class="hidden">
                     <x-alert type="info" icon="ph-info" class="mb-0">
-                        <span class="fs-sm">{{ __('settings::settings.create.multiselect_hint') }}</span>
+                        <span class="text-sm">{{ __('settings::settings.create.multiselect_hint') }}</span>
                     </x-alert>
                 </div>
-                <div id="value_array_container" class="d-none">
+                <div id="value_array_container" class="hidden">
                     <div id="array_values_list">
                         <div class="input-group input-group-sm mb-2 array-value-row">
                             <x-form.input name="value_array[]" placeholder="{{ __('settings::settings.create.array_value_placeholder') }}" />
@@ -153,20 +153,20 @@
             </div>
         </div>
 
-        <div id="options_container" class="d-none">
+        <div id="options_container" class="hidden">
             <x-form-section title="{{ __('settings::settings.create.section_options') }}" icon="ph-list-bullets">
                 <x-slot name="badge">
-                    <span class="text-muted fs-xs ms-auto">{{ __('settings::settings.create.options_badge') }}</span>
+                    <span class="text-muted text-xs ms-auto">{{ __('settings::settings.create.options_badge') }}</span>
                 </x-slot>
-                <div class="row g-0 mb-2 px-1">
-                    <div class="col-5"><span class="fd-overline">{{ __('settings::settings.create.options_col_key') }}</span></div>
-                    <div class="col-5"><span class="fd-overline">{{ __('settings::settings.create.options_col_label') }}</span></div>
+                <div class="grid grid-cols-12 gap-0 mb-2 px-1">
+                    <div class="col-span-5"><span class="fd-overline">{{ __('settings::settings.create.options_col_key') }}</span></div>
+                    <div class="col-span-5"><span class="fd-overline">{{ __('settings::settings.create.options_col_label') }}</span></div>
                 </div>
                 <div id="options_list">
-                    <div class="row g-2 mb-2 align-items-center option-row">
-                        <div class="col-5"><x-form.input name="option_keys[]" placeholder="{{ __('settings::settings.create.option_key_placeholder') }}" /></div>
-                        <div class="col-5"><x-form.input name="option_values[]" placeholder="{{ __('settings::settings.create.option_value_placeholder') }}" /></div>
-                        <div class="col-md-2">
+                    <div class="grid grid-cols-12 gap-2 mb-2 items-center option-row">
+                        <div class="col-span-5"><x-form.input name="option_keys[]" placeholder="{{ __('settings::settings.create.option_key_placeholder') }}" /></div>
+                        <div class="col-span-5"><x-form.input name="option_values[]" placeholder="{{ __('settings::settings.create.option_value_placeholder') }}" /></div>
+                        <div class="col-span-12 md:col-span-2">
                             <button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-option"
                                 onclick="removeOption(this)"><i class="ph-trash"></i></button>
                         </div>
@@ -179,11 +179,11 @@
         </div>
 
         {{-- Footer actions --}}
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="fd-form-actions">
             <a href="{{ route('admin.settings.manage') }}" class="btn btn-light">
                 <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
             </a>
-            <button type="submit" class="btn btn-primary px-4">
+            <button type="submit" class="btn btn-primary px-6">
                 <i class="ph-floppy-disk"></i>{{ __('settings::settings.create.submit') }}
             </button>
         </div>
@@ -205,9 +205,9 @@
             $('#existing_group').on('change', function() {
                 var val = $(this).val();
                 if (val === '__new__') {
-                    $('#group').removeClass('d-none').focus();
+                    $('#group').removeClass('hidden').focus();
                 } else {
-                    $('#group').addClass('d-none').val(val);
+                    $('#group').addClass('hidden').val(val);
                 }
             });
             var initialGroup = $('#existing_group').val();
@@ -227,15 +227,15 @@
         function showValueField() {
             var type = document.getElementById('type').value;
             document.querySelectorAll('[id^="value_"][id$="_container"]').forEach(function(el) {
-                el.classList.add('d-none');
+                el.classList.add('hidden');
             });
-            document.getElementById('options_container').classList.add('d-none');
-            document.getElementById('value_container').classList.toggle('d-none', !type);
+            document.getElementById('options_container').classList.add('hidden');
+            document.getElementById('value_container').classList.toggle('hidden', !type);
             if (!type) return;
             var target = document.getElementById('value_' + type + '_container');
-            if (target) target.classList.remove('d-none');
+            if (target) target.classList.remove('hidden');
             if (type === 'select' || type === 'multi-select') document.getElementById('options_container').classList.remove(
-                'd-none');
+                'hidden');
             if (type === 'json' && !window.jsonEditorInitialized) initJsonEditor();
         }
 
@@ -294,10 +294,10 @@
         }
 
         function addOption() {
-            var row = '<div class="row g-2 mb-2 align-items-center option-row">' +
-                '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_keys[]" placeholder="{{ __('settings::settings.create.option_key_placeholder') }}"></div>' +
-                '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_values[]" placeholder="{{ __('settings::settings.create.option_value_placeholder') }}"></div>' +
-                '<div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-option" onclick="removeOption(this)"><i class="ph-trash"></i></button></div>' +
+            var row = '<div class="grid grid-cols-12 gap-2 mb-2 items-center option-row">' +
+                '<div class="col-span-5"><input type="text" class="form-control form-control-sm" name="option_keys[]" placeholder="{{ __('settings::settings.create.option_key_placeholder') }}"></div>' +
+                '<div class="col-span-5"><input type="text" class="form-control form-control-sm" name="option_values[]" placeholder="{{ __('settings::settings.create.option_value_placeholder') }}"></div>' +
+                '<div class="col-span-12 md:col-span-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-option" onclick="removeOption(this)"><i class="ph-trash"></i></button></div>' +
                 '</div>';
             document.getElementById('options_list').insertAdjacentHTML('beforeend', row);
         }

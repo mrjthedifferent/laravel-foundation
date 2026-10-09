@@ -28,20 +28,20 @@
 
         <x-page-header title="{{ __('settings::settings.edit.title') }}" icon="ph-pencil-simple-line" :back-url="route('admin.settings.manage')" back-label="{{ __('settings::settings.edit.back') }}">
             <x-slot name="actions">
-                <code class="bg-body-tertiary rounded px-2 py-1 fs-xs fw-semibold">{{ $setting->key }}</code>
-                <span class="badge bg-{{ $tc }} text-uppercase">{{ $setting->type }}</span>
+                <code class="bg-subtle rounded-md px-2 py-1 text-xs font-semibold">{{ $setting->key }}</code>
+                <span class="badge badge-{{ $tc }} uppercase">{{ $setting->type }}</span>
             </x-slot>
         </x-page-header>
 
         {{-- Section 1: Identity --}}
         <x-form-section title="{{ __('settings::settings.edit.section_identity') }}" icon="ph-identification-card">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold fs-sm">{{ __('settings::settings.edit.key_label') }}</label>
-                    <input type="text" class="form-control form-control-sm bg-body-tertiary" value="{{ $setting->key }}" readonly disabled>
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6">
+                    <label class="form-label font-semibold text-sm">{{ __('settings::settings.edit.key_label') }}</label>
+                    <input type="text" class="form-control form-control-sm bg-subtle" value="{{ $setting->key }}" readonly disabled>
                     <div class="form-text">{{ __('settings::settings.edit.key_help') }}</div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-span-12 md:col-span-6">
                     <x-form.select
                         class="select"
                         name="existing_group"
@@ -52,9 +52,9 @@
                         :selected="null"
                         data-placeholder="{{ __('settings::settings.edit.group_select_placeholder') }}"
                     />
-                    <x-form.input name="group" id="group" :value="old('group', $setting->group)" class="mt-2 d-none" placeholder="{{ __('settings::settings.edit.group_new_placeholder') }}" />
+                    <x-form.input name="group" id="group" :value="old('group', $setting->group)" class="mt-2 hidden" placeholder="{{ __('settings::settings.edit.group_new_placeholder') }}" />
                 </div>
-                <div class="col-md-6">
+                <div class="col-span-12 md:col-span-6">
                     <x-form.select
                         class="select"
                         name="type"
@@ -66,7 +66,7 @@
                         data-placeholder="{{ __('settings::settings.edit.type_select_placeholder') }}"
                     />
                 </div>
-                <div class="col-md-6">
+                <div class="col-span-12 md:col-span-6">
                     <x-form.input name="description" label="{{ __('foundation::foundation.common.description') }}" :value="old('description', $setting->description)" placeholder="{{ __('settings::settings.edit.description_placeholder') }}" />
                 </div>
             </div>
@@ -74,12 +74,12 @@
 
         {{-- Section 2: Flags --}}
         <x-form-section title="{{ __('settings::settings.edit.section_flags') }}" icon="ph-toggle-right">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <div class="d-flex align-items-center justify-content-between p-3 rounded border">
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6">
+                    <div class="flex items-center justify-between p-4 rounded-md border">
                         <div>
-                            <div class="fw-semibold fs-sm">{{ __('settings::settings.edit.visible_title') }}</div>
-                            <div class="text-muted fs-xs">{{ __('settings::settings.edit.visible_desc') }}</div>
+                            <div class="font-semibold text-sm">{{ __('settings::settings.edit.visible_title') }}</div>
+                            <div class="text-muted text-xs">{{ __('settings::settings.edit.visible_desc') }}</div>
                         </div>
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" id="is_visible" name="is_visible"
@@ -87,11 +87,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="d-flex align-items-center justify-content-between p-3 rounded border">
+                <div class="col-span-12 md:col-span-6">
+                    <div class="flex items-center justify-between p-4 rounded-md border">
                         <div>
-                            <div class="fw-semibold fs-sm">{{ __('settings::settings.edit.required_title') }}</div>
-                            <div class="text-muted fs-xs">{{ __('settings::settings.edit.required_desc') }}</div>
+                            <div class="font-semibold text-sm">{{ __('settings::settings.edit.required_title') }}</div>
+                            <div class="text-muted text-xs">{{ __('settings::settings.edit.required_desc') }}</div>
                         </div>
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" id="is_required" name="is_required"
@@ -103,37 +103,37 @@
         </x-form-section>
 
         {{-- Section 3: Current Value — card kept with id for JS toggling --}}
-        <div id="value_container" class="card mb-3">
+        <div id="value_container" class="card mb-4">
             <div class="card-header">
                 <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-pencil-line"></i></span>
                 <span class="fd-overline">{{ __('settings::settings.edit.value_header') }}</span>
             </div>
             <div class="card-body">
-                <div id="value_text_container" class="{{ $setting->type === 'text' ? '' : 'd-none' }}">
+                <div id="value_text_container" class="{{ $setting->type === 'text' ? '' : 'hidden' }}">
                     <x-form.input name="value_text" :value="old('value_text', $setting->type === 'text' ? $setting->value : '')" />
                 </div>
-                <div id="value_textarea_container" class="{{ $setting->type === 'textarea' ? '' : 'd-none' }}">
+                <div id="value_textarea_container" class="{{ $setting->type === 'textarea' ? '' : 'hidden' }}">
                     <x-form.textarea name="value_textarea" :value="old('value_textarea', $setting->type === 'textarea' ? $setting->value : '')" :rows="4" />
                 </div>
-                <div id="value_encrypted_container" class="{{ $setting->type === 'encrypted' ? '' : 'd-none' }}">
+                <div id="value_encrypted_container" class="{{ $setting->type === 'encrypted' ? '' : 'hidden' }}">
                     <x-form.input type="password" name="value_encrypted" :placeholder="$setting->type === 'encrypted' ? __('settings::settings.edit.value_encrypted_placeholder_set') : __('settings::settings.edit.value_encrypted_placeholder_unset')" />
                 </div>
-                <div id="value_integer_container" class="{{ $setting->type === 'integer' ? '' : 'd-none' }}">
+                <div id="value_integer_container" class="{{ $setting->type === 'integer' ? '' : 'hidden' }}">
                     <x-form.input type="number" name="value_integer" :value="old('value_integer', $setting->type === 'integer' ? $setting->value : '')" />
                 </div>
-                <div id="value_float_container" class="{{ $setting->type === 'float' ? '' : 'd-none' }}">
+                <div id="value_float_container" class="{{ $setting->type === 'float' ? '' : 'hidden' }}">
                     <x-form.input type="number" name="value_float" :value="old('value_float', $setting->type === 'float' ? $setting->value : '')" step="0.01" />
                 </div>
-                <div id="value_boolean_container" class="{{ $setting->type === 'boolean' ? '' : 'd-none' }}">
-                    <div class="d-flex align-items-center gap-3 p-3 border rounded">
+                <div id="value_boolean_container" class="{{ $setting->type === 'boolean' ? '' : 'hidden' }}">
+                    <div class="flex items-center gap-4 p-4 border rounded-md">
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" id="value_boolean" name="value_boolean"
                                 {{ $setting->type === 'boolean' && $setting->value ? 'checked' : '' }}>
                         </div>
-                        <label class="form-check-label fw-medium" for="value_boolean">{{ __('settings::settings.edit.value_boolean_label') }}</label>
+                        <label class="form-check-label font-medium" for="value_boolean">{{ __('settings::settings.edit.value_boolean_label') }}</label>
                     </div>
                 </div>
-                <div id="value_file_container" class="{{ $setting->type === 'file' ? '' : 'd-none' }}">
+                <div id="value_file_container" class="{{ $setting->type === 'file' ? '' : 'hidden' }}">
                     @if ($setting->type === 'file' && $setting->value)
                         <a href="{{ $setting->value }}" target="_blank"
                             class="btn btn-sm btn-light mb-2">
@@ -143,44 +143,44 @@
                     <input type="file" class="form-control form-control-sm" name="value_file">
                     <div class="form-text">{{ __('settings::settings.edit.leave_empty_file') }}</div>
                 </div>
-                <div id="value_image_container" class="{{ $setting->type === 'image' ? '' : 'd-none' }}">
+                <div id="value_image_container" class="{{ $setting->type === 'image' ? '' : 'hidden' }}">
                     @if ($setting->type === 'image' && $setting->value)
                         <img src="{{ $setting->value }}" alt="{{ $setting->key }}" id="img-preview"
-                            class="img-thumbnail d-block mb-2 fd-thumb">
+                            class="img-thumbnail block mb-2 fd-thumb">
                     @else
                         <img src="" alt="" id="img-preview"
-                            class="img-thumbnail d-none mb-2 fd-thumb">
+                            class="img-thumbnail hidden mb-2 fd-thumb">
                     @endif
                     <input type="file" class="form-control form-control-sm" name="value_image" id="value_image_input"
                         accept="image/*">
                     <div class="form-text">{{ __('settings::settings.edit.leave_empty_image') }}</div>
                 </div>
-                <div id="value_json_container" class="{{ $setting->type === 'json' ? '' : 'd-none' }}">
-                    <div id="json-editor" class="border rounded"></div>
+                <div id="value_json_container" class="{{ $setting->type === 'json' ? '' : 'hidden' }}">
+                    <div id="json-editor" class="border rounded-md"></div>
                     <x-form.input type="hidden" name="value_json" id="value_json" :value="old('value_json', $setting->type === 'json' ? (is_string($setting->value) ? $setting->value : json_encode($setting->value)) : '{}')" />
-                    <div class="d-flex align-items-center gap-2 mt-2">
+                    <div class="flex items-center gap-2 mt-2">
                         <button type="button" class="btn btn-sm btn-light" id="format-json"><i
                                 class="ph-brackets-curly"></i>{{ __('settings::settings.edit.json_format') }}</button>
                         <button type="button" class="btn btn-sm btn-light" id="validate-json"><i
                                 class="ph-check"></i>{{ __('settings::settings.edit.json_validate') }}</button>
-                        <span id="json-validation-result" class="ms-1 fs-sm"></span>
+                        <span id="json-validation-result" class="ms-1 text-sm"></span>
                     </div>
                 </div>
-                <div id="value_select_container" class="{{ $setting->type === 'select' ? '' : 'd-none' }}">
+                <div id="value_select_container" class="{{ $setting->type === 'select' ? '' : 'hidden' }}">
                     @if ($setting->type === 'select' && is_array($setting->options) && count($setting->options))
                         <x-form.select class="select" name="value_select" id="value_select" :options="['' => ''] + $setting->options" :selected="$setting->value" data-placeholder="{{ __('settings::settings.edit.select_value_placeholder') }}" />
                     @else
-                        <p class="text-muted mb-0 fs-sm"><i class="ph-info me-1"></i>{{ __('settings::settings.edit.no_options_defined') }}</p>
+                        <p class="text-muted mb-0 text-sm"><i class="ph-info me-1"></i>{{ __('settings::settings.edit.no_options_defined') }}</p>
                     @endif
                 </div>
-                <div id="value_multi-select_container" class="{{ $setting->type === 'multi-select' ? '' : 'd-none' }}">
+                <div id="value_multi-select_container" class="{{ $setting->type === 'multi-select' ? '' : 'hidden' }}">
                     @if ($setting->type === 'multi-select' && is_array($setting->options) && count($setting->options))
                         <x-form.select class="select" name="value_multi-select[]" id="value_multi_select" multiple :options="$setting->options" :selected="is_array($setting->value) ? $setting->value : []" data-placeholder="{{ __('settings::settings.edit.select_options_placeholder') }}" />
                     @else
-                        <p class="text-muted mb-0 fs-sm"><i class="ph-info me-1"></i>{{ __('settings::settings.edit.no_options_defined') }}</p>
+                        <p class="text-muted mb-0 text-sm"><i class="ph-info me-1"></i>{{ __('settings::settings.edit.no_options_defined') }}</p>
                     @endif
                 </div>
-                <div id="value_array_container" class="{{ $setting->type === 'array' ? '' : 'd-none' }}">
+                <div id="value_array_container" class="{{ $setting->type === 'array' ? '' : 'hidden' }}">
                     <div id="array_values_list">
                         @if ($setting->type === 'array' && is_array($setting->value) && count($setting->value))
                             @foreach ($setting->value as $val)
@@ -207,32 +207,32 @@
 
         {{-- Section 4: Options — card kept with id for JS toggling --}}
         <div id="options_container"
-            class="card mb-3 {{ in_array($setting->type, ['select', 'multi-select']) ? '' : 'd-none' }}">
+            class="card mb-4 {{ in_array($setting->type, ['select', 'multi-select']) ? '' : 'hidden' }}">
             <div class="card-header">
                 <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-list-bullets"></i></span>
                 <span class="fd-overline">{{ __('settings::settings.edit.section_options') }}</span>
-                <span class="text-muted fs-xs ms-auto">{{ __('settings::settings.edit.options_badge') }}</span>
+                <span class="text-muted text-xs ms-auto">{{ __('settings::settings.edit.options_badge') }}</span>
             </div>
             <div class="card-body">
-                <div class="row g-0 mb-2 px-1">
-                    <div class="col-5"><span class="fd-overline">{{ __('settings::settings.edit.options_col_key') }}</span></div>
-                    <div class="col-5"><span class="fd-overline">{{ __('settings::settings.edit.options_col_label') }}</span></div>
+                <div class="grid grid-cols-12 gap-0 mb-2 px-1">
+                    <div class="col-span-5"><span class="fd-overline">{{ __('settings::settings.edit.options_col_key') }}</span></div>
+                    <div class="col-span-5"><span class="fd-overline">{{ __('settings::settings.edit.options_col_label') }}</span></div>
                 </div>
                 <div id="options_list">
                     @if (in_array($setting->type, ['select', 'multi-select']) && is_array($setting->options) && count($setting->options))
                         @foreach ($setting->options as $optKey => $optVal)
-                            <div class="row g-2 mb-2 align-items-center option-row">
-                                <div class="col-5"><x-form.input name="option_keys[]" :value="$optKey" /></div>
-                                <div class="col-5"><x-form.input name="option_values[]" :value="$optVal" /></div>
-                                <div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon"
+                            <div class="grid grid-cols-12 gap-2 mb-2 items-center option-row">
+                                <div class="col-span-5"><x-form.input name="option_keys[]" :value="$optKey" /></div>
+                                <div class="col-span-5"><x-form.input name="option_values[]" :value="$optVal" /></div>
+                                <div class="col-span-12 md:col-span-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon"
                                         onclick="removeOption(this)"><i class="ph-trash"></i></button></div>
                             </div>
                         @endforeach
                     @else
-                        <div class="row g-2 mb-2 align-items-center option-row">
-                            <div class="col-5"><x-form.input name="option_keys[]" placeholder="{{ __('settings::settings.edit.option_key_placeholder') }}" /></div>
-                            <div class="col-5"><x-form.input name="option_values[]" placeholder="{{ __('settings::settings.edit.option_value_placeholder') }}" /></div>
-                            <div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon"
+                        <div class="grid grid-cols-12 gap-2 mb-2 items-center option-row">
+                            <div class="col-span-5"><x-form.input name="option_keys[]" placeholder="{{ __('settings::settings.edit.option_key_placeholder') }}" /></div>
+                            <div class="col-span-5"><x-form.input name="option_values[]" placeholder="{{ __('settings::settings.edit.option_value_placeholder') }}" /></div>
+                            <div class="col-span-12 md:col-span-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon"
                                     onclick="removeOption(this)"><i class="ph-trash"></i></button></div>
                         </div>
                     @endif
@@ -244,11 +244,11 @@
         </div>
 
         {{-- Footer actions --}}
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="fd-form-actions">
             <a href="{{ route('admin.settings.manage') }}" class="btn btn-light">
                 <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
             </a>
-            <button type="submit" class="btn btn-primary px-4">
+            <button type="submit" class="btn btn-primary px-6">
                 <i class="ph-floppy-disk"></i>{{ __('settings::settings.edit.submit') }}
             </button>
         </div>
@@ -270,7 +270,7 @@
             });
             if (!groupInList && currentGroup) {
                 $('#existing_group').val('__new__');
-                $('#group').removeClass('d-none').val(currentGroup);
+                $('#group').removeClass('hidden').val(currentGroup);
             } else {
                 $('#group').val(currentGroup);
             }
@@ -283,9 +283,9 @@
             $('#existing_group').on('change', function() {
                 var val = $(this).val();
                 if (val === '__new__') {
-                    $('#group').removeClass('d-none').focus();
+                    $('#group').removeClass('hidden').focus();
                 } else {
-                    $('#group').addClass('d-none').val(val);
+                    $('#group').addClass('hidden').val(val);
                 }
             });
 
@@ -317,7 +317,7 @@
                 if (file && file.type.startsWith('image/')) {
                     var reader = new FileReader();
                     reader.onload = function(e) {
-                        $('#img-preview').attr('src', e.target.result).removeClass('d-none');
+                        $('#img-preview').attr('src', e.target.result).removeClass('hidden');
                     };
                     reader.readAsDataURL(file);
                 }
@@ -331,15 +331,15 @@
         function showValueField() {
             var type = document.getElementById('type').value;
             document.querySelectorAll('[id^="value_"][id$="_container"]').forEach(function(el) {
-                el.classList.add('d-none');
+                el.classList.add('hidden');
             });
-            document.getElementById('options_container').classList.add('d-none');
-            document.getElementById('value_container').classList.toggle('d-none', !type);
+            document.getElementById('options_container').classList.add('hidden');
+            document.getElementById('value_container').classList.toggle('hidden', !type);
             if (!type) return;
             var target = document.getElementById('value_' + type + '_container');
-            if (target) target.classList.remove('d-none');
+            if (target) target.classList.remove('hidden');
             if (type === 'select' || type === 'multi-select') document.getElementById('options_container').classList.remove(
-                'd-none');
+                'hidden');
             if (type === 'json' && !window.jsonEditorInitialized) initJsonEditor();
         }
 
@@ -419,10 +419,10 @@
         }
 
         function addOption() {
-            var row = '<div class="row g-2 mb-2 align-items-center option-row">' +
-                '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_keys[]" placeholder="{{ __('settings::settings.edit.option_key_placeholder') }}"></div>' +
-                '<div class="col-5"><input type="text" class="form-control form-control-sm" name="option_values[]" placeholder="{{ __('settings::settings.edit.option_value_placeholder') }}"></div>' +
-                '<div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon" onclick="removeOption(this)"><i class="ph-trash"></i></button></div></div>';
+            var row = '<div class="grid grid-cols-12 gap-2 mb-2 items-center option-row">' +
+                '<div class="col-span-5"><input type="text" class="form-control form-control-sm" name="option_keys[]" placeholder="{{ __('settings::settings.edit.option_key_placeholder') }}"></div>' +
+                '<div class="col-span-5"><input type="text" class="form-control form-control-sm" name="option_values[]" placeholder="{{ __('settings::settings.edit.option_value_placeholder') }}"></div>' +
+                '<div class="col-span-12 md:col-span-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon" onclick="removeOption(this)"><i class="ph-trash"></i></button></div></div>';
             document.getElementById('options_list').insertAdjacentHTML('beforeend', row);
         }
 

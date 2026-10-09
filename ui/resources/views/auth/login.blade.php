@@ -5,7 +5,7 @@
         <h1 class="fd-auth-title">{{ __('foundation::foundation.auth.login_heading') }}</h1>
         <p class="fd-auth-lead">{{ __('foundation::foundation.auth.login_subheading') }}</p>
 
-        <div class="mb-3">
+        <div class="mb-4">
             <label for="login" class="form-label">{{ __('foundation::foundation.auth.email_or_phone') }}</label>
             <input id="login" type="text" class="form-control form-control-lg @error('login') is-invalid @enderror"
                 name="login" value="{{ old('login') }}" required autocomplete="username" autofocus>
@@ -14,17 +14,17 @@
             @enderror
         </div>
 
-        <div class="mb-3">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="mb-4">
+            <div class="flex justify-between items-center">
                 <label for="password" class="form-label">{{ __('foundation::foundation.auth.password') }}</label>
                 @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="fs-sm">{{ __('foundation::foundation.auth.forgot_password_link') }}</a>
+                    <a href="{{ route('password.request') }}" class="text-sm">{{ __('foundation::foundation.auth.forgot_password_link') }}</a>
                 @endif
             </div>
-            <div class="position-relative">
-                <input id="password" type="password" class="form-control form-control-lg pe-5 @error('password') is-invalid @enderror"
+            <div class="relative">
+                <input id="password" type="password" class="form-control form-control-lg pe-12 @error('password') is-invalid @enderror"
                     name="password" required autocomplete="current-password">
-                <button type="button" class="btn btn-ghost btn-icon pw-toggle position-absolute top-50 end-0 translate-middle-y me-1"
+                <button type="button" class="btn btn-ghost btn-icon pw-toggle absolute top-1/2 end-0 -translate-y-1/2 me-1"
                     data-target="password" tabindex="-1" aria-label="{{ __('foundation::foundation.auth.show_password') }}">
                     <i class="ph-eye"></i>
                 </button>
@@ -34,12 +34,12 @@
             </div>
         </div>
 
-        <div class="form-check mb-4">
+        <div class="form-check mb-6">
             <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-            <label class="form-check-label fs-sm" for="remember">{{ __('foundation::foundation.auth.remember_me') }}</label>
+            <label class="form-check-label text-sm" for="remember">{{ __('foundation::foundation.auth.remember_me') }}</label>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg w-100">{{ __('foundation::foundation.auth.login_button') }}</button>
+        <button type="submit" class="btn btn-primary btn-lg w-full">{{ __('foundation::foundation.auth.login_button') }}</button>
 
         @php
             $socialProviders = collect([
@@ -52,7 +52,7 @@
 
         @if ((bool) config('settings.social_auth_enabled.value', false) && $socialProviders->isNotEmpty())
             <div class="fd-divider">{{ __('foundation::foundation.auth.or_login_with') }}</div>
-            <div class="d-grid gap-2">
+            <div class="grid gap-2">
                 @foreach ($socialProviders as $provider => $meta)
                     <a href="{{ route('social.redirect', $provider) }}" class="btn btn-light">
                         <i class="{{ $meta['icon'] }}"></i>{{ $meta['label'] }}

@@ -6,19 +6,19 @@
 
 @section('content')
 <x-search-card>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('otp::otp.history_index.search_placeholder') }}" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.select class="select" name="contact_type" label="{{ __('otp::otp.history_index.contact_type_label') }}" :options="$contactTypes" :selected="request('contact_type')" data-placeholder="{{ __('otp::otp.history_index.all_types_placeholder') }}" />
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-2">
         <x-form.input name="date_from" label="{{ __('otp::otp.history_index.date_from_label') }}" type="date" :value="request('date_from')" />
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-2">
         <x-form.input name="date_to" label="{{ __('otp::otp.history_index.date_to_label') }}" type="date" :value="request('date_to')" />
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-2">
         <x-form.select class="select" name="is_verified" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('otp::otp.history_index.status_all'), 1 => __('otp::otp.history_index.status_verified'), 0 => __('otp::otp.history_index.status_not_verified')]" :selected="request('is_verified')" data-placeholder="{{ __('otp::otp.history_index.status_all') }}" />
     </div>
 </x-search-card>
@@ -40,16 +40,16 @@
         <tr>
             <td>{{ $code->id }}</td>
             <td>
-                <span class="badge {{ $code->contact_type->value === 'email' ? 'bg-info' : 'bg-warning' }}">
+                <span class="badge {{ $code->contact_type->value === 'email' ? 'badge-info' : 'badge-warning' }}">
                     {{ $code->contact_type->label() }}
                 </span>
             </td>
             <td>{{ $code->contact }}</td>
             <td>
                 @if(config('app.debug') && $code->code !== null)
-                <code class="fs-sm">{{ $code->code }}</code>
+                <code class="text-sm">{{ $code->code }}</code>
                 @else
-                <code class="fs-sm">••••••</code>
+                <code class="text-sm">••••••</code>
                 @endif
             </td>
             <td>

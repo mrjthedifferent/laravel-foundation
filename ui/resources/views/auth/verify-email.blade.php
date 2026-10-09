@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <span class="fd-icon-tile fd-icon-tile-lg is-warning mb-3"><i class="ph-envelope-simple"></i></span>
+    <span class="fd-icon-tile fd-icon-tile-lg is-warning mb-4"><i class="ph-envelope-simple"></i></span>
 
     <h1 class="fd-auth-title">{{ __('foundation::foundation.auth.verify_contact') }}</h1>
     <p class="fd-auth-lead">{{ __('foundation::foundation.auth.verification_required') }}</p>
@@ -17,7 +17,7 @@
     @endif
 
     @if (auth()->user()->email)
-        <p class="text-muted mb-4">
+        <p class="text-muted mb-6">
             {{ __('foundation::foundation.auth.check_email_before') }}
             <strong class="text-strong">{{ auth()->user()->email }}</strong>
             {{ __('foundation::foundation.auth.for_verification_link') }}
@@ -25,7 +25,7 @@
 
         <form method="POST" action="{{ route('verification.send') }}">
             @csrf
-            <button type="submit" class="btn btn-primary btn-lg w-100">
+            <button type="submit" class="btn btn-primary btn-lg w-full">
                 {{ __('foundation::foundation.auth.resend_verification') }}
             </button>
         </form>

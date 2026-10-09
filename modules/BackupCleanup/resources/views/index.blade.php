@@ -24,7 +24,7 @@
 
         <thead>
             <tr>
-                <th class="w-48px">#</th>
+                <th class="w-12">#</th>
                 <th>{{ __('backupcleanup::backupcleanup.index.col_file_name') }}</th>
                 <th>{{ __('backupcleanup::backupcleanup.index.col_size') }}</th>
                 <th>{{ __('backupcleanup::backupcleanup.index.col_created_at') }}</th>
@@ -38,17 +38,17 @@
                     <td>{{ $index + 1 }}</td>
                     <td>
                         <i class="ph-file-zip text-muted me-1"></i>
-                        <span class="text-break fs-sm">{{ $file['filename'] }}</span>
+                        <span class="break-words text-sm">{{ $file['filename'] }}</span>
                     </td>
-                    <td class="text-nowrap fs-sm">
+                    <td class="whitespace-nowrap text-sm">
                         @php $mb = $file['size'] / 1048576; @endphp
                         {{ $mb >= 1 ? number_format($mb, 2) . ' MB' : number_format($file['size'] / 1024, 2) . ' KB' }}
                     </td>
-                    <td class="text-nowrap fs-sm">
+                    <td class="whitespace-nowrap text-sm">
                         {{ \Carbon\Carbon::createFromTimestamp($file['date'])->format('d M Y, h:i A') }}</td>
                     <td>
                         <span
-                            class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">{{ $file['disk'] }}</span>
+                            class="badge badge-secondary text-muted border border-line">{{ $file['disk'] }}</span>
                     </td>
                     <td class="text-end">
                         <x-dropdown-menu>
@@ -70,7 +70,7 @@
         </tbody>
     </x-table-view-pagination>
 
-    <p class="text-muted fs-xs mt-2">
+    <p class="text-muted text-xs mt-2">
         <i class="ph-info me-1"></i>
         {!! __('backupcleanup::backupcleanup.index.stored_on', [
             'disk' => '<strong>'.e(config('backup.backup.destination.disks')[0] ?? 'local').'</strong>',

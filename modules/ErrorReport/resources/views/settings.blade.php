@@ -10,10 +10,10 @@
             <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-gear"></i></span>
             <div>
                 <div class="card-title">{{ __('errorreport::errorreport.settings.title') }}</div>
-                <div class="text-muted fs-xs">{{ __('errorreport::errorreport.settings.subtitle') }}</div>
+                <div class="text-muted text-xs">{{ __('errorreport::errorreport.settings.subtitle') }}</div>
             </div>
         </div>
-        <div class="card-body p-4">
+        <div class="card-body p-6">
             <form action="{{ route('admin.error-reports.settings.update') }}" method="POST">
                 @csrf
 
@@ -25,7 +25,7 @@
                             <input type="checkbox" class="form-check-input" name="error_report_enabled"
                                 id="error_report_enabled" value="1"
                                 {{ optional($settings['error_report_enabled'] ?? null)->value ?? false ? 'checked' : '' }}>
-                            <label class="form-check-label fw-semibold" for="error_report_enabled">{{ __('errorreport::errorreport.settings.enable_label') }}</label>
+                            <label class="form-check-label font-semibold" for="error_report_enabled">{{ __('errorreport::errorreport.settings.enable_label') }}</label>
                         </div>
                         <div class="form-text">{{ __('errorreport::errorreport.settings.enable_help') }}</div>
                     </div>
@@ -74,8 +74,8 @@
                         <h2 class="fd-form-section-title">{{ __('errorreport::errorreport.settings.throttle_title') }}</h2>
                         <p class="fd-form-section-text">{{ __('errorreport::errorreport.settings.throttle_help') }}</p>
                     </div>
-                    <div class="row g-3">
-                        <div class="col-md-6">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-6">
                             <x-form.input
                                 type="number"
                                 name="error_report_throttle_minutes"
@@ -106,19 +106,19 @@
 
                 {{-- Slack --}}
                 <div class="fd-form-section">
-                    <div class="d-flex flex-wrap align-items-start gap-2">
+                    <div class="flex flex-wrap items-start gap-2">
                         <div>
                             <h2 class="fd-form-section-title">{{ __('errorreport::errorreport.settings.slack_title') }}</h2>
                         </div>
-                        <button type="button" class="btn btn-ghost btn-sm ms-auto" data-bs-toggle="collapse"
-                            data-bs-target="#slack-help" aria-expanded="false">
+                        <button type="button" class="btn btn-ghost btn-sm ms-auto" data-fd-toggle="collapse"
+                            data-fd-target="#slack-help" aria-expanded="false">
                             <i class="ph-question"></i>{{ __('errorreport::errorreport.settings.how_to_get') }}
                         </button>
                     </div>
                     <div>
                         <div class="collapse" id="slack-help">
                             <x-alert type="info">
-                                <span class="fs-sm">{!! __('errorreport::errorreport.settings.slack_help') !!}</span>
+                                <span class="text-sm">{!! __('errorreport::errorreport.settings.slack_help') !!}</span>
                             </x-alert>
                         </div>
                         <x-form.input
@@ -133,23 +133,23 @@
 
                 {{-- Telegram --}}
                 <div class="fd-form-section">
-                    <div class="d-flex flex-wrap align-items-start gap-2">
+                    <div class="flex flex-wrap items-start gap-2">
                         <div>
                             <h2 class="fd-form-section-title">{{ __('errorreport::errorreport.settings.telegram_title') }}</h2>
                         </div>
-                        <button type="button" class="btn btn-ghost btn-sm ms-auto" data-bs-toggle="collapse"
-                            data-bs-target="#telegram-help" aria-expanded="false">
+                        <button type="button" class="btn btn-ghost btn-sm ms-auto" data-fd-toggle="collapse"
+                            data-fd-target="#telegram-help" aria-expanded="false">
                             <i class="ph-question"></i>{{ __('errorreport::errorreport.settings.how_to_get') }}
                         </button>
                     </div>
                     <div>
                         <div class="collapse" id="telegram-help">
                             <x-alert type="info">
-                                <span class="fs-sm">{!! __('errorreport::errorreport.settings.telegram_help') !!}</span>
+                                <span class="text-sm">{!! __('errorreport::errorreport.settings.telegram_help') !!}</span>
                             </x-alert>
                         </div>
-                        <div class="row g-3">
-                            <div class="col-md-6">
+                        <div class="grid grid-cols-12 gap-4">
+                            <div class="col-span-12 md:col-span-6">
                                 <x-form.input
                                     name="error_report_telegram_bot_token"
                                     label="{{ __('errorreport::errorreport.settings.telegram_bot_token_label') }}"
@@ -157,7 +157,7 @@
                                     placeholder="{{ __('errorreport::errorreport.settings.telegram_bot_token_placeholder') }}"
                                 />
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-span-12 md:col-span-6">
                                 <x-form.input
                                     name="error_report_telegram_chat_id"
                                     label="{{ __('errorreport::errorreport.settings.telegram_chat_id_label') }}"
@@ -182,14 +182,14 @@
                             name="error_report_dont_report"
                             label="{{ __('errorreport::errorreport.settings.ignore_label') }}"
                             :value="$dontReportStr"
-                            class="font-monospace"
+                            class="font-mono"
                             :rows="5"
                             placeholder="Illuminate\Auth\AuthenticationException&#10;Symfony\Component\HttpKernel\Exception\NotFoundHttpException"
                         />
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end mt-4">
+                <div class="flex justify-end mt-6">
                     <button type="submit" class="btn btn-primary">
                         <i class="ph-floppy-disk"></i>{{ __('errorreport::errorreport.settings.save') }}
                     </button>

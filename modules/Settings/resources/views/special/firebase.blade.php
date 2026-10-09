@@ -6,25 +6,21 @@
 @endsection
 
 @section('content')
-<div class="card">
-
-    {{-- Header --}}
-    <div class="card-header">
-        <span class="fd-icon-tile"><i class="ph-flame"></i></span>
-        <div>
-            <div class="card-title">{{ __('settings::settings.special_firebase.title') }}</div>
-            <div class="text-muted fs-xs">{{ __('settings::settings.special_firebase.subtitle') }}</div>
-        </div>
-        <button type="button" id="testFirebaseBtn" class="btn btn-sm btn-light ms-auto">
+<x-page-header title="{{ __('settings::settings.special_firebase.title') }}" subtitle="{{ __('settings::settings.special_firebase.subtitle') }}" icon="ph-flame">
+    <x-slot name="actions">
+        <button type="button" id="testFirebaseBtn" class="btn btn-sm btn-light">
             <i class="ph-plug"></i>{{ __('settings::settings.special_firebase.test_connection') }}
         </button>
-    </div>
+    </x-slot>
+</x-page-header>
 
-    <div class="card-body p-4">
+<div class="card">
+
+    <div class="card-body p-6">
 
         {{-- Info tip --}}
-        <x-alert type="primary" icon="ph-info" class="mb-4">
-            <span class="fs-sm">
+        <x-alert type="primary" icon="ph-info" class="mb-6">
+            <span class="text-sm">
                 {!! __('settings::settings.special_firebase.info_tip') !!}
             </span>
         </x-alert>
@@ -33,7 +29,7 @@
             @csrf
 
             {{-- Credentials JSON --}}
-            <div class="card mb-3">
+            <div class="card mb-4">
                 <div class="card-header">
                     <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-key"></i></span>
                     <span class="fd-overline">{{ __('settings::settings.special_firebase.credentials_header') }}</span>
@@ -44,7 +40,7 @@
                         id="firebase_credentials_json"
                         label="{{ __('settings::settings.special_firebase.credentials_label') }}"
                         :value="optional($firebaseCredentialsJson)->value ?? ''"
-                        class="font-monospace fs-xs"
+                        class="font-mono text-xs"
                         :rows="10"
                         placeholder='{"type": "service_account", "project_id": "...", ...}'
                     />
@@ -53,14 +49,14 @@
             </div>
 
             {{-- Project IDs --}}
-            <div class="card mb-3">
+            <div class="card mb-4">
                 <div class="card-header">
                     <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-identification-badge"></i></span>
                     <span class="fd-overline">{{ __('settings::settings.special_firebase.project_ids_header') }}</span>
                 </div>
                 <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-12">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-12">
                             <x-form.input name="firebase_project_id" id="firebase_project_id" label="{{ __('settings::settings.special_firebase.project_id_label') }}" :value="optional($firebaseProjectId)->value ?? ''" placeholder="{{ __('settings::settings.special_firebase.project_id_placeholder') }}" />
                             <div class="form-text">{{ __('settings::settings.special_firebase.project_id_help') }}</div>
                         </div>
@@ -68,8 +64,8 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary px-4">
+            <div class="flex justify-end">
+                <button type="submit" class="btn btn-primary px-6">
                     <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_firebase.submit') }}
                 </button>
             </div>

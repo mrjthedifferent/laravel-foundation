@@ -15,12 +15,12 @@
 @endphp
 
 <div {{ $attributes->merge([
-    'class' => 'alert alert-' . $type . ' d-flex align-items-center border-0 mb-3' . ($dismissible ? ' alert-dismissible fade show' : ''),
+    'class' => 'alert alert-' . $type . ' flex items-center border-0 mb-4' . ($dismissible ? ' alert-dismissible fade show' : ''),
     'role'  => 'alert',
 ]) }}>
-    <i class="{{ $resolvedIcon }} me-2 fs-base"></i>
-    <div class="flex-fill">{{ $slot }}</div>
+    <i class="{{ $resolvedIcon }} me-2 text-base"></i>
+    <div class="flex-auto">{{ $slot }}</div>
     @if ($dismissible)
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('foundation::foundation.common.close') }}"></button>
+        <button type="button" class="btn-close" data-fd-dismiss="alert" aria-label="{{ __('foundation::foundation.common.close') }}"></button>
     @endif
 </div>

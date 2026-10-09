@@ -9,16 +9,16 @@
 
 @section('content')
 <x-search-card>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('activitylog::activitylog.email_logs_index.search_placeholder') }}" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.input name="date_from" label="{{ __('activitylog::activitylog.email_logs_index.date_from') }}" type="date" :value="request('date_from')" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.input name="date_to" label="{{ __('activitylog::activitylog.email_logs_index.date_to') }}" type="date" :value="request('date_to')" />
     </div>
-    <div class="col-md-3 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-3">
         <x-form.select class="select" name="status" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('activitylog::activitylog.email_logs_index.all_statuses'), 'sent' => __('activitylog::activitylog.email_logs_index.sent'), 'pending' => __('activitylog::activitylog.email_logs_index.pending'), 'failed' => __('activitylog::activitylog.email_logs_index.failed')]" :selected="request('status')" data-placeholder="{{ __('activitylog::activitylog.email_logs_index.all') }}" />
     </div>
 </x-search-card>
@@ -42,7 +42,7 @@
             <td>
                 {{ $log->to_email }}
                 @if ($log->to_name)
-                <div class="text-muted fs-xs">{{ $log->to_name }}</div>
+                <div class="text-muted text-xs">{{ $log->to_name }}</div>
                 @endif
             </td>
             <td>
@@ -50,13 +50,13 @@
             </td>
             <td>
                 @if ($log->notification)
-                <span class="text-muted fs-xs">{{ class_basename($log->notification) }}</span>
+                <span class="text-muted text-xs">{{ class_basename($log->notification) }}</span>
                 @else
                 <span class="text-muted">—</span>
                 @endif
             </td>
             <td>
-                <span class="badge bg-{{ $statusBadge[$log->status] ?? 'secondary' }}">
+                <span class="badge badge-{{ $statusBadge[$log->status] ?? 'secondary' }}">
                     {{ ucfirst($log->status) }}
                 </span>
             </td>

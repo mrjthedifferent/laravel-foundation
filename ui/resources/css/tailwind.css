@@ -1,0 +1,99 @@
+/* Entry for the admin UI stylesheet. bin/build-css.sh wraps this file with Tailwind itself
+ * and the content paths, and writes ui/public/assets/css/tailwind.css, which is committed
+ * so host apps need no build step. */
+
+@import "./foundation/tokens.css";
+@import "./foundation/base.css" layer(base);
+@import "./foundation/components.css" layer(components);
+@import "./foundation/helpers.css" layer(components);
+@import "./foundation/shell.css" layer(components);
+@import "./foundation/dashboard.css" layer(components);
+@import "./foundation/widgets.css" layer(components);
+@import "./foundation/filterbar.css" layer(components);
+@import "./foundation/tables.css" layer(components);
+@import "./foundation/forms.css" layer(components);
+/* Third-party widgets load their own unlayered CSS, so the overrides must be unlayered too. */
+@import "./foundation/vendor.css";
+
+/* Bootstrap's breakpoints, so the responsive prefixes (sm: md: lg: xl: 2xl:) keep the
+   widths the layouts were designed for. */
+@theme {
+    --breakpoint-sm: 36rem;
+    --breakpoint-md: 48rem;
+    --breakpoint-lg: 62rem;
+    --breakpoint-xl: 75rem;
+    --breakpoint-2xl: 87.5rem;
+
+    /* The admin type scale: dense by design, so text-base is 14px. */
+    --text-xs: var(--fd-text-xs);
+    --text-sm: var(--fd-text-sm);
+    --text-base: var(--fd-text-base);
+    --text-md: var(--fd-text-md);
+    --text-lg: var(--fd-text-lg);
+    --text-xl: var(--fd-text-xl);
+    --text-2xl: var(--fd-text-2xl);
+
+    --font-sans: var(--fd-font);
+    --font-mono: var(--fd-mono);
+
+    --radius-sm: var(--fd-radius-sm);
+    --radius-md: var(--fd-radius);
+    --radius-lg: var(--fd-radius-lg);
+    --radius-xl: 1rem;
+
+    --shadow-xs: var(--fd-shadow-xs);
+    --shadow-sm: var(--fd-shadow-sm);
+    --shadow-md: var(--fd-shadow-md);
+    --shadow-lg: var(--fd-shadow-lg);
+
+    /* Colours read the design tokens, so light, dark and the accent palettes all follow. */
+    --color-canvas: var(--fd-canvas);
+    --color-surface: var(--fd-surface);
+    --color-subtle: var(--fd-subtle);
+    --color-hover: var(--fd-hover);
+    --color-line: var(--fd-border);
+    --color-line-strong: var(--fd-border-strong);
+    --color-body: var(--fd-text);
+    --color-strong: var(--fd-text-strong);
+    --color-muted: var(--fd-muted);
+    --color-faint: var(--fd-faint);
+    --color-primary: var(--fd-accent);
+    --color-primary-text: var(--fd-accent-text);
+    --color-primary-subtle: var(--fd-accent-subtle);
+    --color-primary-muted: var(--fd-accent-muted);
+    --color-success: var(--fd-success);
+    --color-success-text: var(--fd-success-text);
+    --color-success-subtle: var(--fd-success-subtle);
+    --color-warning: var(--fd-warning);
+    --color-warning-text: var(--fd-warning-text);
+    --color-warning-subtle: var(--fd-warning-subtle);
+    --color-danger: var(--fd-danger);
+    --color-danger-text: var(--fd-danger-text);
+    --color-danger-subtle: var(--fd-danger-subtle);
+    --color-info: var(--fd-info);
+    --color-info-text: var(--fd-info-text);
+    --color-info-subtle: var(--fd-info-subtle);
+}
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Row/column grid: children of a 12-column grid default to the full row, so a cell with no
+   column class behaves like a block and col-span-* narrows it. */
+@layer components {
+    .grid-cols-12 > * { grid-column: 1 / -1; }
+}
+
+/* Tailwind's `collapse` utility (visibility: collapse) shares its name with the collapsible
+   region the sidebar and filter panels use. The region is toggled with `show`, never hidden by visibility. */
+@layer utilities {
+    .collapse { visibility: visible; }
+}
+
+/* The common layout vocabulary is always compiled in, not only what the package's own views
+   use, so a project's pages can use it without building Tailwind themselves. */
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{m,p}{,t,b,s,e,x,y}-{0,1,2,3,4,6,8,12}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}m{,t,b,s,e,x,y}-auto");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{flex,inline-flex,grid,block,inline-block,inline,hidden,flex-col,flex-row,flex-wrap,flex-nowrap,grow,shrink-0,items-start,items-center,items-end,items-baseline,items-stretch,justify-start,justify-center,justify-end,justify-between,gap-0,gap-1,gap-2,gap-4,gap-6,gap-12,grid-cols-12}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}col-span-{1,2,3,4,5,6,7,8,9,10,11,12}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{text-start,text-end,text-center,whitespace-nowrap,truncate,uppercase,font-medium,font-semibold,font-bold,font-mono,text-xs,text-sm,text-base,text-md,text-lg,w-full,h-full,w-auto,min-w-0,max-w-full,overflow-hidden,overflow-auto,overflow-x-auto,relative,absolute,fixed,sticky}");
+@source inline("{text-muted,text-strong,text-primary,text-success,text-warning,text-danger,text-info,bg-surface,bg-subtle,bg-canvas,border,border-t,border-b,border-s,border-e,border-0,border-line,rounded-sm,rounded-md,rounded-lg,rounded-full,shadow-sm,shadow-md,shadow-lg,sr-only,cursor-pointer}");

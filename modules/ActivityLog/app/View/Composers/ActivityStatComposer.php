@@ -3,6 +3,7 @@
 namespace Modules\ActivityLog\View\Composers;
 
 use Illuminate\Support\Carbon;
+use Mrj\Foundation\Services\Dashboard\DailySeries;
 use Mrj\Foundation\Support\StatComposer;
 use Override;
 use OwenIt\Auditing\Models\Audit;
@@ -54,6 +55,7 @@ final class ActivityStatComposer extends StatComposer
             'color' => 'success',
             'href' => route('admin.activity-logs.index'),
             'caption' => __('activitylog::activitylog.stat.this_week', ['count' => number_format($week)]),
+            'series' => array_values(app(DailySeries::class)->count(Audit::query()->toBase(), 'created_at', 14)),
         ]];
     }
 }

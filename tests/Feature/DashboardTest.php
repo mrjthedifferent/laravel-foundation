@@ -83,6 +83,64 @@ class DashboardTest extends TestCase
         $this->actingAs($admin)->get(route('admin.dashboard').'?days[]=1')->assertOk();
     }
 
+    public function test_the_range_picker_offers_four_windows_and_the_old_days_parameter_still_works(): void
+    {
+        $admin = $this->admin();
+
+        $this->actingAs($admin)->get(route('admin.dashboard', ['range' => 90]))
+            ->assertOk()
+            ->assertSee(__('foundation::foundation.dashboard.range_days', ['days' => 7]))
+            ->assertSee('aria-current="page">'.__('foundation::foundation.dashboard.range_days', ['days' => 90]), false);
+
+        $this->actingAs($admin)->get(route('admin.dashboard', ['days' => 30]))
+            ->assertSee('aria-current="page">'.__('foundation::foundation.dashboard.range_days', ['days' => 30]), false);
+
+        foreach ([0, 999, 'abc'] as $bogus) {
+            $this->actingAs($admin)->get(route('admin.dashboard', ['range' => $bogus]))
+                ->assertSee('aria-current="page">'.__('foundation::foundation.dashboard.range_days', ['days' => 14]), false);
+        }
+    }
+
+    public function test_comparing_adds_the_previous_period_to_the_chart(): void
+    {
+        Carbon::setTestNow('2026-09-23 12:00:00');
+        $admin = $this->admin();
+
+        UserLoginHistory::factory()->count(3)->create(['user_id' => $admin->id, 'logged_in_at' => Carbon::parse('2026-09-22 08:00:00')]);
+        // 14 days before that window: 2026-09-10 .. 2026-09-09 is the window before 09-10..09-23
+        UserLoginHistory::factory()->count(2)->create(['user_id' => $admin->id, 'logged_in_at' => Carbon::parse('2026-09-05 08:00:00')]);
+
+        $this->actingAs($admin);
+        $plain = app(ChartRegistry::class)->first(14);
+        $compared = app(ChartRegistry::class)->first(14, true);
+
+        $this->assertArrayNotHasKey('previous', $plain);
+        $this->assertCount(14, $compared['previous']);
+        $this->assertSame(2, $compared['previous']['2026-09-05']);
+        $this->assertSame(2, array_sum($compared['previous']));
+        $this->assertSame($plain['series'], $compared['series']);
+
+        $this->actingAs($admin)->get(route('admin.dashboard', ['compare' => 1]))
+            ->assertOk()
+            ->assertSee('chart-previous', false)
+            ->assertSee(__('foundation::foundation.dashboard.previous_period'))
+            ->assertSee('vs previous period');
+
+        $this->actingAs($admin)->get(route('admin.dashboard'))->assertDontSee('chart-previous', false);
+    }
+
+    public function test_stat_cards_draw_a_sparkline_when_the_stat_has_a_series(): void
+    {
+        $admin = $this->admin();
+        UserLoginHistory::factory()->create(['user_id' => $admin->id, 'logged_in_at' => now()]);
+        User::factory()->create(['created_at' => now()->subDays(2)]);
+
+        $this->actingAs($admin)->get(route('admin.dashboard'))->assertOk()->assertSee('fd-spark', false);
+
+        $stat = collect(app(StatRegistry::class)->all())->firstWhere('label', __('user::user.stat.sign_ins_today'));
+        $this->assertCount(14, $stat['series']);
+    }
+
     /**
      * Everything the dashboard caches has to survive a store that refuses objects,
      * so assert the payloads are arrays and scalars at the source.

@@ -17,8 +17,8 @@
     back-label="{{ __('notification::notification.push_notification_create.back_to_list') }}" />
 
 <x-form-section title="{{ __('notification::notification.push_notification_create.recipient_section') }}" icon="ph-user">
-    <div class="row g-3">
-        <div class="col-md-12">
+    <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-12">
             <x-form.select
                 class="select"
                 name="user_id"
@@ -34,30 +34,30 @@
 </x-form-section>
 
 <x-form-section title="{{ __('notification::notification.push_notification_create.content_section') }}" icon="ph-article">
-    <div class="row g-3">
-        <div class="col-md-6">
+    <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-6">
             <x-form.input name="title" label="{{ __('notification::notification.push_notification_create.title_label') }}" required :value="old('title')" placeholder="{{ __('notification::notification.push_notification_create.title_placeholder') }}" />
         </div>
-        <div class="col-md-6">
+        <div class="col-span-12 md:col-span-6">
             <x-form.input name="url" label="{{ __('notification::notification.push_notification_create.url_label') }}" :value="old('url')" placeholder="{{ __('notification::notification.push_notification_create.url_placeholder') }}" />
         </div>
-        <div class="col-md-12">
+        <div class="col-span-12 md:col-span-12">
             <x-form.textarea name="body" label="{{ __('notification::notification.push_notification_create.body_label') }}" required :value="old('body')" :rows="3" placeholder="{{ __('notification::notification.push_notification_create.body_placeholder') }}" />
         </div>
-        <div class="col-md-12">
+        <div class="col-span-12 md:col-span-12">
             <x-form.textarea name="description" label="{{ __('notification::notification.push_notification_create.description_label') }}" :value="old('description')" :rows="2" placeholder="{{ __('notification::notification.push_notification_create.description_placeholder') }}" />
         </div>
-        <div class="col-md-12">
+        <div class="col-span-12 md:col-span-12">
             <x-form.file name="image" label="{{ __('notification::notification.push_notification_create.image_label') }}" accept="image/*" />
         </div>
     </div>
 </x-form-section>
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="fd-form-actions">
     <a href="{{ route('admin.push.notification.index') }}" class="btn btn-light">
         <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
     </a>
-    <x-primary-button id="submit-button" class="px-5">
+    <x-primary-button id="submit-button" class="px-12">
         <i class="ph-paper-plane-tilt"></i>{{ __('notification::notification.push_notification_create.send_notification') }}
     </x-primary-button>
 </div>

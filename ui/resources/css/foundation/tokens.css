@@ -1,0 +1,185 @@
+/* Design tokens: neutrals, accent palettes, status colours, type, shape, motion, shell. */
+:root,
+[data-theme="light"] {
+    /* Neutrals: zinc, cool and quiet */
+    --fd-canvas: #fafafa;
+    --fd-surface: #ffffff;
+    --fd-subtle: #f4f4f5;
+    --fd-hover: #f4f4f5;
+    --fd-border: #e4e4e7;
+    --fd-border-strong: #d4d4d8;
+    --fd-text: #18181b;
+    --fd-text-strong: #09090b;
+    --fd-muted: #68686f;
+    --fd-faint: #a1a1aa;
+
+    /* Semantic */
+    --fd-success: #16a34a; --fd-success-rgb: 22, 163, 74;
+    --fd-warning: #d97706; --fd-warning-rgb: 217, 119, 6;
+    --fd-danger: #dc2626;  --fd-danger-rgb: 220, 38, 38;
+    --fd-info: #0284c7;    --fd-info-rgb: 2, 132, 199;
+
+    /* Type */
+    --fd-font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --fd-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --fd-text-xs: .75rem;      /* 12 */
+    --fd-text-sm: .8125rem;    /* 13 */
+    --fd-text-base: .875rem;   /* 14 */
+    --fd-text-md: 1rem;        /* 16 */
+    --fd-text-lg: 1.25rem;     /* 20 */
+    --fd-text-xl: 1.5rem;      /* 24 */
+    --fd-text-2xl: 1.875rem;   /* 30 */
+
+    /* Shape and depth */
+    --fd-radius-sm: .375rem;
+    --fd-radius: .5rem;
+    --fd-radius-lg: .75rem;
+    --fd-shadow-xs: 0 1px 2px rgba(9, 9, 11, .04);
+    --fd-shadow-sm: 0 1px 2px rgba(9, 9, 11, .04), 0 1px 3px rgba(9, 9, 11, .06);
+    --fd-shadow-md: 0 2px 4px -1px rgba(9, 9, 11, .05), 0 6px 16px -4px rgba(9, 9, 11, .1);
+    --fd-shadow-lg: 0 4px 8px -2px rgba(9, 9, 11, .06), 0 16px 40px -8px rgba(9, 9, 11, .18);
+
+    /* Motion */
+    --fd-ease: cubic-bezier(.2, 0, 0, 1);
+    --fd-duration: 150ms;
+
+    /* Shell */
+    --fd-sidebar-width: 16rem;
+    --fd-sidebar-mini-width: 4rem;
+    --fd-navbar-height: 3.5rem;
+    --fd-footer-height: 3.25rem;
+    /* One gutter for the navbar, the page and the footer, so their edges line up */
+    --fd-gutter: 1.5rem;
+    --fd-card-pad: 1.25rem;
+    --fd-content-pad: var(--fd-gutter);
+    /* Page width, density and corner presets: set from the Theme settings through <html data-*>. */
+    --fd-content-max: none;
+    --fd-control-h: 2.25rem;
+    --fd-control-h-sm: 2rem;
+    --fd-field-y: .4375rem;
+    --fd-cell-y: .75rem;
+
+    /* Accent (indigo unless a palette says otherwise) */
+    --fd-accent-l: #4f46e5; --fd-accent-l-rgb: 79, 70, 229;
+    --fd-accent-d: #818cf8; --fd-accent-d-rgb: 129, 140, 248;
+    --fd-accent: var(--fd-accent-l);
+    --fd-accent-rgb: var(--fd-accent-l-rgb);
+    /* Filled buttons keep the brand hue in both themes; only text and icons lighten in dark. */
+    --fd-accent-solid: var(--fd-accent-l);
+    --fd-accent-solid-hover: color-mix(in oklab, var(--fd-accent-l) 88%, #000);
+    --fd-on-accent: #ffffff;
+    --fd-danger-solid: #dc2626;
+    --fd-accent-hover: color-mix(in oklab, var(--fd-accent) 86%, #000);
+    --fd-accent-subtle: rgba(var(--fd-accent-rgb), .09);
+    --fd-accent-muted: rgba(var(--fd-accent-rgb), .22);
+    --fd-accent-text: color-mix(in oklab, var(--fd-accent) 82%, #000);
+    --fd-ring: 0 0 0 2px var(--fd-surface), 0 0 0 4px rgba(var(--fd-accent-rgb), .45);
+}
+
+[data-theme="dark"] {
+    --fd-canvas: #09090b;
+    --fd-surface: #111113;
+    --fd-subtle: #18181b;
+    --fd-hover: #1c1c20;
+    --fd-border: #27272a;
+    --fd-border-strong: #3f3f46;
+    --fd-text: #e4e4e7;
+    --fd-text-strong: #fafafa;
+    --fd-muted: #a1a1aa;
+    --fd-faint: #71717a;
+
+    --fd-success: #4ade80; --fd-success-rgb: 74, 222, 128;
+    --fd-warning: #fbbf24; --fd-warning-rgb: 251, 191, 36;
+    --fd-danger: #f87171;  --fd-danger-rgb: 248, 113, 113;
+    --fd-info: #38bdf8;    --fd-info-rgb: 56, 189, 248;
+
+    --fd-shadow-xs: 0 1px 2px rgba(0, 0, 0, .4);
+    --fd-shadow-sm: 0 1px 2px rgba(0, 0, 0, .4), 0 1px 3px rgba(0, 0, 0, .3);
+    --fd-shadow-md: 0 2px 4px -1px rgba(0, 0, 0, .4), 0 8px 20px -4px rgba(0, 0, 0, .5);
+    --fd-shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, .5), 0 20px 48px -8px rgba(0, 0, 0, .7);
+
+    --fd-accent: var(--fd-accent-d);
+    --fd-accent-rgb: var(--fd-accent-d-rgb);
+    --fd-accent-solid: color-mix(in oklab, var(--fd-accent-l) 88%, #fff);
+    --fd-accent-solid-hover: var(--fd-accent-l);
+    --fd-on-accent: #ffffff;
+    --fd-danger-solid: #dc2626;
+    --fd-accent-hover: color-mix(in oklab, var(--fd-accent) 86%, #fff);
+    --fd-accent-subtle: rgba(var(--fd-accent-rgb), .14);
+    --fd-accent-muted: rgba(var(--fd-accent-rgb), .3);
+    --fd-accent-text: color-mix(in oklab, var(--fd-accent) 88%, #fff);
+
+    color-scheme: dark;
+}
+
+/* Accent palettes: <html data-color-palette="…">. Old names map to the nearest new one. */
+[data-color-palette="indigo"] { --fd-accent-l: #4f46e5; --fd-accent-l-rgb: 79, 70, 229;   --fd-accent-d: #818cf8; --fd-accent-d-rgb: 129, 140, 248; }
+[data-color-palette="blue"]   { --fd-accent-l: #2563eb; --fd-accent-l-rgb: 37, 99, 235;   --fd-accent-d: #60a5fa; --fd-accent-d-rgb: 96, 165, 250; }
+[data-color-palette="violet"],
+[data-color-palette="purple"] { --fd-accent-l: #7c3aed; --fd-accent-l-rgb: 124, 58, 237;  --fd-accent-d: #a78bfa; --fd-accent-d-rgb: 167, 139, 250; }
+[data-color-palette="teal"],
+[data-color-palette="cyan"]   { --fd-accent-l: #0f766e; --fd-accent-l-rgb: 15, 118, 110;  --fd-accent-d: #2dd4bf; --fd-accent-d-rgb: 45, 212, 191; }
+[data-color-palette="green"]  { --fd-accent-l: #15803d; --fd-accent-l-rgb: 21, 128, 61;   --fd-accent-d: #4ade80; --fd-accent-d-rgb: 74, 222, 128; }
+[data-color-palette="amber"],
+[data-color-palette="orange"],
+[data-color-palette="yellow"] { --fd-accent-l: #b45309; --fd-accent-l-rgb: 180, 83, 9;    --fd-accent-d: #fbbf24; --fd-accent-d-rgb: 251, 191, 36; }
+[data-color-palette="rose"],
+[data-color-palette="pink"],
+[data-color-palette="red"]    { --fd-accent-l: #e11d48; --fd-accent-l-rgb: 225, 29, 72;   --fd-accent-d: #fb7185; --fd-accent-d-rgb: 251, 113, 133; }
+[data-color-palette="slate"]  { --fd-accent-l: #334155; --fd-accent-l-rgb: 51, 65, 85;    --fd-accent-d: #cbd5e1; --fd-accent-d-rgb: 203, 213, 225; }
+[data-color-palette="custom"] {
+    --fd-accent-l: var(--custom-primary, #4f46e5);
+    --fd-accent-l-rgb: var(--custom-primary-rgb, 79, 70, 229);
+    --fd-accent-d: var(--custom-primary, #818cf8);
+    --fd-accent-d-rgb: var(--custom-primary-rgb, 129, 140, 248);
+}
+
+/* Tinted pairs for each status colour. Declared here, after both themes, because a
+   var() inside a custom property resolves where it is declared: they must see the
+   light or dark value of the colour they mix. */
+:root, [data-theme] {
+    --fd-success-subtle: rgba(var(--fd-success-rgb), .1);  --fd-success-border: rgba(var(--fd-success-rgb), .25);
+    --fd-warning-subtle: rgba(var(--fd-warning-rgb), .12); --fd-warning-border: rgba(var(--fd-warning-rgb), .28);
+    --fd-danger-subtle: rgba(var(--fd-danger-rgb), .1);    --fd-danger-border: rgba(var(--fd-danger-rgb), .25);
+    --fd-info-subtle: rgba(var(--fd-info-rgb), .1);        --fd-info-border: rgba(var(--fd-info-rgb), .25);
+    --fd-success-text: color-mix(in oklab, var(--fd-success) 80%, var(--fd-text-strong));
+    --fd-warning-text: color-mix(in oklab, var(--fd-warning) 80%, var(--fd-text-strong));
+    --fd-danger-text: color-mix(in oklab, var(--fd-danger) 80%, var(--fd-text-strong));
+    --fd-info-text: color-mix(in oklab, var(--fd-info) 80%, var(--fd-text-strong));
+
+    /* Short names some older views still read */
+    --primary: var(--fd-accent);
+    --primary-rgb: var(--fd-accent-rgb);
+    --success: var(--fd-success);
+    --warning: var(--fd-warning);
+    --danger: var(--fd-danger);
+    --info: var(--fd-info);
+    --white: #fff;
+    --body-bg: var(--fd-canvas);
+    --body-color: var(--fd-text);
+    --gray-100: var(--fd-subtle);
+    --gray-200: var(--fd-subtle);
+    --gray-300: var(--fd-border);
+    --gray-500: var(--fd-muted);
+    --gray-600: var(--fd-muted);
+    --gray-800: var(--fd-text-strong);
+}
+
+/* Roomier gutters on large screens, tighter on phones */
+@media (min-width: 1400px) { :root, [data-theme] { --fd-gutter: 2rem; } }
+@media (max-width: 575.98px) { :root, [data-theme] { --fd-gutter: 1rem; --fd-card-pad: 1rem; } }
+
+/* Presets. They come last so they win over the defaults above at the same specificity. */
+[data-width="boxed"] { --fd-content-max: 100rem; }
+
+[data-density="compact"] {
+    --fd-control-h: 2rem;
+    --fd-control-h-sm: 1.75rem;
+    --fd-field-y: .3125rem;
+    --fd-cell-y: .4375rem;
+    --fd-card-pad: 1rem;
+    --fd-gutter: 1.25rem;
+}
+
+[data-radius="sharp"] { --fd-radius-sm: .125rem; --fd-radius: .25rem; --fd-radius-lg: .375rem; }
+[data-radius="soft"] { --fd-radius-sm: .625rem; --fd-radius: .875rem; --fd-radius-lg: 1.25rem; }

@@ -39,6 +39,27 @@ abstract class ChartComposer
     }
 
     /**
+     * The same window one period earlier (the 14 days before the last 14), for the
+     * "compare to previous period" line, or null when the viewer may not see the
+     * chart or this composer does not support comparing.
+     *
+     * @return array<string, int>|null
+     */
+    final public function previousSeries(int $days): ?array
+    {
+        if (! auth()->user()?->canAny($this->permissions())) {
+            return null;
+        }
+
+        $previous = $this->cache->remember(
+            'chart:'.$this->key().':'.$days.':previous',
+            fn (): array => $this->buildPrevious($days) ?? [],
+        );
+
+        return $previous === [] ? null : $previous;
+    }
+
+    /**
      * What the chart counts, shown as the card's title.
      */
     abstract public function label(int $days): string;
@@ -59,4 +80,15 @@ abstract class ChartComposer
      * @return array<string, int> one entry per day, zeros included
      */
     abstract protected function build(int $days): array;
+
+    /**
+     * The window before the one build() draws, in the same shape. Override it to let
+     * the dashboard compare periods; the default is "not supported".
+     *
+     * @return array<string, int>|null
+     */
+    protected function buildPrevious(int $days): ?array
+    {
+        return null;
+    }
 }

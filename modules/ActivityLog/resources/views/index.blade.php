@@ -6,22 +6,22 @@
 
 @section('content')
 <x-search-card>
-    <div class="col-md-2 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-2">
         <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('activitylog::activitylog.index.search_placeholder') }}" />
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-2">
         <x-form.input name="date_from" label="{{ __('activitylog::activitylog.index.date_from') }}" type="date" :value="request('date_from')" />
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-2">
         <x-form.input name="date_to" label="{{ __('activitylog::activitylog.index.date_to') }}" type="date" :value="request('date_to')" />
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-2">
         <x-form.select class="select" name="event" label="{{ __('activitylog::activitylog.index.event') }}" :options="['' => __('activitylog::activitylog.index.all_events')] + array_combine($eventTypes, array_map('ucfirst', $eventTypes))" :selected="request('event')" data-placeholder="{{ __('activitylog::activitylog.index.all_events') }}" />
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-2">
         <x-form.select class="select" name="auditable_type" label="{{ __('activitylog::activitylog.index.entity') }}" :options="['' => __('activitylog::activitylog.index.all_entities')] + array_combine($auditableTypes, array_map(fn($t) => ActivityLogHelper::getModelName($t), $auditableTypes))" :selected="request('auditable_type')" data-placeholder="{{ __('activitylog::activitylog.index.all_entities') }}" />
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-2">
         <x-form.select class="select" name="user_id" label="{{ __('activitylog::activitylog.index.action_by') }}" :options="['' => __('activitylog::activitylog.index.all_users')] + $users->mapWithKeys(fn($u) => [$u->id => $u->name])->toArray()" :selected="request('user_id')" data-placeholder="{{ __('activitylog::activitylog.index.all_users') }}" />
     </div>
 </x-search-card>
@@ -90,16 +90,16 @@
 
             {{-- Event + Model --}}
             <td>
-                <span class="badge bg-{{ $badgeColor }} mb-1">{{ ActivityLogHelper::titleCase($audit->event) }}</span>
-                <div class="fs-sm fw-semibold text-strong">{{ ActivityLogHelper::titleCase($model) }}</div>
+                <span class="badge badge-{{ $badgeColor }} mb-1">{{ ActivityLogHelper::titleCase($audit->event) }}</span>
+                <div class="text-sm font-semibold text-strong">{{ ActivityLogHelper::titleCase($model) }}</div>
                 {{-- A setting is identified by its key, whether the type is stored as a morph alias or a class --}}
                 @if ($audit->auditable?->getAttribute('key'))
-                <div class="fs-sm text-muted">{{ $audit->auditable->key }}</div>
+                <div class="text-sm text-muted">{{ $audit->auditable->key }}</div>
                 @endif
             </td>
 
             {{-- Description --}}
-            <td class="w-sm">
+            <td class="w-50">
                 @php
                 $toStr = fn($v): string => match(true) {
                 is_null($v) => '—',
@@ -120,15 +120,15 @@
                 $nk = collect(is_array($sample) ? array_keys($sample) : [])
                 ->first(fn($k) => in_array($k, ['name','title','label','slug']), 'id');
                 @endphp
-                <div class="fs-sm mb-1">
+                <div class="text-sm mb-1">
                     <span class="fd-overline">{{ ActivityLogHelper::titleCase($relation) }}</span>
                     @if (!empty($added))
-                    <div class="text-truncate">
+                    <div class="truncate">
                         <i class="ph-plus-circle text-success me-1"></i>{{ implode(', ', array_map(fn($i) => is_array($i) ? ($i[$nk] ?? $i['id'] ?? '?') : $toStr($i), $added)) }}
                     </div>
                     @endif
                     @if (!empty($removed))
-                    <div class="text-truncate">
+                    <div class="truncate">
                         <i class="ph-minus-circle text-danger me-1"></i>{{ implode(', ', array_map(fn($i) => is_array($i) ? ($i[$nk] ?? $i['id'] ?? '?') : $toStr($i), $removed)) }}
                     </div>
                     @endif
@@ -141,7 +141,7 @@
                 $values = $isUpdated ? $modifiedData : ($audit->event === 'deleted' ? ($audit->old_values ?? []) : ($audit->new_values ?? []));
                 @endphp
                 @forelse ($values as $key => $value)
-                <div class="text-truncate fs-sm">
+                <div class="truncate text-sm">
                     <strong class="text-body">{{ ActivityLogHelper::titleCase($key) }}:</strong>
                     @if ($isUpdated && is_array($value) && array_key_exists('old', $value) && array_key_exists('new', $value))
                     <span class="text-danger">{{ Str::limit($toStr($value['old']), 20) }}</span>
@@ -152,7 +152,7 @@
                     @endif
                 </div>
                 @empty
-                <span class="text-muted fst-italic fs-xs">—</span>
+                <span class="text-muted italic text-xs">—</span>
                 @endforelse
                 @endif
             </td>
@@ -163,28 +163,28 @@
                 @if ($audit->user)
                 @can('view', $audit->user)
                 <a href="{{ route('admin.users.show', $audit->user_id) }}"
-                    class="d-flex align-items-center gap-2 text-decoration-none user-link"
+                    class="flex items-center gap-2 no-underline user-link"
                     title="{{ __('activitylog::activitylog.index.view_user_profile_tooltip') }}">
                     <img src="{{ $audit->user->image }}"
                         alt="{{ $audit->user->name }}"
                         class="fd-avatar">
                     <span>
-                        <span class="d-block fw-semibold text-body lh-sm fs-sm">
+                        <span class="block font-semibold text-body leading-snug text-sm">
                             {{ $audit->user->name }}
                         </span>
                         @if ($audit->user->roles->isNotEmpty())
-                        <span class="badge bg-body-tertiary text-muted border fs-xs">
+                        <span class="badge badge-secondary text-muted border text-xs">
                             {{ $audit->user->roles->first()->name }}
                         </span>
                         @endif
                     </span>
                 </a>
                 @else
-                <div class="d-flex align-items-center gap-2">
+                <div class="flex items-center gap-2">
                     <img src="{{ $audit->user->image }}"
                         alt="{{ $audit->user->name }}"
                         class="fd-avatar">
-                    <span class="fw-semibold fs-sm">{{ $audit->user->name }}</span>
+                    <span class="font-semibold text-sm">{{ $audit->user->name }}</span>
                 </div>
                 @endcan
                 @else
@@ -198,7 +198,7 @@
                 </span>
                 @endif
                 @if ($impersonatedId = ActivityLogHelper::impersonatedUserId($audit->tags))
-                <span class="badge bg-warning-subtle text-warning border border-warning-subtle fs-xs mt-1"
+                <span class="badge bg-warning-subtle text-warning border border-warning-subtle text-xs mt-1"
                     title="{{ __('activitylog::activitylog.index.impersonating_title') }}">
                     <i class="ph-user-switch"></i>{{ __('activitylog::activitylog.index.as_user', ['name' => ($impersonatedUsers ?? collect())[$impersonatedId] ?? __('activitylog::activitylog.index.user_number', ['id' => $impersonatedId])]) }}
                 </span>
@@ -207,7 +207,7 @@
 
             {{-- IP --}}
             <td>
-                <a href="#" class="badge bg-body-tertiary text-muted border font-monospace fs-xs track-ip">
+                <a href="#" class="badge badge-secondary text-muted border font-mono text-xs track-ip">
                     {{ $auditMetaData['audit_ip_address'] }}
                 </a>
             </td>
@@ -218,7 +218,7 @@
             </td>
 
             {{-- Time --}}
-            <td class="text-nowrap">
+            <td class="whitespace-nowrap">
                 <span class="small text-muted" title="{{ $audit->created_at->format(config('foundation.formats.datetime')) }}">
                     {{ $audit->created_at->diffForHumans() }}
                 </span>
@@ -254,8 +254,8 @@
 </x-table-view-pagination>
 
 <x-modal id="track-ip-modal" title="{{ __('activitylog::activitylog.index.ip_information') }}">
-    <div class="row">
-        <div class="col-md-12" id="ip-details"></div>
+    <div class="grid grid-cols-12 gap-x-6">
+        <div class="col-span-12 md:col-span-12" id="ip-details"></div>
     </div>
 </x-modal>
 @endsection

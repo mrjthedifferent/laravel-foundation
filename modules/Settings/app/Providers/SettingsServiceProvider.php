@@ -15,6 +15,7 @@ use Modules\Settings\Services\MailerSecretCipher;
 use Modules\Settings\Services\MicrosoftOAuthTokenService;
 use Modules\Settings\Support\EloquentSettingsRepository;
 use Modules\Settings\Support\SettingsConfigApplier;
+use Modules\Settings\View\Composers\SettingsQuickActions;
 use Modules\Settings\View\Composers\SettingsWidgetComposer;
 use Mrj\Foundation\Contracts\SettingsRepository;
 use Mrj\Foundation\Events\TenancyContextChanged;
@@ -44,6 +45,10 @@ class SettingsServiceProvider extends ModuleServiceProvider
 
     protected array $policies = [
         Setting::class => SettingPolicy::class,
+    ];
+
+    protected array $dashboardActions = [
+        SettingsQuickActions::class,
     ];
 
     protected array $composers = [

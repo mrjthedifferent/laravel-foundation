@@ -25,9 +25,9 @@ function initSwalHelpers() {
             buttonsStyling: false,
             customClass: { popup: `fd-toast toast-${tone}` },
             html: `<i class="${toastIcons[tone]} fd-toast-icon is-${tone}"></i>
-                <span class="min-width-0">
+                <span class="min-w-0">
                     <span class="fd-toast-title">${escapeHtml(title || '')}</span>
-                    ${text ? `<span class="fd-toast-text d-block">${escapeHtml(text)}</span>` : ''}
+                    ${text ? `<span class="fd-toast-text block">${escapeHtml(text)}</span>` : ''}
                 </span>`,
         });
     };
@@ -178,8 +178,8 @@ function initFormPost() {
                         const err = json.errors[key].join(' ');
                         const inputEl = $(`${formSelector} input[name="${key}"]`);
                         const classEl = $(`.${key}`);
-                        inputEl.addClass('is-invalid').after(`<label class="custom-error-p error invalid-feedback d-block">${err}</label>`);
-                        classEl.addClass('is-invalid').append(`<small class="custom-error-p text-danger d-block">${err}</small>`);
+                        inputEl.addClass('is-invalid').after(`<label class="custom-error-p error invalid-feedback block">${err}</label>`);
+                        classEl.addClass('is-invalid').append(`<small class="custom-error-p text-danger block">${err}</small>`);
                     });
                 }
             },

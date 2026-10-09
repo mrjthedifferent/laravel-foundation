@@ -6,24 +6,24 @@
 
 @section('content')
 <x-search-card>
-    <div class="col-md-6 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-6">
         <x-form.input name="name" label="{{ __('rolepermission::rolepermission.manage_permissions.permission_name_label') }}" :value="request('name')" placeholder="{{ __('rolepermission::rolepermission.manage_permissions.search_placeholder') }}" />
     </div>
-    <div class="col-md-6 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-6">
         <x-form.select class="select" name="module" label="{{ __('rolepermission::rolepermission.manage_permissions.module_label') }}" :options="['' => __('rolepermission::rolepermission.manage_permissions.all_modules')] + $modules->mapWithKeys(fn ($m) => [$m => display_label($m)])->all()" :selected="request('module')" data-placeholder="{{ __('rolepermission::rolepermission.manage_permissions.all_modules') }}" />
     </div>
 </x-search-card>
 
 <x-table-view-pagination title="{{ __('rolepermission::rolepermission.manage_permissions.title') }}" :data="$permissions" empty-icon="ph-shield-slash" empty-message="{{ __('rolepermission::rolepermission.manage_permissions.empty') }}">
     <x-slot name="actions">
-        <x-table-action id="bulk-delete-btn" class="btn-danger btn-sm d-none" icon="ph-trash" title="{{ __('rolepermission::rolepermission.manage_permissions.delete_selected') }}" />
-        <x-table-action class="btn-primary btn-sm" icon="ph-plus" title="{{ __('rolepermission::rolepermission.manage_permissions.create_permission') }}" data-bs-toggle="modal" data-bs-target="#createPermissionModal" />
+        <x-table-action id="bulk-delete-btn" class="btn-danger btn-sm hidden" icon="ph-trash" title="{{ __('rolepermission::rolepermission.manage_permissions.delete_selected') }}" />
+        <x-table-action class="btn-primary btn-sm" icon="ph-plus" title="{{ __('rolepermission::rolepermission.manage_permissions.create_permission') }}" data-fd-toggle="modal" data-fd-target="#createPermissionModal" />
         <x-table-action :href="route('admin.permission.sync')" class="btn-success btn-sm swal-post" icon="ph-eject" title="{{ __('rolepermission::rolepermission.manage_permissions.sync_permissions') }}" :data-text="__('rolepermission::rolepermission.manage_permissions.sync_permissions_confirm')" />
     </x-slot>
 
     <thead>
         <tr>
-            <th class="w-32px"><input type="checkbox" class="form-check-input" id="select-all"></th>
+            <th class="w-8"><input type="checkbox" class="form-check-input" id="select-all"></th>
             <th>{{ __('rolepermission::rolepermission.manage_permissions.module_label') }}</th>
             <th>{{ __('rolepermission::rolepermission.manage_permissions.permission_name_label') }}</th>
             <th>{{ __('foundation::foundation.common.description') }}</th>
@@ -37,11 +37,11 @@
             @foreach ($permissions as $permission)
             <tr>
                 <td><input type="checkbox" class="form-check-input permission-checkbox" name="permission_ids[]" value="{{ $permission->id }}"></td>
-                <td><span class="badge bg-secondary">{{ display_label($permission->module_name) }}</span></td>
-                <td class="fw-semibold fs-sm">{{ display_label($permission->name) }}</td>
-                <td class="text-muted fs-sm">{{ $permission->description ?: '—' }}</td>
+                <td><span class="badge badge-secondary">{{ display_label($permission->module_name) }}</span></td>
+                <td class="font-semibold text-sm">{{ display_label($permission->name) }}</td>
+                <td class="text-muted text-sm">{{ $permission->description ?: '—' }}</td>
                 <td>
-                    <span class="badge bg-info">{{ __('rolepermission::rolepermission.manage_permissions.roles_count', ['count' => $permission->roles_count]) }}</span>
+                    <span class="badge badge-info">{{ __('rolepermission::rolepermission.manage_permissions.roles_count', ['count' => $permission->roles_count]) }}</span>
                     @if ($permission->roles_count > 0)
                     <a href="#" class="show-roles ms-1" data-permission-id="{{ $permission->id }}" title="{{ __('rolepermission::rolepermission.manage_permissions.view_roles_title') }}">
                         <i class="ph-info text-muted"></i>
@@ -67,20 +67,20 @@
 <x-modal id="createPermissionModal" title="{{ __('rolepermission::rolepermission.manage_permissions.create_permission') }}">
     <form id="createPermissionForm" action="{{ route('admin.permission.store') }}" method="POST">
         @csrf
-        <div class="mb-3">
+        <div class="mb-4">
             <x-form.select class="select" name="module_name" id="module_name" label="{{ __('rolepermission::rolepermission.manage_permissions.module_name_label') }}" required :options="['' => __('rolepermission::rolepermission.manage_permissions.select_module')] + $modules->mapWithKeys(fn ($m) => [$m => display_label($m)])->all() + ['new' => __('rolepermission::rolepermission.manage_permissions.create_new_module')]" :selected="null" />
         </div>
-        <div class="mb-3 d-none" id="new-module-container">
+        <div class="mb-4 hidden" id="new-module-container">
             <x-form.input name="new_module_name" id="new_module_name" label="{{ __('rolepermission::rolepermission.manage_permissions.new_module_name_label') }}" />
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <x-form.input name="permission_name" id="permission_name" label="{{ __('rolepermission::rolepermission.manage_permissions.permission_name_label') }}" required />
         </div>
-        <div class="mb-3">
+        <div class="mb-4">
             <x-form.textarea name="description" label="{{ __('rolepermission::rolepermission.manage_permissions.description_optional_label') }}" :rows="2" />
         </div>
         <x-slot name="footer">
-            <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
+            <button type="button" class="btn btn-light" data-fd-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
             <button type="submit" form="createPermissionForm" class="btn btn-primary">{{ __('foundation::foundation.common.create') }}</button>
         </x-slot>
     </form>
@@ -89,12 +89,12 @@
 {{-- Permission Roles Modal --}}
 <x-modal id="permissionRolesModal" title="{{ __('rolepermission::rolepermission.manage_permissions.roles_using_permission_title') }}" size="sm">
     <div class="permission-roles-list">
-        <div class="text-center py-3">
+        <div class="text-center py-4">
             <div class="spinner-border spinner-border-sm"></div>
         </div>
     </div>
     <x-slot name="footer">
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('foundation::foundation.common.close') }}</button>
+        <button type="button" class="btn btn-light" data-fd-dismiss="modal">{{ __('foundation::foundation.common.close') }}</button>
     </x-slot>
 </x-modal>
 @endsection
@@ -119,7 +119,7 @@
         });
 
         function toggleBulkDeleteButton() {
-            $("#bulk-delete-btn").toggleClass('d-none', $(".permission-checkbox:checked").length === 0);
+            $("#bulk-delete-btn").toggleClass('hidden', $(".permission-checkbox:checked").length === 0);
         }
         $("#bulk-delete-btn").click(function(e) {
             e.preventDefault();
@@ -133,7 +133,7 @@
             });
         });
         $("#module_name").change(function() {
-            $("#new-module-container").toggleClass('d-none', $(this).val() !== 'new');
+            $("#new-module-container").toggleClass('hidden', $(this).val() !== 'new');
         });
         $(".show-roles").click(function(e) {
             e.preventDefault();
@@ -145,9 +145,9 @@
                     const roles = res.data && res.data.roles ? res.data.roles : res.roles;
                     let html = '<ul class="list-group list-group-flush">';
                     if (roles && roles.length) roles.forEach(r => {
-                        html += `<li class="list-group-item py-1 fs-sm">${r.name}</li>`;
+                        html += `<li class="list-group-item py-1 text-sm">${r.name}</li>`;
                     });
-                    else html += `<li class="list-group-item py-1 text-muted fs-sm">${rolepermissionI18n.noRolesUsingPermission}</li>`;
+                    else html += `<li class="list-group-item py-1 text-muted text-sm">${rolepermissionI18n.noRolesUsingPermission}</li>`;
                     html += '</ul>';
                     $('.permission-roles-list').html(html);
                 },

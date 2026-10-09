@@ -4,8 +4,10 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
       dir="{{ $theme['direction'] }}"
-      data-bs-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}"
-      data-color-palette="{{ $theme['palette'] }}">
+      data-theme="{{ $theme['colorMode'] === 'dark' ? 'dark' : 'light' }}"
+      data-color-palette="{{ $theme['palette'] }}"
+      data-width="{{ $theme['contentWidth'] ?? 'fluid' }}" data-density="{{ $theme['density'] ?? 'comfortable' }}"
+      data-radius="{{ $theme['radius'] ?? 'rounded' }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

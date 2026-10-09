@@ -26,6 +26,17 @@ return [
         'none_yet' => 'No backup has run yet',
     ],
 
+    'health' => [
+        'label' => 'Backups',
+        'none' => 'No backup has run yet.',
+        'last' => 'Last backup :ago.',
+        'unreachable' => 'The backup disk could not be read.',
+    ],
+
+    'quick' => [
+        'backups' => 'Backups',
+    ],
+
     'widget' => [
         'title' => 'Backup',
         'view_all' => 'View all',

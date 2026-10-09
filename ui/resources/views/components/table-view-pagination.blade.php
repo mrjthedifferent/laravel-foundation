@@ -21,16 +21,16 @@ $totalCount = isset($data) ? ($isPaginator ? $data->total() : count($data)) : 0;
     <div class="card-header {{ isset($tabs) ? 'pb-0' : '' }}">
         <h2 class="card-title">{{ $title }}</h2>
         @if($hasRows)
-        <span class="badge bg-secondary-subtle text-secondary-emphasis fw-normal">{{ number_format($totalCount) }}</span>
+        <span class="badge badge-secondary text-muted font-normal">{{ number_format($totalCount) }}</span>
         @endif
 
         @isset($tabs)
-            <ul class="nav nav-tabs card-header-tabs mb-0">
+            <ul class="nav nav-tabs mb-0">
                 {{ $tabs }}
             </ul>
         @endisset
 
-        <div class="d-flex align-items-center gap-2 flex-wrap ms-auto">
+        <div class="flex items-center gap-2 flex-wrap ms-auto">
             @isset($actions)
             {{ $actions }}
             @endisset
@@ -44,7 +44,7 @@ $totalCount = isset($data) ? ($isPaginator ? $data->total() : count($data)) : 0;
     <div class="card-body p-0">
         @if($hasRows)
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover table-stack align-middle mb-0">
                 {{ $slot }}
             </table>
         </div>
@@ -56,11 +56,11 @@ $totalCount = isset($data) ? ($isPaginator ? $data->total() : count($data)) : 0;
                 {{ __('foundation::foundation.table.showing', ['first' => $data->firstItem(), 'last' => $data->lastItem(), 'total' => number_format($data->total())]) }}
             </span>
 
-            <div class="d-flex align-items-center gap-3 flex-wrap ms-auto">
+            <div class="flex items-center gap-4 flex-wrap ms-auto">
                 {{-- Navigation control, not a form field: no name and no <form> wrapper, so an
                      enclosing form (e.g. a bulk-action POST) can never capture or submit it. --}}
-                <div class="d-flex align-items-center gap-2">
-                    <label class="mb-0 text-nowrap">{{ __('foundation::foundation.table.per_page') }}</label>
+                <div class="flex items-center gap-2">
+                    <label class="mb-0 whitespace-nowrap">{{ __('foundation::foundation.table.per_page') }}</label>
                     <select class="form-select form-select-sm select js-per-page">
                         @foreach(getParPagePaginate() as $size => $label)
                             <option value="{{ $size }}" @selected((int) $size === perPage())>{{ $label }}</option>
@@ -73,13 +73,11 @@ $totalCount = isset($data) ? ($isPaginator ? $data->total() : count($data)) : 0;
         </div>
         @endif
         @else
-        <div class="fd-empty">
-            <span class="fd-empty-icon"><i class="{{ $emptyIcon }}"></i></span>
-            <p class="fd-empty-title">{{ $emptyMessage }}</p>
+        <x-empty-state :icon="$emptyIcon" :title="$emptyMessage">
             @isset($emptyAction)
                 {{ $emptyAction }}
             @endisset
-        </div>
+        </x-empty-state>
         @endif
     </div>
 </div>

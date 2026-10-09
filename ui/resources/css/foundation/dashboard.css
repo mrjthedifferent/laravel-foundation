@@ -1,0 +1,37 @@
+/* Dashboard: range control, stat cards with sparklines, chart summary and legend. */
+
+/* Segmented control: one choice out of a few, as links */
+.fd-segmented {
+    display: inline-flex; padding: 2px; gap: 2px;
+    background: var(--fd-subtle); border: 1px solid var(--fd-border); border-radius: var(--fd-radius);
+}
+.fd-segmented > a {
+    display: inline-flex; align-items: center; min-height: 1.875rem; padding: 0 .75rem;
+    border-radius: calc(var(--fd-radius) - 2px);
+    font-size: var(--fd-text-sm); font-weight: 500; color: var(--fd-muted); text-decoration: none !important;
+    transition: background-color var(--fd-duration) var(--fd-ease), color var(--fd-duration) var(--fd-ease);
+}
+.fd-segmented > a:hover { color: var(--fd-text-strong); }
+.fd-segmented > a.is-active { background: var(--fd-surface); color: var(--fd-text-strong); box-shadow: var(--fd-shadow-xs); }
+.btn.is-on { --btn-color: var(--fd-accent-text); --btn-bg: var(--fd-accent-subtle); --btn-border: var(--fd-accent-muted); --btn-hover-bg: var(--fd-accent-subtle); }
+
+/* Stat card: figure on the left, sparkline on the right */
+.fd-stat-body { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+.fd-spark-wrap {
+    --fd-tile: var(--fd-accent-rgb);
+    flex: 0 1 6.5rem; min-width: 4rem; color: rgb(var(--fd-tile));
+}
+.fd-spark-wrap.is-success { --fd-tile: var(--fd-success-rgb); }
+.fd-spark-wrap.is-warning { --fd-tile: var(--fd-warning-rgb); }
+.fd-spark-wrap.is-danger  { --fd-tile: var(--fd-danger-rgb); }
+.fd-spark-wrap.is-info    { --fd-tile: var(--fd-info-rgb); }
+.fd-spark-wrap.is-neutral { --fd-tile: 113, 113, 122; }
+.fd-spark { display: block; width: 100%; height: 2rem; overflow: visible; }
+
+/* Chart card summary */
+.fd-chart-total { display: flex; align-items: center; gap: .5rem; }
+.fd-chart-total-value { font-size: var(--fd-text-lg); font-weight: 600; letter-spacing: -.02em; color: var(--fd-text-strong); font-variant-numeric: tabular-nums; }
+.fd-chart-total-note { font-size: var(--fd-text-xs); color: var(--fd-muted); }
+.fd-chart-legend { display: flex; align-items: center; gap: .5rem; margin: .75rem 0 0; font-size: var(--fd-text-xs); color: var(--fd-muted); }
+.fd-chart-legend > span { display: inline-block; width: 1rem; height: 0; border-top: 2px solid var(--fd-accent); }
+.fd-chart-legend > span.is-previous { margin-inline-start: .75rem; border-top: 2px dashed var(--fd-faint); }

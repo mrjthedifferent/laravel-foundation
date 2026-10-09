@@ -1,5 +1,5 @@
 {{--
-    The package's own paginator: Bootstrap 5 markup without the "Showing x to y
+    The package's own paginator: Pagination markup without the "Showing x to y
     of z results" summary, which <x-table-view-pagination> already renders beside
     it. Owning this view also means Laravel renaming its built-in pagination
     views cannot change how a project's tables look.
@@ -23,15 +23,15 @@
             {{-- Numbers (hidden on the narrowest screens, where prev/next is enough) --}}
             @foreach ($elements as $element)
                 @if (is_string($element))
-                    <li class="page-item disabled d-none d-sm-block" aria-disabled="true"><span class="page-link">{{ $element }}</span></li>
+                    <li class="page-item disabled hidden sm:block" aria-disabled="true"><span class="page-link">{{ $element }}</span></li>
                 @endif
 
                 @if (is_array($element))
                     @foreach ($element as $page => $url)
                         @if ($page == $paginator->currentPage())
-                            <li class="page-item active d-none d-sm-block" aria-current="page"><span class="page-link">{{ $page }}</span></li>
+                            <li class="page-item active hidden sm:block" aria-current="page"><span class="page-link">{{ $page }}</span></li>
                         @else
-                            <li class="page-item d-none d-sm-block"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                            <li class="page-item hidden sm:block"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
                         @endif
                     @endforeach
                 @endif

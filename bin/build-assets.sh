@@ -2,7 +2,8 @@
 #
 # Rebuilds the third-party files under ui/public/assets from npm, at the versions
 # pinned below. Run it to upgrade a library, then update THIRD-PARTY-NOTICES.md.
-# foundation.css, foundation.js and the images are hand-written and left alone.
+# foundation.js and the images are hand-written and left alone. foundation.css is compiled by
+# bin/build-css.sh (Tailwind), not copied from here.
 
 set -euo pipefail
 
@@ -14,15 +15,14 @@ N=$B/node_modules
 mkdir -p "$B"
 echo '{ "name": "foundation-assets", "private": true, "version": "1.0.0" }' > "$B/package.json"
 (cd "$B" && npm install --no-audit --no-fund --ignore-scripts \
-    bootstrap@5.3 jquery@3 select2@4.0.13 sweetalert2@11 quill@2 ace-builds@1 \
+    jquery@3 select2@4.0.13 sweetalert2@11 quill@2 ace-builds@1 \
     phosphor-icons@1.4.2 inter-ui@4)
 
 rm -rf "$A/vendor" "$A/icons" "$A/fonts"
 mkdir -p "$A/css" "$A/js" "$A"/vendor/{select2,sweetalert2,ace,quill} \
     "$A/icons/phosphor/fonts" "$A/fonts/inter"
 
-cp "$N"/bootstrap/dist/css/bootstrap.min.css "$N"/bootstrap/dist/css/bootstrap.rtl.min.css "$A/css/"
-cp "$N"/bootstrap/dist/js/bootstrap.bundle.min.js "$N"/jquery/dist/jquery.min.js "$A/js/"
+cp "$N"/jquery/dist/jquery.min.js "$A/js/"
 cp "$N"/select2/dist/js/select2.min.js "$N"/select2/dist/css/select2.min.css "$A/vendor/select2/"
 cp "$N"/sweetalert2/dist/sweetalert2.all.min.js "$A/vendor/sweetalert2/"
 cp "$N"/quill/dist/quill.js "$N"/quill/dist/quill.snow.css "$A/vendor/quill/"

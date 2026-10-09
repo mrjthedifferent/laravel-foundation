@@ -5,13 +5,13 @@
 
 @section('content')
 <x-search-card>
-    <div class="col-md-4 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-4">
         <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('errorreport::errorreport.index.search_placeholder') }}" />
     </div>
-    <div class="col-md-4 mb-2">
+    <div class="col-span-12 mb-2 md:col-span-4">
         <x-form.input name="exception_class" label="{{ __('errorreport::errorreport.index.exception_label') }}" :value="request('exception_class')" placeholder="{{ __('errorreport::errorreport.index.exception_placeholder') }}" />
     </div>
-     <div class="col-md-4 mb-2">
+     <div class="col-span-12 mb-2 md:col-span-4">
         <x-form.select name="resolved" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('errorreport::errorreport.index.status_all'), '0' => __('errorreport::errorreport.index.status_unresolved'), '1' => __('errorreport::errorreport.index.status_resolved')]" :selected="request('resolved')" />
     </div>
 </x-search-card>
@@ -34,18 +34,18 @@
         <tr>
             <td class="text-muted small">{{ $report->id }}</td>
             <td>
-                <span class="fw-semibold">{{ class_basename($report->exception_class) }}</span>
+                <span class="font-semibold">{{ class_basename($report->exception_class) }}</span>
             </td>
-            <td class="w-sm">
+            <td class="w-50">
                 <x-truncated-text :text="$report->message" :limit="60" />
             </td>
-            <td class="small font-monospace">
+            <td class="small font-mono">
                 {{ Str::limit(basename($report->file), 25) }}:{{ $report->line }}
             </td>
             <td>
-                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">{{ $report->occurrences }}</span>
+                <span class="badge badge-secondary text-muted border border-line">{{ $report->occurrences }}</span>
             </td>
-            <td class="text-nowrap small text-muted">
+            <td class="whitespace-nowrap small text-muted">
                 {{ $report->last_seen_at->diffForHumans() }}
             </td>
             <td>
@@ -64,7 +64,7 @@
                     @endcan
                     @can('Resolve Error Report')
                     @if (! $report->isResolved())
-                    <form action="{{ route('admin.error-reports.resolve', $report) }}" method="POST" class="d-inline">
+                    <form action="{{ route('admin.error-reports.resolve', $report) }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="dropdown-item">
                             <i class="ph-check-circle"></i> {{ __('errorreport::errorreport.index.mark_resolved') }}

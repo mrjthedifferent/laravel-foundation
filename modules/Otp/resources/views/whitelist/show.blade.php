@@ -28,8 +28,8 @@
         </x-slot>
     </x-page-header>
 
-    <div class="row g-3">
-        <div class="col-md-6">
+    <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-6">
             <x-form-section title="{{ __('otp::otp.whitelist_show.section_details') }}" icon="ph-identification-card">
                 <dl class="fd-dl">
                     <dt>{{ __('otp::otp.whitelist_index.col_id') }}</dt>
@@ -37,7 +37,7 @@
 
                     <dt>{{ __('otp::otp.whitelist_show.recipient_type_label') }}</dt>
                     <dd>
-                        <span class="badge {{ $whitelist->recipient_type->value === 'email' ? 'bg-info' : 'bg-warning' }}">
+                        <span class="badge {{ $whitelist->recipient_type->value === 'email' ? 'badge-info' : 'badge-warning' }}">
                             {{ $whitelist->recipient_type->label() }}
                         </span>
                     </dd>
@@ -46,7 +46,7 @@
                     <dd>{{ $whitelist->recipient }}</dd>
 
                     <dt>{{ __('otp::otp.whitelist_show.fixed_otp_label') }}</dt>
-                    <dd><code class="fs-sm">{{ $whitelist->fixed_otp }}</code></dd>
+                    <dd><code class="text-sm">{{ $whitelist->fixed_otp }}</code></dd>
 
                     <dt>{{ __('foundation::foundation.common.status') }}</dt>
                     <dd><x-status-badge :active="$whitelist->is_active" /></dd>
@@ -56,19 +56,19 @@
                 </dl>
             </x-form-section>
         </div>
-        <div class="col-md-6">
+        <div class="col-span-12 md:col-span-6">
             <x-form-section title="{{ __('otp::otp.whitelist_show.section_timestamps') }}" icon="ph-clock">
                 <dl class="fd-dl">
                     <dt>{{ __('foundation::foundation.common.created_at') }}</dt>
                     <dd>
                         {{ $whitelist->created_at->format('d M Y H:i') }}
-                        <div class="text-muted fs-xs">{{ $whitelist->created_at->diffForHumans() }}</div>
+                        <div class="text-muted text-xs">{{ $whitelist->created_at->diffForHumans() }}</div>
                     </dd>
 
                     <dt>{{ __('otp::otp.whitelist_show.last_updated_label') }}</dt>
                     <dd>
                         {{ $whitelist->updated_at->format('d M Y H:i') }}
-                        <div class="text-muted fs-xs">{{ $whitelist->updated_at->diffForHumans() }}</div>
+                        <div class="text-muted text-xs">{{ $whitelist->updated_at->diffForHumans() }}</div>
                     </dd>
                 </dl>
             </x-form-section>

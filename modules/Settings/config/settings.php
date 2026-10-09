@@ -735,4 +735,28 @@ return [
         'description' => 'Main sidebar display type',
         'is_visible' => false,
     ],
+    'theme_content_width' => [
+        'group' => 'Theme',
+        'value' => 'fluid',
+        'type' => 'select',
+        'options' => json_encode(['fluid' => 'Fluid (full width)', 'boxed' => 'Boxed (centered, max 1600px)']),
+        'description' => 'How wide pages grow on large screens',
+        'is_visible' => false,
+    ],
+    'theme_density' => [
+        'group' => 'Theme',
+        'value' => 'comfortable',
+        'type' => 'select',
+        'options' => json_encode(['comfortable' => 'Comfortable', 'compact' => 'Compact']),
+        'description' => 'Spacing of controls, tables and cards',
+        'is_visible' => false,
+    ],
+    'theme_radius' => [
+        'group' => 'Theme',
+        'value' => 'rounded',
+        'type' => 'select',
+        'options' => json_encode(['sharp' => 'Sharp', 'rounded' => 'Rounded', 'soft' => 'Soft']),
+        'description' => 'Corner radius of controls and cards',
+        'is_visible' => false,
+    ],
 ];

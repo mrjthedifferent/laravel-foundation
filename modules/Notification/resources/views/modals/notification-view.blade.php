@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h5 class="modal-title">{{ __('notification::notification.modal.title') }}</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('foundation::foundation.common.close') }}"></button>
+    <button type="button" class="btn-close" data-fd-dismiss="modal" aria-label="{{ __('foundation::foundation.common.close') }}"></button>
 </div>
 <div class="modal-body">
     @php
@@ -11,10 +11,10 @@
         };
     @endphp
 
-    <dl class="fd-dl mb-3">
+    <dl class="fd-dl mb-4">
         <dt>{{ __('notification::notification.modal.type_label') }}</dt>
         <dd>
-            <span class="badge bg-{{ $typeConfig['bg'] }}">
+            <span class="badge badge-{{ $typeConfig['bg'] }}">
                 <i class="ph {{ $typeConfig['icon'] }}"></i>{{ ucfirst($notification->type) }}
             </span>
         </dd>
@@ -35,9 +35,9 @@
         </dd>
     </dl>
 
-    <div class="mb-3">
+    <div class="mb-4">
         <div class="fd-overline mb-1">{{ __('notification::notification.modal.message_label') }}</div>
-        <h5 class="fw-semibold mb-1">{{ $notification->title }}</h5>
+        <h5 class="font-semibold mb-1">{{ $notification->title }}</h5>
         @if($notification->body)
             <p class="text-muted mb-2">{{ $notification->body }}</p>
         @endif
@@ -51,16 +51,16 @@
     @if(count($notification->data_payload) > 0)
         <details>
             <summary class="fd-overline cursor-pointer">{{ __('notification::notification.modal.additional_data') }}</summary>
-            <pre class="border rounded p-3 bg-body-tertiary font-monospace fs-xs mt-2 mb-0 fd-scroll-y overflow-auto">{{ json_encode($notification->data_payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
+            <pre class="border rounded-md p-4 bg-subtle font-mono text-xs mt-2 mb-0 fd-scroll-y overflow-auto">{{ json_encode($notification->data_payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
         </details>
     @endif
 </div>
 <div class="modal-footer">
-    <div class="d-flex w-100 justify-content-between">
+    <div class="flex w-full justify-between">
         <div>
             @if ($notification->read_at)
                 <form action="{{ route('admin.notification.mark-as-unread', $notification->id) }}" method="POST"
-                    class="d-inline">
+                    class="inline">
                     @csrf
                     @method('PATCH')
                     <button type="submit" class="btn btn-light btn-sm">
@@ -69,7 +69,7 @@
                 </form>
             @else
                 <form action="{{ route('admin.notification.mark-as-read', $notification->id) }}" method="POST"
-                    class="d-inline">
+                    class="inline">
                     @csrf
                     @method('PATCH')
                     <button type="submit" class="btn btn-light btn-sm">
@@ -84,7 +84,7 @@
                data-text="{{ __('notification::notification.modal.delete_confirm') }}">
                 <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
             </a>
-            <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">{{ __('foundation::foundation.common.close') }}</button>
+            <button type="button" class="btn btn-light btn-sm" data-fd-dismiss="modal">{{ __('foundation::foundation.common.close') }}</button>
         </div>
     </div>
 </div>
