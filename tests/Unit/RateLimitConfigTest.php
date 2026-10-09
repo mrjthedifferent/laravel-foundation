@@ -25,12 +25,4 @@ class RateLimitConfigTest extends TestCase
 
         $this->assertSame(11, $limits[1]->maxAttempts);
     }
-
-    public function test_defaults_match_the_previous_hard_coded_values(): void
-    {
-        $this->assertSame(30, config('foundation.rate_limits.auth_ip'));
-        $this->assertSame(120, config('foundation.rate_limits.api_user'));
-        $this->assertSame(30, config('foundation.rate_limits.api_guest'));
-        $this->assertSame(191, config('foundation.schema.string_length'));
-    }
 }

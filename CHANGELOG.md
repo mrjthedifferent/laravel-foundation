@@ -4,6 +4,11 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.13.1
+
+**Changed**
+- Removed a test that only asserted configuration constants.
+
 ## 1.13.0
 
 **Added**
