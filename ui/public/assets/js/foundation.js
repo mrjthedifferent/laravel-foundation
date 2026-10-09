@@ -172,18 +172,6 @@
         });
     }
 
-    // Remembers whether the index-page filter panel (#filter-collapse) is open.
-    function initFilterMemory() {
-        var filter = document.getElementById('filter-collapse');
-        if (!filter) { return; }
-
-        try {
-            if (localStorage.getItem('filter-collapse') === 'open') { filter.classList.add('show'); }
-            filter.addEventListener('fd:collapse-shown', function () { localStorage.setItem('filter-collapse', 'open'); });
-            filter.addEventListener('fd:collapse-hidden', function () { localStorage.setItem('filter-collapse', 'closed'); });
-        } catch (e) { /* storage blocked */ }
-    }
-
     // ------------------------------------------------------------------
     // Overlay components. Same data-attribute API the markup always used, under data-fd-*:
     //   data-fd-toggle="modal|offcanvas|dropdown|collapse|tab|tooltip|popover"
@@ -1065,7 +1053,6 @@
         initSidebar();
         initThemePanel();
         initSelects();
-        initFilterMemory();
         initFilterBars();
         initTableLabels();
         initUploads();
@@ -1084,7 +1071,6 @@
         dropdown: function (el) { return components.dropdown(el); },
         collapse: function (el) { return components.collapse(el); },
         tab: function (el) { return components.tab(el); },
-        initTooltips: function () { /* tooltips and popovers bind on demand */ },
         applyColorMode: applyColorMode,
         applyDirection: applyDirection
     };

@@ -75,6 +75,8 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 
 ### Available Shared Components
 
+Every component's props and slots: [`components-reference.md`](components-reference.md).
+
 | Component | Purpose |
 |---|---|
 | `<x-app-layout>` | Root page wrapper (use in `layouts/master.blade.php` only) |
@@ -85,7 +87,7 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 | `<x-table-view-pagination>` | Card + table + pagination + empty state for list pages |
 | `<x-table-actions>` / `<x-table-action>` | Action group for the table card header; overflow collapses into a menu |
 | `<x-table-export-dropdown>` / `<x-table-export-item>` | Export menu for the table's `$exports` slot |
-| `<x-stat-card label="" :value="" icon="">` | KPI tile (`.fd-stat`) for dashboards |
+| `<x-stat-card label="" :value="" icon="">` | KPI tile (`.fd-stat`) for dashboards; `:series` adds a sparkline |
 | `<x-status-badge :active="">` | Status dot + translated Active/Inactive label (`.fd-status`) |
 | `<x-dropdown-menu>` | Action dropdown in table rows |
 | `<x-dropdown-link :url="">` | Link item inside `x-dropdown-menu` |
@@ -210,7 +212,7 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
         </div>
     </x-form-section>
 
-    <div class="flex justify-between items-center">
+    <div class="fd-form-actions">
         <a href="{{ route('admin.things.index') }}" class="btn btn-light">
             <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
@@ -263,7 +265,7 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
         </div>
     </x-form-section>
 
-    <div class="flex justify-between items-center">
+    <div class="fd-form-actions">
         <a href="{{ route('admin.things.index') }}" class="btn btn-light">
             <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
@@ -296,7 +298,7 @@ The layouts, the shared `<x-...>` components and the error pages ship in the `mr
 
 **Authorization:** Gate all action buttons and links with `@can('Permission Name') ... @endcan`.
 
-**Status:** `<x-status-badge :active="$thing->is_active" />` — a `.fd-status` dot plus an already-translated label; don't hand-write badge markup for state. A label or count that isn't state is a soft badge: `bg-*-subtle` + `text-*-emphasis`.
+**Status:** `<x-status-badge :active="$thing->is_active" />` — a `.fd-status` dot plus an already-translated label; don't hand-write badge markup for state. A label or count that isn't state is a soft badge: `badge badge-primary|secondary|success|danger|warning|info|count`.
 
 **Styling:** No inline `style=` attributes, and never add rules to the package's `assets/css/foundation.css` — it is overwritten on update. Use Tailwind utilities, the `.fd-*` classes and the `--fd-*` tokens (see `ui-components.md`); project-wide CSS belongs in `resources/css/app.css`.
 

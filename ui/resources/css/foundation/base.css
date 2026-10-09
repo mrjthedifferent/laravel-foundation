@@ -65,7 +65,7 @@ a:hover { color: var(--fd-accent-hover); text-decoration: underline; text-underl
 ::selection { background: rgba(var(--fd-accent-rgb), .22); }
 :focus-visible { outline: none; box-shadow: var(--fd-ring); }
 hr { margin: 1rem 0; border: 0; border-top: 1px solid var(--fd-border); opacity: 1; }
-code, kbd, pre, samp, .font-monospace { font-family: var(--fd-mono); }
+code, kbd, pre, samp { font-family: var(--fd-mono); }
 pre { display: block; margin-top: 0; margin-bottom: 1rem; overflow: auto; font-size: .875em; }
 
 @media (prefers-reduced-motion: reduce) {

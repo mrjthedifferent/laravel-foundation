@@ -449,7 +449,6 @@ return [
         'palette_header' => 'Accent',
         'palette_subtitle' => 'One colour, used sparingly: active items, links and primary buttons',
         'custom_label' => 'Custom',
-        'custom_desc' => 'Pick any colour',
         'custom_primary_color_label' => 'Brand colour',
         'custom_color_hint' => 'Choose or type a hex colour, then save.',
         'direction_header' => 'Text direction',

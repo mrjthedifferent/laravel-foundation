@@ -70,7 +70,6 @@ return [
         'greeting_morning' => 'Good morning',
         'greeting_afternoon' => 'Good afternoon',
         'greeting_evening' => 'Good evening',
-        'last_days' => ':days days',
         'range' => 'Date range',
         'range_days' => ':days d',
         'compare' => 'Compare',
@@ -201,10 +200,7 @@ return [
     */
     'theme_config' => [
         'title' => 'Theme configuration',
-        'layout_badge' => 'Layout :layout',
         'sidebar_badge' => 'Sidebar: :color/:type',
-        'navbar_badge' => 'Navbar: :color',
-        'font_badge' => 'Font: :font',
         'color_mode' => 'Color mode',
         'session_override' => '(session override)',
         'light_theme' => 'Light theme',

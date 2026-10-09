@@ -1,29 +1,9 @@
 /* Helpers and small shared patterns (icon tile, avatar, status, empty state, stat card, feed). */
-.fs-base { font-size: var(--fd-text-base) !important; }
-.fs-sm { font-size: var(--fd-text-sm) !important; }
-.fs-xs { font-size: var(--fd-text-xs) !important; }
-.fs-lg { font-size: var(--fd-text-md) !important; }
 .cursor-pointer { cursor: pointer !important; }
 .text-strong { color: var(--fd-text-strong) !important; }
 .fd-scroll-y { max-height: 17.5rem; overflow-y: auto; }
 .fd-thumb { max-height: 6.25rem; max-width: 13.75rem; width: auto; object-fit: contain; }
-.min-width-0 { min-width: 0 !important; }
-.border-width-1 { border-width: 1px !important; }
-.border-transparent { border-color: transparent !important; }
-.border-bottom-white { border-bottom-color: var(--fd-border) !important; }
 .flex-1 { flex: 1 !important; }
-.w-32px { width: 2rem !important; }
-.w-40px { width: 2.5rem !important; }
-.w-48px { width: 3rem !important; }
-.h-24px { height: 1.5rem !important; }
-.h-32px { height: 2rem !important; }
-.h-40px { height: 2.5rem !important; }
-.h-48px { height: 3rem !important; }
-.w-sm { width: 12.5rem !important; }
-.translate-middle-top { transform: translate(25%, -25%) !important; }
-.zindex-1 { z-index: 1 !important; }
-@media (min-width: 768px) { .w-md-25 { width: 25% !important; } }
-@media (min-width: 992px) { .flex-lg-0 { flex: 0 0 auto !important; } .flex-lg-1 { flex: 1 !important; } }
 .custom-scrollbar { scrollbar-width: thin; scrollbar-color: var(--fd-border-strong) transparent; }
 
 .ph-sm { font-size: .875em; }
@@ -88,9 +68,6 @@
 .fd-status.is-danger::before  { background: var(--fd-danger);  box-shadow: 0 0 0 3px rgba(var(--fd-danger-rgb), .16); }
 .fd-status.is-info::before    { background: var(--fd-info);    box-shadow: 0 0 0 3px rgba(var(--fd-info-rgb), .16); }
 
-/* Dot badge on an avatar or icon */
-.status-indicator-container { position: relative; display: inline-flex; }
-.status-indicator { position: absolute; top: 0; inset-inline-end: 0; width: .625rem; height: .625rem; border-radius: 50%; border: 2px solid var(--fd-surface); }
 
 /* Empty state */
 .fd-empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: .375rem; padding: 3.5rem 1.5rem; }
@@ -111,7 +88,7 @@
 .fd-stat-value { font-size: var(--fd-text-2xl); font-weight: 600; letter-spacing: -.025em; line-height: 1; color: var(--fd-text-strong); font-variant-numeric: tabular-nums; }
 .fd-stat-foot { display: flex; align-items: center; gap: .5rem; font-size: var(--fd-text-sm); color: var(--fd-muted); }
 .fd-delta { display: inline-flex; align-items: center; gap: .125rem; font-weight: 600; font-size: var(--fd-text-xs); padding: .0625rem .375rem; border-radius: 999px; font-variant-numeric: tabular-nums; }
-/* A shade darker than Bootstrap's emphasis pair, which lands just under 4.5:1 at this size */
+/* A shade darker than the status text colours, which land just under 4.5:1 at this size */
 .fd-delta.is-up { color: color-mix(in srgb, var(--fd-success-text) 85%, #000); background: var(--fd-success-subtle); }
 .fd-delta.is-down { color: color-mix(in srgb, var(--fd-danger-text) 85%, #000); background: var(--fd-danger-subtle); }
 [data-theme="dark"] .fd-delta.is-up { color: var(--fd-success-text); }

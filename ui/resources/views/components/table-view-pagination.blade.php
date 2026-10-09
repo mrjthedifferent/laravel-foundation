@@ -3,6 +3,7 @@
 'data' => null,
 'emptyMessage' => null,
 'emptyIcon' => 'ph-tray',
+'stack' => true,   // false keeps a wide table a table on phones (it scrolls sideways)
 ])
 
 @php
@@ -44,7 +45,7 @@ $totalCount = isset($data) ? ($isPaginator ? $data->total() : count($data)) : 0;
     <div class="card-body p-0">
         @if($hasRows)
         <div class="table-responsive">
-            <table class="table table-hover table-stack align-middle mb-0">
+            <table class="table table-hover align-middle mb-0 {{ $stack ? 'table-stack' : '' }}">
                 {{ $slot }}
             </table>
         </div>

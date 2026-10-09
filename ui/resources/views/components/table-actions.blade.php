@@ -49,7 +49,7 @@
                              .css({'display': 'block', 'width': '100%'});
                         
                         // Remove tooltip popup since it's in a menu
-                        $item.removeAttr('data-fd-popup');
+                        $item.removeAttr('data-fd-toggle');
                         
                         // Add text if it only had an icon
                         if ($item.find('i').length && !$item.text().trim()) {

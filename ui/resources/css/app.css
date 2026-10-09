@@ -1,7 +1,8 @@
 /* App styles — add custom CSS here or import additional stylesheets.
  *
- * The admin theme lives in public/assets/css/foundation.css, which is served directly
- * (no build step). Anything that styles the shared UI belongs there, not here. */
+ * The admin theme is public/assets/css/foundation.css, compiled inside the package and
+ * served as is (no build step in the project). Write plain CSS here with the --fd-* tokens
+ * (var(--fd-accent), var(--fd-border), var(--fd-radius) …); see the theming guideline. */
 
 .online-pulse {
     animation: online-pulse 2s ease-in-out infinite;

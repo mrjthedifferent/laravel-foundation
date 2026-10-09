@@ -15,7 +15,7 @@
 /* Third-party widgets load their own unlayered CSS, so the overrides must be unlayered too. */
 @import "./foundation/vendor.css";
 
-/* Bootstrap's breakpoints, so the responsive prefixes (sm: md: lg: xl: 2xl:) keep the
+/* The breakpoints the layouts were designed for, so the responsive prefixes (sm: md: lg: xl: 2xl:) keep the
    widths the layouts were designed for. */
 @theme {
     --breakpoint-sm: 36rem;

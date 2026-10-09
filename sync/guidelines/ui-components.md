@@ -4,7 +4,9 @@
 > **Icons:** Phosphor (`ph-*`) — the only icon set · **Fonts:** Inter  
 > **JS:** jQuery · Alpine · Select2 · SweetAlert2
 
-See [`views.md`](views.md) for full index/create/edit page templates. This file covers the component API, CSS patterns, and conventions that apply across all views.
+Start at [`foundation-overview.md`](foundation-overview.md). Every component with its props and slots is in [`components-reference.md`](components-reference.md); templates for full
+pages are in [`views.md`](views.md); behaviour (`data-fd-*`, confirmations, toasts) in [`frontend-js.md`](frontend-js.md); tokens, utilities, theme settings in
+[`theming.md`](theming.md); the dashboard in [`dashboard.md`](dashboard.md). This file covers the conventions that apply across all views.
 
 ---
 
@@ -36,12 +38,13 @@ There is **one** layout, `<x-app-layout>` — no layout variants to choose betwe
 
 A page never writes shell markup: no navbar, no sidebar, no footer, no `<html>`/`<body>`. It fills the content slot and declares its sidebar entry in `config/menu.php` (see `views.md`).
 
-Because only `.content-inner` scrolls, `position: sticky` inside the content works against that column — `.sticky-top` on a save bar sticks to the top of the content area, not the viewport.
+Because only `.content-inner` scrolls, `position: sticky` inside the content works against that column — `sticky top-0 z-10` on a save bar sticks to the top of the content area, not the viewport.
 
-**Theme options** (the floating gear opens the quick panel; Settings → Theme has the full page) were curated down to five:
+Below the `lg` breakpoint (992px) the footer and the floating gear give way to a **bottom navigation bar** (Dashboard, three areas, Menu), and the sidebar becomes a drawer.
 
-| Option | Values |
-|---|---|
+**Theme options** (the floating gear opens the quick panel; Settings → Theme has the full page): colour mode, direction, accent, sidebar colour and type, **page width** (fluid or boxed), **density** (comfortable or compact) and **corners** (sharp, rounded, soft). They change the `--fd-*` tokens for every page; see [`theming.md`](theming.md). There is no layout picker, no navbar colour and no font picker — the type is Inter everywhere. Don't build UI or settings that assume any of those exist.
+
+---|---|
 | Colour mode | `light` · `dark` · `auto` |
 | Direction | `ltr` · `rtl` |
 | Accent | `indigo` `blue` `violet` `teal` `green` `amber` `rose` `slate` · or `custom` + a hex |
@@ -94,6 +97,15 @@ These are the classes a view is expected to use. Everything else it needs is a T
 | `fd-choice` | A pickable card wrapping a radio/checkbox; add `is-selected` to the chosen one |
 | `fd-swatch` + `fd-swatch-dot` | A pickable colour pill; add `is-selected` to the chosen one |
 | `fd-scroll-y` | Caps a block at ~17.5 rem and scrolls it |
+| `fd-segmented` + `a.is-active` | A segmented control of links (the dashboard's range picker) |
+| `fd-chip` | A removable filter chip (built by the filter bar) |
+| `fd-drop` + `fd-drop-preview` / `-input` | The file drop zone. Rendered by `<x-form.file>` |
+| `fd-fields` (+ `fd-fields-3`, child `fd-fields-wide`) | Responsive field grid: 1 column on phones, 2 from tablet, 3 on wide screens |
+| `fd-form-layout` · `fd-form-nav` · `fd-form-sections` · `fd-identity` | A sectioned page with a left section nav (the profile) |
+| `fd-form-actions` | A sticky Cancel / Save bar at the foot of a long form |
+| `fd-skeleton` · `fd-skeleton-row` | Shimmering loading placeholders. Use `<x-skeleton>` |
+| `fd-actions` · `fd-health` · `fd-bars` · `fd-donut` · `fd-heat` | Dashboard card internals (quick actions, health list, bar list, donut, heatmap) |
+| `fd-bottomnav` | The phone bottom navigation (rendered by the layout) |
 | `text-strong` | The strongest text colour (`--fd-text-strong`), for a value that must out-weigh its label |
 
 ```blade
@@ -110,7 +122,7 @@ These are the classes a view is expected to use. Everything else it needs is a T
 <ul class="fd-feed">
     @foreach ($events as $event)
         <li>
-            <span class="badge badge-secondary text-secondary-emphasis">{{ $event->type }}</span>
+            <span class="badge badge-secondary">{{ $event->type }}</span>
             <span class="fd-feed-body truncate">{{ $event->title }}</span>
             <span class="fd-feed-meta">{{ $event->created_at->diffForHumans() }}</span>
         </li>
@@ -154,13 +166,15 @@ These are the classes a view is expected to use. Everything else it needs is a T
 
 ### Blade Components — Quick Reference
 
+Full props and slots for every component: [`components-reference.md`](components-reference.md).
+
 | Component | Tag | Purpose |
 |---|---|---|
 | App layout | `<x-app-layout>` | Root authenticated layout (used in module `master.blade.php` only) |
 | Module layout | `<x-module-layout route="" :label="">` | A module's `layouts/master.blade.php`, in one line |
-| Page header | `<x-page-header>` | `.fd-page-head`: icon tile + title + subtitle, `$actions` slot, optional back button |
+| Page header | `<x-page-header>` | Icon tile + title + subtitle, `$actions` and `$tabs` slots, optional back button |
 | Form section | `<x-form-section>` | Titled card grouping related form fields |
-| Search card | `<x-search-card>` | GET filter form with Reset (`btn-light`) + Filter (`btn-primary`) buttons |
+| Search card | `<x-search-card>` | Filter bar: search box + Filters button + chips + Reset/Filter, over a GET form |
 | Table view | `<x-table-view-pagination>` | Card + table + count badge + `.fd-table-foot` + `.fd-empty` state |
 | Stat card | `<x-stat-card>` | `.fd-stat` KPI tile: label, value, icon tile, trend, caption |
 | Status badge | `<x-status-badge :active="">` | `.fd-status` dot + translated Active/Inactive label |
@@ -171,6 +185,9 @@ These are the classes a view is expected to use. Everything else it needs is a T
 | Table action | `<x-table-action :href="" icon="" title="">` | One `btn-sm` action inside `<x-table-actions>` |
 | Export dropdown | `<x-table-export-dropdown>` / `<x-table-export-item>` | Export menu for the `$exports` slot |
 | Alert | `<x-alert type="" :dismissible="">` | Inline `alert` with a matching Phosphor icon |
+| Empty state | `<x-empty-state>` | Icon, title, text, next-step slot |
+| Skeleton | `<x-skeleton>` | Loading placeholder rows |
+| Charts | `<x-chart-area\|bar\|donut\|heatmap>`, `<x-sparkline>` | Inline SVG/HTML charts |
 | Primary button | `<x-primary-button>` | `btn btn-primary` submit button |
 | Secondary button | `<x-secondary-button>` | `btn btn-secondary` type=button |
 | Danger button | `<x-danger-button>` | `btn btn-danger` submit button |
@@ -183,7 +200,7 @@ These are the classes a view is expected to use. Everything else it needs is a T
 | Form input | `<x-form.input>` | Labeled text/email/number/date/password/hidden input, old-input + error handling built in |
 | Form select | `<x-form.select>` | Labeled `<select>`, single or `multiple`, unwraps enum values |
 | Form textarea | `<x-form.textarea>` | Labeled `<textarea>` |
-| Form file | `<x-form.file>` | Labeled file input |
+| Form file | `<x-form.file>` | Labeled drop zone with preview around a real file input |
 | Form checkbox | `<x-form.checkbox>` | `form-check` checkbox |
 | Form label | `<x-form.label>` | Standalone `form-label`, `required` prop adds the asterisk |
 
@@ -191,34 +208,19 @@ These are the classes a view is expected to use. Everything else it needs is a T
 
 ### `<x-page-header>`
 
-Renders `.fd-page-head`: the icon in a large tile, the title, the optional subtitle, then the actions and the back button on the trailing edge.
-
-Props:
-
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `title` | string | `''` | Page heading (`.fd-page-title`) |
-| `subtitle` | string\|null | `null` | Muted sub-line (`.fd-page-subtitle`) |
-| `icon` | string\|null | `null` | Phosphor icon class, e.g. `ph-users-four` — rendered in a `.fd-icon-tile-lg` |
-| `backUrl` | string\|null | `null` | Renders a `btn-light` back button when set |
-| `backLabel` | string\|null | `null` | Back button label; falls back to the translated "Back" |
-| `$actions` | slot | — | Buttons/badges before the back button |
+Heads every page except a list (a list's title sits in its table card). Props: `title`, `subtitle`, `icon` (Phosphor class, shown in a tile), `backUrl`, `backLabel`;
+slots: `actions` (buttons on the trailing edge; text inputs inside are 14rem wide) and `tabs` (a full-width row beneath).
 
 ```blade
-{{-- Index page --}}
-<x-page-header title="Users" subtitle="Manage system users" icon="ph-users-four" />
-
-{{-- Create/edit: context on the right, the submit button in the bottom row --}}
-<x-page-header :title="$user->name" icon="ph-pencil-simple"
-    :back-url="route('admin.users.index')" back-label="Back to List">
+<x-page-header title="Theme" subtitle="How the admin looks for everyone who signs in." icon="ph-paint-brush">
     <x-slot name="actions">
-        <span class="badge badge-primary">Admin</span>
-        <x-status-badge :active="$user->is_active" class="text-xs" />
+        <button type="submit" form="theme-form" class="btn btn-primary"><i class="ph-check"></i>Save theme settings</button>
     </x-slot>
 </x-page-header>
 ```
 
-> The `$actions` slot holds context — badges, status, an avatar, a secondary action. The submit button goes in the form's bottom row (see **Forms**), so the page's primary action sits at the end of the fields the user just filled in.
+The submit button of a create/edit form lives in the form's `fd-form-actions` bar (see **Forms**); the header's actions hold the page's other controls or, on a
+single long form, its Save button.
 
 ---
 
@@ -317,9 +319,10 @@ Slots:
 
 **Table CSS (applied automatically by the component):**
 ```html
-<table class="table table-hover align-middle mb-0">
+<table class="table table-hover align-middle mb-0 table-stack">
 ```
 - Header cells are sticky, small, muted and tinted — nothing to add to a `<th>`
+- On phones each row stacks into labelled cells (headings are copied to `data-label`; empty cells are hidden). Pass `:stack="false"` to keep a wide table scrolling sideways instead
 - Row padding and hairlines come from `.table`; add `table-xs` only when a table needs tighter rows
 - `table-nowrap` keeps a dense table on one line per row
 
@@ -346,26 +349,27 @@ $items = ItemQuery::make()
 
 ### `<x-search-card>`
 
-Wraps a GET form. The Reset (`btn-light`) and Filter (`btn-primary`) buttons are built in. Always place this above `<x-table-view-pagination>`.
+The filter bar. One slim row: the search box, a **Filters** button (with a count of active filters), Reset and Filter. The remaining fields open in a panel under the row, and every
+active filter shows as a removable chip. It wraps a GET form and keeps `per_page`. Always place it above `<x-table-view-pagination>`.
 
-Props: `:reset-route` (optional, overrides the auto-detected current route for the Reset button).  
-Slots: `$slot` for the filter columns, `$wide` for full-width filters that need their own row above them.
+Props: `:reset-route` (optional). Slots: default (the fields, as grid children) and `$wide` (full-width filters on their own row in the panel).
+**Name the free-text field `search`** — it is lifted into the bar. Every other field with a value becomes a chip (labelled from its `<label>`).
 
 ```blade
 <x-search-card>
-    <div class="col-span-12 mb-2 md:col-span-3">
+    <div class="col-span-12 md:col-span-3">
         <x-form.input name="search" label="Search" :value="request('search')" placeholder="Name, email…" />
     </div>
-    <div class="col-span-12 mb-2 md:col-span-2">
+    <div class="col-span-12 md:col-span-3">
         <x-form.select class="select" name="is_active" label="Status" :options="['' => 'All', '1' => 'Active', '0' => 'Inactive']" :selected="request('is_active')" data-placeholder="All" />
     </div>
-    <div class="col-span-12 mb-2 md:col-span-2">
+    <div class="col-span-12 md:col-span-3">
         <x-form.input name="date_from" label="From" type="date" :value="request('date_from')" />
     </div>
 </x-search-card>
 ```
 
-A filter form reads GET query params (`request($name)`), never `old()` — there's no validation to fail back from. `<x-form.input>`/`<x-form.select>` still work correctly here: with no flashed old input, `old($key, $value)` always falls through to the given `:value`.
+A filter form reads GET query params (`request($name)`), never `old()`. Without JavaScript all fields are simply shown.
 
 ---
 
@@ -455,16 +459,17 @@ Props:
 | `change` | `null` | Trend string, e.g. `+12%` — rendered as a `.fd-delta` pill |
 | `changeUp` | `true` | `true` = green ↗ / `false` = red ↘ |
 | `caption` | `null` | What the change is measured against, e.g. "vs last month" |
+| `series` | `null` | A list of integers (oldest first): draws a sparkline beside the number |
 
 ```blade
 <div class="grid grid-cols-12 gap-4 mb-4">
-    <div class="col-span-12 col-xl md:col-span-6">
+    <div class="col-span-12 md:col-span-6 xl:col-span-3">
         <x-stat-card label="Total Users" :value="number_format($totalUsers)"
             icon="ph-users-four" color="primary"
             :href="route('admin.users.index')"
             change="+5%" :change-up="true" caption="vs last month" />
     </div>
-    <div class="col-span-12 col-xl md:col-span-6">
+    <div class="col-span-12 md:col-span-6 xl:col-span-3">
         <x-stat-card label="Active Roles" :value="$activeRoles" icon="ph-shield" color="warning" />
     </div>
 </div>
@@ -482,104 +487,8 @@ For a module dashboard widget with several numbers in one card, use the classes 
 
 ### The dashboard
 
-The page has three bands: headline stats, a chart beside a recent-activity feed, then one
-widget card per module. A module contributes to any of them without editing the page, and each
-contribution is permission-gated and cached the same way — returning nothing when the viewer
-may not see it.
-
-**A headline stat** — a `StatComposer` listed in `$dashboardStats` on the module's provider:
-
-```php
-final class InvoiceStatComposer extends StatComposer
-{
-    public function priority(): int { return 50; }          // lower sorts first
-
-    protected function permissions(): array { return ['View Invoice']; }
-
-    protected function key(): string { return 'invoice'; }   // cached as stat:invoice
-
-    protected function build(): array                        // scalars and arrays only
-    {
-        return [[
-            'label' => __('invoice::invoice.stat.open'),
-            'value' => number_format(Invoice::query()->whereNull('paid_at')->count()),
-            'icon' => 'ph-receipt',
-            'color' => 'warning',                            // primary|success|warning|danger|info
-            'href' => route('admin.invoices.index'),
-            'caption' => __('invoice::invoice.stat.this_month'),
-        ]];
-    }
-}
-```
-
-**The chart** — a `ChartComposer` in `$dashboardCharts`, returning a day => count series. The
-registered composer with the lowest priority that the viewer may see is the one drawn:
-
-```php
-protected function build(int $days): array
-{
-    return app(DailySeries::class)->count(Invoice::query()->toBase(), 'created_at', $days);
-}
-```
-
-`DailySeries` groups by day in SQL on every supported driver and fills the gaps with zeros, so
-the chart always has one point per day.
-
-**The chart component** — `<x-chart-area>` draws any such series as inline SVG, themed by the
-accent, with a screen-reader summary. Nothing else is needed to plot a series:
-
-```blade
-<x-chart-area :series="$series" :label="__('invoice::invoice.chart.title')" />
-```
-
-**A widget card** can still be a `WidgetComposer` bound to the module's
-`partials/dashboard-widget.blade.php`. Keep out of it anything the headline stats already show.
-It joins the grid as it is, and viewers can move, resize and hide it.
-
-**A customizable widget** — a `DashboardWidget` listed in `$dashboardWidgets`. It says who may see it
-and builds plain data (scalars and arrays only); the base class checks the permission and caches
-the data. Return `null` from `data()` to show nothing, which takes the card off the page.
-
-```php
-final class OpenInvoicesWidget extends DashboardWidget
-{
-    public function key(): string { return 'open-invoices'; }      // stored in saved layouts: never change it
-    public function title(): string { return __('invoice::invoice.widget.open'); }
-    public function icon(): string { return 'ph-receipt'; }
-    public function width(): int { return 4; }                    // 3, 4, 6, 8 or 12 of 12
-    public function order(): int { return 50; }                   // default place; lower comes first
-    public function permissions(): array { return ['View Invoice']; }
-
-    protected function cacheKey(DashboardContext $context): string
-    {
-        return $this->key().':'.$context->days;                    // the range changes the answer
-    }
-
-    protected function data(DashboardContext $context): ?array
-    {
-        return ['series' => app(DailySeries::class)->count(Invoice::query()->toBase(), 'created_at', $context->days)];
-    }
-
-    protected function view(array $data, DashboardContext $context): View
-    {
-        return view('invoice::partials.widget-open', $data);
-    }
-}
-```
-
-`DashboardContext` carries the viewer's range (`$context->days`) and compare flag.
-
-**Chart components** — all inline SVG or plain HTML, themed by the tokens, with a screen-reader
-summary: `<x-chart-area>` (a day => count series, optionally `:previous`), `<x-chart-bar :series="['Label' => 12]">`,
-`<x-chart-donut :parts="[['label' => 'Paid', 'value' => 8, 'tone' => 'success']]">` (tones: accent, success,
-warning, danger, info, muted) and `<x-chart-heatmap :matrix="$weekdayByHour">` (build the matrix with
-`HourlySeries`). `<x-sparkline :series="[1, 4, 2]">` is the tiny trend line a stat card shows when its
-stat array carries a `series` of counts.
-
-**Quick actions and health** — a `QuickActionComposer` in `$dashboardActions` returns
-`[['label' => …, 'icon' => 'ph-…', 'href' => …, 'permission' => 'Create Invoice']]`; a `HealthCheck` in
-`$dashboardHealth` returns `['status' => self::OK|WARN|FAIL, 'label' => …, 'detail' => …, 'href' => …]` and
-lists first when it is not fine. A check that throws is reported as failed instead of breaking the page.
+A grid of customizable widgets; modules add stats, charts, cards, shortcuts and health checks from their service provider, and every viewer can rearrange, resize and
+hide the cards. The full guide, with the classes to extend and a worked example of each, is [`dashboard.md`](dashboard.md).
 
 ---
 
@@ -660,9 +569,9 @@ Or the component's own `help` prop: `<x-form.input name="phone" label="Mobile No
 ```
 A password field with no toggle button — just the blank-by-default, never-repopulated input — can still use the component directly: `<x-form.input type="password" name="value_encrypted" placeholder="Leave blank to keep the current secret" />`.
 
-**Submit row (create/edit bottom bar):** cancel on the leading edge, submit on the trailing edge, below the last `<x-form-section>`:
+**Submit row (create/edit bottom bar):** cancel on the leading edge, submit on the trailing edge, below the last `<x-form-section>`. `fd-form-actions` keeps it in reach (sticky) on a long form:
 ```blade
-<div class="flex justify-between items-center">
+<div class="fd-form-actions">
     <a href="{{ route('admin.items.index') }}" class="btn btn-light">
         <i class="ph-x"></i>Cancel
     </a>
@@ -754,21 +663,19 @@ For a state that isn't a boolean, write the class directly:
 <span class="fd-status is-info">{{ __('thing::thing.status.queued') }}</span>
 ```
 
-**Badges are for labels and counts**, not for state. The soft badge is the `bg-*-subtle` + `text-*-emphasis` pair:
+**Badges are for labels and counts**, not for state. Use the semantic badge classes, which are soft pills legible in both themes:
 ```blade
-<span class="badge badge-secondary text-secondary-emphasis">{{ $role->name }}</span>
-<span class="badge bg-success-subtle text-success-emphasis">{{ __('thing::thing.common.paid') }}</span>
-<span class="badge bg-danger-subtle text-danger-emphasis">{{ __('thing::thing.common.overdue') }}</span>
+<span class="badge badge-secondary">{{ $role->name }}</span>
+<span class="badge badge-primary">Admin</span>
+<span class="badge badge-success">{{ __('thing::thing.common.paid') }}</span>
+<span class="badge badge-danger">{{ __('thing::thing.common.overdue') }}</span>
+<span class="badge badge-warning">…</span> <span class="badge badge-info">…</span>
 <span class="badge badge-count">{{ number_format($count) }}</span>
 ```
 
-A solid `bg-*` badge is repainted as the matching soft pill by the stylesheet, so `<span class="badge badge-primary">Admin</span>` is fine and stays legible in both themes. What is **out** is the three-class triple `bg-success-subtle text-success border border-success-subtle` — the border is stripped anyway, and `text-success` is too light on a subtle background in dark mode.
-
-**Dynamic badge:**
+**Dynamic badge** — choose the class, not the colours:
 ```blade
-<span class="badge {{ $invoice->is_paid
-    ? 'bg-success-subtle text-success-emphasis'
-    : 'bg-warning-subtle text-warning-emphasis' }}">
+<span class="badge {{ $invoice->is_paid ? 'badge-success' : 'badge-warning' }}">
     {{ $invoice->is_paid ? __('thing::thing.common.paid') : __('thing::thing.common.due') }}
 </span>
 ```
@@ -823,7 +730,7 @@ The card is themed by the stylesheet — no utility classes are needed to make i
 </div>
 ```
 
-**Equal-height cards in a row:** a card that is the only child of a `.row.g-3 > [class*="col"]` already stretches to the row height — `h-full` is belt and braces, not a requirement.
+**Equal-height cards in a row:** put `h-full` on the card (`<div class="card h-full">`) inside a `grid grid-cols-12 gap-4` cell. A card that is the only child of a grid cell already stretches.
 
 A card does not need a `bg-primary` hero variant; a page announces itself through `<x-page-header>`.
 
@@ -944,7 +851,7 @@ A decorative icon that leads a block of content belongs in a `.fd-icon-tile`, no
 For long settings/configuration forms. It sticks to the top of the scrolling content column:
 
 ```blade
-<div id="save-bar" class="hidden mb-4 sticky-top">
+<div id="save-bar" class="hidden mb-4 sticky top-0 z-10">
     <div class="alert alert-warning flex items-center justify-between py-2 px-4 mb-0
                 rounded-none border-s-0 border-e-0">
         <span><i class="ph-warning-circle me-2"></i>{{ __('thing::thing.settings.unsaved_changes') }}</span>
@@ -980,14 +887,19 @@ $('#settings-form').on('change input', function () {
 |---|---|
 | Add a rule to `assets/css/foundation.css` | Project CSS in `resources/css/app.css`, or `@push('styles')` for one page — the package file is overwritten on update |
 | `style="…"` on an element | Tailwind utilities, a `.fd-*` class, or a sizing helper (`w-12`, `text-xs`) |
-| Hard-coded hex colours in markup or CSS | A token: `var(--fd-accent)`, `var(--fd-muted)`, `var(--bs-success-bg-subtle)` |
+| Hard-coded hex colours in markup or CSS | A token: `var(--fd-accent)`, `var(--fd-muted)`, `var(--fd-success-subtle)` |
 | `fa-*` icons | `ph-*` — Font Awesome is not loaded |
 | `me-1`/`me-2` on an icon inside `.btn`, `.dropdown-item` or `.navbar-nav-link` | Nothing — the container sets the gap |
 | `btn-outline-secondary` / `btn-secondary` in a new view | `btn-light` (or `btn-ghost` when it should be borderless) |
-| `bg-success-subtle text-success border border-success-subtle` | `bg-success-subtle text-success-emphasis` |
+| `bg-success-subtle text-success border border-success-subtle` (or any hand-mixed badge colours) | `badge badge-success` |
+| Bootstrap markup: `d-flex`, `row`/`col-md-6`, `me-3`, `fw-bold`, `data-bs-*` | The Tailwind utilities and `data-fd-*` attributes in these guidelines — Bootstrap is not loaded |
+| A modal/dropdown/tab wired with your own JavaScript | `data-fd-toggle` / `data-fd-target` (see `frontend-js.md`) |
+| A hand-written filter card or `fd-empty` block | `<x-search-card>` / `<x-empty-state>` |
+| A native file input styled by hand | `<x-form.file>` |
+| A charting library | `<x-chart-*>` components (inline SVG) |
 | A hand-written Active/Inactive badge | `<x-status-badge :active="" />` |
 | Bare `<style>` / `<script>` tags in views | `@push('styles')` / `@push('scripts')` |
-| Raw `<table>` without `<x-table-view-pagination>` | Always use the component |
+| Raw `<table>` without `<x-table-view-pagination>` | Always use the component (it brings the filter-friendly header, footer, empty state and the phone layout) |
 | `style="width:60px"` on a `<th>` | `w-8` / `w-10` / `w-12` |
 | `btn` without a size in table/card contexts | Add `btn-sm` |
 | `window.confirm()` | `.swal-confirm` / `.swal-delete` / `.swal-post` |

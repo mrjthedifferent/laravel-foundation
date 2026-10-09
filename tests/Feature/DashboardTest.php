@@ -73,7 +73,7 @@ class DashboardTest extends TestCase
 
         $this->actingAs($admin)->get(route('admin.dashboard', ['days' => 30]))
             ->assertOk()
-            ->assertSee(__('foundation::foundation.dashboard.last_days', ['days' => 30]));
+            ->assertSee('aria-current="page">'.__('foundation::foundation.dashboard.range_days', ['days' => 30]), false);
 
         foreach ([999, 'abc', -1] as $bogus) {
             $this->actingAs($admin)->get(route('admin.dashboard', ['days' => $bogus]))->assertOk();

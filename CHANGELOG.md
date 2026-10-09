@@ -6,6 +6,17 @@ what that covers.
 
 ## 2.0.0
 
+**Documentation and cleanup.**
+
+- The AI guidelines synced into a project (`.ai/guidelines/foundation/`) are rewritten for the Tailwind UI and gain `foundation-overview.md` (start here),
+  `components-reference.md` (every component with props and slots), `frontend-js.md` (`data-fd-*`, events, the `Foundation` API), `dashboard.md` (every
+  extension point with an example) and `theming.md` (tokens, theme settings, which utilities exist). A test fails when a component or dashboard extension
+  point is added without being documented.
+- Leftovers of the Bootstrap era are removed: unused compatibility classes (`fs-*`, `*-px` sizes, `navbar-brand`, `badge-dark`, `btn-group`,
+  `form-control-feedback`, …), the filter-collapse memory script, the `initTooltips` stub, commented Bootstrap imports and unused translation keys. Row-action
+  tooltips work again (their trigger attribute was left as `data-fd-popup`).
+- `<x-table-view-pagination>` takes `:stack="false"` to keep a wide table scrolling sideways on phones.
+
 **Design pass across every page.**
 
 - **Page width, density and corners** are Theme settings (`theme_content_width` fluid or boxed, `theme_density`

@@ -39,8 +39,9 @@ kits drift apart; a package does not.
 | Otp *(optional)* | One-time codes by email or SMS |
 | ErrorReport *(optional)* | Captures exceptions and notifies you |
 
-Plus the core: helpers, a JSON response factory, an exception handler, middleware, 26 Blade
-components, layouts, error pages and base migrations.
+Plus the core: helpers, a JSON response factory, an exception handler, middleware, a library of
+Blade components (page header, filter bar, tables, forms with a file drop zone, modals, charts,
+empty states…), layouts, error pages and base migrations.
 
 ## Quick start
 
@@ -315,6 +316,23 @@ that have no key. Schedule `php artisan model:prune` to remove expired keys.
 
 Registration is closed by default: an administrator creates accounts.
 
+## Documentation for people and AI assistants
+
+`foundation:install` and `foundation:sync` copy the guidelines into the project at
+`.ai/guidelines/foundation/`, where coding assistants (Claude Code, Laravel Boost, Cursor…) read them.
+They are the reference for building on the package without re-inventing it:
+
+| File | Covers |
+|---|---|
+| `foundation-overview.md` | Start here: the rules, where to look, the commands |
+| `components-reference.md` | Every Blade component, with props and slots |
+| `ui-components.md` | UI conventions: page structure, tables, forms, buttons, badges, cards, icons |
+| `views.md` | Page templates: index, create, edit, show |
+| `frontend-js.md` | `data-fd-*` behaviour, events, the `Foundation` API, confirmations, toasts, Select2 |
+| `dashboard.md` | Adding stats, charts, widgets, shortcuts and health checks to the dashboard |
+| `theming.md` | Tokens, theme settings, which utilities exist, dark mode and RTL |
+| `module-creation.md`, `module-architecture.md`, `models-enums.md`, `patterns.md`, `permissions-settings.md`, `testing.md`, `tenancy.md` | Back-end conventions |
+
 ## Commands
 
 | Command | Purpose |
@@ -330,6 +348,8 @@ Registration is closed by default: an administrator creates accounts.
 ```bash
 composer update mrjthedifferent/laravel-foundation --with-dependencies
 php artisan migrate
+php artisan foundation:publish --force   # the compiled theme assets
+php artisan foundation:sync              # the guidelines and shared tooling
 ```
 
 `--with-dependencies` lets Composer update or add the packages a new release needs. Read the
@@ -343,7 +363,7 @@ any of these waits for the next major version:
 
 - classes and interfaces marked `@api`: `Foundation`, the base classes a project extends
   (`Models\User`, `Support\ModuleServiceProvider`, `WidgetComposer`, `StatComposer`,
-  `ChartComposer`, `QueryBuilder`,
+  `ChartComposer`, `DashboardWidget`, `QuickActionComposer`, `HealthCheck`, `QueryBuilder`,
   `ExportJob`, `Http\Controllers\Controller`, `Exceptions\Handler`), every interface in
   `Contracts`, `JsonResponseFactory`, `Roles`, `Email`, `PhoneNumber`, `FileManagerService`,
   `Tenancy`, `MigrationPaths`, `Enums\ModuleContext`, `Events\TenancyContextChanged`,

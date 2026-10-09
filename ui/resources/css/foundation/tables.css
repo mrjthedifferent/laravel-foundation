@@ -1,15 +1,15 @@
 /* Tables: calmer scrollbars, visible row actions, and a stacked card layout on phones. */
 
 /* Scrollbars that match the theme instead of the operating system's chunky ones */
-.table-responsive, .fd-scroll, .content-inner, .sidebar-content, .dropdown-menu-scrollable-lg {
+.table-responsive, .content-inner, .sidebar-content {
     scrollbar-width: thin;
     scrollbar-color: var(--fd-border-strong) transparent;
 }
-.table-responsive::-webkit-scrollbar, .fd-scroll::-webkit-scrollbar, .content-inner::-webkit-scrollbar { width: .5rem; height: .5rem; }
-.table-responsive::-webkit-scrollbar-thumb, .fd-scroll::-webkit-scrollbar-thumb, .content-inner::-webkit-scrollbar-thumb {
+.table-responsive::-webkit-scrollbar, .content-inner::-webkit-scrollbar { width: .5rem; height: .5rem; }
+.table-responsive::-webkit-scrollbar-thumb, .content-inner::-webkit-scrollbar-thumb {
     background: var(--fd-border-strong); border-radius: 999px; border: 2px solid transparent; background-clip: content-box;
 }
-.table-responsive::-webkit-scrollbar-track, .fd-scroll::-webkit-scrollbar-track, .content-inner::-webkit-scrollbar-track { background: transparent; }
+.table-responsive::-webkit-scrollbar-track, .content-inner::-webkit-scrollbar-track { background: transparent; }
 
 /* Row hover that is visible in both themes, and a header that stays put */
 .table-hover > tbody > tr:hover > * { background-color: color-mix(in srgb, var(--fd-accent) 4%, var(--fd-hover)); }

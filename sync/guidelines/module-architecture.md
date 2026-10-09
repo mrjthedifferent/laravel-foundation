@@ -65,7 +65,13 @@ class ThingServiceProvider extends ModuleServiceProvider
 
     protected array $policies = [Thing::class => ThingPolicy::class];
 
-    protected array $composers = ['thing::partials.dashboard-widget' => ThingWidgetComposer::class];
+    // Dashboard contributions (each permission-gated and cached; see dashboard.md):
+    protected array $dashboardStats = [ThingStatComposer::class];       // headline KPI cards
+    protected array $dashboardCharts = [ThingChart::class];              // the trend chart
+    protected array $dashboardWidgets = [ThingWidget::class];            // a card viewers can move, resize and hide
+    protected array $dashboardActions = [ThingQuickActions::class];      // shortcuts
+    protected array $dashboardHealth = [ThingHealth::class];             // a line in System health
+    protected array $composers = ['thing::partials.dashboard-widget' => ThingWidgetComposer::class];   // older card style
 
     protected array $listen = [
         ThingCreated::class => [NotifyThingCreated::class],
@@ -73,7 +79,7 @@ class ThingServiceProvider extends ModuleServiceProvider
 }
 ```
 
-Also available: `$commands`, `$middlewareAliases`, `$prependToGroups` and `$appendToGroups`. Override `boot()` or `register()` only for anything else, and call the parent first — for example, to bind a contract this module provides the implementation for:
+Also available: `$dashboardStats`/`$dashboardCharts`/`$dashboardWidgets`/`$dashboardActions`/`$dashboardHealth` (see `dashboard.md`), `$commands`, `$middlewareAliases`, `$prependToGroups` and `$appendToGroups`. Override `boot()` or `register()` only for anything else, and call the parent first — for example, to bind a contract this module provides the implementation for:
 
 ```php
 #[Override]
