@@ -146,4 +146,19 @@ final class Foundation
             ? (string) (InstalledVersions::getPrettyVersion(self::PACKAGE) ?? 'dev')
             : 'dev';
     }
+
+    /**
+     * Version plus source reference, e.g. "v3.0.1@baec3fb7f360". It changes whenever the
+     * shipped assets can change (a dev or path install keeps its version string, so the
+     * reference is what tells those apart). Stamped by foundation:publish and appended to
+     * asset URLs, so browsers drop their cached copies after an update.
+     */
+    public static function assetVersion(): string
+    {
+        $reference = InstalledVersions::isInstalled(self::PACKAGE)
+            ? InstalledVersions::getReference(self::PACKAGE)
+            : null;
+
+        return self::version().($reference ? '@'.substr($reference, 0, 12) : '');
+    }
 }

@@ -50,8 +50,8 @@
 
     @stack('modals')
 
-    <script src="{{ asset('assets/vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/select2/select2.min.js') }}"></script>
+    <script src="{{ foundation_asset('assets/vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ foundation_asset('assets/vendor/select2/select2.min.js') }}"></script>
     @stack('scripts')
 
     <button type="button" class="btn btn-light btn-icon btn-floating-settings" data-fd-toggle="offcanvas"

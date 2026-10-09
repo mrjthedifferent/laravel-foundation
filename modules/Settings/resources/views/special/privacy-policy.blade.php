@@ -26,11 +26,11 @@
 @endsection
 
 @push('styles')
-    <link href="{{ asset('assets/vendor/quill/quill.snow.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ foundation_asset('assets/vendor/quill/quill.snow.css') }}" rel="stylesheet" type="text/css">
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('assets/vendor/quill/quill.js') }}"></script>
+    <script src="{{ foundation_asset('assets/vendor/quill/quill.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var field = document.querySelector('#privacy_policy');

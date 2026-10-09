@@ -2,7 +2,6 @@
 
 namespace Mrj\Foundation\Console;
 
-use Composer\InstalledVersions;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Mrj\Foundation\Foundation;
@@ -33,7 +32,7 @@ final class PublishCommand extends Command
             return $this->link($files, $source, $target);
         }
 
-        $stamp = $this->stamp();
+        $stamp = Foundation::assetVersion();
         $stampFile = $target.DIRECTORY_SEPARATOR.self::STAMP_FILE;
 
         if (! $this->option('force') && $files->exists($stampFile) && trim($files->get($stampFile)) === $stamp) {
@@ -71,18 +70,5 @@ final class PublishCommand extends Command
         $this->components->info("Linked [$target] to the package assets.");
 
         return self::SUCCESS;
-    }
-
-    /**
-     * Version plus source reference: a dev or path install keeps the same version
-     * string across changes, so the reference is what detects new assets there.
-     */
-    private function stamp(): string
-    {
-        $reference = InstalledVersions::isInstalled(Foundation::PACKAGE)
-            ? InstalledVersions::getReference(Foundation::PACKAGE)
-            : null;
-
-        return Foundation::version().($reference ? '@'.substr($reference, 0, 12) : '');
     }
 }

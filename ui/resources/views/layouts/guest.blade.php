@@ -66,8 +66,8 @@
 
     @stack('modals')
 
-    <script src="{{ asset('assets/vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/select2/select2.min.js') }}"></script>
+    <script src="{{ foundation_asset('assets/vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ foundation_asset('assets/vendor/select2/select2.min.js') }}"></script>
     @stack('scripts')
 </body>
 
