@@ -15,6 +15,12 @@ use Illuminate\Contracts\Auth\Authenticatable;
  */
 interface ImpersonationContext
 {
+    /** Audit event written when an impersonation starts. */
+    public const string STARTED_EVENT = 'impersonation_started';
+
+    /** Audit event written when an impersonation ends. */
+    public const string ENDED_EVENT = 'impersonation_ended';
+
     public function isImpersonating(): bool;
 
     /**

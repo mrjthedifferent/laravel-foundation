@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Notification\Jobs\SendSmsJob;
+use Modules\Settings\Actions\SaveSettingAction;
 use Modules\Settings\Data\MailerData;
 use Modules\Settings\Data\SmsGatewayData;
 use Modules\Settings\Http\Requests\SendTestEmailRequest;
@@ -49,16 +50,9 @@ class SpecialSettingsController extends Controller
     {
         $this->authorize('editSpecial', Setting::class);
 
-        Setting::updateOrCreate(
-            ['key' => 'privacy_policy'],
-            [
-                'value' => $request->validated('privacy_policy'),
-                'type' => 'textarea',
-                'group' => 'General',
-                'description' => __('settings::settings.flash.privacy_policy_description'),
-                'is_visible' => false,
-            ]
-        );
+        SaveSettingAction::hidden('privacy_policy', $request->validated('privacy_policy'), 'textarea', 'General', [
+            'description' => __('settings::settings.flash.privacy_policy_description'),
+        ]);
 
         return redirect()->back()->with('success', __('settings::settings.flash.privacy_policy_updated'));
     }
@@ -81,16 +75,9 @@ class SpecialSettingsController extends Controller
     {
         $this->authorize('editSpecial', Setting::class);
 
-        Setting::updateOrCreate(
-            ['key' => 'terms_conditions'],
-            [
-                'value' => $request->validated('terms_conditions'),
-                'type' => 'textarea',
-                'group' => 'General',
-                'description' => __('settings::settings.flash.terms_conditions_description'),
-                'is_visible' => false,
-            ]
-        );
+        SaveSettingAction::hidden('terms_conditions', $request->validated('terms_conditions'), 'textarea', 'General', [
+            'description' => __('settings::settings.flash.terms_conditions_description'),
+        ]);
 
         return redirect()->back()->with('success', __('settings::settings.flash.terms_conditions_updated'));
     }
@@ -129,15 +116,9 @@ class SpecialSettingsController extends Controller
                 ->toEntry($cipher, $storedValues[$gateway['TYPE'] ?? ''] ?? []);
         }
 
-        Setting::updateOrCreate(
-            ['key' => 'sms_gateways'],
-            ['type' => 'json', 'group' => 'General', 'value' => json_encode($gatewaysArray), 'is_visible' => false]
-        );
+        SaveSettingAction::hidden('sms_gateways', json_encode($gatewaysArray), 'json', 'General');
 
-        Setting::updateOrCreate(
-            ['key' => 'sms_gateway'],
-            ['type' => 'select', 'group' => 'General', 'value' => $request->validated('sms_gateway'), 'is_visible' => false]
-        );
+        SaveSettingAction::hidden('sms_gateway', $request->validated('sms_gateway'), 'select', 'General');
 
         return redirect()->back()->with('success', __('settings::settings.flash.sms_gateways_updated'));
     }
@@ -221,15 +202,9 @@ class SpecialSettingsController extends Controller
             }
         }
 
-        Setting::updateOrCreate(
-            ['key' => 'email_mailers'],
-            ['type' => 'json', 'group' => 'General', 'value' => json_encode($mailersArray), 'is_visible' => false]
-        );
+        SaveSettingAction::hidden('email_mailers', json_encode($mailersArray), 'json', 'General');
 
-        Setting::updateOrCreate(
-            ['key' => 'email_mailer'],
-            ['type' => 'select', 'group' => 'General', 'value' => $request->validated('email_mailer'), 'is_visible' => false]
-        );
+        SaveSettingAction::hidden('email_mailer', $request->validated('email_mailer'), 'select', 'General');
 
         return redirect()->back()->with('success', __('settings::settings.flash.email_mailers_updated'));
     }
@@ -340,16 +315,7 @@ class SpecialSettingsController extends Controller
         foreach ($keys as $key => $meta) {
             // 'type' must be filled before 'value': Setting::setValueAttribute()
             // reads the sibling 'type' attribute to decide whether to encrypt.
-            Setting::updateOrCreate(
-                ['key' => $key],
-                [
-                    'type' => $key === 'firebase_credentials_json' ? 'encrypted' : 'text',
-                    'value' => $request->validated($key, ''),
-                    'group' => 'Firebase',
-                    'description' => $meta['description'],
-                    'is_visible' => false,
-                ]
-            );
+            SaveSettingAction::hidden($key, $request->validated($key, ''), $key === 'firebase_credentials_json' ? 'encrypted' : 'text', 'Firebase', ['description' => $meta['description']]);
         }
 
         return redirect()->back()->with('success', __('settings::settings.flash.firebase_updated'));
@@ -413,16 +379,24 @@ class SpecialSettingsController extends Controller
     }
 
     /**
-     * Social Auth setting keys and their config targets (for syncing before test).
+     * Social-auth setting key => the services.* config key it feeds.
+     *
+     * @var array<string, string>
      */
-    private static function socialAuthKeys(): array
-    {
-        return [
-            'google' => ['google_client_id', 'google_client_secret', 'google_redirect_uri'],
-            'github' => ['github_client_id', 'github_client_secret', 'github_redirect_uri'],
-            'apple' => ['apple_client_id', 'apple_client_secret', 'apple_redirect_uri', 'apple_team_id', 'apple_key_id', 'apple_key_file'],
-        ];
-    }
+    private const array SOCIAL_CONFIG_MAP = [
+        'google_client_id' => 'services.google.client_id',
+        'google_client_secret' => 'services.google.client_secret',
+        'google_redirect_uri' => 'services.google.redirect',
+        'github_client_id' => 'services.github.client_id',
+        'github_client_secret' => 'services.github.client_secret',
+        'github_redirect_uri' => 'services.github.redirect',
+        'apple_client_id' => 'services.apple.client_id',
+        'apple_client_secret' => 'services.apple.client_secret',
+        'apple_redirect_uri' => 'services.apple.redirect',
+        'apple_team_id' => 'services.apple.team_id',
+        'apple_key_id' => 'services.apple.key_id',
+        'apple_key_file' => 'services.apple.key_file',
+    ];
 
     /**
      * Display the Social Auth settings form
@@ -430,11 +404,7 @@ class SpecialSettingsController extends Controller
     public function socialAuth(): Renderable
     {
         $this->authorize('editSpecial', Setting::class);
-        $keys = array_merge(
-            self::socialAuthKeys()['google'],
-            self::socialAuthKeys()['github'],
-            self::socialAuthKeys()['apple']
-        );
+        $keys = array_keys(self::SOCIAL_CONFIG_MAP);
         $settings = Setting::whereIn('key', $keys)->get()->keyBy('key');
 
         return view('settings::special.social-auth', compact('settings'));
@@ -447,25 +417,8 @@ class SpecialSettingsController extends Controller
     {
         $this->authorize('editSpecial', Setting::class);
 
-        $keys = array_merge(
-            self::socialAuthKeys()['google'],
-            self::socialAuthKeys()['github'],
-            self::socialAuthKeys()['apple']
-        );
-        $configMap = [
-            'google_client_id' => 'services.google.client_id',
-            'google_client_secret' => 'services.google.client_secret',
-            'google_redirect_uri' => 'services.google.redirect',
-            'github_client_id' => 'services.github.client_id',
-            'github_client_secret' => 'services.github.client_secret',
-            'github_redirect_uri' => 'services.github.redirect',
-            'apple_client_id' => 'services.apple.client_id',
-            'apple_client_secret' => 'services.apple.client_secret',
-            'apple_redirect_uri' => 'services.apple.redirect',
-            'apple_team_id' => 'services.apple.team_id',
-            'apple_key_id' => 'services.apple.key_id',
-            'apple_key_file' => 'services.apple.key_file',
-        ];
+        $keys = array_keys(self::SOCIAL_CONFIG_MAP);
+        $configMap = self::SOCIAL_CONFIG_MAP;
 
         // OAuth client secrets are stored encrypted. apple_key_file is a filesystem
         // path to the .p8 key, not the key material itself, so it stays plain text.
@@ -473,20 +426,10 @@ class SpecialSettingsController extends Controller
 
         foreach ($keys as $key) {
             $value = $request->validated($key, '');
-            if (isset($configMap[$key])) {
-                config([$configMap[$key] => $value]);
-            }
+            config([$configMap[$key] => $value]);
             // 'type' must be filled before 'value': Setting::setValueAttribute()
             // reads the sibling 'type' attribute to decide whether to encrypt.
-            Setting::updateOrCreate(
-                ['key' => $key],
-                [
-                    'type' => in_array($key, $secretKeys, true) ? 'encrypted' : 'text',
-                    'value' => $value,
-                    'group' => 'Social Auth',
-                    'is_visible' => false,
-                ]
-            );
+            SaveSettingAction::hidden($key, $value, in_array($key, $secretKeys, true) ? 'encrypted' : 'text', 'Social Auth');
         }
 
         app(SettingsRepository::class)->forget();
@@ -543,20 +486,7 @@ class SpecialSettingsController extends Controller
             $values[$key] = $value;
         }
 
-        $map = [
-            'google_client_id' => 'services.google.client_id',
-            'google_client_secret' => 'services.google.client_secret',
-            'google_redirect_uri' => 'services.google.redirect',
-            'github_client_id' => 'services.github.client_id',
-            'github_client_secret' => 'services.github.client_secret',
-            'github_redirect_uri' => 'services.github.redirect',
-            'apple_client_id' => 'services.apple.client_id',
-            'apple_client_secret' => 'services.apple.client_secret',
-            'apple_redirect_uri' => 'services.apple.redirect',
-            'apple_team_id' => 'services.apple.team_id',
-            'apple_key_id' => 'services.apple.key_id',
-            'apple_key_file' => 'services.apple.key_file',
-        ];
+        $map = self::SOCIAL_CONFIG_MAP;
 
         foreach ($values as $key => $value) {
             if (isset($map[$key])) {

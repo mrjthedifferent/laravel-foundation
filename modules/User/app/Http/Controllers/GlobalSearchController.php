@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Mrj\Foundation\Http\Controllers\Controller;
 use Mrj\Foundation\Http\Responses\JsonResponseFactory;
+use Mrj\Foundation\Support\QueryBuilder;
 
 class GlobalSearchController extends Controller
 {
@@ -30,14 +31,8 @@ class GlobalSearchController extends Controller
         // only surface individual users they are authorized to view. This
         // prevents leaking names and emails to any authenticated account.
         if (in_array($category, ['all', 'users'], true) && $actor->can('viewAny', User::class)) {
-            $like = '%'.escapeLike($query).'%';
-
             $users = User::query()
-                ->where(function ($q) use ($like): void {
-                    $q->whereRaw('name LIKE ? ESCAPE ?', [$like, '\\'])
-                        ->orWhereRaw('email LIKE ? ESCAPE ?', [$like, '\\'])
-                        ->orWhereRaw('phone LIKE ? ESCAPE ?', [$like, '\\']);
-                })
+                ->tap(fn ($q) => QueryBuilder::applyLike($q, ['name', 'email', 'phone'], $query))
                 ->latest()
                 ->limit(20)
                 ->get();

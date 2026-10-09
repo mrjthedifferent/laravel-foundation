@@ -188,8 +188,11 @@ final class FoundationServiceProvider extends ServiceProvider
 
     private function configureRuntime(): void
     {
-        // Set default string length for MariaDB compatibility
-        Schema::defaultStringLength(191);
+        // Default string length (191 keeps indexed utf8mb4 columns valid on older MariaDB/MySQL).
+        $stringLength = (int) config('foundation.schema.string_length', 191);
+        if ($stringLength > 0) {
+            Schema::defaultStringLength($stringLength);
+        }
 
         // Throw on lazy loading everywhere except production, so an N+1 surfaces
         // in local/CI/staging as a hard error instead of a silent slow query that
@@ -262,15 +265,15 @@ final class FoundationServiceProvider extends ServiceProvider
 
             return [
                 Limit::perMinute(max(1, (int) config('foundation.login.max_attempts', 5)))->by('auth:'.$login.'|'.$request->ip()),
-                Limit::perMinute(30)->by('auth-ip:'.$request->ip()),
+                Limit::perMinute(max(1, (int) config('foundation.rate_limits.auth_ip', 30)))->by('auth-ip:'.$request->ip()),
             ];
         });
 
         // Authenticated API traffic, per user; anonymous callers share a tighter per-IP bucket.
         RateLimiter::for('api', function (Request $request) {
             return $request->user()
-                ? Limit::perMinute(120)->by('api:'.$request->user()->getAuthIdentifier())
-                : Limit::perMinute(30)->by('api-ip:'.$request->ip());
+                ? Limit::perMinute(max(1, (int) config('foundation.rate_limits.api_user', 120)))->by('api:'.$request->user()->getAuthIdentifier())
+                : Limit::perMinute(max(1, (int) config('foundation.rate_limits.api_guest', 30)))->by('api-ip:'.$request->ip());
         });
     }
 

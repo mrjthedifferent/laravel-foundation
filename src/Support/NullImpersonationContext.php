@@ -6,9 +6,10 @@ namespace Mrj\Foundation\Support;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Mrj\Foundation\Contracts\ImpersonationContext;
+use Mrj\Foundation\Contracts\ResolvesImpersonatorId;
 
 /** @internal */
-final class NullImpersonationContext implements ImpersonationContext
+final class NullImpersonationContext implements ImpersonationContext, ResolvesImpersonatorId
 {
     public function isImpersonating(): bool
     {
@@ -16,6 +17,11 @@ final class NullImpersonationContext implements ImpersonationContext
     }
 
     public function impersonator(): ?Authenticatable
+    {
+        return null;
+    }
+
+    public function impersonatorId(): ?int
     {
         return null;
     }

@@ -42,16 +42,19 @@ final class Foundation
     public static function middleware(?callable $project = null): Closure
     {
         return function (Middleware $middleware) use ($project): void {
-            $middleware->appendToGroup('web', CheckUserIsActive::class);
-            $middleware->appendToGroup('api', CheckUserIsActive::class);
-            $middleware->appendToGroup('web', EnsurePasswordIsChanged::class);
-            $middleware->appendToGroup('api', EnsurePasswordIsChanged::class);
-            $middleware->appendToGroup('web', EnsureTwoFactorIsEnabled::class);
-            $middleware->appendToGroup('api', EnsureTwoFactorIsEnabled::class);
-            $middleware->appendToGroup('web', EnsurePanelIsAvailable::class);
-            // Sliding idle expiry for Sanctum API tokens. Appended so it runs after
-            // auth:sanctum has resolved the user.
-            $middleware->appendToGroup('api', SlideSanctumTokenExpiry::class);
+            // Order matters within a group: each runs after the one before it.
+            $groups = [
+                'web' => [CheckUserIsActive::class, EnsurePasswordIsChanged::class, EnsureTwoFactorIsEnabled::class, EnsurePanelIsAvailable::class],
+                // SlideSanctumTokenExpiry (sliding idle expiry for Sanctum API tokens) is last
+                // so it runs after auth:sanctum has resolved the user.
+                'api' => [CheckUserIsActive::class, EnsurePasswordIsChanged::class, EnsureTwoFactorIsEnabled::class, SlideSanctumTokenExpiry::class],
+            ];
+
+            foreach ($groups as $group => $classes) {
+                foreach ($classes as $class) {
+                    $middleware->appendToGroup($group, $class);
+                }
+            }
 
             $aliases = [
                 'verified' => EnsureContactIsVerified::class,

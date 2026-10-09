@@ -5,7 +5,8 @@ namespace Modules\ActivityLog\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Modules\User\Services\ImpersonationService;
+use Mrj\Foundation\Contracts\ImpersonationContext;
+use Mrj\Foundation\Contracts\ResolvesImpersonatorId;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -41,7 +42,7 @@ class LogRequestResponse
                         'name' => $user->name ?? null,
                         'email' => $user->email ?? null,
                     ] : null,
-                    'impersonator_id' => app(ImpersonationService::class)->impersonatorId(),
+                    'impersonator_id' => $this->impersonatorId(),
                     'parameters' => $request_params,
                     'status_code' => $response->getStatusCode(),
                     'headers' => $this->filterHeaders($request->headers->all(), ['authorization', 'cookie', 'x-xsrf-token']),
@@ -71,7 +72,7 @@ class LogRequestResponse
                     'phone' => $user->phone ?? null,
                     'email' => $user->email ?? null,
                 ] : null,
-                'impersonator_id' => app(ImpersonationService::class)->impersonatorId(),
+                'impersonator_id' => $this->impersonatorId(),
                 'parameters' => $request_params,
                 'headers' => $this->filterHeaders($request->headers->all(), ['authorization', 'cookie', 'x-xsrf-token']),
                 'status_code' => $response->getStatusCode(),
@@ -191,5 +192,14 @@ class LogRequestResponse
         } catch (Throwable $e) {
             return ['error' => $e->getMessage()];
         }
+    }
+
+    private function impersonatorId(): ?int
+    {
+        $context = app(ImpersonationContext::class);
+
+        return $context instanceof ResolvesImpersonatorId
+            ? $context->impersonatorId()
+            : $context->impersonator()?->getAuthIdentifier();
     }
 }
