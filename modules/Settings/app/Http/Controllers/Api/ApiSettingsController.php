@@ -4,6 +4,7 @@ namespace Modules\Settings\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Modules\Settings\Models\Setting;
 use Mrj\Foundation\Http\Controllers\Controller;
 use Mrj\Foundation\Http\Responses\JsonResponseFactory;
@@ -36,6 +37,10 @@ class ApiSettingsController extends Controller
             $settings['google_maps_api_key_ios'],
             $settings['google_maps_api_key_web'],
         );
+
+        // Where an app links its "Privacy policy" and "Terms" (null when the public pages are off).
+        $settings['privacy_policy_url'] = Route::has('legal.privacy_policy') ? route('legal.privacy_policy') : null;
+        $settings['terms_conditions_url'] = Route::has('legal.terms_conditions') ? route('legal.terms_conditions') : null;
 
         return JsonResponseFactory::success(__('settings::settings.flash.api_settings_retrieved'), $settings);
     }

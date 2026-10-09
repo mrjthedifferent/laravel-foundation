@@ -4,6 +4,22 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.2.0
+
+**Added**
+- **Public privacy policy and terms pages:** `/privacy-policy` and `/terms-conditions` (routes `legal.privacy_policy`, `legal.terms_conditions`), with no login. They show what admins write under Settings → Privacy Policy / Terms & Conditions, which until now was only reachable as JSON.
+  - Use them for app-store listings (Google Play requires a privacy-policy web page), sign-up forms and footers.
+  - Each page follows the theme and works on phones.
+  - A page with no text is a 404.
+- **The text is cleaned before it's shown** (`Modules\Settings\Support\LegalHtml`). Only formatting tags survive: no scripts, styles, frames, forms or event handlers, and only http(s), mailto, tel or relative links. External links open in a new tab with `rel="noopener noreferrer nofollow"`. A script typed into the editor can't run for visitors.
+- `GET /api/v1/settings/app` also returns `privacy_policy_url` and `terms_conditions_url`.
+- The admin editors for both texts have a "Public page" button.
+- `foundation.routing.legal_pages` (`FOUNDATION_LEGAL_PAGES`, default on) turns the pages off for a project that serves its own.
+
+**Upgrading**
+- `composer update mrjthedifferent/laravel-foundation`.
+- The pages appear at once. If your project already has a route at `/privacy-policy` or `/terms-conditions`, set `FOUNDATION_LEGAL_PAGES=false`, or remove your route.
+
 ## 3.1.0
 
 **Added**

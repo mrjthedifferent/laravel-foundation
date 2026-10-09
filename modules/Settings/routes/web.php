@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Modules\Settings\Http\Controllers\LegalPageController;
 use Modules\Settings\Http\Controllers\NotificationSettingsController;
 use Modules\Settings\Http\Controllers\SecuritySettingsController;
 use Modules\Settings\Http\Controllers\SettingsController;
@@ -19,6 +20,12 @@ use Modules\Settings\Http\Controllers\ThemeSettingsController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Public pages, no login: for app stores, sign-up forms and footers.
+if (config('foundation.routing.legal_pages', true)) {
+    Route::get('privacy-policy', [LegalPageController::class, 'privacyPolicy'])->name('legal.privacy_policy');
+    Route::get('terms-conditions', [LegalPageController::class, 'termsConditions'])->name('legal.terms_conditions');
+}
 
 Route::middleware(config('foundation.routing.middleware'))
     ->domain(config('foundation.routing.domain'))

@@ -157,3 +157,15 @@ Settings that need custom UI use `is_visible => false` and are managed by dedica
 
 1. **Centralized (Settings module)** — OAuth, payment keys, SMS/email gateways, theme, security (two-factor, passwords, sign-in), etc. live under `SpecialSettingsController` / `ThemeSettingsController` / `SecuritySettingsController` in the Settings module.
 2. **Module-owned** — When a module has settings that belong to its domain (e.g. Error Report), create a settings page inside that module, add a permission (e.g. `Edit Error Report Settings`), register a gate, and add a link in the module's sidebar menu. Keep those settings `is_visible => false` so they never appear in the generic settings page.
+
+### Privacy Policy and Terms (public pages)
+
+Admins write both texts under Settings → Privacy Policy / Terms & Conditions (settings `privacy_policy`, `terms_conditions`).
+
+- **Public pages:** they are served without login at `/privacy-policy` and `/terms-conditions` (routes `legal.privacy_policy`, `legal.terms_conditions`).
+  - Use these URLs in app-store listings, sign-up forms and footers.
+  - Don't build another page or content type for them.
+- **Mobile apps** get the same URLs from `GET /api/v1/settings/app` (`privacy_policy_url`, `terms_conditions_url`).
+- **The HTML is cleaned before it's shown** (`Modules\Settings\Support\LegalHtml`): formatting tags only, no scripts, styles or event handlers, and only http(s), mailto, tel or relative links.
+- **No text yet:** a page that has none is a 404.
+- **To serve your own pages instead,** set `foundation.routing.legal_pages` to `false` (`FOUNDATION_LEGAL_PAGES=false`).

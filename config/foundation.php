@@ -163,6 +163,9 @@ return [
         'api_prefix' => env('FOUNDATION_API_PREFIX', 'v1'),
         // The package registers admin.dashboard. Set false to define it yourself.
         'dashboard' => true,
+        // Public /privacy-policy and /terms-conditions pages (no login), showing what admins write
+        // under Settings → Privacy Policy / Terms & Conditions. Set false to serve your own.
+        'legal_pages' => (bool) env('FOUNDATION_LEGAL_PAGES', true),
     ],
 
     /*
