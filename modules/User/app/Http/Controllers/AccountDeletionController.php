@@ -9,29 +9,33 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 use Modules\User\Actions\LoginAction;
-use Modules\User\Actions\ManageUserAccountAction;
-use Modules\User\Enum\AccountAction;
+use Modules\User\Enum\DeletionStatus;
+use Modules\User\Exceptions\AccountDeletionBlocked;
+use Modules\User\Services\AccountDeletion;
 use Mrj\Foundation\Support\TwoFactorAuthenticator;
 
 /**
- * The public page where anyone can delete their own account without the app: app stores
- * (Google Play) require such a web link next to in-app deletion. The person proves who they
- * are with their sign-in (email or phone and password, plus a two-factor code when they use
- * one). Throttled like sign-in. Super Admin accounts are not deleted here.
+ * The public page where anyone can ask for their account to be deleted without the app: app
+ * stores (Google Play) require such a web link next to in-app deletion. The person proves who
+ * they are with their sign-in (email or phone and password, plus a two-factor code when they
+ * use one). Throttled like sign-in. The request follows the same rules as in the app: blockers,
+ * staff review when automatic deletion is off, and the grace period.
  * Turn it off with foundation.routing.account_deletion_page = false.
  */
 final class AccountDeletionController extends Controller
 {
     public function show(): View
     {
-        return view('user::public.delete-account');
+        return view('user::public.delete-account', [
+            'graceDays' => (int) config('foundation.account_deletion.grace_days', 30),
+        ]);
     }
 
     public function destroy(
         Request $request,
         LoginAction $login,
         TwoFactorAuthenticator $twoFactor,
-        ManageUserAccountAction $manage,
+        AccountDeletion $deletion,
     ): RedirectResponse {
         $data = $request->validate([
             'login' => ['required', 'string', 'max:191'],
@@ -52,18 +56,15 @@ final class AccountDeletionController extends Controller
                 ->withErrors(['two_factor_code' => __('user::user.account_deletion.two_factor_needed')]);
         }
 
-        if ($user->is_super_admin) {
-            return back()->withInput($request->only('login'))
-                ->withErrors(['login' => __('user::user.account_deletion.super_admin')]);
+        try {
+            $result = $deletion->request($user, 'web');
+        } catch (AccountDeletionBlocked $e) {
+            return back()->withInput($request->only('login'))->with('deletion_blockers', $e->blockers);
         }
 
-        if (! $manage->execute($user, AccountAction::Delete)) {
-            return back()->withInput($request->only('login'))
-                ->withErrors(['login' => __('user::user.errors.manage_account_failed_api')]);
-        }
-
-        $user->tokens()->delete();
-
-        return redirect()->route('account.delete')->with('account_deleted', true);
+        return redirect()->route('account.delete')->with('deletion', [
+            'review' => $result->status === DeletionStatus::PendingReview,
+            'date' => $result->scheduled_for?->toDateString(),
+        ]);
     }
 }

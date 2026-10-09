@@ -172,6 +172,22 @@ return [
     ],
 
     /*
+    | Account deletion (app, API, the /delete-account page). A request signs the person out
+    | everywhere; after the grace period the account is anonymized, not erased: the user row
+    | stays with its personal data removed, so payments, orders and logs that point at it keep
+    | working. Signing in again before then cancels the request.
+    |
+    | automatic: off sends every request to Administration → Deletion requests for staff to
+    | approve or reject first (Settings → Security changes it).
+    */
+    'account_deletion' => [
+        'automatic' => (bool) env('FOUNDATION_ACCOUNT_DELETION_AUTOMATIC', true),
+        'grace_days' => (int) env('FOUNDATION_ACCOUNT_DELETION_GRACE_DAYS', 30),
+        // Login history and audit rows of anonymized users are kept this long (security, fraud).
+        'security_log_days' => (int) env('FOUNDATION_ACCOUNT_DELETION_LOG_DAYS', 365),
+    ],
+
+    /*
     | Proxies whose X-Forwarded-* headers are trusted: '*', or a comma-separated
     | list of IPs / CIDRs. Behind a load balancer, without this every user shares
     | the proxy's IP and IP-keyed throttles collapse into one bucket.

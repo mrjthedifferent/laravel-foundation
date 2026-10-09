@@ -23,7 +23,9 @@ use Modules\User\Http\Requests\ManageUserAccountRequest;
 use Modules\User\Http\Requests\StoreUserRequest;
 use Modules\User\Http\Requests\UpdateStatusRequest;
 use Modules\User\Http\Requests\UpdateUserRequest;
+use Modules\User\Models\AccountDeletionRequest;
 use Modules\User\Queries\UserQuery;
+use Modules\User\Services\AccountDeletion;
 use Mrj\Foundation\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -64,7 +66,13 @@ class UserController extends Controller
 
         $roles = Role::pluck('name', 'id');
 
-        return view('user::user.index', compact('users', 'roles'));
+        // Users with a deletion request still open get a badge linking to Deletion requests.
+        $deletions = AccountDeletionRequest::query()->open()
+            ->whereIn('user_id', $users->getCollection()->pluck('id'))
+            ->pluck('status', 'user_id')
+            ->all();
+
+        return view('user::user.index', compact('users', 'roles', 'deletions'));
     }
 
     /**
@@ -166,15 +174,17 @@ class UserController extends Controller
         }
 
         $accountAction = AccountAction::from($request->validated('action'));
-        $result = $action->execute($user, $accountAction);
 
-        if ($result) {
-            if ($accountAction === AccountAction::Reset) {
-                return back()->with('success', __('user::user.flash.account_reset'));
-            }
+        // Anonymized, not erased: payments, orders and logs that point at the account stay intact.
+        if ($accountAction === AccountAction::Delete) {
+            app(AccountDeletion::class)->anonymize($user);
 
             return redirect()->route('admin.users.index')
                 ->with('success', __('user::user.flash.account_deleted'));
+        }
+
+        if ($action->execute($user, $accountAction)) {
+            return back()->with('success', __('user::user.flash.account_reset'));
         }
 
         return back()->with('error', __('user::user.errors.manage_account_failed'));

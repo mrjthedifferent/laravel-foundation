@@ -194,6 +194,22 @@ return [
         'description' => 'Minutes of inactivity before a panel session ends',
         'is_visible' => false,
     ],
+    'account_deletion_automatic' => [
+        'group' => 'Security',
+        'config' => 'foundation.account_deletion.automatic',
+        'seed' => false,
+        'type' => 'boolean',
+        'description' => 'Schedule account deletion requests straight away (off: staff review each one under Administration → Deletion requests)',
+        'is_visible' => false,
+    ],
+    'account_deletion_grace_days' => [
+        'group' => 'Security',
+        'config' => 'foundation.account_deletion.grace_days',
+        'seed' => false,
+        'type' => 'integer',
+        'description' => 'Days between an accepted deletion request and the account being deleted; signing in meanwhile cancels it',
+        'is_visible' => false,
+    ],
     /*
     |--------------------------------------------------------------------------
     | Performance Settings

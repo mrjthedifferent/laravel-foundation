@@ -21,4 +21,6 @@ return [
     ['module_name' => 'User', 'name' => 'Verify User Contact'],
     ['module_name' => 'User', 'name' => 'Export User'],
     ['module_name' => 'User', 'name' => 'Import User'],
+    ['module_name' => 'User', 'name' => 'Review Account Deletion'],
+    ['module_name' => 'User', 'name' => 'Anonymize Account'],
 ];

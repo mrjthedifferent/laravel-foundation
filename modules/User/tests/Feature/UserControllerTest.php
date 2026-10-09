@@ -366,7 +366,7 @@ class UserControllerTest extends TestCase
         $this->assertSame(0, Device::where('user_id', $user->id)->count());
     }
 
-    public function test_account_delete_removes_the_user(): void
+    public function test_account_delete_anonymizes_the_user(): void
     {
         $user = User::factory()->create();
 
@@ -374,7 +374,12 @@ class UserControllerTest extends TestCase
             ->post(route('admin.users.account.manage', $user), ['action' => 'delete'])
             ->assertRedirect(route('admin.users.index'));
 
-        $this->assertModelMissing($user);
+        // Kept as a tombstone (other records point at it) with every personal detail gone.
+        $user->refresh();
+        $this->assertNotNull($user->anonymized_at);
+        $this->assertNull($user->email);
+        $this->assertNull($user->phone);
+        $this->assertFalse((bool) $user->is_active);
     }
 
     public function test_manage_account_rejects_an_unknown_action(): void

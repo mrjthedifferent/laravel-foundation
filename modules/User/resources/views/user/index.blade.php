@@ -137,6 +137,14 @@
                 @if ($user->isSuperAdmin())
                     <span class="badge badge-danger ms-1"><i class="ph ph-crown"></i>{{ __('user::user.common.super_admin') }}</span>
                 @endif
+                @isset($deletions[$user->id])
+                    
+                    @can(\Modules\User\Services\AccountDeletion::REVIEW_PERMISSION)
+                        <a href="{{ route('admin.deletion-requests.index', ['tab' => $deletions[$user->id]->value]) }}" class="badge badge-warning ms-1"><i class="ph ph-user-minus"></i>{{ __('user::user.deletion.badge', ['status' => mb_strtolower($deletions[$user->id]->label())]) }}</a>
+                    @else
+                        <span class="badge badge-warning ms-1"><i class="ph ph-user-minus"></i>{{ __('user::user.deletion.badge', ['status' => mb_strtolower($deletions[$user->id]->label())]) }}</span>
+                    @endcan
+                @endisset
             </td>
             <td class="text-end">
                 <x-dropdown-menu>

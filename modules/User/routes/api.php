@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Modules\User\Http\Controllers\Api\AccountDeletionController;
 use Modules\User\Http\Controllers\Api\UserController;
 use Modules\User\Http\Controllers\Api\UserDocumentController;
 
@@ -20,6 +21,8 @@ Route::prefix(config('foundation.routing.api_prefix'))->group(function (): void 
         Route::post('logout', [UserController::class, 'logout']);
         Route::post('change-password', [UserController::class, 'changePassword']);
         Route::post('manage-account', [UserController::class, 'manageAccount']);
+        Route::get('account/deletion', [AccountDeletionController::class, 'show']);
+        Route::post('account/deletion', [AccountDeletionController::class, 'store'])->middleware('throttle:auth');
 
         Route::get('user/documents', [UserDocumentController::class, 'index']);
         Route::post('user/documents', [UserDocumentController::class, 'store']);
