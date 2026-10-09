@@ -28,7 +28,7 @@
         @endisset
         @if($backUrl)
             <a href="{{ $backUrl }}" class="btn btn-light">
-                <i class="ph-arrow-left"></i>{{ $backLabel ?? __('foundation::foundation.components.back') }}
+                <i class="ph ph-arrow-left"></i>{{ $backLabel ?? __('foundation::foundation.components.back') }}
             </a>
         @endif
     </div>

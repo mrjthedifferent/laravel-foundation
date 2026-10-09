@@ -9,10 +9,10 @@
     <form action="{{ route('admin.settings.store_new') }}" method="POST" enctype="multipart/form-data" id="create-form">
         @csrf
 
-        <x-page-header title="{{ __('settings::settings.create.title') }}" subtitle="{{ __('settings::settings.create.subtitle') }}" icon="ph-plus"
+        <x-page-header title="{{ __('settings::settings.create.title') }}" subtitle="{{ __('settings::settings.create.subtitle') }}" icon="ph ph-plus"
             :back-url="route('admin.settings.manage')" back-label="{{ __('settings::settings.create.back') }}" />
 
-        <x-form-section title="{{ __('settings::settings.create.section_identity') }}" icon="ph-identification-card">
+        <x-form-section title="{{ __('settings::settings.create.section_identity') }}" icon="ph ph-identification-card">
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6">
                     <label class="form-label font-semibold text-sm required">{{ __('settings::settings.create.key_label') }}</label>
@@ -53,7 +53,7 @@
             </div>
         </x-form-section>
 
-        <x-form-section title="{{ __('settings::settings.create.section_flags') }}" icon="ph-toggle-right">
+        <x-form-section title="{{ __('settings::settings.create.section_flags') }}" icon="ph ph-toggle-right">
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6">
                     <div class="flex items-center justify-between p-4 rounded-md border">
@@ -82,7 +82,7 @@
 
         <div class="card mb-4 hidden" id="value_container">
             <div class="card-header">
-                <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-pencil-line"></i></span>
+                <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph ph-pencil-line"></i></span>
                 <span class="fd-overline">{{ __('settings::settings.create.value_header') }}</span>
             </div>
             <div class="card-body">
@@ -121,19 +121,19 @@
                     <x-form.input type="hidden" name="value_json" id="value_json" :value="old('value_json', '{}')" />
                     <div class="flex items-center gap-2 mt-2">
                         <button type="button" class="btn btn-sm btn-light" id="format-json"><i
-                                class="ph-brackets-curly"></i>{{ __('settings::settings.create.json_format') }}</button>
+                                class="ph ph-brackets-curly"></i>{{ __('settings::settings.create.json_format') }}</button>
                         <button type="button" class="btn btn-sm btn-light" id="validate-json"><i
-                                class="ph-check"></i>{{ __('settings::settings.create.json_validate') }}</button>
+                                class="ph ph-check"></i>{{ __('settings::settings.create.json_validate') }}</button>
                         <span id="json-validation-result" class="ms-1 text-sm"></span>
                     </div>
                 </div>
                 <div id="value_select_container" class="hidden">
-                    <x-alert type="info" icon="ph-info" class="mb-0">
+                    <x-alert type="info" icon="ph ph-info" class="mb-0">
                         <span class="text-sm">{{ __('settings::settings.create.select_hint') }}</span>
                     </x-alert>
                 </div>
                 <div id="value_multi-select_container" class="hidden">
-                    <x-alert type="info" icon="ph-info" class="mb-0">
+                    <x-alert type="info" icon="ph ph-info" class="mb-0">
                         <span class="text-sm">{{ __('settings::settings.create.multiselect_hint') }}</span>
                     </x-alert>
                 </div>
@@ -142,18 +142,18 @@
                         <div class="input-group input-group-sm mb-2 array-value-row">
                             <x-form.input name="value_array[]" placeholder="{{ __('settings::settings.create.array_value_placeholder') }}" />
                             <button type="button" class="btn btn-outline-danger btn-icon" onclick="removeArrayValue(this)"><i
-                                    class="ph-trash"></i></button>
+                                    class="ph ph-trash"></i></button>
                         </div>
                     </div>
                     <button type="button" class="btn btn-sm btn-light" onclick="addArrayValue()">
-                        <i class="ph-plus"></i>{{ __('settings::settings.create.add_value') }}
+                        <i class="ph ph-plus"></i>{{ __('settings::settings.create.add_value') }}
                     </button>
                 </div>
             </div>
         </div>
 
         <div id="options_container" class="hidden">
-            <x-form-section title="{{ __('settings::settings.create.section_options') }}" icon="ph-list-bullets">
+            <x-form-section title="{{ __('settings::settings.create.section_options') }}" icon="ph ph-list-bullets">
                 <x-slot name="badge">
                     <span class="text-muted text-xs ms-auto">{{ __('settings::settings.create.options_badge') }}</span>
                 </x-slot>
@@ -167,12 +167,12 @@
                         <div class="col-span-5"><x-form.input name="option_values[]" placeholder="{{ __('settings::settings.create.option_value_placeholder') }}" /></div>
                         <div class="col-span-12 md:col-span-2">
                             <button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-option"
-                                onclick="removeOption(this)"><i class="ph-trash"></i></button>
+                                onclick="removeOption(this)"><i class="ph ph-trash"></i></button>
                         </div>
                     </div>
                 </div>
                 <button type="button" class="btn btn-sm btn-light mt-1" onclick="addOption()">
-                    <i class="ph-plus"></i>{{ __('settings::settings.create.add_option') }}
+                    <i class="ph ph-plus"></i>{{ __('settings::settings.create.add_option') }}
                 </button>
             </x-form-section>
         </div>
@@ -180,10 +180,10 @@
         {{-- Footer actions --}}
         <div class="fd-form-actions">
             <a href="{{ route('admin.settings.manage') }}" class="btn btn-light">
-                <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
+                <i class="ph ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
             </a>
             <button type="submit" class="btn btn-primary px-6">
-                <i class="ph-floppy-disk"></i>{{ __('settings::settings.create.submit') }}
+                <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.create.submit') }}
             </button>
         </div>
 
@@ -259,7 +259,7 @@
                 try {
                     document.getElementById('value_json').value = JSON.stringify(JSON.parse(editor.getValue()));
                     document.getElementById('json-validation-result').innerHTML =
-                        '<span class="text-success"><i class="ph-check me-1"></i>{{ __('settings::settings.create.json_valid') }}</span>';
+                        '<span class="text-success"><i class="ph ph-check me-1"></i>{{ __('settings::settings.create.json_valid') }}</span>';
                 } catch (e) {
                     document.getElementById('json-validation-result').innerHTML = '<span class="text-danger">' + e
                         .message + '</span>';
@@ -283,7 +283,7 @@
                 try {
                     JSON.parse(editor.getValue());
                     document.getElementById('json-validation-result').innerHTML =
-                        '<span class="text-success"><i class="ph-check me-1"></i>{{ __('settings::settings.create.json_valid_json') }}</span>';
+                        '<span class="text-success"><i class="ph ph-check me-1"></i>{{ __('settings::settings.create.json_valid_json') }}</span>';
                 } catch (e) {
                     document.getElementById('json-validation-result').innerHTML = '<span class="text-danger">' + e
                         .message + '</span>';
@@ -296,7 +296,7 @@
             var row = '<div class="grid grid-cols-12 gap-2 mb-2 items-center option-row">' +
                 '<div class="col-span-5"><input type="text" class="form-control form-control-sm" name="option_keys[]" placeholder="{{ __('settings::settings.create.option_key_placeholder') }}"></div>' +
                 '<div class="col-span-5"><input type="text" class="form-control form-control-sm" name="option_values[]" placeholder="{{ __('settings::settings.create.option_value_placeholder') }}"></div>' +
-                '<div class="col-span-12 md:col-span-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-option" onclick="removeOption(this)"><i class="ph-trash"></i></button></div>' +
+                '<div class="col-span-12 md:col-span-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-option" onclick="removeOption(this)"><i class="ph ph-trash"></i></button></div>' +
                 '</div>';
             document.getElementById('options_list').insertAdjacentHTML('beforeend', row);
         }
@@ -307,7 +307,7 @@
 
         function addArrayValue() {
             var row =
-                '<div class="input-group input-group-sm mb-2 array-value-row"><input type="text" class="form-control" name="value_array[]" placeholder="{{ __('settings::settings.create.array_value_placeholder') }}"><button type="button" class="btn btn-outline-danger btn-icon" onclick="removeArrayValue(this)"><i class="ph-trash"></i></button></div>';
+                '<div class="input-group input-group-sm mb-2 array-value-row"><input type="text" class="form-control" name="value_array[]" placeholder="{{ __('settings::settings.create.array_value_placeholder') }}"><button type="button" class="btn btn-outline-danger btn-icon" onclick="removeArrayValue(this)"><i class="ph ph-trash"></i></button></div>';
             document.getElementById('array_values_list').insertAdjacentHTML('beforeend', row);
         }
 

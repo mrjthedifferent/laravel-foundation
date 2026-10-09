@@ -30,7 +30,7 @@ final class QuickActionsWidget extends DashboardWidget
     #[Override]
     public function icon(): string
     {
-        return 'ph-lightning';
+        return 'ph ph-lightning';
     }
 
     #[Override]

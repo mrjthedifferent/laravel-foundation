@@ -45,7 +45,7 @@ class UiTest extends TestCase
     public static function components(): array
     {
         return [
-            'page-header' => ['<x-page-header title="Things" icon="ph-cube" back-url="/back" />'],
+            'page-header' => ['<x-page-header title="Things" icon="ph ph-cube" back-url="/back" />'],
             'form-section' => ['<x-form-section title="Details">body</x-form-section>'],
             'search-card' => ['<x-search-card>filters</x-search-card>'],
             'table-view-pagination' => ['<x-table-view-pagination title="Things" :data="$rows"><tr><td>x</td></tr></x-table-view-pagination>'],

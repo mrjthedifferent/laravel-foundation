@@ -177,7 +177,7 @@ return [
     [
         'group' => 'administration',          // parent key from config/sidebar.php
         'label' => 'Things',
-        'icon' => 'ph-cube',
+        'icon' => 'ph ph-cube',
         'route' => 'admin.things.index',
         // Other routes that keep this item highlighted and its parent open.
         'routes' => ['admin.things.show', 'admin.things.create', 'admin.things.edit'],

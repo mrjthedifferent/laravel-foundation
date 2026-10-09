@@ -7,7 +7,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-gear"></i></span>
+            <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph ph-gear"></i></span>
             <div>
                 <div class="card-title">{{ __('errorreport::errorreport.settings.title') }}</div>
                 <div class="text-muted text-xs">{{ __('errorreport::errorreport.settings.subtitle') }}</div>
@@ -112,7 +112,7 @@
                         </div>
                         <button type="button" class="btn btn-ghost btn-sm ms-auto" data-fd-toggle="collapse"
                             data-fd-target="#slack-help" aria-expanded="false">
-                            <i class="ph-question"></i>{{ __('errorreport::errorreport.settings.how_to_get') }}
+                            <i class="ph ph-question"></i>{{ __('errorreport::errorreport.settings.how_to_get') }}
                         </button>
                     </div>
                     <div>
@@ -139,7 +139,7 @@
                         </div>
                         <button type="button" class="btn btn-ghost btn-sm ms-auto" data-fd-toggle="collapse"
                             data-fd-target="#telegram-help" aria-expanded="false">
-                            <i class="ph-question"></i>{{ __('errorreport::errorreport.settings.how_to_get') }}
+                            <i class="ph ph-question"></i>{{ __('errorreport::errorreport.settings.how_to_get') }}
                         </button>
                     </div>
                     <div>
@@ -191,7 +191,7 @@
 
                 <div class="flex justify-end mt-6">
                     <button type="submit" class="btn btn-primary">
-                        <i class="ph-floppy-disk"></i>{{ __('errorreport::errorreport.settings.save') }}
+                        <i class="ph ph-floppy-disk"></i>{{ __('errorreport::errorreport.settings.save') }}
                     </button>
                 </div>
             </form>

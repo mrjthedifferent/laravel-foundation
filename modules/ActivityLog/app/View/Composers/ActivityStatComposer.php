@@ -51,7 +51,7 @@ final class ActivityStatComposer extends StatComposer
         return [[
             'label' => __('activitylog::activitylog.stat.activity_today'),
             'value' => number_format($today),
-            'icon' => 'ph-activity',
+            'icon' => 'ph ph-activity',
             'color' => 'success',
             'href' => route('admin.activity-logs.index'),
             'caption' => __('activitylog::activitylog.stat.this_week', ['count' => number_format($week)]),

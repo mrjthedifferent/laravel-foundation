@@ -8,7 +8,7 @@
 
 {{-- Import errors --}}
 @if(session('import_errors'))
-<x-alert type="warning" icon="ph-warning">
+<x-alert type="warning" icon="ph ph-warning">
     <strong>{{ __('settings::settings.manage.import_errors_title') }}</strong>
     <ul class="mb-0 mt-1 ps-4 text-sm">
         @foreach(session('import_errors') as $error)
@@ -25,16 +25,16 @@
         <div class="flex flex-wrap gap-2 ms-auto">
             <a href="{{ route('admin.settings.sync') }}" class="btn btn-light swal-post"
                 data-text="{{ __('settings::settings.manage.sync_confirm') }}">
-                <i class="ph-eject"></i>{{ __('settings::settings.manage.sync') }}
+                <i class="ph ph-eject"></i>{{ __('settings::settings.manage.sync') }}
             </a>
             <a href="{{ route('admin.settings.export') }}" class="btn btn-light">
-                <i class="ph-download"></i>{{ __('foundation::foundation.common.export') }}
+                <i class="ph ph-download"></i>{{ __('foundation::foundation.common.export') }}
             </a>
             <a href="{{ route('admin.settings.import_form') }}" class="btn btn-light">
-                <i class="ph-upload"></i>{{ __('settings::settings.manage.import') }}
+                <i class="ph ph-upload"></i>{{ __('settings::settings.manage.import') }}
             </a>
             <a href="{{ route('admin.settings.create') }}" class="btn btn-primary">
-                <i class="ph-plus"></i>{{ __('settings::settings.manage.new_setting') }}
+                <i class="ph ph-plus"></i>{{ __('settings::settings.manage.new_setting') }}
             </a>
         </div>
     </div>
@@ -42,7 +42,7 @@
     {{-- Filters --}}
     <div class="fd-toolbar">
         <div class="fd-toolbar-search">
-            <i class="ph-magnifying-glass"></i>
+            <i class="ph ph-magnifying-glass"></i>
             <input type="text" id="settings-search" class="form-control"
                 aria-label="{{ __('settings::settings.manage.search_label') }}"
                 placeholder="{{ __('settings::settings.manage.search_placeholder') }}">
@@ -60,17 +60,17 @@
             @endforeach
         </select>
         <button type="button" id="clear-search" class="btn btn-ghost btn-icon" title="{{ __('settings::settings.manage.clear') }}">
-            <i class="ph-x"></i>
+            <i class="ph ph-x"></i>
         </button>
         <button type="button" id="reset-filters-btn" class="btn btn-light ms-auto">
-            <i class="ph-arrow-counter-clockwise"></i>{{ __('foundation::foundation.common.reset') }}
+            <i class="ph ph-arrow-counter-clockwise"></i>{{ __('foundation::foundation.common.reset') }}
         </button>
     </div>
 
     {{-- Bulk action bar --}}
     <div id="bulk-bar" class="fd-toolbar hidden">
         <span class="font-medium text-sm">
-            <i class="ph-check-square"></i> <span id="selected-count">0</span> {{ __('settings::settings.manage.selected') }}
+            <i class="ph ph-check-square"></i> <span id="selected-count">0</span> {{ __('settings::settings.manage.selected') }}
         </span>
         <select id="bulk-action" class="form-select" aria-label="{{ __('settings::settings.manage.choose_action') }}">
             <option value="">{{ __('settings::settings.manage.choose_action') }}</option>
@@ -93,14 +93,14 @@
             placeholder="{{ __('settings::settings.manage.new_group_placeholder') }}">
         <button type="button" id="apply-bulk-action" class="btn btn-primary btn-sm">{{ __('settings::settings.manage.apply') }}</button>
         <button type="button" id="deselect-all" class="btn btn-ghost btn-sm ms-auto">
-            <i class="ph-x"></i>{{ __('settings::settings.manage.clear') }}
+            <i class="ph ph-x"></i>{{ __('settings::settings.manage.clear') }}
         </button>
     </div>
 
     {{-- Select-all row --}}
     <div id="select-bar" class="fd-toolbar">
         <button type="button" id="select-all" class="btn btn-light btn-sm">
-            <i class="ph-check-square"></i>{{ __('settings::settings.manage.select_all_visible') }}
+            <i class="ph ph-check-square"></i>{{ __('settings::settings.manage.select_all_visible') }}
         </button>
     </div>
 
@@ -154,7 +154,7 @@
                         <img src="{{ $setting->value }}" class="rounded-md h-6" alt="{{ $setting->key }}">
                         @elseif($setting->type === 'file' && $setting->value)
                         <a href="{{ $setting->value }}" target="_blank" class="text-sm">
-                            <i class="ph-file"></i> {{ __('settings::settings.index.view_current_file') }}
+                            <i class="ph ph-file"></i> {{ __('settings::settings.index.view_current_file') }}
                         </a>
                         @elseif($setting->type === 'boolean')
                         @if($setting->value)
@@ -173,14 +173,14 @@
                     </td>
                     <td class="text-center">
                         @if($setting->is_visible)
-                        <i class="ph-eye text-success" title="{{ __('settings::settings.manage.visible_tooltip') }}"></i>
+                        <i class="ph ph-eye text-success" title="{{ __('settings::settings.manage.visible_tooltip') }}"></i>
                         @else
-                        <i class="ph-eye-slash text-muted" title="{{ __('settings::settings.manage.hidden_tooltip') }}"></i>
+                        <i class="ph ph-eye-slash text-muted" title="{{ __('settings::settings.manage.hidden_tooltip') }}"></i>
                         @endif
                     </td>
                     <td class="text-center">
                         @if($setting->required)
-                        <i class="ph-asterisk text-warning" title="{{ __('settings::settings.manage.required_tooltip') }}"></i>
+                        <i class="ph ph-asterisk text-warning" title="{{ __('settings::settings.manage.required_tooltip') }}"></i>
                         @else
                         <span class="text-muted">—</span>
                         @endif
@@ -188,13 +188,13 @@
                     <td class="text-end">
                         <x-dropdown-menu>
                             <x-dropdown-link :url="route('admin.settings.edit', $setting)">
-                                <i class="ph-pencil-simple"></i>{{ __('foundation::foundation.common.edit') }}
+                                <i class="ph ph-pencil-simple"></i>{{ __('foundation::foundation.common.edit') }}
                             </x-dropdown-link>
                             <div class="dropdown-divider"></div>
                             <button type="button" class="dropdown-item text-danger swal-delete"
                                 data-url="{{ route('admin.settings.destroy', $setting) }}"
                                 data-text="{{ __('settings::settings.manage.delete_confirm', ['key' => $setting->key]) }}">
-                                <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
+                                <i class="ph ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
                             </button>
                         </x-dropdown-menu>
                     </td>
@@ -211,7 +211,7 @@
     </div>
 
     <div id="no-results" class="fd-empty hidden">
-        <span class="fd-empty-icon"><i class="ph-magnifying-glass"></i></span>
+        <span class="fd-empty-icon"><i class="ph ph-magnifying-glass"></i></span>
         <div class="fd-empty-title">{{ __('settings::settings.manage.no_results') }}</div>
     </div>
 

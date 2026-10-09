@@ -23,7 +23,7 @@ final class BackupQuickActions extends QuickActionComposer
     {
         return [[
             'label' => __('backupcleanup::backupcleanup.quick.backups'),
-            'icon' => 'ph-database',
+            'icon' => 'ph ph-database',
             'href' => route('admin.backups.index'),
             'permission' => 'Create Backup',
         ]];

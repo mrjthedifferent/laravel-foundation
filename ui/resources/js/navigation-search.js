@@ -15,7 +15,7 @@ export function initNavigationSearch() {
     overlay.innerHTML = `
         <div class="fd-cmdk" role="dialog" aria-modal="true" aria-label="${escapeHtml(strings.label)}">
             <div class="fd-cmdk-input">
-                <i class="ph-magnifying-glass"></i>
+                <i class="ph ph-magnifying-glass"></i>
                 <input type="text" id="globalSearchPaletteInput" autocomplete="off" placeholder="${escapeHtml(strings.placeholder)}">
                 <span class="fd-kbd">Esc</span>
             </div>
@@ -57,7 +57,7 @@ export function initNavigationSearch() {
                 label,
                 href,
                 hint: group,
-                icon: link.querySelector('i')?.className || 'ph-arrow-right',
+                icon: link.querySelector('i')?.className || 'ph ph-arrow-right',
             });
         });
 
@@ -113,7 +113,7 @@ export function initNavigationSearch() {
                 .map((person) => {
                     const face = person.avatar
                         ? `<img src="${escapeHtml(person.avatar)}" class="fd-avatar fd-avatar-sm" alt="">`
-                        : `<i class="${escapeHtml(person.icon || 'ph-user')}"></i>`;
+                        : `<i class="${escapeHtml(person.icon || 'ph ph-user')}"></i>`;
                     return `
                         <a class="fd-cmdk-item" href="${escapeHtml(person.url)}">
                             ${face}${escapeHtml(person.text)}

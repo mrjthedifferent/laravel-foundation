@@ -781,7 +781,7 @@
                 widget.setAttribute('data-hidden', hidden ? 'true' : 'false');
                 widget.classList.toggle('is-hidden', hidden);
                 var icon = widget.querySelector('[data-fd-widget-act="toggle"] i');
-                if (icon) { icon.className = hidden ? 'ph-eye-slash' : 'ph-eye'; }
+                if (icon) { icon.className = hidden ? 'ph ph-eye-slash' : 'ph ph-eye'; }
                 // Hidden ones stay on screen while editing, dimmed, so they can be brought back.
                 widget.style.opacity = hidden ? '.55' : '';
                 dirty = true;
@@ -940,7 +940,7 @@
                     chip.className = 'fd-chip';
                     var name = labelOf(control);
                     chip.setAttribute('aria-label', (name ? name + ': ' : '') + value + ' (remove)');
-                    chip.innerHTML = '<span class="fd-chip-name"></span><span class="fd-chip-value"></span><i class="ph-x" aria-hidden="true"></i>';
+                    chip.innerHTML = '<span class="fd-chip-name"></span><span class="fd-chip-value"></span><i class="ph ph-x" aria-hidden="true"></i>';
                     chip.querySelector('.fd-chip-name').textContent = name;
                     chip.querySelector('.fd-chip-value').textContent = value;
                     chip.addEventListener('click', function () {

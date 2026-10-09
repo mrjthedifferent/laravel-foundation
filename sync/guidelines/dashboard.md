@@ -37,7 +37,7 @@ final class InvoiceStatComposer extends StatComposer
         return [[
             'label' => __('invoice::invoice.stat.open'),
             'value' => number_format(Invoice::query()->whereNull('paid_at')->count()),
-            'icon' => 'ph-receipt',
+            'icon' => 'ph ph-receipt',
             'color' => 'warning',                                // primary|success|warning|danger|info|secondary
             'href' => route('admin.invoices.index'),
             'change' => '12%', 'changeUp' => true,               // optional trend pill
@@ -73,7 +73,7 @@ final class OpenInvoicesWidget extends DashboardWidget
 {
     public function key(): string { return 'open-invoices'; }     // stored in saved layouts — never change it once released
     public function title(): string { return __('invoice::invoice.widget.open'); }
-    public function icon(): string { return 'ph-receipt'; }
+    public function icon(): string { return 'ph ph-receipt'; }
     public function width(): int { return 4; }                    // default: 3, 4, 6, 8 or 12 of 12
     public function order(): int { return 50; }                   // default place; lower first
     public function permissions(): array { return ['View Invoice']; }   // any one is enough; [] = everyone
@@ -92,7 +92,7 @@ final class OpenInvoicesWidget extends DashboardWidget
 {{-- Modules/Invoice/resources/views/partials/widget-open.blade.php --}}
 <div class="card h-full">
     <div class="card-header">
-        <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-receipt"></i></span>
+        <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph ph-receipt"></i></span>
         <h2 class="card-title">{{ __('invoice::invoice.widget.open') }}</h2>
     </div>
     <div class="card-body"><x-chart-bar :series="$series" label="…" /></div>
@@ -109,7 +109,7 @@ final class InvoiceQuickActions extends QuickActionComposer
     public function priority(): int { return 25; }
     public function actions(): array
     {
-        return [['label' => __('invoice::invoice.quick.new'), 'icon' => 'ph-plus', 'href' => route('admin.invoices.create'), 'permission' => 'Create Invoice']];
+        return [['label' => __('invoice::invoice.quick.new'), 'icon' => 'ph ph-plus', 'href' => route('admin.invoices.create'), 'permission' => 'Create Invoice']];
     }
 }
 

@@ -12,16 +12,16 @@
     <x-page-header
         title="{{ __('settings::settings.import.title') }}"
         subtitle="{{ __('settings::settings.import.subtitle') }}"
-        icon="ph-upload"
+        icon="ph ph-upload"
         :back-url="route('admin.settings.manage')"
         back-label="{{ __('settings::settings.import.back') }}" />
 
-    <x-form-section title="{{ __('settings::settings.import.section_how_it_works') }}" icon="ph-info">
+    <x-form-section title="{{ __('settings::settings.import.section_how_it_works') }}" icon="ph ph-info">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 sm:col-span-6">
                 <div class="flex gap-2">
                     <span class="fd-icon-tile fd-icon-tile-sm">
-                        <i class="ph-git-merge"></i>
+                        <i class="ph ph-git-merge"></i>
                     </span>
                     <div>
                         <div class="font-semibold text-sm">{{ __('settings::settings.import.merge_mode_title') }}</div>
@@ -32,7 +32,7 @@
             <div class="col-span-12 sm:col-span-6">
                 <div class="flex gap-2">
                     <span class="fd-icon-tile fd-icon-tile-sm is-danger">
-                        <i class="ph-arrows-clockwise"></i>
+                        <i class="ph ph-arrows-clockwise"></i>
                     </span>
                     <div>
                         <div class="font-semibold text-sm">{{ __('settings::settings.import.overwrite_mode_title') }}</div>
@@ -43,7 +43,7 @@
         </div>
     </x-form-section>
 
-    <x-form-section title="{{ __('settings::settings.import.section_import_file') }}" icon="ph-brackets-curly">
+    <x-form-section title="{{ __('settings::settings.import.section_import_file') }}" icon="ph ph-brackets-curly">
         <div class="mb-4">
             <x-form.file name="settings_file" id="settings_file" accept=".json" required
                 :label="__('settings::settings.import.json_file_label')"
@@ -75,7 +75,7 @@
         </div>
     </x-form-section>
 
-    <x-alert type="warning" icon="ph-warning" class="mb-6">
+    <x-alert type="warning" icon="ph ph-warning" class="mb-6">
         <span class="text-sm">
             {!! __('settings::settings.import.backup_warning', [
                 'link' => '<a href="'.route('admin.settings.export').'" class="font-semibold alert-link">'.__('settings::settings.import.export_current_settings').'</a>',
@@ -85,10 +85,10 @@
 
     <div class="flex justify-between items-center">
         <a href="{{ route('admin.settings.manage') }}" class="btn btn-light">
-            <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
+            <i class="ph ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
         <button type="submit" class="btn btn-primary px-6">
-            <i class="ph-upload"></i>{{ __('settings::settings.import.submit') }}
+            <i class="ph ph-upload"></i>{{ __('settings::settings.import.submit') }}
         </button>
     </div>
 

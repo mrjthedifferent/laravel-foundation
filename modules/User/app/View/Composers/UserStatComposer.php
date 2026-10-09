@@ -55,7 +55,7 @@ final class UserStatComposer extends StatComposer
         return [
             'label' => __('user::user.stat.active_users'),
             'value' => number_format(User::query()->where('is_active', true)->count()),
-            'icon' => 'ph-users',
+            'icon' => 'ph ph-users',
             'href' => route('admin.users.index'),
             'change' => $this->percentage($thisWeek, $lastWeek),
             'changeUp' => $thisWeek >= $lastWeek,
@@ -75,7 +75,7 @@ final class UserStatComposer extends StatComposer
         return [
             'label' => __('user::user.stat.sign_ins_today'),
             'value' => number_format($today),
-            'icon' => 'ph-sign-in',
+            'icon' => 'ph ph-sign-in',
             'color' => 'info',
             'change' => $this->percentage($today, $yesterday),
             'changeUp' => $today >= $yesterday,

@@ -37,17 +37,17 @@
         <x-table-export-dropdown>
             <x-table-export-item :href="route('admin.activity-logs.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'csv']))"
                 class="swal-confirm"
-                icon="ph-file-csv"
+                icon="ph ph-file-csv"
                 title="{{ __('activitylog::activitylog.index.export_csv') }}"
                 data-text="{{ __('activitylog::activitylog.index.export_csv_confirm') }}" />
             <x-table-export-item :href="route('admin.activity-logs.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'xlsx']))"
                 class="swal-confirm"
-                icon="ph-file-xls"
+                icon="ph ph-file-xls"
                 title="{{ __('activitylog::activitylog.index.export_excel') }}"
                 data-text="{{ __('activitylog::activitylog.index.export_excel_confirm') }}" />
             <x-table-export-item :href="route('admin.activity-logs.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'pdf']))"
                 class="swal-confirm"
-                icon="ph-file-pdf"
+                icon="ph ph-file-pdf"
                 title="{{ __('activitylog::activitylog.index.export_pdf') }}"
                 data-text="{{ __('activitylog::activitylog.index.export_pdf_confirm') }}" />
         </x-table-export-dropdown>
@@ -124,12 +124,12 @@
                     <span class="fd-overline">{{ ActivityLogHelper::titleCase($relation) }}</span>
                     @if (!empty($added))
                     <div class="truncate">
-                        <i class="ph-plus-circle text-success me-1"></i>{{ implode(', ', array_map(fn($i) => is_array($i) ? ($i[$nk] ?? $i['id'] ?? '?') : $toStr($i), $added)) }}
+                        <i class="ph ph-plus-circle text-success me-1"></i>{{ implode(', ', array_map(fn($i) => is_array($i) ? ($i[$nk] ?? $i['id'] ?? '?') : $toStr($i), $added)) }}
                     </div>
                     @endif
                     @if (!empty($removed))
                     <div class="truncate">
-                        <i class="ph-minus-circle text-danger me-1"></i>{{ implode(', ', array_map(fn($i) => is_array($i) ? ($i[$nk] ?? $i['id'] ?? '?') : $toStr($i), $removed)) }}
+                        <i class="ph ph-minus-circle text-danger me-1"></i>{{ implode(', ', array_map(fn($i) => is_array($i) ? ($i[$nk] ?? $i['id'] ?? '?') : $toStr($i), $removed)) }}
                     </div>
                     @endif
                 </div>
@@ -145,7 +145,7 @@
                     <strong class="text-body">{{ ActivityLogHelper::titleCase($key) }}:</strong>
                     @if ($isUpdated && is_array($value) && array_key_exists('old', $value) && array_key_exists('new', $value))
                     <span class="text-danger">{{ Str::limit($toStr($value['old']), 20) }}</span>
-                    <i class="ph-arrow-right mx-1 text-muted"></i>
+                    <i class="ph ph-arrow-right mx-1 text-muted"></i>
                     <span class="text-success">{{ Str::limit($toStr($value['new']), 20) }}</span>
                     @else
                     <span class="text-muted">{{ Str::limit($toStr($value), 30) }}</span>
@@ -189,18 +189,18 @@
                 @endcan
                 @else
                 <span class="text-muted small">
-                    <i class="ph-user-circle me-1"></i>{{ __('activitylog::activitylog.index.deleted_user', ['id' => $audit->user_id]) }}
+                    <i class="ph ph-user-circle me-1"></i>{{ __('activitylog::activitylog.index.deleted_user', ['id' => $audit->user_id]) }}
                 </span>
                 @endif
                 @else
                 <span class="text-muted small">
-                    <i class="ph-robot me-1"></i>{{ __('activitylog::activitylog.index.system') }}
+                    <i class="ph ph-robot me-1"></i>{{ __('activitylog::activitylog.index.system') }}
                 </span>
                 @endif
                 @if ($impersonatedId = ActivityLogHelper::impersonatedUserId($audit->tags))
                 <span class="badge bg-warning-subtle text-warning border border-warning-subtle text-xs mt-1"
                     title="{{ __('activitylog::activitylog.index.impersonating_title') }}">
-                    <i class="ph-user-switch"></i>{{ __('activitylog::activitylog.index.as_user', ['name' => ($impersonatedUsers ?? collect())[$impersonatedId] ?? __('activitylog::activitylog.index.user_number', ['id' => $impersonatedId])]) }}
+                    <i class="ph ph-user-switch"></i>{{ __('activitylog::activitylog.index.as_user', ['name' => ($impersonatedUsers ?? collect())[$impersonatedId] ?? __('activitylog::activitylog.index.user_number', ['id' => $impersonatedId])]) }}
                 </span>
                 @endif
             </td>
@@ -229,13 +229,13 @@
                 <x-dropdown-menu>
                     @can('View Activity Log')
                     <x-dropdown-link :url="route('admin.activity-logs.show', $audit->id)">
-                        <i class="ph-eye"></i> {{ __('activitylog::activitylog.index.view_content_history') }}
+                        <i class="ph ph-eye"></i> {{ __('activitylog::activitylog.index.view_content_history') }}
                     </x-dropdown-link>
                     @endcan
                     @if ($audit->user_id && $audit->user)
                     @can('view', $audit->user)
                     <x-dropdown-link :url="route('admin.users.show', $audit->user_id)">
-                        <i class="ph-user"></i> {{ __('activitylog::activitylog.index.view_user_profile') }}
+                        <i class="ph ph-user"></i> {{ __('activitylog::activitylog.index.view_user_profile') }}
                     </x-dropdown-link>
                     @endcan
                     @endif
@@ -243,7 +243,7 @@
                     <button type="button" class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.activity-logs.destroy', $audit->id) }}"
                         data-text="{{ __('activitylog::activitylog.index.delete_log_confirm') }}">
-                        <i class="ph-trash"></i> {{ __('activitylog::activitylog.index.delete_log') }}
+                        <i class="ph ph-trash"></i> {{ __('activitylog::activitylog.index.delete_log') }}
                     </button>
                     @endcan
                 </x-dropdown-menu>

@@ -10,7 +10,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'Roles',
-        'icon' => 'ph-shield',
+        'icon' => 'ph ph-shield',
         'route' => 'admin.role.index',
         'routes' => ['admin.role.assign.permission.get', 'admin.role.clone'],
         'permissions' => ['Create Role', 'View Role', 'Edit Role', 'Delete Role', 'Assign Permission'],
@@ -19,7 +19,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'Permissions',
-        'icon' => 'ph-lock-key',
+        'icon' => 'ph ph-lock-key',
         'route' => 'admin.permissions.manage',
         'routes' => ['admin.permission.sync', 'admin.permission.delete', 'admin.permission.bulk-delete', 'admin.permission.store', 'admin.permission.roles'],
         'permissions' => ['Assign Permission'],

@@ -5,7 +5,7 @@
             <x-stat-card
                 :label="$stat['label']"
                 :value="$stat['value']"
-                :icon="$stat['icon'] ?? 'ph-chart-bar'"
+                :icon="$stat['icon'] ?? 'ph ph-chart-bar'"
                 :color="$stat['color'] ?? 'primary'"
                 :href="$stat['href'] ?? null"
                 :change="$stat['change'] ?? null"

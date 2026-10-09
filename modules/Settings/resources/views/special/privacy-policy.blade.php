@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<x-page-header title="{{ __('settings::settings.special_privacy_policy.title') }}" subtitle="{{ __('settings::settings.special_privacy_policy.subtitle') }}" icon="ph-file-text">
+<x-page-header title="{{ __('settings::settings.special_privacy_policy.title') }}" subtitle="{{ __('settings::settings.special_privacy_policy.subtitle') }}" icon="ph ph-file-text">
 </x-page-header>
 
 <div class="card">
@@ -17,7 +17,7 @@
             </div>
             <div class="flex justify-end">
                 <button type="submit" class="btn btn-primary px-6">
-                    <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_privacy_policy.submit') }}
+                    <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.special_privacy_policy.submit') }}
                 </button>
             </div>
         </form>

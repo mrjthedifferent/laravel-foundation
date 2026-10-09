@@ -23,7 +23,7 @@ final class NotificationQuickActions extends QuickActionComposer
     {
         return [[
             'label' => __('notification::notification.quick.send'),
-            'icon' => 'ph-paper-plane-tilt',
+            'icon' => 'ph ph-paper-plane-tilt',
             'href' => route('admin.push.notification.create'),
             'permission' => 'Create Push Notification',
         ]];

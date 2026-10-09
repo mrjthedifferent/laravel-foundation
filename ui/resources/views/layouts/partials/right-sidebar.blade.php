@@ -29,9 +29,9 @@
         <div class="fd-overline mb-2">{{ __('foundation::foundation.theme_config.color_mode') }}</div>
         <p class="text-sm text-muted">{{ __('foundation::foundation.theme_config.session_override') }}</p>
         <div class="list-group mb-6">
-            @foreach(['light' => ['icon'=>'ph-sun','label'=>__('foundation::foundation.theme_config.light_theme'),'desc'=>__('foundation::foundation.theme_config.light_theme_desc')],
-                       'dark'  => ['icon'=>'ph-moon','label'=>__('foundation::foundation.theme_config.dark_theme'),'desc'=>__('foundation::foundation.theme_config.dark_theme_desc')],
-                       'auto'  => ['icon'=>'ph-circle-half','label'=>__('foundation::foundation.theme_config.auto_theme'),'desc'=>__('foundation::foundation.theme_config.auto_theme_desc')]] as $val => $opt)
+            @foreach(['light' => ['icon'=>'ph ph-sun','label'=>__('foundation::foundation.theme_config.light_theme'),'desc'=>__('foundation::foundation.theme_config.light_theme_desc')],
+                       'dark'  => ['icon'=>'ph ph-moon','label'=>__('foundation::foundation.theme_config.dark_theme'),'desc'=>__('foundation::foundation.theme_config.dark_theme_desc')],
+                       'auto'  => ['icon'=>'ph ph-circle-half','label'=>__('foundation::foundation.theme_config.auto_theme'),'desc'=>__('foundation::foundation.theme_config.auto_theme_desc')]] as $val => $opt)
             <label class="list-group-item flex items-center gap-4 @if($val === $rsColorMode) rs-item-selected @endif">
                 <i class="{{ $opt['icon'] }} ph-lg"></i>
                 <span class="flex-auto min-w-0">
@@ -48,7 +48,7 @@
         <div class="fd-overline mb-2">{{ __('foundation::foundation.theme_config.direction') }}</div>
         <div class="list-group mb-6">
             <label class="list-group-item flex items-center gap-4">
-                <i class="ph-text-aa ph-lg"></i>
+                <i class="ph ph-text-aa ph-lg"></i>
                 <span class="flex-auto min-w-0">
                     <span class="font-semibold block text-strong">{{ __('foundation::foundation.theme_config.rtl_direction') }}</span>
                     <span class="text-sm text-muted">{{ __('foundation::foundation.theme_config.rtl_direction_desc') }}</span>
@@ -64,7 +64,7 @@
         @can('editSpecial', \Modules\Settings\Models\Setting::class)
         <p class="text-sm text-muted">{{ __('foundation::foundation.theme_config.persistent_settings_note') }}</p>
         <a href="{{ route('admin.settings.special.theme') }}" class="btn btn-light w-full">
-            <i class="ph-paint-brush"></i>{{ __('foundation::foundation.theme_config.open_theme_settings') }}
+            <i class="ph ph-paint-brush"></i>{{ __('foundation::foundation.theme_config.open_theme_settings') }}
         </a>
         @endcan
         @endif

@@ -5,11 +5,11 @@
 @endsection
 
 @section('content')
-    <x-table-view-pagination title="{{ __('otp::otp.whitelist_index.breadcrumb') }}" :data="$whitelists" empty-message="{{ __('otp::otp.whitelist_index.empty') }}" empty-icon="ph-list-checks">
+    <x-table-view-pagination title="{{ __('otp::otp.whitelist_index.breadcrumb') }}" :data="$whitelists" empty-message="{{ __('otp::otp.whitelist_index.empty') }}" empty-icon="ph ph-list-checks">
         <x-slot name="actions">
             <x-table-actions>
                 @can('Create OTP Whitelist')
-                    <x-table-action :href="route('admin.otp-whitelist.create')" icon="ph-plus" title="{{ __('otp::otp.whitelist_index.add_new') }}" />
+                    <x-table-action :href="route('admin.otp-whitelist.create')" icon="ph ph-plus" title="{{ __('otp::otp.whitelist_index.add_new') }}" />
                 @endcan
             </x-table-actions>
         </x-slot>
@@ -44,13 +44,13 @@
                         <x-dropdown-menu>
                             @can('View OTP Whitelist')
                                 <x-dropdown-link :url="route('admin.otp-whitelist.show', $whitelist->id)">
-                                    <i class="ph-eye"></i>{{ __('otp::otp.whitelist_index.view_entry') }}
+                                    <i class="ph ph-eye"></i>{{ __('otp::otp.whitelist_index.view_entry') }}
                                 </x-dropdown-link>
                             @endcan
 
                             @can('Edit OTP Whitelist')
                                 <x-dropdown-link :url="route('admin.otp-whitelist.edit', $whitelist->id)">
-                                    <i class="ph-pencil-simple"></i>{{ __('otp::otp.whitelist_index.edit_entry') }}
+                                    <i class="ph ph-pencil-simple"></i>{{ __('otp::otp.whitelist_index.edit_entry') }}
                                 </x-dropdown-link>
                             @endcan
 
@@ -58,7 +58,7 @@
                                 <button type="button" class="dropdown-item text-danger swal-delete"
                                     data-url="{{ route('admin.otp-whitelist.destroy', $whitelist->id) }}"
                                     data-text="{{ __('otp::otp.whitelist_index.delete_confirm') }}">
-                                    <i class="ph-trash"></i>{{ __('otp::otp.whitelist_index.delete_entry') }}
+                                    <i class="ph ph-trash"></i>{{ __('otp::otp.whitelist_index.delete_entry') }}
                                 </button>
                             @endcan
                         </x-dropdown-menu>

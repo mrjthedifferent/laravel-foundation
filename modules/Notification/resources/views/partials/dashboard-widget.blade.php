@@ -2,7 +2,7 @@
     <div class="col-span-12 xl:col-span-4 lg:col-span-6">
         <div class="card h-full">
             <div class="card-header">
-                <span class="fd-icon-tile fd-icon-tile-sm is-info"><i class="ph-bell"></i></span>
+                <span class="fd-icon-tile fd-icon-tile-sm is-info"><i class="ph ph-bell"></i></span>
                 <h2 class="card-title">{{ __('notification::notification.widget.title') }}</h2>
                 <a href="{{ route('admin.notification.index') }}" class="ms-auto text-sm">
                     {{ __('foundation::foundation.notification.view_all') }}

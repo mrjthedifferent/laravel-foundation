@@ -34,10 +34,10 @@
 
     <div class="flex flex-wrap justify-center gap-2">
         <a href="{{ url()->previous('/') }}" class="btn btn-light">
-            <i class="ph-arrow-left"></i>{{ __('foundation::foundation.errors.go_back') }}
+            <i class="ph ph-arrow-left"></i>{{ __('foundation::foundation.errors.go_back') }}
         </a>
         <a href="/" class="btn btn-primary">
-            <i class="ph-house"></i>{{ __('foundation::foundation.layout.home') }}
+            <i class="ph ph-house"></i>{{ __('foundation::foundation.layout.home') }}
         </a>
     </div>
 </div>

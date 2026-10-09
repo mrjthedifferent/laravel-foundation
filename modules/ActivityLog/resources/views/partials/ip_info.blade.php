@@ -17,12 +17,12 @@
             <div class="font-mono">{{ $latitude }}, {{ $longitude }}</div>
             <a href="https://www.google.com/maps?q={{ $latitude }},{{ $longitude }}"
                class="inline-flex items-center gap-1 text-sm" target="_blank" rel="noopener">
-                <i class="ph-map-pin"></i>{{ __('activitylog::activitylog.ip_info.view_on_google_maps') }}
+                <i class="ph ph-map-pin"></i>{{ __('activitylog::activitylog.ip_info.view_on_google_maps') }}
             </a>
         </dd>
     @endif
 </dl>
 
-<x-alert type="info" icon="ph-info" class="mt-4">
+<x-alert type="info" icon="ph ph-info" class="mt-4">
     {{ __('activitylog::activitylog.ip_info.disclaimer') }}
 </x-alert>

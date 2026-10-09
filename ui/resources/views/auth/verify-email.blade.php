@@ -1,18 +1,18 @@
 <x-guest-layout>
-    <span class="fd-icon-tile fd-icon-tile-lg is-warning mb-4"><i class="ph-envelope-simple"></i></span>
+    <span class="fd-icon-tile fd-icon-tile-lg is-warning mb-4"><i class="ph ph-envelope-simple"></i></span>
 
     <h1 class="fd-auth-title">{{ __('foundation::foundation.auth.verify_contact') }}</h1>
     <p class="fd-auth-lead">{{ __('foundation::foundation.auth.verification_required') }}</p>
 
     @if (session('success') === 'Verification link sent successfully')
         <div class="alert alert-success" role="alert">
-            <i class="ph-check-circle"></i>{{ __('foundation::foundation.auth.verification_link_sent') }}
+            <i class="ph ph-check-circle"></i>{{ __('foundation::foundation.auth.verification_link_sent') }}
         </div>
     @endif
 
     @if (session('error'))
         <div class="alert alert-danger" role="alert">
-            <i class="ph-x-circle"></i>{{ session('error') }}
+            <i class="ph ph-x-circle"></i>{{ session('error') }}
         </div>
     @endif
 

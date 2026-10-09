@@ -33,7 +33,7 @@
     </svg>
 @else
     <div class="fd-empty">
-        <span class="fd-empty-icon"><i class="ph-chart-line"></i></span>
+        <span class="fd-empty-icon"><i class="ph ph-chart-line"></i></span>
         <p class="fd-empty-title">{{ __('foundation::foundation.dashboard.chart_empty') }}</p>
         <p class="fd-empty-text">{{ __('foundation::foundation.dashboard.chart_empty_text') }}</p>
     </div>

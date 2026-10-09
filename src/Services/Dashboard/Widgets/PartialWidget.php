@@ -42,7 +42,7 @@ final class PartialWidget extends DashboardWidget
     #[Override]
     public function icon(): string
     {
-        return 'ph-puzzle-piece';
+        return 'ph ph-puzzle-piece';
     }
 
     #[Override]

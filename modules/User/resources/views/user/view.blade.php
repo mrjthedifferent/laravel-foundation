@@ -17,24 +17,24 @@
                             <h5 class="mb-1">{{ $user->name }}</h5>
                             <p class="mb-2 text-muted text-sm">
                                 @if ($user->email)
-                                    <i class="ph-envelope me-1"></i> {{ $user->email }}
+                                    <i class="ph ph-envelope me-1"></i> {{ $user->email }}
                                     @if ($user->email_verified_at)
-                                        <i class="ph-check-circle text-success ms-1" title="{{ __('user::user.view.col_email_verified') }}"></i>
+                                        <i class="ph ph-check-circle text-success ms-1" title="{{ __('user::user.view.col_email_verified') }}"></i>
                                     @endif
                                 @endif
                                 @if ($user->phone)
                                     @if ($user->email)
                                         <span class="mx-2">·</span>
                                     @endif
-                                    <i class="ph-phone me-1"></i> {{ $user->phone }}
+                                    <i class="ph ph-phone me-1"></i> {{ $user->phone }}
                                     @if ($user->phone_verified_at)
-                                        <i class="ph-check-circle text-success ms-1" title="{{ __('user::user.view.col_phone_verified') }}"></i>
+                                        <i class="ph ph-check-circle text-success ms-1" title="{{ __('user::user.view.col_phone_verified') }}"></i>
                                     @endif
                                 @endif
                             </p>
                             <div class="flex flex-wrap gap-1">
                                 @if ($user->isSuperAdmin())
-                                    <span class="badge badge-danger"><i class="ph-crown"></i>{{ __('user::user.common.super_admin') }}</span>
+                                    <span class="badge badge-danger"><i class="ph ph-crown"></i>{{ __('user::user.common.super_admin') }}</span>
                                 @endif
                                 @foreach ($user->roles as $role)
                                     <span class="badge badge-primary">{{ $role->name }}</span>
@@ -48,14 +48,14 @@
                     <div class="flex flex-wrap gap-2 md:justify-end">
                         @can('Edit User')
                             <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-primary">
-                                <i class="ph-pencil-simple"></i>{{ __('user::user.view.edit_user') }}
+                                <i class="ph ph-pencil-simple"></i>{{ __('user::user.view.edit_user') }}
                             </a>
                         @endcan
                         @can('User Password Reset')
                             <a href="{{ route('admin.user.password.reset', $user->id) }}"
                                 class="btn btn-sm btn-light swal-confirm"
                                 data-text="{{ __('user::user.view.reset_password_confirm') }}">
-                                <i class="ph-key"></i>{{ __('user::user.view.reset_password') }}
+                                <i class="ph ph-key"></i>{{ __('user::user.view.reset_password') }}
                             </a>
                         @endcan
                         @if (config('foundation.two_factor.enabled') && $user->hasTwoFactorEnabled())
@@ -63,7 +63,7 @@
                                 <a href="{{ route('admin.users.two-factor.reset', $user->id) }}"
                                     class="btn btn-sm btn-light swal-post" data-method="DELETE"
                                     data-text="{{ __('user::user.two_factor.reset_confirm') }}">
-                                    <i class="ph-shield-slash"></i>{{ __('user::user.two_factor.reset_button') }}
+                                    <i class="ph ph-shield-slash"></i>{{ __('user::user.two_factor.reset_button') }}
                                 </a>
                             @endcan
                         @endif
@@ -71,7 +71,7 @@
                             <a href="{{ route('admin.users.impersonate', $user->id) }}"
                                 class="btn btn-sm btn-light swal-post"
                                 data-text="{{ __('user::user.view.impersonate_confirm', ['name' => $user->name]) }}">
-                                <i class="ph-user-switch"></i>{{ __('user::user.view.impersonate') }}
+                                <i class="ph ph-user-switch"></i>{{ __('user::user.view.impersonate') }}
                             </a>
                         @endcan
                     </div>
@@ -87,20 +87,20 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="personal-tab" data-fd-toggle="tab"
                         data-fd-target="#personal" type="button" role="tab" aria-selected="true">
-                        <i class="ph-user me-1"></i> {{ __('user::user.view.tab_personal') }}
+                        <i class="ph ph-user me-1"></i> {{ __('user::user.view.tab_personal') }}
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="documents-tab" data-fd-toggle="tab"
                         data-fd-target="#documents" type="button" role="tab" aria-selected="false">
-                        <i class="ph-files me-1"></i> {{ __('user::user.view.tab_documents') }}
+                        <i class="ph ph-files me-1"></i> {{ __('user::user.view.tab_documents') }}
                         <span class="badge badge-count ms-1">{{ $user->documents->count() }}</span>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="login-history-tab" data-fd-toggle="tab"
                         data-fd-target="#login-history" type="button" role="tab" aria-selected="false">
-                        <i class="ph-clock-counter-clockwise me-1"></i> {{ __('user::user.view.tab_login_history') }}
+                        <i class="ph ph-clock-counter-clockwise me-1"></i> {{ __('user::user.view.tab_login_history') }}
                     </button>
                 </li>
             </ul>
@@ -125,9 +125,9 @@
                                 <dd>
                                     {{ $user->email ?? 'N/A' }}
                                     @if ($user->email && $user->email_verified_at)
-                                        <i class="ph-check-circle text-success ms-1" title="{{ __('user::user.common.verified') }}"></i>
+                                        <i class="ph ph-check-circle text-success ms-1" title="{{ __('user::user.common.verified') }}"></i>
                                     @elseif ($user->email)
-                                        <i class="ph-x-circle text-warning ms-1" title="{{ __('user::user.view.not_verified_badge') }}"></i>
+                                        <i class="ph ph-x-circle text-warning ms-1" title="{{ __('user::user.view.not_verified_badge') }}"></i>
                                     @endif
                                 </dd>
 
@@ -192,7 +192,7 @@
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-light swal-confirm"
                                                             data-text="{{ __('user::user.view.verify_email_confirm') }}">
-                                                            <i class="ph-check-circle"></i>{{ __('user::user.view.verify_email') }}
+                                                            <i class="ph ph-check-circle"></i>{{ __('user::user.view.verify_email') }}
                                                         </button>
                                                     </form>
                                                 @endif
@@ -218,7 +218,7 @@
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-light swal-confirm"
                                                             data-text="{{ __('user::user.view.verify_phone_confirm') }}">
-                                                            <i class="ph-check-circle"></i>{{ __('user::user.view.verify_phone') }}
+                                                            <i class="ph ph-check-circle"></i>{{ __('user::user.view.verify_phone') }}
                                                         </button>
                                                     </form>
                                                 @endcan
@@ -258,12 +258,12 @@
                                             <div class="flex flex-wrap gap-1">
                                                 <a href="{{ \Mrj\Foundation\Services\FileManagerService::getFile($document->file_path) }}"
                                                     target="_blank" class="btn btn-sm btn-light">
-                                                    <i class="ph-eye"></i>{{ __('user::user.view.doc_front') }}
+                                                    <i class="ph ph-eye"></i>{{ __('user::user.view.doc_front') }}
                                                 </a>
                                                 @if ($document->back_file_path)
                                                     <a href="{{ \Mrj\Foundation\Services\FileManagerService::getFile($document->back_file_path) }}"
                                                         target="_blank" class="btn btn-sm btn-light">
-                                                        <i class="ph-eye"></i>{{ __('user::user.view.doc_back') }}
+                                                        <i class="ph ph-eye"></i>{{ __('user::user.view.doc_back') }}
                                                     </a>
                                                 @endif
                                             </div>
@@ -281,7 +281,7 @@
                                                     <button type="button" class="dropdown-item text-danger swal-delete"
                                                         data-url="{{ route('admin.users.documents.destroy', [$user->id, $document->id]) }}"
                                                         data-text="{{ __('user::user.view.delete_document_confirm') }}">
-                                                        <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
+                                                        <i class="ph ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
                                                     </button>
                                                 </x-dropdown-menu>
                                             </td>
@@ -291,7 +291,7 @@
                                     <tr>
                                         <td colspan="7" class="p-0">
                                             <div class="fd-empty">
-                                                <span class="fd-empty-icon"><i class="ph-folder-open"></i></span>
+                                                <span class="fd-empty-icon"><i class="ph ph-folder-open"></i></span>
                                                 <div class="fd-empty-title">{{ __('user::user.view.no_documents') }}</div>
                                             </div>
                                         </td>
@@ -330,7 +330,7 @@
                                 </div>
                                 <div class="mt-4">
                                     <x-primary-button type="submit">
-                                        <i class="ph-upload"></i>{{ __('user::user.view.upload_document_submit') }}
+                                        <i class="ph ph-upload"></i>{{ __('user::user.view.upload_document_submit') }}
                                     </x-primary-button>
                                 </div>
                             </form>
@@ -359,11 +359,11 @@
                                         <td class="text-muted">{{ $loginHistory->firstItem() + $loop->index }}</td>
                                         <td>
                                             @if ($history->device_type === 'mobile')
-                                                <i class="ph-device-mobile text-muted me-1"></i>
+                                                <i class="ph ph-device-mobile text-muted me-1"></i>
                                             @elseif ($history->device_type === 'tablet')
-                                                <i class="ph-device-tablet text-muted me-1"></i>
+                                                <i class="ph ph-device-tablet text-muted me-1"></i>
                                             @else
-                                                <i class="ph-desktop text-muted me-1"></i>
+                                                <i class="ph ph-desktop text-muted me-1"></i>
                                             @endif
                                             {{ ucfirst($history->device_type ?? 'N/A') }}
                                         </td>
@@ -386,7 +386,7 @@
                                     <tr>
                                         <td colspan="7" class="p-0">
                                             <div class="fd-empty">
-                                                <span class="fd-empty-icon"><i class="ph-clock-counter-clockwise"></i></span>
+                                                <span class="fd-empty-icon"><i class="ph ph-clock-counter-clockwise"></i></span>
                                                 <div class="fd-empty-title">{{ __('user::user.view.no_login_history') }}</div>
                                             </div>
                                         </td>
@@ -414,7 +414,7 @@
         @can('Delete User')
             <div class="card mt-4" id="manage-account">
                 <div class="card-header">
-                    <span class="fd-icon-tile fd-icon-tile-sm is-danger"><i class="ph-warning-octagon"></i></span>
+                    <span class="fd-icon-tile fd-icon-tile-sm is-danger"><i class="ph ph-warning-octagon"></i></span>
                     <h2 class="card-title">{{ __('user::user.view.manage_account_heading') }}</h2>
                 </div>
                 <div class="card-body">
@@ -428,7 +428,7 @@
                                             id="actionReset" value="reset" checked
                                             onchange="updateManageWarning()">
                                         <label class="form-check-label" for="actionReset">
-                                            <i class="ph-arrow-counter-clockwise text-warning me-1"></i> {{ __('user::user.view.reset_account_label') }}
+                                            <i class="ph ph-arrow-counter-clockwise text-warning me-1"></i> {{ __('user::user.view.reset_account_label') }}
                                         </label>
                                         <div class="text-muted text-xs ms-6">{{ __('user::user.view.reset_account_hint') }}</div>
                                     </div>
@@ -437,7 +437,7 @@
                                             id="actionDelete" value="delete"
                                             onchange="updateManageWarning()">
                                         <label class="form-check-label" for="actionDelete">
-                                            <i class="ph-trash text-danger me-1"></i> {{ __('user::user.view.delete_account_label') }}
+                                            <i class="ph ph-trash text-danger me-1"></i> {{ __('user::user.view.delete_account_label') }}
                                         </label>
                                         <div class="text-muted text-xs ms-6">{{ __('user::user.view.delete_account_hint') }}</div>
                                     </div>
@@ -445,11 +445,11 @@
                             </div>
                             <div class="col-span-12 md:col-span-6">
                                 <div id="manageResetWarning" class="alert alert-warning mb-0">
-                                    <i class="ph-warning"></i>
+                                    <i class="ph ph-warning"></i>
                                     <div><strong>{{ __('user::user.view.warning_label') }}</strong> {{ __('user::user.view.reset_warning_text') }}</div>
                                 </div>
                                 <div id="manageDeleteWarning" class="alert alert-danger mb-0 hidden">
-                                    <i class="ph-warning-octagon"></i>
+                                    <i class="ph ph-warning-octagon"></i>
                                     <div><strong>{{ __('user::user.view.danger_label') }}</strong> {{ __('user::user.view.delete_warning_text') }}</div>
                                 </div>
                             </div>
@@ -457,7 +457,7 @@
                         <div class="mt-4">
                             <button type="submit" id="manageConfirmButton" class="btn btn-warning swal-confirm"
                                     data-text="{{ __('user::user.view.manage_account_confirm') }}">
-                                <i class="ph-arrow-counter-clockwise"></i>{{ __('user::user.view.confirm_reset') }}
+                                <i class="ph ph-arrow-counter-clockwise"></i>{{ __('user::user.view.confirm_reset') }}
                             </button>
                         </div>
                     </form>
@@ -501,10 +501,10 @@
                 document.getElementById('manageDeleteWarning').classList.toggle('hidden', !isDelete);
                 const btn = document.getElementById('manageConfirmButton');
                 if (isDelete) {
-                    btn.innerHTML = '<i class="ph-trash"></i>{{ __('user::user.view.confirm_delete') }}';
+                    btn.innerHTML = '<i class="ph ph-trash"></i>{{ __('user::user.view.confirm_delete') }}';
                     btn.className = 'btn btn-danger';
                 } else {
-                    btn.innerHTML = '<i class="ph-arrow-counter-clockwise"></i>{{ __('user::user.view.confirm_reset') }}';
+                    btn.innerHTML = '<i class="ph ph-arrow-counter-clockwise"></i>{{ __('user::user.view.confirm_reset') }}';
                     btn.className = 'btn btn-warning';
                 }
             }

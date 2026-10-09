@@ -1,7 +1,7 @@
 @props([
     'label'  => '',
     'value'  => '',
-    'icon'   => 'ph-chart-bar',
+    'icon'   => 'ph ph-chart-bar',
     'color'  => 'primary',  # {{-- primary | success | warning | danger | info --}}
     'href'   => null,
     'change' => null,       # {{-- e.g. '+12%' --}}
@@ -45,7 +45,7 @@
             <div class="fd-stat-foot">
                 @if($change !== null)
                     <span class="fd-delta {{ $changeUp ? 'is-up' : 'is-down' }}">
-                        <i class="{{ $changeUp ? 'ph-arrow-up-right' : 'ph-arrow-down-right' }}"></i>{{ $change }}
+                        <i class="{{ $changeUp ? 'ph ph-arrow-up-right' : 'ph ph-arrow-down-right' }}"></i>{{ $change }}
                     </span>
                 @endif
                 @if($caption)

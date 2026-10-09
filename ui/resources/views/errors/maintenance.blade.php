@@ -12,7 +12,7 @@
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="btn btn-primary">
-                <i class="ph-sign-out"></i>{{ __('foundation::foundation.errors.sign_out') }}
+                <i class="ph ph-sign-out"></i>{{ __('foundation::foundation.errors.sign_out') }}
             </button>
         </form>
     @endsection

@@ -23,7 +23,7 @@
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('otp::otp.history_index.breadcrumb') }}" :data="$codes" empty-icon="ph-lock-key" empty-message="{{ __('otp::otp.history_index.empty') }}">
+<x-table-view-pagination title="{{ __('otp::otp.history_index.breadcrumb') }}" :data="$codes" empty-icon="ph ph-lock-key" empty-message="{{ __('otp::otp.history_index.empty') }}">
     <thead>
         <tr>
             <th>{{ __('otp::otp.history_index.col_id') }}</th>

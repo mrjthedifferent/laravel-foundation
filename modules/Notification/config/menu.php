@@ -10,7 +10,7 @@ return [
     [
         'group' => 'communications',
         'label' => 'Push Notifications',
-        'icon' => 'ph-device-mobile',
+        'icon' => 'ph ph-device-mobile',
         'route' => 'admin.push.notification.index',
         'permissions' => ['View Push Notification'],
         'order' => 30,
@@ -18,7 +18,7 @@ return [
     [
         'group' => 'communications',
         'label' => 'Send Notification',
-        'icon' => 'ph-paper-plane-tilt',
+        'icon' => 'ph ph-paper-plane-tilt',
         'route' => 'admin.push.notification.create',
         'permissions' => ['Create Push Notification'],
         'order' => 40,

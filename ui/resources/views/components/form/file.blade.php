@@ -19,7 +19,7 @@
 <div class="fd-drop @if ($errors->has($errorKey)) is-invalid @endif" data-fd-upload @if ($current) data-current="{{ $current }}" @endif>
     <img class="fd-drop-preview" alt="" @if ($current && $isImage) src="{{ $current }}" @else hidden @endif>
     <div class="fd-drop-body">
-        <i class="ph-cloud-arrow-up fd-drop-icon" aria-hidden="true"></i>
+        <i class="ph ph-cloud-arrow-up fd-drop-icon" aria-hidden="true"></i>
         <span class="fd-drop-text">
             <strong>{{ __('foundation::foundation.components.upload_choose') }}</strong>
             <span class="fd-drop-or">{{ __('foundation::foundation.components.upload_drag') }}</span>

@@ -10,7 +10,7 @@
     </ul>
 @else
     <div class="fd-empty">
-        <span class="fd-empty-icon"><i class="ph-chart-bar"></i></span>
+        <span class="fd-empty-icon"><i class="ph ph-chart-bar"></i></span>
         <p class="fd-empty-title">{{ __('foundation::foundation.dashboard.chart_empty') }}</p>
     </div>
 @endif

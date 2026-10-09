@@ -5,7 +5,7 @@
             <span class="fd-chart-total-value">{{ number_format($total) }}</span>
             @if ($delta !== null && $delta != 0)
                 <span class="fd-delta {{ $delta > 0 ? 'is-up' : 'is-down' }}">
-                    <i class="{{ $delta > 0 ? 'ph-arrow-up-right' : 'ph-arrow-down-right' }}"></i>{{ number_format(abs($delta), abs($delta) < 10 ? 1 : 0) }}%
+                    <i class="{{ $delta > 0 ? 'ph ph-arrow-up-right' : 'ph ph-arrow-down-right' }}"></i>{{ number_format(abs($delta), abs($delta) < 10 ? 1 : 0) }}%
                 </span>
                 <span class="fd-chart-total-note">{{ __('foundation::foundation.dashboard.vs_previous') }}</span>
             @endif

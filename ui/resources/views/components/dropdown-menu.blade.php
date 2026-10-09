@@ -7,7 +7,7 @@
                 data-fd-toggle="dropdown"
                 aria-expanded="false"
                 title="{{ $label ?? __('foundation::foundation.common.actions') }}">
-            <i class="ph-dots-three-vertical"></i>
+            <i class="ph ph-dots-three-vertical"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-end">
             {{ $slot }}

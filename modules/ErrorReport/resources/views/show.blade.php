@@ -6,7 +6,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <span class="fd-icon-tile fd-icon-tile-sm {{ $errorReport->isResolved() ? 'is-success' : 'is-danger' }}"><i class="ph-bug"></i></span>
+        <span class="fd-icon-tile fd-icon-tile-sm {{ $errorReport->isResolved() ? 'is-success' : 'is-danger' }}"><i class="ph ph-bug"></i></span>
         <h2 class="card-title">{{ __('errorreport::errorreport.show.title') }}</h2>
         <div class="flex gap-2 ms-auto">
             @can('Resolve Error Report')
@@ -14,7 +14,7 @@
             <form action="{{ route('admin.error-reports.resolve', $errorReport) }}" method="POST" class="inline">
                 @csrf
                 <button type="submit" class="btn btn-primary btn-sm">
-                    <i class="ph-check-circle"></i>{{ __('errorreport::errorreport.index.mark_resolved') }}
+                    <i class="ph ph-check-circle"></i>{{ __('errorreport::errorreport.index.mark_resolved') }}
                 </button>
             </form>
             @endif
@@ -23,7 +23,7 @@
             <button type="button" class="btn btn-danger btn-sm swal-delete"
                 data-url="{{ route('admin.error-reports.destroy', $errorReport) }}"
                 data-text="{{ __('errorreport::errorreport.index.delete_confirm') }}">
-                <i class="ph-trash"></i>{{ __('errorreport::errorreport.index.delete') }}
+                <i class="ph ph-trash"></i>{{ __('errorreport::errorreport.index.delete') }}
             </button>
             @endcan
         </div>

@@ -27,7 +27,7 @@
                     </select>
                 </form>
                 <a href="{{ route('admin.activity-logs.index') }}" class="btn btn-light btn-sm">
-                    <i class="ph-arrow-left"></i>{{ __('activitylog::activitylog.show.back') }}
+                    <i class="ph ph-arrow-left"></i>{{ __('activitylog::activitylog.show.back') }}
                 </a>
             </div>
         </div>
@@ -153,7 +153,7 @@
                                             <dt>{{ $helper::titleCase($attr) }}</dt>
                                             <dd class="flex flex-wrap items-baseline gap-1">
                                                 <code class="bg-danger-subtle text-danger-text px-1 rounded-md">{{ $oldVal }}</code>
-                                                <i class="ph-arrow-right text-muted text-xs"></i>
+                                                <i class="ph ph-arrow-right text-muted text-xs"></i>
                                                 <code class="bg-success-subtle text-success-text px-1 rounded-md">{{ $newVal }}</code>
                                             </dd>
                                         @endforeach
@@ -191,7 +191,7 @@
                     <tr>
                         <td colspan="5">
                             <div class="fd-empty">
-                                <span class="fd-empty-icon"><i class="ph-clock-counter-clockwise"></i></span>
+                                <span class="fd-empty-icon"><i class="ph ph-clock-counter-clockwise"></i></span>
                                 <div class="fd-empty-title">{{ __('activitylog::activitylog.show.no_audit_history') }}</div>
                             </div>
                         </td>

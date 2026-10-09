@@ -2,7 +2,7 @@
 <nav class="fd-breadcrumb-row" aria-label="{{ __('foundation::foundation.layout.breadcrumb') }}">
     <div class="breadcrumb">
         <a href="{{ route('admin.dashboard') }}" class="breadcrumb-item">
-            <i class="ph-house"></i>
+            <i class="ph ph-house"></i>
             <span class="sr-only">{{ __('foundation::foundation.layout.home') }}</span>
         </a>
         {{ $breadcrumbs ?? '' }}

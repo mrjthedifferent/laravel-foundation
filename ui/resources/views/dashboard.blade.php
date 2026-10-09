@@ -28,17 +28,17 @@
             </nav>
             <a href="{{ route('admin.dashboard', $context->query(['compare' => $context->compare ? null : 1])) }}"
                 class="btn btn-light @if ($context->compare) is-on @endif" role="switch" aria-checked="{{ $context->compare ? 'true' : 'false' }}">
-                <i class="ph-arrows-left-right"></i>{{ __('foundation::foundation.dashboard.compare') }}
+                <i class="ph ph-arrows-left-right"></i>{{ __('foundation::foundation.dashboard.compare') }}
             </a>
             <span class="fd-edit-controls">
                 <button type="button" class="btn btn-light" data-fd-dash="edit">
-                    <i class="ph-sliders-horizontal"></i>{{ __('foundation::foundation.dashboard.customize') }}
+                    <i class="ph ph-sliders-horizontal"></i>{{ __('foundation::foundation.dashboard.customize') }}
                 </button>
                 <button type="button" class="btn btn-ghost fd-edit-only" data-fd-dash="reset">
-                    <i class="ph-arrow-counter-clockwise"></i>{{ __('foundation::foundation.dashboard.reset_layout') }}
+                    <i class="ph ph-arrow-counter-clockwise"></i>{{ __('foundation::foundation.dashboard.reset_layout') }}
                 </button>
                 <button type="button" class="btn btn-primary fd-edit-only" data-fd-dash="done">
-                    <i class="ph-check"></i>{{ __('foundation::foundation.dashboard.done') }}
+                    <i class="ph ph-check"></i>{{ __('foundation::foundation.dashboard.done') }}
                 </button>
             </span>
         </x-slot>
@@ -57,19 +57,19 @@
                 data-fd-widget data-key="{{ $item['key'] }}" data-width="{{ $item['width'] }}"
                 data-hidden="{{ $item['hidden'] ? 'true' : 'false' }}" aria-label="{{ $item['title'] }}">
                 <div class="fd-widget-bar fd-edit-only">
-                    <span class="fd-widget-handle" draggable="true" title="{{ __('foundation::foundation.dashboard.drag') }}"><i class="ph-dots-six-vertical"></i></span>
+                    <span class="fd-widget-handle" draggable="true" title="{{ __('foundation::foundation.dashboard.drag') }}"><i class="ph ph-dots-six-vertical"></i></span>
                     <span class="fd-widget-name"><i class="{{ $item['icon'] }}"></i>{{ $item['title'] }}</span>
                     <span class="fd-widget-tools">
-                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="earlier" aria-label="{{ __('foundation::foundation.dashboard.move_earlier') }}"><i class="ph-arrow-up"></i></button>
-                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="later" aria-label="{{ __('foundation::foundation.dashboard.move_later') }}"><i class="ph-arrow-down"></i></button>
-                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="narrower" aria-label="{{ __('foundation::foundation.dashboard.narrower') }}"><i class="ph-arrows-in-line-horizontal"></i></button>
-                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="wider" aria-label="{{ __('foundation::foundation.dashboard.wider') }}"><i class="ph-arrows-out-line-horizontal"></i></button>
-                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="toggle" aria-label="{{ __('foundation::foundation.dashboard.show_hide') }}"><i class="{{ $item['hidden'] ? 'ph-eye-slash' : 'ph-eye' }}"></i></button>
+                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="earlier" aria-label="{{ __('foundation::foundation.dashboard.move_earlier') }}"><i class="ph ph-arrow-up"></i></button>
+                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="later" aria-label="{{ __('foundation::foundation.dashboard.move_later') }}"><i class="ph ph-arrow-down"></i></button>
+                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="narrower" aria-label="{{ __('foundation::foundation.dashboard.narrower') }}"><i class="ph ph-arrows-in-line-horizontal"></i></button>
+                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="wider" aria-label="{{ __('foundation::foundation.dashboard.wider') }}"><i class="ph ph-arrows-out-line-horizontal"></i></button>
+                        <button type="button" class="btn btn-ghost btn-sm btn-icon" data-fd-widget-act="toggle" aria-label="{{ __('foundation::foundation.dashboard.show_hide') }}"><i class="{{ $item['hidden'] ? 'ph ph-eye-slash' : 'ph ph-eye' }}"></i></button>
                     </span>
                 </div>
                 <div class="fd-widget-body">
                     @if ($item['hidden'])
-                        <p class="fd-widget-hidden-note"><i class="ph-eye-slash"></i>{{ __('foundation::foundation.dashboard.hidden_note') }}</p>
+                        <p class="fd-widget-hidden-note"><i class="ph ph-eye-slash"></i>{{ __('foundation::foundation.dashboard.hidden_note') }}</p>
                     @else
                         {!! $item['html'] !!}
                     @endif
@@ -80,7 +80,7 @@
         @if ($items === [])
             <div class="fd-widget fd-w-12">
                 <div class="card"><div class="fd-empty">
-                    <span class="fd-empty-icon"><i class="ph-squares-four"></i></span>
+                    <span class="fd-empty-icon"><i class="ph ph-squares-four"></i></span>
                     <p class="fd-empty-title">{{ __('foundation::foundation.dashboard.nothing_to_show') }}</p>
                 </div></div>
             </div>

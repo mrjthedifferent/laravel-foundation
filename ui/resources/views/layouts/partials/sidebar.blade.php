@@ -42,12 +42,12 @@ $userRole = $user?->isSuperAdmin()
                     class="btn btn-ghost btn-icon btn-sm sidebar-main-resize sidebar-resize-hide hidden lg:inline-flex"
                     title="{{ __('foundation::foundation.sidebar.toggle') }}"
                     aria-label="{{ __('foundation::foundation.sidebar.toggle') }}">
-                    <i class="ph-sidebar-simple"></i>
+                    <i class="ph ph-sidebar-simple"></i>
                 </button>
 
                 <button type="button" class="btn btn-ghost btn-icon btn-sm sidebar-mobile-main-toggle lg:hidden"
                     aria-label="{{ __('foundation::foundation.common.close') }}">
-                    <i class="ph-x"></i>
+                    <i class="ph ph-x"></i>
                 </button>
             </div>
         </div>
@@ -61,13 +61,13 @@ $userRole = $user?->isSuperAdmin()
 
                 <li class="nav-item-header pt-0">
                     <div class="sidebar-resize-hide">{{ __('foundation::foundation.sidebar.main') }}</div>
-                    <i class="ph-dots-three sidebar-resize-show"></i>
+                    <i class="ph ph-dots-three sidebar-resize-show"></i>
                 </li>
 
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}"
                         class="nav-link @if($current_route === 'admin.dashboard') active @endif">
-                        <i class="ph-house"></i>
+                        <i class="ph ph-house"></i>
                         <span>{{ __('foundation::foundation.layout.dashboard') }}</span>
                     </a>
                 </li>

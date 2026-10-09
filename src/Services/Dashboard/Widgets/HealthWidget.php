@@ -31,7 +31,7 @@ final class HealthWidget extends DashboardWidget
     #[Override]
     public function icon(): string
     {
-        return 'ph-heartbeat';
+        return 'ph ph-heartbeat';
     }
 
     #[Override]

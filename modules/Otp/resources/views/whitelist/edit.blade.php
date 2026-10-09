@@ -13,11 +13,11 @@
     <x-page-header
         title="{{ __('otp::otp.whitelist_edit.title', ['id' => $whitelist->id]) }}"
         subtitle="{{ __('otp::otp.whitelist_edit.subtitle') }}"
-        icon="ph-pencil-simple"
+        icon="ph ph-pencil-simple"
         :back-url="route('admin.otp-whitelist.index')"
         back-label="{{ __('otp::otp.whitelist_edit.back_label') }}" />
 
-    <x-form-section title="{{ __('otp::otp.whitelist_edit.section_title') }}" icon="ph-lock-key">
+    <x-form-section title="{{ __('otp::otp.whitelist_edit.section_title') }}" icon="ph ph-lock-key">
         @php $otpDigits = (int) config('settings.otp_digit_length.value', 6); @endphp
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-6">
@@ -41,10 +41,10 @@
 
     <div class="flex justify-between items-center">
         <a href="{{ route('admin.otp-whitelist.index') }}" class="btn btn-light">
-            <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
+            <i class="ph ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
         <x-primary-button id="submit-button" class="px-12">
-            <i class="ph-floppy-disk"></i>{{ __('otp::otp.whitelist_edit.update_button') }}
+            <i class="ph ph-floppy-disk"></i>{{ __('otp::otp.whitelist_edit.update_button') }}
         </x-primary-button>
     </div>
 

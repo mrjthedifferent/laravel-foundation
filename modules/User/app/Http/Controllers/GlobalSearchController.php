@@ -46,7 +46,7 @@ class GlobalSearchController extends Controller
                     'id' => $user->id,
                     'text' => $user->name,
                     'sub_text' => $user->email,
-                    'icon' => 'ph-user-circle',
+                    'icon' => 'ph ph-user-circle',
                     'avatar' => $user->image ?: asset('images/person.png'),
                     'url' => route('admin.users.show', $user->id),
                     'category' => __('user::user.search.category_user'),

@@ -38,11 +38,11 @@
 <x-page-header
     title="{{ __('user::user.create.title') }}"
     subtitle="{{ __('user::user.create.subtitle') }}"
-    icon="ph-user-plus"
+    icon="ph ph-user-plus"
     :back-url="route('admin.users.index')"
     back-label="{{ __('user::user.create.back_label') }}" />
 
-<x-form-section title="{{ __('user::user.create.section_personal') }}" icon="ph-identification-card">
+<x-form-section title="{{ __('user::user.create.section_personal') }}" icon="ph ph-identification-card">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-6">
             <x-form.input name="name" label="{{ __('user::user.create.full_name_label') }}" required placeholder="{{ __('user::user.create.full_name_placeholder') }}" />
@@ -61,7 +61,7 @@
     </div>
 </x-form-section>
 
-<x-form-section :title="__('user::user.create.section_contact')" icon="ph-envelope">
+<x-form-section :title="__('user::user.create.section_contact')" icon="ph ph-envelope">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-3">
             <x-form.input type="email" name="email" label="{{ __('user::user.create.email_label') }}" required placeholder="{{ __('user::user.create.email_placeholder') }}" />
@@ -77,31 +77,31 @@
                 <button type="button" class="btn btn-ghost btn-icon absolute top-1/2 end-0 -translate-y-1/2" tabindex="-1"
                         aria-label="{{ __('foundation::foundation.auth.show_password') }}"
                         @click="togglePassword('password')">
-                    <i x-show="!passwordVisible" class="ph-eye"></i>
-                    <i x-show="passwordVisible" class="ph-eye-slash" x-cloak></i>
+                    <i x-show="!passwordVisible" class="ph ph-eye"></i>
+                    <i x-show="passwordVisible" class="ph ph-eye-slash" x-cloak></i>
                 </button>
             </div>
         </div>
         <div class="col-span-12 md:col-span-3">
             <x-form.label for="password_confirmation" required>{{ __('user::user.create.password_confirmation_label') }}</x-form.label>
             <span class="ms-1">
-                <i x-show="passwordConfirmation && password === passwordConfirmation" class="ph-check-circle text-success"></i>
-                <i x-show="passwordConfirmation && password !== passwordConfirmation" class="ph-x-circle text-danger"></i>
+                <i x-show="passwordConfirmation && password === passwordConfirmation" class="ph ph-check-circle text-success"></i>
+                <i x-show="passwordConfirmation && password !== passwordConfirmation" class="ph ph-x-circle text-danger"></i>
             </span>
             <div class="relative">
                 <input type="password" name="password_confirmation" id="password_confirmation" class="form-control pe-12" placeholder="{{ __('user::user.create.password_confirmation_placeholder') }}" required x-model="passwordConfirmation">
                 <button type="button" class="btn btn-ghost btn-icon absolute top-1/2 end-0 -translate-y-1/2" tabindex="-1"
                         aria-label="{{ __('foundation::foundation.auth.show_password') }}"
                         @click="togglePassword('password_confirmation')">
-                    <i x-show="!passwordConfirmVisible" class="ph-eye"></i>
-                    <i x-show="passwordConfirmVisible" class="ph-eye-slash" x-cloak></i>
+                    <i x-show="!passwordConfirmVisible" class="ph ph-eye"></i>
+                    <i x-show="passwordConfirmVisible" class="ph ph-eye-slash" x-cloak></i>
                 </button>
             </div>
         </div>
     </div>
 </x-form-section>
 
-<x-form-section :title="__('user::user.create.section_access')" icon="ph-shield-check">
+<x-form-section :title="__('user::user.create.section_access')" icon="ph ph-shield-check">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-6">
             <x-form.select class="select" name="roles[]" id="roles" label="{{ __('user::user.create.roles_label') }}" required multiple :options="$roles" :selected="null" data-placeholder="{{ __('user::user.create.select_roles_placeholder') }}" />
@@ -114,10 +114,10 @@
 
 <div class="fd-form-actions">
     <a href="{{ route('admin.users.index') }}" class="btn btn-light">
-        <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
+        <i class="ph ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
     </a>
     <x-primary-button id="submit-button" class="px-12">
-        <i class="ph-user-plus"></i>{{ __('user::user.create.breadcrumb') }}
+        <i class="ph ph-user-plus"></i>{{ __('user::user.create.breadcrumb') }}
     </x-primary-button>
 </div>
 </div>

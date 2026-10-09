@@ -62,7 +62,7 @@
                         class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.sms-logs.destroy', $log->id) }}"
                         data-text="{{ __('activitylog::activitylog.sms_logs_index.delete_confirm') }}">
-                        <i class="ph-trash"></i> {{ __('foundation::foundation.common.delete') }}
+                        <i class="ph ph-trash"></i> {{ __('foundation::foundation.common.delete') }}
                     </button>
                 </x-dropdown-menu>
             </td>

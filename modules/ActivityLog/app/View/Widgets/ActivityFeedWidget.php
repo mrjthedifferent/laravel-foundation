@@ -32,7 +32,7 @@ final class ActivityFeedWidget extends DashboardWidget
     #[Override]
     public function icon(): string
     {
-        return 'ph-clock-counter-clockwise';
+        return 'ph ph-clock-counter-clockwise';
     }
 
     #[Override]

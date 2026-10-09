@@ -10,7 +10,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'Error Reports',
-        'icon' => 'ph-bug',
+        'icon' => 'ph ph-bug',
         'route' => 'admin.error-reports.index',
         'routes' => ['admin.error-reports.show'],
         'permissions' => ['View Error Report'],
@@ -19,7 +19,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'Error Report Settings',
-        'icon' => 'ph-gear',
+        'icon' => 'ph ph-gear',
         'route' => 'admin.error-reports.settings.index',
         'permissions' => ['Edit Error Report Settings'],
         'order' => 160,

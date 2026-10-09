@@ -28,12 +28,12 @@
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('notification::notification.index.breadcrumb') }}" :data="$notifications" empty-icon="ph-bell-slash" empty-message="{{ __('notification::notification.index.empty') }}">
+<x-table-view-pagination title="{{ __('notification::notification.index.breadcrumb') }}" :data="$notifications" empty-icon="ph ph-bell-slash" empty-message="{{ __('notification::notification.index.empty') }}">
     <x-slot name="actions">
         <x-table-actions>
             <form action="{{ route('admin.notification.mark-all-as-read') }}" method="POST" class="inline">
                 @csrf @method('PATCH')
-                <x-table-action icon="ph-checks" title="{{ __('notification::notification.index.mark_all_as_read') }}" class="swal-confirm" data-text="{{ __('notification::notification.index.mark_all_as_read_confirm') }}" />
+                <x-table-action icon="ph ph-checks" title="{{ __('notification::notification.index.mark_all_as_read') }}" class="swal-confirm" data-text="{{ __('notification::notification.index.mark_all_as_read_confirm') }}" />
             </form>
         </x-table-actions>
     </x-slot>
@@ -55,9 +55,9 @@
             <td>
                 @php
                     $typeConfig = match($notification->type) {
-                        'export' => ['bg' => 'success', 'icon' => 'ph-download-simple'],
-                        'error' => ['bg' => 'danger', 'icon' => 'ph-x-circle'],
-                        default => ['bg' => 'primary', 'icon' => 'ph-info'],
+                        'export' => ['bg' => 'success', 'icon' => 'ph ph-download-simple'],
+                        'error' => ['bg' => 'danger', 'icon' => 'ph ph-x-circle'],
+                        default => ['bg' => 'primary', 'icon' => 'ph ph-info'],
                     };
                 @endphp
                 <span class="badge badge-{{ $typeConfig['bg'] }}">
@@ -73,7 +73,7 @@
                     @endif
                     @if($notification->download_url)
                         <a href="{{ $notification->download_url }}" class="btn btn-sm btn-light self-start mt-1" target="_blank" rel="noopener">
-                            <i class="ph-download-simple"></i>{{ __('notification::notification.index.download') }}
+                            <i class="ph ph-download-simple"></i>{{ __('notification::notification.index.download') }}
                         </a>
                     @endif
                 </div>
@@ -89,25 +89,25 @@
             <td class="text-end">
                 <x-dropdown-menu>
                     <x-dropdown-link :url="route('admin.notification.show', $notification->id)">
-                        <i class="ph-eye"></i>{{ __('foundation::foundation.common.view') }}
+                        <i class="ph ph-eye"></i>{{ __('foundation::foundation.common.view') }}
                     </x-dropdown-link>
                     @if($notification->download_url)
                     <a href="{{ $notification->download_url }}" class="dropdown-item" target="_blank" rel="noopener">
-                        <i class="ph-download-simple"></i>{{ __('notification::notification.index.download') }}
+                        <i class="ph ph-download-simple"></i>{{ __('notification::notification.index.download') }}
                     </a>
                     @endif
                     @if ($notification->read_at)
                     <form action="{{ route('admin.notification.mark-as-unread', $notification->id) }}" method="POST">
                         @csrf @method('PATCH')
                         <button type="submit" class="dropdown-item">
-                            <i class="ph-envelope-simple"></i>{{ __('notification::notification.index.mark_as_unread') }}
+                            <i class="ph ph-envelope-simple"></i>{{ __('notification::notification.index.mark_as_unread') }}
                         </button>
                     </form>
                     @else
                     <form action="{{ route('admin.notification.mark-as-read', $notification->id) }}" method="POST">
                         @csrf @method('PATCH')
                         <button type="submit" class="dropdown-item">
-                            <i class="ph-envelope-open"></i>{{ __('notification::notification.index.mark_as_read') }}
+                            <i class="ph ph-envelope-open"></i>{{ __('notification::notification.index.mark_as_read') }}
                         </button>
                     </form>
                     @endif
@@ -115,7 +115,7 @@
                     <button type="button" class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.notification.destroy', $notification->id) }}"
                         data-text="{{ __('notification::notification.index.delete_confirm') }}">
-                        <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
+                        <i class="ph ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
                     </button>
                 </x-dropdown-menu>
             </td>

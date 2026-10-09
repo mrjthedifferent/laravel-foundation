@@ -2,7 +2,7 @@
     <div class="col-span-12 xl:col-span-4 lg:col-span-6 md:col-span-12">
         <div class="card h-full">
             <div class="card-header">
-                <span class="fd-icon-tile fd-icon-tile-sm is-warning"><i class="ph-shield"></i></span>
+                <span class="fd-icon-tile fd-icon-tile-sm is-warning"><i class="ph ph-shield"></i></span>
                 <h2 class="card-title">{{ __('rolepermission::rolepermission.layouts.label') }}</h2>
                 @can('View Role')
                     <a href="{{ route('admin.role.index') }}" class="ms-auto text-sm">

@@ -17,17 +17,17 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
     {{-- ── Sticky unsaved-changes bar ── --}}
     <div id="save-bar" class="hidden mb-4 sticky top-0 z-10">
         <div class="alert alert-warning flex items-center justify-between py-2 px-4 mb-0 rounded-none border-s-0 border-e-0">
-            <span><i class="ph-warning-circle me-2"></i>{!! __('settings::settings.index.unsaved_changes') !!}</span>
+            <span><i class="ph ph-warning-circle me-2"></i>{!! __('settings::settings.index.unsaved_changes') !!}</span>
             <button type="submit" class="btn btn-dark btn-sm px-4">
-                <i class="ph-floppy-disk"></i>{{ __('settings::settings.index.save_now') }}
+                <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.index.save_now') }}
             </button>
         </div>
     </div>
 
-    <x-page-header title="{{ __('settings::settings.index.title') }}" subtitle="{{ __('settings::settings.index.subtitle') }}" icon="ph-gear">
+    <x-page-header title="{{ __('settings::settings.index.title') }}" subtitle="{{ __('settings::settings.index.subtitle') }}" icon="ph ph-gear">
         <x-slot name="actions">
             <button type="submit" class="btn btn-primary">
-                <i class="ph-floppy-disk"></i>{{ __('settings::settings.index.save_changes') }}
+                <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.index.save_changes') }}
             </button>
         </x-slot>
     </x-page-header>
@@ -46,20 +46,20 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                             @foreach ($settings as $tabKey => $group)
                             @php
                             $tabKeyLower = strtolower($tabKey);
-                            $tabIcon = 'ph-sliders';
-                            if (str_contains($tabKeyLower, 'mail') || str_contains($tabKeyLower, 'email')) $tabIcon = 'ph-envelope';
-                            elseif (str_contains($tabKeyLower, 'sms')) $tabIcon = 'ph-chat-teardrop-text';
-                            elseif (str_contains($tabKeyLower, 'otp')) $tabIcon = 'ph-lock-key';
-                            elseif (str_contains($tabKeyLower, 'payment')) $tabIcon = 'ph-credit-card';
-                            elseif (str_contains($tabKeyLower, 'social') || str_contains($tabKeyLower, 'auth')) $tabIcon = 'ph-users-three';
-                            elseif (str_contains($tabKeyLower, 'firebase')) $tabIcon = 'ph-fire';
-                            elseif (str_contains($tabKeyLower, 'storage') || str_contains($tabKeyLower, 'file')) $tabIcon = 'ph-folder-open';
-                            elseif (str_contains($tabKeyLower, 'notif')) $tabIcon = 'ph-bell';
-                            elseif (str_contains($tabKeyLower, 'security') || str_contains($tabKeyLower, 'permission')) $tabIcon = 'ph-shield-check';
-                            elseif (str_contains($tabKeyLower, 'contact')) $tabIcon = 'ph-address-book';
-                            elseif (str_contains($tabKeyLower, 'mobile') || str_contains($tabKeyLower, 'app')) $tabIcon = 'ph-device-mobile';
-                            elseif (str_contains($tabKeyLower, 'general')) $tabIcon = 'ph-house-line';
-                            elseif (str_contains($tabKeyLower, 'api')) $tabIcon = 'ph-plug';
+                            $tabIcon = 'ph ph-sliders';
+                            if (str_contains($tabKeyLower, 'mail') || str_contains($tabKeyLower, 'email')) $tabIcon = 'ph ph-envelope';
+                            elseif (str_contains($tabKeyLower, 'sms')) $tabIcon = 'ph ph-chat-teardrop-text';
+                            elseif (str_contains($tabKeyLower, 'otp')) $tabIcon = 'ph ph-lock-key';
+                            elseif (str_contains($tabKeyLower, 'payment')) $tabIcon = 'ph ph-credit-card';
+                            elseif (str_contains($tabKeyLower, 'social') || str_contains($tabKeyLower, 'auth')) $tabIcon = 'ph ph-users-three';
+                            elseif (str_contains($tabKeyLower, 'firebase')) $tabIcon = 'ph ph-fire';
+                            elseif (str_contains($tabKeyLower, 'storage') || str_contains($tabKeyLower, 'file')) $tabIcon = 'ph ph-folder-open';
+                            elseif (str_contains($tabKeyLower, 'notif')) $tabIcon = 'ph ph-bell';
+                            elseif (str_contains($tabKeyLower, 'security') || str_contains($tabKeyLower, 'permission')) $tabIcon = 'ph ph-shield-check';
+                            elseif (str_contains($tabKeyLower, 'contact')) $tabIcon = 'ph ph-address-book';
+                            elseif (str_contains($tabKeyLower, 'mobile') || str_contains($tabKeyLower, 'app')) $tabIcon = 'ph ph-device-mobile';
+                            elseif (str_contains($tabKeyLower, 'general')) $tabIcon = 'ph ph-house-line';
+                            elseif (str_contains($tabKeyLower, 'api')) $tabIcon = 'ph ph-plug';
 
                             $visibleCount = count($group);
                             @endphp
@@ -90,7 +90,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                             {{-- Section header --}}
                             <div class="flex items-center gap-2 mb-4 pb-2 border-b">
                                 <span class="fd-icon-tile fd-icon-tile-sm">
-                                    <i class="{{ $tabIcon ?? 'ph-sliders' }}"></i>
+                                    <i class="{{ $tabIcon ?? 'ph ph-sliders' }}"></i>
                                 </span>
                                 <div>
                                     <div class="fd-overline">{{ display_label($tabKey) }}</div>
@@ -155,11 +155,11 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                                     id="preview_{{ $setting->key }}"
                                                     class="img-preview block mx-auto mb-1"
                                                     alt="{{ $label }}">
-                                                <div class="text-muted text-xs"><i class="ph-pencil me-1"></i>{{ __('settings::settings.index.click_to_change_image') }}</div>
+                                                <div class="text-muted text-xs"><i class="ph ph-pencil me-1"></i>{{ __('settings::settings.index.click_to_change_image') }}</div>
                                                 @else
                                                 <img src="" id="preview_{{ $setting->key }}"
                                                     class="img-preview hidden" alt="{{ $label }}">
-                                                <i class="ph-image-square text-[2rem] text-muted block mb-1"></i>
+                                                <i class="ph ph-image-square text-[2rem] text-muted block mb-1"></i>
                                                 <div class="text-muted text-xs">{{ __('settings::settings.index.click_to_upload_image') }}</div>
                                                 @endif
                                                 <input type="file"
@@ -177,7 +177,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                                 @if ($setting->value)
                                                 <a href="{{ $setting->value }}" target="_blank"
                                                     class="btn btn-light btn-sm mb-2">
-                                                    <i class="ph-file-arrow-down"></i>{{ __('settings::settings.index.view_current_file') }}
+                                                    <i class="ph ph-file-arrow-down"></i>{{ __('settings::settings.index.view_current_file') }}
                                                 </a>
                                                 @endif
                                                 <input type="file" name="{{ $setting->key }}" id="{{ $setting->key }}"
@@ -284,9 +284,9 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
 
         {{-- ── Footer ── --}}
         <div class="card-footer flex justify-between items-center">
-            <span class="text-muted text-sm"><i class="ph-info me-1"></i>{{ __('settings::settings.index.footer_note') }}</span>
+            <span class="text-muted text-sm"><i class="ph ph-info me-1"></i>{{ __('settings::settings.index.footer_note') }}</span>
             <button type="submit" class="btn btn-primary px-12">
-                <i class="ph-floppy-disk"></i>{{ __('settings::settings.index.save_changes') }}
+                <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.index.save_changes') }}
             </button>
         </div>
 
@@ -370,7 +370,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                 reader.onload = function(e) {
                     var $img = $('#' + previewId);
                     $img.attr('src', e.target.result).removeClass('hidden');
-                    $img.closest('.border').find('.text-muted').html('<i class="ph-pencil me-1"></i>{{ __('settings::settings.index.click_to_change_image') }}');
+                    $img.closest('.border').find('.text-muted').html('<i class="ph ph-pencil me-1"></i>{{ __('settings::settings.index.click_to_change_image') }}');
                     $img.closest('.border').find('.ph-image-square').hide();
                 };
                 reader.readAsDataURL(file);

@@ -11,14 +11,14 @@
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('rolepermission::rolepermission.index.breadcrumb') }}" :data="$roles" empty-icon="ph-shield" empty-message="{{ __('rolepermission::rolepermission.index.empty') }}">
+<x-table-view-pagination title="{{ __('rolepermission::rolepermission.index.breadcrumb') }}" :data="$roles" empty-icon="ph ph-shield" empty-message="{{ __('rolepermission::rolepermission.index.empty') }}">
     <x-slot name="actions">
         <x-table-actions>
             @can('Assign Permission')
-                <x-table-action :href="route('admin.permissions.manage')" class="btn-info" icon="ph-shield" title="{{ __('rolepermission::rolepermission.index.manage_permissions') }}" />
+                <x-table-action :href="route('admin.permissions.manage')" class="btn-info" icon="ph ph-shield" title="{{ __('rolepermission::rolepermission.index.manage_permissions') }}" />
             @endcan
             @can('Create Role')
-                <x-table-action class="btn-primary" icon="ph-plus" title="{{ __('rolepermission::rolepermission.index.create_role') }}" data-fd-toggle="modal" data-fd-target="#createRoleModal" />
+                <x-table-action class="btn-primary" icon="ph ph-plus" title="{{ __('rolepermission::rolepermission.index.create_role') }}" data-fd-toggle="modal" data-fd-target="#createRoleModal" />
             @endcan
         </x-table-actions>
     </x-slot>
@@ -52,19 +52,19 @@
                         data-role-id="{{ $role->id }}"
                         data-role-name="{{ $role->name }}"
                         data-url="{{ route('admin.role.update', $role->id) }}">
-                        <i class="ph-pencil"></i>{{ __('foundation::foundation.common.edit') }}
+                        <i class="ph ph-pencil"></i>{{ __('foundation::foundation.common.edit') }}
                     </button>
                     @endcan
                     @can('Assign Permission')
                     <x-dropdown-link :url="route('admin.role.assign.permission.get', $role->id)">
-                        <i class="ph-shield-check"></i>{{ __('rolepermission::rolepermission.index.assign_permissions') }}
+                        <i class="ph ph-shield-check"></i>{{ __('rolepermission::rolepermission.index.assign_permissions') }}
                     </x-dropdown-link>
                     @endcan
                     @can('Create Role')
                     <x-dropdown-link :url="route('admin.role.clone', $role->id)"
                         class="swal-confirm"
                         data-text="{{ __('rolepermission::rolepermission.index.clone_role_confirm') }}">
-                        <i class="ph-copy"></i>{{ __('rolepermission::rolepermission.index.clone_role') }}
+                        <i class="ph ph-copy"></i>{{ __('rolepermission::rolepermission.index.clone_role') }}
                     </x-dropdown-link>
                     @endcan
                     @can('Delete Role')
@@ -72,7 +72,7 @@
                     <x-dropdown-link :url="route('admin.role.destroy', $role->id)"
                         class="swal-delete text-danger"
                         data-text="{{ __('rolepermission::rolepermission.index.delete_role_confirm') }}">
-                        <i class="ph-trash"></i>{{ __('rolepermission::rolepermission.index.delete_role') }}
+                        <i class="ph ph-trash"></i>{{ __('rolepermission::rolepermission.index.delete_role') }}
                     </x-dropdown-link>
                     @endif
                     @endcan

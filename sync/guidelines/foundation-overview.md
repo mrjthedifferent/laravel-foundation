@@ -27,7 +27,7 @@ overwritten or broken by the next package update.
 1. **Pages never write shell markup.** One layout, `<x-app-layout>` (a module uses `<x-module-layout>`); a page fills the content slot.
 2. **Use the components, not their markup.** `<x-page-header>`, `<x-search-card>`, `<x-table-view-pagination>`, `<x-form.input>`, `<x-form.select>`,
    `<x-form.file>`, `<x-modal>`, `<x-form-section>`, `<x-status-badge>`, `<x-empty-state>`, `<x-stat-card>`. If one fits, use it.
-3. **Icons are Phosphor (`ph-*`) only.** No Font Awesome.
+3. **Icons are Phosphor 2 only, written as a weight class plus the icon: `ph ph-gear`** (`ph-bold`/`ph-fill` for other weights). A bare `ph-gear` renders nothing. No Font Awesome.
 4. **Layout is Tailwind utilities; look is the component classes.** `flex`, `grid grid-cols-12 gap-4`, `col-span-12 md:col-span-6`, `mb-4` for layout; `.btn`,
    `.card`, `.badge`, `.table`, `.form-control`, `.alert` and the `.fd-*` classes for appearance. Never inline `style=`, never a hard-coded colour.
 5. **Never edit package files in a project.** `assets/css/foundation.css`, `assets/js/foundation.js`, anything under `vendor/` is overwritten on update.
@@ -73,3 +73,15 @@ The UI moved from Bootstrap 5 to Tailwind CSS 4 with the same look. Views that o
 Bootstrap classes or `data-bs-*` attributes themselves: run
 `node vendor/mrjthedifferent/laravel-foundation/bin/migrate-bootstrap-to-tailwind.mjs resources/views --write` **once** on a clean git tree and review the
 diff (spacing is renumbered: Bootstrap `mb-3` is Tailwind `mb-4`). Then run `php artisan migrate` (adds `dashboard_layouts`).
+
+### Upgrading from 2.x to 3.x (Phosphor 2, jQuery 4)
+
+The bundled libraries moved to their latest releases. Two of them change a project's code:
+
+- **Phosphor 2 icons need a weight class:** `ph-gear` is now `ph ph-gear`, and the 1.x suffix `ph-star-fill` is now `ph-fill ph-star`. A bare `ph-gear` renders nothing. Run
+  `node vendor/mrjthedifferent/laravel-foundation/bin/migrate-phosphor-2.mjs Modules resources config app --write` and review the diff. It rewrites class attributes,
+  `icon` props and `'icon' => …` values (menus, `config/sidebar.php`, widgets), and is safe to run again. Every Phosphor 1 icon name still exists in 2.x.
+- **jQuery 4** removed long-deprecated helpers (`$.trim`, `$.isArray`, `$.isFunction`, `$.parseJSON`, `$.type`, `$.now`…). Replace them in a project's own scripts
+  with plain JavaScript (`str.trim()`, `Array.isArray()`, `typeof f === 'function'`, `JSON.parse()`, `Date.now()`).
+
+Then run `php artisan foundation:publish --force`.

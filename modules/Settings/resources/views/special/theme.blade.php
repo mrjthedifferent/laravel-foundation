@@ -6,7 +6,7 @@
 
 @section('content')
     <x-page-header :title="__('settings::settings.special_theme.title')"
-        :subtitle="__('settings::settings.special_theme.subtitle')" icon="ph-paint-brush" />
+        :subtitle="__('settings::settings.special_theme.subtitle')" icon="ph ph-paint-brush" />
 
     @php
         $palettes = [
@@ -39,9 +39,9 @@
                         <p class="text-muted text-sm mb-4">{{ __('settings::settings.special_theme.color_mode_subtitle') }}</p>
                         <div class="grid grid-cols-12 gap-2">
                             @foreach ([
-                                'light' => ['icon' => 'ph-sun', 'label' => __('settings::settings.special_theme.mode_light'), 'desc' => __('settings::settings.special_theme.mode_light_desc')],
-                                'dark' => ['icon' => 'ph-moon', 'label' => __('settings::settings.special_theme.mode_dark'), 'desc' => __('settings::settings.special_theme.mode_dark_desc')],
-                                'auto' => ['icon' => 'ph-circle-half', 'label' => __('settings::settings.special_theme.mode_auto'), 'desc' => __('settings::settings.special_theme.mode_auto_desc')],
+                                'light' => ['icon' => 'ph ph-sun', 'label' => __('settings::settings.special_theme.mode_light'), 'desc' => __('settings::settings.special_theme.mode_light_desc')],
+                                'dark' => ['icon' => 'ph ph-moon', 'label' => __('settings::settings.special_theme.mode_dark'), 'desc' => __('settings::settings.special_theme.mode_dark_desc')],
+                                'auto' => ['icon' => 'ph ph-circle-half', 'label' => __('settings::settings.special_theme.mode_auto'), 'desc' => __('settings::settings.special_theme.mode_auto_desc')],
                             ] as $value => $mode)
                                 <div class="col-span-12 sm:col-span-4">
                                     <label class="fd-choice @if (($theme['theme_color_mode'] ?? 'light') === $value) is-selected @endif">
@@ -136,8 +136,8 @@
                                 'title' => __('settings::settings.special_theme.width_label'),
                                 'default' => 'fluid',
                                 'options' => [
-                                    'fluid' => ['ph-arrows-out-line-horizontal', __('settings::settings.special_theme.width_fluid'), __('settings::settings.special_theme.width_fluid_desc')],
-                                    'boxed' => ['ph-frame-corners', __('settings::settings.special_theme.width_boxed'), __('settings::settings.special_theme.width_boxed_desc')],
+                                    'fluid' => ['ph ph-arrows-out-line-horizontal', __('settings::settings.special_theme.width_fluid'), __('settings::settings.special_theme.width_fluid_desc')],
+                                    'boxed' => ['ph ph-frame-corners', __('settings::settings.special_theme.width_boxed'), __('settings::settings.special_theme.width_boxed_desc')],
                                 ],
                             ],
                             [
@@ -145,8 +145,8 @@
                                 'title' => __('settings::settings.special_theme.density_label'),
                                 'default' => 'comfortable',
                                 'options' => [
-                                    'comfortable' => ['ph-rows', __('settings::settings.special_theme.density_comfortable'), __('settings::settings.special_theme.density_comfortable_desc')],
-                                    'compact' => ['ph-list-dashes', __('settings::settings.special_theme.density_compact'), __('settings::settings.special_theme.density_compact_desc')],
+                                    'comfortable' => ['ph ph-rows', __('settings::settings.special_theme.density_comfortable'), __('settings::settings.special_theme.density_comfortable_desc')],
+                                    'compact' => ['ph ph-list-dashes', __('settings::settings.special_theme.density_compact'), __('settings::settings.special_theme.density_compact_desc')],
                                 ],
                             ],
                             [
@@ -154,9 +154,9 @@
                                 'title' => __('settings::settings.special_theme.radius_label'),
                                 'default' => 'rounded',
                                 'options' => [
-                                    'sharp' => ['ph-square', __('settings::settings.special_theme.radius_sharp'), __('settings::settings.special_theme.radius_sharp_desc')],
-                                    'rounded' => ['ph-app-window', __('settings::settings.special_theme.radius_rounded'), __('settings::settings.special_theme.radius_rounded_desc')],
-                                    'soft' => ['ph-circle', __('settings::settings.special_theme.radius_soft'), __('settings::settings.special_theme.radius_soft_desc')],
+                                    'sharp' => ['ph ph-square', __('settings::settings.special_theme.radius_sharp'), __('settings::settings.special_theme.radius_sharp_desc')],
+                                    'rounded' => ['ph ph-app-window', __('settings::settings.special_theme.radius_rounded'), __('settings::settings.special_theme.radius_rounded_desc')],
+                                    'soft' => ['ph ph-circle', __('settings::settings.special_theme.radius_soft'), __('settings::settings.special_theme.radius_soft_desc')],
                                 ],
                             ],
                         ] as $group)
@@ -204,7 +204,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    <i class="ph-check"></i>{{ __('settings::settings.special_theme.submit') }}
+                    <i class="ph ph-check"></i>{{ __('settings::settings.special_theme.submit') }}
                 </button>
             </div>
 

@@ -31,15 +31,15 @@ The heading of every non-list page: icon tile, title, subtitle, actions, optiona
 |---|---|---|
 | `title` | `''` | Page title (`h1`) |
 | `subtitle` | `null` | One line of context |
-| `icon` | `null` | Phosphor class, e.g. `ph-gear` — shown in a tile |
+| `icon` | `null` | Phosphor class, e.g. `ph ph-gear` — shown in a tile |
 | `backUrl` / `backLabel` | `null` | Adds a "Back" button |
 | slot `actions` | | Buttons on the trailing edge. Inputs inside are 14rem wide |
 | slot `tabs` | | Full-width row under the header |
 
 ```blade
-<x-page-header title="Security" subtitle="Two-factor and sign-in rules" icon="ph-shield-check">
+<x-page-header title="Security" subtitle="Two-factor and sign-in rules" icon="ph ph-shield-check">
     <x-slot name="actions">
-        <button type="submit" form="security-form" class="btn btn-primary"><i class="ph-floppy-disk"></i>Save changes</button>
+        <button type="submit" form="security-form" class="btn btn-primary"><i class="ph ph-floppy-disk"></i>Save changes</button>
     </x-slot>
 </x-page-header>
 ```
@@ -74,7 +74,7 @@ Card + table + count badge + footer (count, per-page select, paginator) + empty 
 |---|---|---|
 | `title` | `''` | Card title |
 | `data` | `null` | A paginator **or** a collection/array |
-| `emptyMessage` / `emptyIcon` | translated / `ph-tray` | The empty state |
+| `emptyMessage` / `emptyIcon` | translated / `ph ph-tray` | The empty state |
 | `stack` | `true` | On phones each row becomes labelled cells; `:stack="false"` keeps a wide table a table that scrolls sideways |
 
 Slots: default (the `<thead>`/`<tbody>`), `actions` (header buttons, usually `<x-table-actions>`), `exports`, `tabs`, `emptyAction` (a button inside the
@@ -87,14 +87,14 @@ Header action group. Past `limit` (default 2) actions, the rest collapse into a 
 | Tag | Props |
 |---|---|
 | `<x-table-actions :limit="2">` | `limit` |
-| `<x-table-action :href="route(…)" icon="ph-plus" title="Add" class="btn-primary">` | `href` (renders `<a>`, else `<button type=…>`), `type`, `class` (variant, default `btn-primary`), `icon`, `title` (also the tooltip). Extra attributes such as `data-url` / `data-text` with a `swal-post` class work |
+| `<x-table-action :href="route(…)" icon="ph ph-plus" title="Add" class="btn-primary">` | `href` (renders `<a>`, else `<button type=…>`), `type`, `class` (variant, default `btn-primary`), `icon`, `title` (also the tooltip). Extra attributes such as `data-url` / `data-text` with a `swal-post` class work |
 
 #### `<x-dropdown-menu>` / `<x-dropdown-link>`
 The three-dot row menu. `<x-dropdown-menu label="Actions">` wraps items; `<x-dropdown-link :url="…" class="swal-delete text-danger" data-text="…">` is an
 anchor item. A non-link item is `<button type="button" class="dropdown-item">`. Separator: `<div class="dropdown-divider"></div>`.
 
 #### `<x-table-export-dropdown>` / `<x-table-export-item>`
-`<x-table-export-dropdown>` is the export menu for the `exports` slot; each `<x-table-export-item :href="…" icon="ph-file-xls" title="Excel" />` is an entry.
+`<x-table-export-dropdown>` is the export menu for the `exports` slot; each `<x-table-export-item :href="…" icon="ph ph-file-xls" title="Excel" />` is an entry.
 
 #### `<x-modal>`
 | Prop | Default | |
@@ -145,7 +145,7 @@ pattern. Its body is a grid; put fields in `.fd-fields`.
 |---|---|
 | `<x-status-badge :active="$m->is_active" active-label="…" inactive-label="…" />` | `.fd-status` dot + translated label |
 | `<x-stat-card label value icon color href change :change-up caption :series>` | KPI tile. `color`: `primary success warning danger info secondary`. `series`: list of ints, draws a sparkline |
-| `<x-empty-state icon="ph-users" title="No users" text="Add the first one">` + slot | The one empty state; the slot is the next step (a button) |
+| `<x-empty-state icon="ph ph-users" title="No users" text="Add the first one">` + slot | The one empty state; the slot is the next step (a button) |
 | `<x-skeleton :rows="3" :avatar="true" />` | Shimmering placeholder while a list loads |
 | `<x-truncated-text :text="…" :limit="50" />` | Truncates with a tooltip holding the full text |
 | `<x-image src="…" alt="…" :max-width="40" />` | A bounded image |

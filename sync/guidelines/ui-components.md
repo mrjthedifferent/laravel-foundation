@@ -1,7 +1,7 @@
 ## UI Components & Blade Guidelines
 
 > **Theme:** Laravel Foundation (`assets/css/foundation.css`) — design tokens and component classes compiled with Tailwind CSS 4  
-> **Icons:** Phosphor (`ph-*`) — the only icon set · **Fonts:** Inter  
+> **Icons:** Phosphor 2 — the only icon set, always `ph ph-name` · **Fonts:** Inter  
 > **JS:** jQuery · Alpine · Select2 · SweetAlert2
 
 Start at [`foundation-overview.md`](foundation-overview.md). Every component with its props and slots is in [`components-reference.md`](components-reference.md); templates for full
@@ -131,7 +131,7 @@ These are the classes a view is expected to use. Everything else it needs is a T
 
 {{-- Empty state written by hand (inside a tab pane, a widget, an AJAX target) --}}
 <div class="fd-empty">
-    <span class="fd-empty-icon"><i class="ph-folder-open"></i></span>
+    <span class="fd-empty-icon"><i class="ph ph-folder-open"></i></span>
     <div class="fd-empty-title">{{ __('thing::thing.index.empty') }}</div>
     <p class="fd-empty-text">{{ __('thing::thing.index.empty_help') }}</p>
 </div>
@@ -139,7 +139,7 @@ These are the classes a view is expected to use. Everything else it needs is a T
 {{-- Toolbar above a table that filters client-side --}}
 <div class="fd-toolbar">
     <div class="fd-toolbar-search">
-        <i class="ph-magnifying-glass"></i>
+        <i class="ph ph-magnifying-glass"></i>
         <input type="text" id="thing-search" class="form-control"
                placeholder="{{ __('thing::thing.index.search_placeholder') }}">
     </div>
@@ -212,9 +212,9 @@ Heads every page except a list (a list's title sits in its table card). Props: `
 slots: `actions` (buttons on the trailing edge; text inputs inside are 14rem wide) and `tabs` (a full-width row beneath).
 
 ```blade
-<x-page-header title="Theme" subtitle="How the admin looks for everyone who signs in." icon="ph-paint-brush">
+<x-page-header title="Theme" subtitle="How the admin looks for everyone who signs in." icon="ph ph-paint-brush">
     <x-slot name="actions">
-        <button type="submit" form="theme-form" class="btn btn-primary"><i class="ph-check"></i>Save theme settings</button>
+        <button type="submit" form="theme-form" class="btn btn-primary"><i class="ph ph-check"></i>Save theme settings</button>
     </x-slot>
 </x-page-header>
 ```
@@ -235,7 +235,7 @@ Props:
 | `title` | `''` | Card header title |
 | `data` | `null` | Paginator **or** Collection/array |
 | `emptyMessage` | translated default | Empty state text |
-| `emptyIcon` | `'ph-tray'` | Phosphor icon for the empty state |
+| `emptyIcon` | `'ph ph-tray'` | Phosphor icon for the empty state |
 
 Slots:
 
@@ -249,15 +249,15 @@ Slots:
 
 ```blade
 <x-table-view-pagination title="Users" :data="$users"
-    empty-message="No users found" empty-icon="ph-users">
+    empty-message="No users found" empty-icon="ph ph-users">
 
     <x-slot name="actions">
         <x-table-actions>
             @can('Create User')
-                <x-table-action :href="route('admin.users.create')" icon="ph-plus" title="Add User" />
+                <x-table-action :href="route('admin.users.create')" icon="ph ph-plus" title="Add User" />
             @endcan
             @can('Import User')
-                <x-table-action :href="route('admin.users.bulk.create')" icon="ph-upload-simple" title="Import" />
+                <x-table-action :href="route('admin.users.bulk.create')" icon="ph ph-upload-simple" title="Import" />
             @endcan
         </x-table-actions>
     </x-slot>
@@ -265,7 +265,7 @@ Slots:
     <x-slot name="emptyAction">
         @can('Create User')
             <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm">
-                <i class="ph-plus"></i>Add the first user
+                <i class="ph ph-plus"></i>Add the first user
             </a>
         @endcan
     </x-slot>
@@ -293,12 +293,12 @@ Slots:
                     <x-dropdown-menu>
                         @can('View User')
                             <x-dropdown-link :url="route('admin.users.show', $user->id)">
-                                <i class="ph-eye"></i>View
+                                <i class="ph ph-eye"></i>View
                             </x-dropdown-link>
                         @endcan
                         @can('Edit User')
                             <x-dropdown-link :url="route('admin.users.edit', $user->id)">
-                                <i class="ph-pencil-simple"></i>Edit
+                                <i class="ph ph-pencil-simple"></i>Edit
                             </x-dropdown-link>
                         @endcan
                         @can('Delete User')
@@ -306,7 +306,7 @@ Slots:
                             <x-dropdown-link :url="route('admin.users.destroy', $user->id)"
                                 class="swal-delete text-danger"
                                 data-text="Delete this user? This cannot be undone.">
-                                <i class="ph-trash"></i>Delete
+                                <i class="ph ph-trash"></i>Delete
                             </x-dropdown-link>
                         @endcan
                     </x-dropdown-menu>
@@ -334,7 +334,7 @@ Slots:
 ```blade
 <button type="button" class="dropdown-item edit-btn"
     data-id="{{ $item->id }}" data-name="{{ $item->name }}">
-    <i class="ph-pencil"></i>Edit
+    <i class="ph ph-pencil"></i>Edit
 </button>
 ```
 
@@ -382,11 +382,11 @@ Props:
 | Prop | Default | Description |
 |---|---|---|
 | `title` | `''` | Section heading (auto-uppercased) |
-| `icon` | `'ph-note'` | Phosphor icon in the tinted header |
+| `icon` | `'ph ph-note'` | Phosphor icon in the tinted header |
 | `$badge` | slot | Optional badge in header |
 
 ```blade
-<x-form-section title="Personal Information" icon="ph-identification-card">
+<x-form-section title="Personal Information" icon="ph ph-identification-card">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-4">
             <x-form.input name="first_name" label="First Name" />
@@ -417,7 +417,7 @@ Props:
 {{-- Trigger --}}
 <button type="button" class="btn btn-sm btn-primary"
     data-fd-toggle="modal" data-fd-target="#createModal">
-    <i class="ph-plus"></i>Create
+    <i class="ph ph-plus"></i>Create
 </button>
 
 {{-- Modal (place at the bottom of @section('content')) --}}
@@ -426,7 +426,7 @@ Props:
     <x-slot name="footer">
         <button type="button" class="btn btn-light" data-fd-dismiss="modal">Cancel</button>
         <button type="submit" form="create-form" class="btn btn-primary">
-            <i class="ph-floppy-disk"></i>Save
+            <i class="ph ph-floppy-disk"></i>Save
         </button>
     </x-slot>
 </x-modal>
@@ -453,7 +453,7 @@ Props:
 |---|---|---|
 | `label` | `''` | Muted label (`.fd-stat-label`) |
 | `value` | `''` | Main metric (`.fd-stat-value`) |
-| `icon` | `'ph-chart-bar'` | Phosphor icon inside the tile |
+| `icon` | `'ph ph-chart-bar'` | Phosphor icon inside the tile |
 | `color` | `'primary'` | Tile tint: `primary` `success` `warning` `danger` `info` `secondary` |
 | `href` | `null` | Makes the whole card a stretched link |
 | `change` | `null` | Trend string, e.g. `+12%` — rendered as a `.fd-delta` pill |
@@ -465,12 +465,12 @@ Props:
 <div class="grid grid-cols-12 gap-4 mb-4">
     <div class="col-span-12 md:col-span-6 xl:col-span-3">
         <x-stat-card label="Total Users" :value="number_format($totalUsers)"
-            icon="ph-users-four" color="primary"
+            icon="ph ph-users-four" color="primary"
             :href="route('admin.users.index')"
             change="+5%" :change-up="true" caption="vs last month" />
     </div>
     <div class="col-span-12 md:col-span-6 xl:col-span-3">
-        <x-stat-card label="Active Roles" :value="$activeRoles" icon="ph-shield" color="warning" />
+        <x-stat-card label="Active Roles" :value="$activeRoles" icon="ph ph-shield" color="warning" />
     </div>
 </div>
 ```
@@ -549,8 +549,8 @@ Controls are one size: `form-control` and `form-control-sm` render identically, 
 **Hint text:**
 ```blade
 <div class="form-text">Leave empty to keep current · JPEG or PNG, max 2 MB</div>
-<div class="form-text text-success"><i class="ph-check-circle me-1"></i>Verified</div>
-<div class="form-text text-warning"><i class="ph-warning me-1"></i>Not verified</div>
+<div class="form-text text-success"><i class="ph ph-check-circle me-1"></i>Verified</div>
+<div class="form-text text-warning"><i class="ph ph-warning me-1"></i>Not verified</div>
 ```
 
 Or the component's own `help` prop: `<x-form.input name="phone" label="Mobile No" help="With country code, e.g. +8801712345678" />`.
@@ -562,8 +562,8 @@ Or the component's own `help` prop: `<x-form.input name="phone" label="Mobile No
     <input type="password" name="password" id="password" class="form-control pe-12" placeholder="Min. 8 characters" required>
     <button type="button" class="btn btn-ghost btn-icon absolute top-1/2 end-0 -translate-y-1/2" tabindex="-1"
             @click="togglePassword('password')">
-        <i x-show="!passwordVisible" class="ph-eye"></i>
-        <i x-show="passwordVisible" class="ph-eye-slash" x-cloak></i>
+        <i x-show="!passwordVisible" class="ph ph-eye"></i>
+        <i x-show="passwordVisible" class="ph ph-eye-slash" x-cloak></i>
     </button>
 </div>
 ```
@@ -573,10 +573,10 @@ A password field with no toggle button — just the blank-by-default, never-repo
 ```blade
 <div class="fd-form-actions">
     <a href="{{ route('admin.items.index') }}" class="btn btn-light">
-        <i class="ph-x"></i>Cancel
+        <i class="ph ph-x"></i>Cancel
     </a>
     <x-primary-button id="submit-btn" class="px-12">
-        <i class="ph-floppy-disk"></i>Save Changes
+        <i class="ph ph-floppy-disk"></i>Save Changes
     </x-primary-button>
 </div>
 ```
@@ -610,41 +610,41 @@ A password field with no toggle button — just the blank-by-default, never-repo
 **Icon margins:** `.btn`, `.dropdown-item` and `.navbar-nav-link` set their own `gap`, so an icon inside them takes **no** `me-1`/`me-2` — the class would double the spacing. Keep the margin only where the container sets no gap: a plain `<span>`, a table cell, a heading, a `.dropdown-header`, a `.nav-tabs .nav-link`.
 
 ```blade
-<i class="ph-plus"></i>Create                          {{-- inside .btn — no margin --}}
-<i class="ph-pencil"></i>Edit                          {{-- inside .dropdown-item — no margin --}}
-<span><i class="ph-warning-circle me-2"></i>Heads up</span>   {{-- plain span — margin needed --}}
+<i class="ph ph-plus"></i>Create                          {{-- inside .btn — no margin --}}
+<i class="ph ph-pencil"></i>Edit                          {{-- inside .dropdown-item — no margin --}}
+<span><i class="ph ph-warning-circle me-2"></i>Heads up</span>   {{-- plain span — margin needed --}}
 ```
 
 **Common buttons:**
 ```blade
 {{-- Primary --}}
-<x-primary-button><i class="ph-plus"></i>Create</x-primary-button>
+<x-primary-button><i class="ph ph-plus"></i>Create</x-primary-button>
 
 {{-- Secondary (cancel / back) --}}
 <a href="{{ route('admin.items.index') }}" class="btn btn-light btn-sm">
-    <i class="ph-arrow-left"></i>Back
+    <i class="ph ph-arrow-left"></i>Back
 </a>
 
 {{-- Import --}}
 <a href="{{ route('admin.items.bulk.create') }}" class="btn btn-sm btn-info">
-    <i class="ph-upload-simple"></i>Import
+    <i class="ph ph-upload-simple"></i>Import
 </a>
 
 {{-- Export (combined with .swal-confirm) --}}
 <a href="{{ route('admin.items.export') }}?{{ request()->getQueryString() }}"
    class="btn btn-sm btn-success swal-confirm"
    data-text="Export the current filtered results?">
-    <i class="ph-file-xls"></i>Export
+    <i class="ph ph-file-xls"></i>Export
 </a>
 
 {{-- Icon-only --}}
 <button type="button" class="btn btn-sm btn-icon btn-light" title="Refresh">
-    <i class="ph-arrows-clockwise"></i>
+    <i class="ph ph-arrows-clockwise"></i>
 </button>
 
 {{-- Quiet icon-only --}}
 <button type="button" class="btn btn-ghost btn-icon btn-sm" aria-label="Close">
-    <i class="ph-x"></i>
+    <i class="ph ph-x"></i>
 </button>
 ```
 
@@ -694,7 +694,7 @@ The card is themed by the stylesheet — no utility classes are needed to make i
         <span class="badge badge-count">{{ number_format($total) }}</span>
         <div class="flex items-center gap-2 ms-auto">
             <a href="{{ route('admin.things.create') }}" class="btn btn-sm btn-primary">
-                <i class="ph-plus"></i>{{ __('thing::thing.index.add') }}
+                <i class="ph ph-plus"></i>{{ __('thing::thing.index.add') }}
             </a>
         </div>
     </div>
@@ -706,7 +706,7 @@ The card is themed by the stylesheet — no utility classes are needed to make i
 ```blade
 <div class="card h-full">
     <div class="card-header">
-        <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-users-four"></i></span>
+        <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph ph-users-four"></i></span>
         <h6 class="card-title">{{ __('thing::thing.widget.title') }}</h6>
         <a href="{{ route('admin.things.index') }}" class="ms-auto text-sm">
             {{ __('thing::thing.widget.view_all') }}
@@ -758,7 +758,7 @@ return back()->with('error', __('item::item.flash.create_failed'));
 <a href="{{ route('admin.items.activate', $item->id) }}"
    class="dropdown-item swal-confirm"
    data-text="Activate this item?">
-    <i class="ph-check"></i>Activate
+    <i class="ph ph-check"></i>Activate
 </a>
 ```
 
@@ -767,7 +767,7 @@ return back()->with('error', __('item::item.flash.create_failed'));
 <x-dropdown-link :url="route('admin.items.destroy', $item->id)"
     class="swal-delete text-danger"
     data-text="Delete this item? This cannot be undone.">
-    <i class="ph-trash"></i>Delete
+    <i class="ph ph-trash"></i>Delete
 </x-dropdown-link>
 ```
 
@@ -777,7 +777,7 @@ return back()->with('error', __('item::item.flash.create_failed'));
     class="swal-post"
     data-method="POST"
     data-text="Reset this user's password?">
-    <i class="ph-key"></i>Reset Password
+    <i class="ph ph-key"></i>Reset Password
 </x-dropdown-link>
 ```
 
@@ -787,46 +787,59 @@ Never use `window.confirm()`, hand-built toasts, or inline `Swal.fire()` calls �
 
 ### Icons
 
-**Phosphor (`ph-*`) is the only icon set.** Font Awesome was removed — there is no `fa-*` stylesheet loaded, so an `fa-` class renders nothing at all. If a glyph seems to be missing, find the nearest Phosphor name rather than reaching for another library.
+**Phosphor 2 is the only icon set.** Every icon is **a weight class plus the icon class**: `<i class="ph ph-gear"></i>`. A bare `ph-gear` renders nothing. This applies everywhere an icon is named: class attributes, `icon="…"` props and `'icon' => '…'` in menus, sidebar groups and dashboard widgets. Font Awesome is not loaded, so an `fa-` class renders nothing either. If a glyph seems to be missing, look it up at [phosphoricons.com](https://phosphoricons.com) rather than reaching for another library.
+
+**Weights:**
+- The layout loads **`ph`** (regular), **`ph-bold`** and **`ph-fill`**, e.g. `ph-fill ph-star`.
+- `ph-light`, `ph-thin` and `ph-duotone` are shipped but not loaded. A page that uses one adds its stylesheet:
+
+  ```blade
+  @push('styles')
+      <link href="{{ asset('assets/icons/phosphor/phosphor-duotone.css') }}" rel="stylesheet">
+  @endpush
+  ```
+- Each weight's font downloads only once an icon in that weight is shown.
+
+To upgrade a project from Phosphor 1 names (`ph-gear`, `ph-star-fill`), run `node vendor/mrjthedifferent/laravel-foundation/bin/migrate-phosphor-2.mjs Modules resources config app --write`. It is safe to run more than once.
 
 **Common mapping:**
 
 | Purpose | Icon |
 |---|---|
-| Dashboard | `ph-house` |
-| Users | `ph-users-four` |
-| Create | `ph-plus` |
-| Edit | `ph-pencil-simple` |
-| View | `ph-eye` |
-| Delete | `ph-trash` |
-| Save | `ph-floppy-disk` |
-| Back | `ph-arrow-left` |
-| Cancel / Close | `ph-x` |
-| Search | `ph-magnifying-glass` |
-| Filter | `ph-funnel` |
-| Reset | `ph-arrow-counter-clockwise` |
-| Settings | `ph-gear` |
-| Roles | `ph-shield` |
-| Permissions | `ph-shield-check` |
-| Key / Password | `ph-key` |
-| Import | `ph-upload-simple` |
-| Export | `ph-file-xls` · `ph-file-csv` · `ph-file-pdf` |
-| Activity | `ph-clock-counter-clockwise` |
-| Notification | `ph-bell` |
-| Email | `ph-envelope` |
-| Verified | `ph-check-circle` |
-| Not verified | `ph-x-circle` |
-| Warning | `ph-warning-circle` |
-| Empty tray | `ph-tray` |
-| Action menu | `ph-dots-three-vertical` |
+| Dashboard | `ph ph-house` |
+| Users | `ph ph-users-four` |
+| Create | `ph ph-plus` |
+| Edit | `ph ph-pencil-simple` |
+| View | `ph ph-eye` |
+| Delete | `ph ph-trash` |
+| Save | `ph ph-floppy-disk` |
+| Back | `ph ph-arrow-left` |
+| Cancel / Close | `ph ph-x` |
+| Search | `ph ph-magnifying-glass` |
+| Filter | `ph ph-funnel` |
+| Reset | `ph ph-arrow-counter-clockwise` |
+| Settings | `ph ph-gear` |
+| Roles | `ph ph-shield` |
+| Permissions | `ph ph-shield-check` |
+| Key / Password | `ph ph-key` |
+| Import | `ph ph-upload-simple` |
+| Export | `ph ph-file-xls` · `ph ph-file-csv` · `ph ph-file-pdf` |
+| Activity | `ph ph-clock-counter-clockwise` |
+| Notification | `ph ph-bell` |
+| Email | `ph ph-envelope` |
+| Verified | `ph ph-check-circle` |
+| Not verified | `ph ph-x-circle` |
+| Warning | `ph ph-warning-circle` |
+| Empty tray | `ph ph-tray` |
+| Action menu | `ph ph-dots-three-vertical` |
 
 **Sizing:**
 ```blade
-<i class="ph-users ph-sm"></i>     {{-- .875em --}}
-<i class="ph-users ph-lg"></i>     {{-- 1.375em --}}
-<i class="ph-users ph-2x"></i>     {{-- 2em --}}
-<i class="ph-users ph-3x"></i>     {{-- 3em --}}
-<i class="ph-spinner ph-spin"></i> {{-- spins --}}
+<i class="ph ph-users ph-sm"></i>     {{-- .875em --}}
+<i class="ph ph-users ph-lg"></i>     {{-- 1.375em --}}
+<i class="ph ph-users ph-2x"></i>     {{-- 2em --}}
+<i class="ph ph-users ph-3x"></i>     {{-- 3em --}}
+<i class="ph ph-spinner ph-spin"></i> {{-- spins --}}
 ```
 Inside a `.btn`, a `.dropdown-item`, a sidebar link or an `.alert`, the icon is already sized by the container — add nothing.
 
@@ -854,9 +867,9 @@ For long settings/configuration forms. It sticks to the top of the scrolling con
 <div id="save-bar" class="hidden mb-4 sticky top-0 z-10">
     <div class="alert alert-warning flex items-center justify-between py-2 px-4 mb-0
                 rounded-none border-s-0 border-e-0">
-        <span><i class="ph-warning-circle me-2"></i>{{ __('thing::thing.settings.unsaved_changes') }}</span>
+        <span><i class="ph ph-warning-circle me-2"></i>{{ __('thing::thing.settings.unsaved_changes') }}</span>
         <button type="submit" class="btn btn-dark btn-sm px-4">
-            <i class="ph-floppy-disk"></i>{{ __('thing::thing.settings.save_now') }}
+            <i class="ph ph-floppy-disk"></i>{{ __('thing::thing.settings.save_now') }}
         </button>
     </div>
 </div>
@@ -888,7 +901,7 @@ $('#settings-form').on('change input', function () {
 | Add a rule to `assets/css/foundation.css` | Project CSS in `resources/css/app.css`, or `@push('styles')` for one page — the package file is overwritten on update |
 | `style="…"` on an element | Tailwind utilities, a `.fd-*` class, or a sizing helper (`w-12`, `text-xs`) |
 | Hard-coded hex colours in markup or CSS | A token: `var(--fd-accent)`, `var(--fd-muted)`, `var(--fd-success-subtle)` |
-| `fa-*` icons | `ph-*` — Font Awesome is not loaded |
+| `fa-*` icons, or a bare `ph-gear` | `ph ph-gear`. Font Awesome is not loaded, and Phosphor 2 needs the weight class |
 | `me-1`/`me-2` on an icon inside `.btn`, `.dropdown-item` or `.navbar-nav-link` | Nothing — the container sets the gap |
 | `btn-outline-secondary` / `btn-secondary` in a new view | `btn-light` (or `btn-ghost` when it should be borderless) |
 | `bg-success-subtle text-success border border-success-subtle` (or any hand-mixed badge colours) | `badge badge-success` |

@@ -5,17 +5,17 @@
 @endsection
 
 @section('content')
-    <x-table-view-pagination title="{{ __('backupcleanup::backupcleanup.index.breadcrumb') }}" :data="$files" empty-icon="ph-archive"
+    <x-table-view-pagination title="{{ __('backupcleanup::backupcleanup.index.breadcrumb') }}" :data="$files" empty-icon="ph ph-archive"
         empty-message="{{ __('backupcleanup::backupcleanup.index.empty') }}">
         <x-slot name="actions">
             <x-table-actions>
                 @can('Cleanup Backup')
-                    <x-table-action class="btn-warning swal-post" icon="ph-eraser" title="{{ __('backupcleanup::backupcleanup.index.run_cleanup') }}"
+                    <x-table-action class="btn-warning swal-post" icon="ph ph-eraser" title="{{ __('backupcleanup::backupcleanup.index.run_cleanup') }}"
                         data-url="{{ route('admin.backups.cleanup') }}"
                         data-text="{{ __('backupcleanup::backupcleanup.index.run_cleanup_confirm') }}" />
                 @endcan
                 @can('Create Backup')
-                    <x-table-action class="btn-primary swal-post" icon="ph-plus" title="{{ __('backupcleanup::backupcleanup.index.create_backup') }}"
+                    <x-table-action class="btn-primary swal-post" icon="ph ph-plus" title="{{ __('backupcleanup::backupcleanup.index.create_backup') }}"
                         data-url="{{ route('admin.backups.store') }}"
                         data-text="{{ __('backupcleanup::backupcleanup.index.create_backup_confirm') }}" />
                 @endcan
@@ -37,7 +37,7 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>
-                        <i class="ph-file-zip text-muted me-1"></i>
+                        <i class="ph ph-file-zip text-muted me-1"></i>
                         <span class="break-words text-sm">{{ $file['filename'] }}</span>
                     </td>
                     <td class="whitespace-nowrap text-sm">
@@ -54,13 +54,13 @@
                         <x-dropdown-menu>
                             @can('Download Backup')
                                 <x-dropdown-link :url="route('admin.backups.download', ['filename' => $file['filename']])">
-                                    <i class="ph-download-simple"></i>{{ __('backupcleanup::backupcleanup.index.download') }}
+                                    <i class="ph ph-download-simple"></i>{{ __('backupcleanup::backupcleanup.index.download') }}
                                 </x-dropdown-link>
                             @endcan
                             @can('Delete Backup')
                                 <div class="dropdown-divider"></div>
                                 <x-dropdown-link :url="route('admin.backups.destroy', ['filename' => $file['filename']])"
-                                    class="text-danger swal-delete" data-text="{{ __('backupcleanup::backupcleanup.index.delete_confirm') }}" data-method="DELETE"><i class="ph-trash"></i> {{ __('backupcleanup::backupcleanup.index.delete') }}
+                                    class="text-danger swal-delete" data-text="{{ __('backupcleanup::backupcleanup.index.delete_confirm') }}" data-method="DELETE"><i class="ph ph-trash"></i> {{ __('backupcleanup::backupcleanup.index.delete') }}
                                 </x-dropdown-link>
                             @endcan
                         </x-dropdown-menu>
@@ -71,7 +71,7 @@
     </x-table-view-pagination>
 
     <p class="text-muted text-xs mt-2">
-        <i class="ph-info me-1"></i>
+        <i class="ph ph-info me-1"></i>
         {!! __('backupcleanup::backupcleanup.index.stored_on', [
             'disk' => '<strong>'.e(config('backup.backup.destination.disks')[0] ?? 'local').'</strong>',
             'name' => '<strong>'.e(config('backup.backup.name', config('app.name'))).'</strong>',

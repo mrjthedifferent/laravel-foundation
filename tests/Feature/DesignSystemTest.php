@@ -97,7 +97,7 @@ class DesignSystemTest extends TestCase
     public function test_the_page_header_shows_title_subtitle_icon_actions_and_tabs(): void
     {
         $html = Blade::render(<<<'BLADE'
-            <x-page-header title="Security" subtitle="Sign-in rules" icon="ph-shield">
+            <x-page-header title="Security" subtitle="Sign-in rules" icon="ph ph-shield">
                 <x-slot name="actions"><button>Save</button></x-slot>
                 <x-slot name="tabs"><a href="#">One</a></x-slot>
             </x-page-header>
@@ -105,7 +105,7 @@ class DesignSystemTest extends TestCase
 
         $this->assertStringContainsString('<h1 class="fd-page-title">Security</h1>', $html);
         $this->assertStringContainsString('Sign-in rules', $html);
-        $this->assertStringContainsString('ph-shield', $html);
+        $this->assertStringContainsString('ph ph-shield', $html);
         $this->assertStringContainsString('<button>Save</button>', $html);
         $this->assertStringContainsString('fd-page-tabs', $html);
     }
@@ -139,7 +139,7 @@ class DesignSystemTest extends TestCase
         $this->assertSame(2, substr_count($skeleton, 'fd-skeleton-row'));
         $this->assertStringContainsString('aria-hidden="true"', $skeleton);
 
-        $empty = Blade::render('<x-empty-state icon="ph-users" title="No users" text="Add one">Go</x-empty-state>');
+        $empty = Blade::render('<x-empty-state icon="ph ph-users" title="No users" text="Add one">Go</x-empty-state>');
         $this->assertStringContainsString('No users', $empty);
         $this->assertStringContainsString('Add one', $empty);
         $this->assertStringContainsString('fd-empty-action', $empty);

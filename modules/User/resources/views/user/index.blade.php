@@ -36,14 +36,14 @@
     title="{{ __('user::user.index.title') }}"
     :data="$users"
     empty-message="{{ __('user::user.index.empty') }}"
-    empty-icon="ph-users">
+    empty-icon="ph ph-users">
     <x-slot name="actions">
         <x-table-actions>
             @can('Create User')
-            <x-table-action :href="route('admin.users.create')" icon="ph-plus" title="{{ __('user::user.index.add_user') }}" />
+            <x-table-action :href="route('admin.users.create')" icon="ph ph-plus" title="{{ __('user::user.index.add_user') }}" />
             @endcan
             @can('Import User')
-            <x-table-action :href="route('admin.users.bulk.create')" icon="ph-upload-simple" title="{{ __('user::user.index.import_users') }}" />
+            <x-table-action :href="route('admin.users.bulk.create')" icon="ph ph-upload-simple" title="{{ __('user::user.index.import_users') }}" />
             @endcan
         </x-table-actions>
     </x-slot>
@@ -53,18 +53,18 @@
         <x-table-export-dropdown>
             <x-table-export-item :href="route('admin.users.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'csv']))"
                 class="swal-confirm"
-                icon="ph-file-csv"
+                icon="ph ph-file-csv"
                 title="CSV"
                 data-text="{{ __('user::user.index.export_confirm', ['format' => 'CSV']) }}" />
             <x-table-export-item :href="route('admin.users.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'xlsx']))"
                 class="swal-confirm"
-                icon="ph-file-xls"
+                icon="ph ph-file-xls"
                 title="Excel"
                 data-text="{{ __('user::user.index.export_confirm', ['format' => 'Excel']) }}" />
 
             <x-table-export-item :href="route('admin.users.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'pdf']))"
                 class="swal-confirm"
-                icon="ph-file-pdf"
+                icon="ph ph-file-pdf"
                 title="PDF"
                 data-text="{{ __('user::user.index.export_confirm', ['format' => 'PDF']) }}" />
         </x-table-export-dropdown>
@@ -106,13 +106,13 @@
                 {{-- Email --}}
                 @if ($user->email)
                 <div class="text-sm flex items-center gap-1">
-                    <i class="ph-envelope text-muted"></i>
+                    <i class="ph ph-envelope text-muted"></i>
                     <span>{{ $user->email }}</span>
 
                     @if ($user->email_verified_at)
-                    <i class="ph-check-circle text-success" title="{{ __('user::user.index.email_verified_label') }}"></i>
+                    <i class="ph ph-check-circle text-success" title="{{ __('user::user.index.email_verified_label') }}"></i>
                     @else
-                    <i class="ph-x-circle text-warning" title="{{ __('user::user.index.email_not_verified') }}"></i>
+                    <i class="ph ph-x-circle text-warning" title="{{ __('user::user.index.email_not_verified') }}"></i>
                     @endif
                 </div>
                 @endif
@@ -120,13 +120,13 @@
                 {{-- Phone --}}
                 @if ($user->phone)
                 <div class="text-sm flex items-center gap-1 mt-1">
-                    <i class="ph-device-mobile text-muted"></i>
+                    <i class="ph ph-device-mobile text-muted"></i>
                     <span>{{ $user->phone }}</span>
 
                     @if ($user->phone_verified_at)
-                    <i class="ph-check-circle text-success" title="{{ __('user::user.index.phone_verified_label') }}"></i>
+                    <i class="ph ph-check-circle text-success" title="{{ __('user::user.index.phone_verified_label') }}"></i>
                     @else
-                    <i class="ph-x-circle text-muted" title="{{ __('user::user.index.phone_not_verified') }}"></i>
+                    <i class="ph ph-x-circle text-muted" title="{{ __('user::user.index.phone_not_verified') }}"></i>
                     @endif
                 </div>
                 @endif
@@ -135,33 +135,33 @@
             <td>
                 <x-status-badge :active="$user->is_active" />
                 @if ($user->isSuperAdmin())
-                    <span class="badge badge-danger ms-1"><i class="ph-crown"></i>{{ __('user::user.common.super_admin') }}</span>
+                    <span class="badge badge-danger ms-1"><i class="ph ph-crown"></i>{{ __('user::user.common.super_admin') }}</span>
                 @endif
             </td>
             <td class="text-end">
                 <x-dropdown-menu>
                     @can('View User')
                     <x-dropdown-link :url="route('admin.users.show', $user->id)">
-                        <i class="ph-eye"></i>{{ __('foundation::foundation.common.view') }}
+                        <i class="ph ph-eye"></i>{{ __('foundation::foundation.common.view') }}
                     </x-dropdown-link>
                     @endcan
                     @can('Edit User')
                     <x-dropdown-link :url="route('admin.users.edit', $user->id)">
-                        <i class="ph-pencil-simple"></i>{{ __('foundation::foundation.common.edit') }}
+                        <i class="ph ph-pencil-simple"></i>{{ __('foundation::foundation.common.edit') }}
                     </x-dropdown-link>
                     @endcan
                     @can('User Password Reset')
                     <x-dropdown-link :url="route('admin.user.password.reset', $user->id)"
                         data-text="{{ __('user::user.index.reset_password_confirm') }}"
                         class="swal-confirm">
-                        <i class="ph-key"></i>{{ __('user::user.index.reset_password') }}
+                        <i class="ph ph-key"></i>{{ __('user::user.index.reset_password') }}
                     </x-dropdown-link>
                     @endcan
                     @can('impersonate', $user)
                     <x-dropdown-link :url="route('admin.users.impersonate', $user->id)"
                         data-text="{{ __('user::user.index.impersonate_confirm', ['name' => $user->name]) }}"
                         class="swal-post">
-                        <i class="ph-user-switch"></i>{{ __('user::user.index.impersonate') }}
+                        <i class="ph ph-user-switch"></i>{{ __('user::user.index.impersonate') }}
                     </x-dropdown-link>
                     @endcan
                     @if (!app()->environment('production'))
@@ -170,7 +170,7 @@
                     <x-dropdown-link
                         :url="route('admin.users.show', $user->id) . '#manage-account'"
                         class="text-warning">
-                        <i class="ph-gear"></i>{{ __('user::user.index.manage_account') }}
+                        <i class="ph ph-gear"></i>{{ __('user::user.index.manage_account') }}
                     </x-dropdown-link>
                     @endcan
                     @endif

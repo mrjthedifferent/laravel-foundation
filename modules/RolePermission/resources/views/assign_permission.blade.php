@@ -12,7 +12,7 @@
     <x-page-header
         title="{{ __('rolepermission::rolepermission.index.assign_permissions') }}"
         subtitle="{{ __('rolepermission::rolepermission.assign_permission.subtitle', ['role' => $role->name]) }}"
-        icon="ph-shield-check"
+        icon="ph ph-shield-check"
         :back-url="route('admin.role.index')"
         back-label="{{ __('rolepermission::rolepermission.assign_permission.back_to_roles') }}">
         <x-slot name="actions">
@@ -21,7 +21,7 @@
                 <span class="text-sm font-semibold">{{ __('rolepermission::rolepermission.assign_permission.check_all') }}</span>
             </label>
             <x-primary-button id="submit-button" class="px-6">
-                <i class="ph-floppy-disk"></i>{{ __('rolepermission::rolepermission.assign_permission.save_permissions') }}
+                <i class="ph ph-floppy-disk"></i>{{ __('rolepermission::rolepermission.assign_permission.save_permissions') }}
             </x-primary-button>
         </x-slot>
     </x-page-header>
@@ -59,7 +59,7 @@
 
     <div class="flex justify-end mt-4">
         <x-primary-button class="px-12">
-            <i class="ph-floppy-disk"></i>{{ __('rolepermission::rolepermission.assign_permission.save_permissions') }}
+            <i class="ph ph-floppy-disk"></i>{{ __('rolepermission::rolepermission.assign_permission.save_permissions') }}
         </x-primary-button>
     </div>
 

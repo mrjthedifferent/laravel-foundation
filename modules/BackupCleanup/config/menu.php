@@ -10,7 +10,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'Backups',
-        'icon' => 'ph-database',
+        'icon' => 'ph ph-database',
         'route' => 'admin.backups.index',
         'permissions' => ['View Backup', 'Create Backup', 'Delete Backup', 'Download Backup', 'Cleanup Backup'],
         'order' => 170,
