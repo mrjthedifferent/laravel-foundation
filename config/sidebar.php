@@ -20,10 +20,10 @@ declare(strict_types=1);
 
 return [
     'groups' => [
-        'reports' => ['label' => 'Reports', 'icon' => 'ph-chart-bar'],
-        'communications' => ['label' => 'Communications', 'icon' => 'ph-bell'],
-        'administration' => ['label' => 'Administration', 'icon' => 'ph-shield'],
-        'settings' => ['label' => 'Settings', 'icon' => 'ph-gear'],
-        'imports' => ['label' => 'Import / Download Manager', 'icon' => 'ph-download', 'single' => true],
+        'reports' => ['label' => 'Reports', 'icon' => 'ph ph-chart-bar'],
+        'communications' => ['label' => 'Communications', 'icon' => 'ph ph-bell'],
+        'administration' => ['label' => 'Administration', 'icon' => 'ph ph-shield'],
+        'settings' => ['label' => 'Settings', 'icon' => 'ph ph-gear'],
+        'imports' => ['label' => 'Import / Download Manager', 'icon' => 'ph ph-download', 'single' => true],
     ],
 ];

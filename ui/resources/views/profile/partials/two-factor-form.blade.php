@@ -56,13 +56,13 @@
             <form method="post" action="{{ route('admin.profile.two-factor.recovery-codes') }}">
                 @csrf
                 <button type="submit" class="btn btn-light swal-confirm" data-text="{{ __('user::user.two_factor.regenerate_confirm') }}">
-                    <i class="ph-key me-1"></i>{{ __('user::user.two_factor.regenerate') }}
+                    <i class="ph ph-key me-1"></i>{{ __('user::user.two_factor.regenerate') }}
                 </button>
             </form>
             @if ($user->requiresTwoFactor())
                 <form method="post" action="{{ route('admin.profile.two-factor.enable') }}">
                     @csrf
-                    <button type="submit" class="btn btn-light"><i class="ph-arrows-clockwise me-1"></i>{{ __('user::user.two_factor.replace') }}</button>
+                    <button type="submit" class="btn btn-light"><i class="ph ph-arrows-clockwise me-1"></i>{{ __('user::user.two_factor.replace') }}</button>
                 </form>
             @else
                 <form method="post" action="{{ route('admin.profile.two-factor.disable') }}">
@@ -76,7 +76,7 @@
     @else
         <form method="post" action="{{ route('admin.profile.two-factor.enable') }}">
             @csrf
-            <x-primary-button><i class="ph-shield-check me-1"></i>{{ __('user::user.two_factor.enable') }}</x-primary-button>
+            <x-primary-button><i class="ph ph-shield-check me-1"></i>{{ __('user::user.two_factor.enable') }}</x-primary-button>
         </form>
     @endif
 </section>

@@ -1,5 +1,5 @@
 @props([
-    'icon' => 'ph-tray',
+    'icon' => 'ph ph-tray',
     'title' => '',
     'text' => null,
 ])

@@ -2,7 +2,7 @@
 'title' => '',
 'data' => null,
 'emptyMessage' => null,
-'emptyIcon' => 'ph-tray',
+'emptyIcon' => 'ph ph-tray',
 'stack' => true,   // false keeps a wide table a table on phones (it scrolls sideways)
 ])
 

@@ -34,7 +34,7 @@ final class ActivityByEventWidget extends DashboardWidget
     #[Override]
     public function icon(): string
     {
-        return 'ph-chart-bar-horizontal';
+        return 'ph ph-chart-bar-horizontal';
     }
 
     #[Override]

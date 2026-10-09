@@ -4,7 +4,7 @@
     <form method="POST" action="{{ route('two-factor.login') }}">
         @csrf
 
-        <span class="fd-icon-tile fd-icon-tile-lg mb-4"><i class="ph-shield-check"></i></span>
+        <span class="fd-icon-tile fd-icon-tile-lg mb-4"><i class="ph ph-shield-check"></i></span>
 
         <h1 class="fd-auth-title">{{ __('user::user.two_factor.challenge_heading') }}</h1>
         <p class="fd-auth-lead">{{ $recovery ? __('user::user.two_factor.challenge_recovery_lead') : __('user::user.two_factor.challenge_lead') }}</p>

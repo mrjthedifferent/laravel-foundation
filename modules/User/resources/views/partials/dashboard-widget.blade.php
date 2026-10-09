@@ -2,7 +2,7 @@
     <div class="col-span-12 xl:col-span-4 lg:col-span-6 md:col-span-12">
         <div class="card h-full">
             <div class="card-header">
-                <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-users-four"></i></span>
+                <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph ph-users-four"></i></span>
                 <h2 class="card-title">{{ __('user::user.widget.title') }}</h2>
                 @can('View User')
                     <a href="{{ route('admin.users.index') }}" class="ms-auto text-sm">

@@ -10,7 +10,7 @@ return [
     [
         'group' => 'imports',
         'label' => 'Import / Download Manager',
-        'icon' => 'ph-download',
+        'icon' => 'ph ph-download',
         'route' => 'admin.download.import.manager.index',
         'routes' => ['admin.download.import.status.update'],
         'permissions' => ['Download Import Manager Management'],

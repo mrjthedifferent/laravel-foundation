@@ -9,7 +9,7 @@
 
     <x-page-header
         title="{{ __('notification::notification.show.title') }}"
-        icon="ph-bell"
+        icon="ph ph-bell"
         :back-url="route('admin.notification.index')"
         back-label="{{ __('notification::notification.show.back_to_list') }}">
         <x-slot name="actions">
@@ -17,33 +17,33 @@
                 <form action="{{ route('admin.notification.mark-as-unread', $notification->id) }}" method="POST" class="inline">
                     @csrf @method('PATCH')
                     <button type="submit" class="btn btn-light">
-                        <i class="ph-envelope-simple"></i>{{ __('notification::notification.show.mark_as_unread') }}
+                        <i class="ph ph-envelope-simple"></i>{{ __('notification::notification.show.mark_as_unread') }}
                     </button>
                 </form>
             @else
                 <form action="{{ route('admin.notification.mark-as-read', $notification->id) }}" method="POST" class="inline">
                     @csrf @method('PATCH')
                     <button type="submit" class="btn btn-light">
-                        <i class="ph-envelope-open"></i>{{ __('notification::notification.show.mark_as_read') }}
+                        <i class="ph ph-envelope-open"></i>{{ __('notification::notification.show.mark_as_read') }}
                     </button>
                 </form>
             @endif
             <a href="{{ route('admin.notification.destroy', $notification->id) }}"
                class="btn btn-outline-danger swal-delete"
                data-text="{{ __('notification::notification.show.delete_confirm') }}">
-                <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
+                <i class="ph ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
             </a>
         </x-slot>
     </x-page-header>
 
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-6">
-            <x-form-section title="{{ __('notification::notification.show.meta_title') }}" icon="ph-info">
+            <x-form-section title="{{ __('notification::notification.show.meta_title') }}" icon="ph ph-info">
                 @php
                     $typeConfig = match($notification->type) {
-                        'export' => ['bg' => 'success', 'icon' => 'ph-download-simple'],
-                        'error' => ['bg' => 'danger', 'icon' => 'ph-x-circle'],
-                        default => ['bg' => 'primary', 'icon' => 'ph-info'],
+                        'export' => ['bg' => 'success', 'icon' => 'ph ph-download-simple'],
+                        'error' => ['bg' => 'danger', 'icon' => 'ph ph-x-circle'],
+                        default => ['bg' => 'primary', 'icon' => 'ph ph-info'],
                     };
                 @endphp
                 <dl class="fd-dl">
@@ -85,7 +85,7 @@
             </x-form-section>
         </div>
         <div class="col-span-12 md:col-span-6">
-            <x-form-section title="{{ __('notification::notification.show.message_title') }}" icon="ph-chat-text">
+            <x-form-section title="{{ __('notification::notification.show.message_title') }}" icon="ph ph-chat-text">
                 <div class="mb-4">
                     <h5 class="font-semibold mb-2">{{ $notification->title }}</h5>
                     @if($notification->body)
@@ -94,7 +94,7 @@
                 </div>
                 @if($notification->download_url)
                     <a href="{{ $notification->download_url }}" class="btn btn-light" target="_blank" rel="noopener">
-                        <i class="ph-download-simple"></i>{{ __('notification::notification.show.download_file') }}
+                        <i class="ph ph-download-simple"></i>{{ __('notification::notification.show.download_file') }}
                     </a>
                 @endif
                 @if(count($notification->data_payload) > 0)

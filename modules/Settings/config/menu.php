@@ -10,7 +10,7 @@ return [
     [
         'group' => 'settings',
         'label' => 'General Settings',
-        'icon' => 'ph-sliders',
+        'icon' => 'ph ph-sliders',
         'route' => 'admin.settings.index',
         'permissions' => ['Edit System Setting'],
         'order' => 10,
@@ -18,7 +18,7 @@ return [
     [
         'group' => 'settings',
         'label' => 'Privacy Policy',
-        'icon' => 'ph-file-text',
+        'icon' => 'ph ph-file-text',
         'route' => 'admin.settings.special.privacy_policy',
         'permissions' => ['Edit Special Setting'],
         'order' => 20,
@@ -26,7 +26,7 @@ return [
     [
         'group' => 'settings',
         'label' => 'Terms & Conditions',
-        'icon' => 'ph-scroll',
+        'icon' => 'ph ph-scroll',
         'route' => 'admin.settings.special.terms_conditions',
         'permissions' => ['Edit Special Setting'],
         'order' => 30,
@@ -34,7 +34,7 @@ return [
     [
         'group' => 'settings',
         'label' => 'SMS Gateways',
-        'icon' => 'ph-chat-text',
+        'icon' => 'ph ph-chat-text',
         'route' => 'admin.settings.special.sms_gateways',
         'permissions' => ['Edit Special Setting'],
         'order' => 40,
@@ -42,7 +42,7 @@ return [
     [
         'group' => 'settings',
         'label' => 'Email Mailers',
-        'icon' => 'ph-envelope',
+        'icon' => 'ph ph-envelope',
         'route' => 'admin.settings.special.email_mailers',
         'permissions' => ['Edit Special Setting'],
         'order' => 50,
@@ -50,7 +50,7 @@ return [
     [
         'group' => 'settings',
         'label' => 'Notifications',
-        'icon' => 'ph-bell-ringing',
+        'icon' => 'ph ph-bell-ringing',
         'route' => 'admin.settings.special.notifications',
         'routes' => ['admin.settings.special.update_notifications'],
         'permissions' => ['Edit Special Setting'],
@@ -59,7 +59,7 @@ return [
     [
         'group' => 'settings',
         'label' => 'Firebase',
-        'icon' => 'ph-fire-simple',
+        'icon' => 'ph ph-fire-simple',
         'route' => 'admin.settings.special.firebase',
         'permissions' => ['Edit Special Setting'],
         'order' => 70,
@@ -67,7 +67,7 @@ return [
     [
         'group' => 'settings',
         'label' => 'Social Auth',
-        'icon' => 'ph-users-three',
+        'icon' => 'ph ph-users-three',
         'route' => 'admin.settings.special.social_auth',
         'permissions' => ['Edit Special Setting'],
         'order' => 80,
@@ -75,7 +75,7 @@ return [
     [
         'group' => 'settings',
         'label' => 'Security',
-        'icon' => 'ph-shield-check',
+        'icon' => 'ph ph-shield-check',
         'route' => 'admin.settings.special.security',
         'routes' => ['admin.settings.special.update_security', 'admin.settings.special.two_factor', 'admin.settings.special.update_two_factor'],
         'permissions' => ['Edit Special Setting'],
@@ -84,7 +84,7 @@ return [
     [
         'group' => 'settings',
         'label' => 'Theme',
-        'icon' => 'ph-paint-brush',
+        'icon' => 'ph ph-paint-brush',
         'route' => 'admin.settings.special.theme',
         'routes' => ['admin.settings.special.update_theme'],
         'permissions' => ['Edit Special Setting'],
@@ -93,7 +93,7 @@ return [
     [
         'group' => 'settings',
         'label' => 'Manage Settings',
-        'icon' => 'ph-gear-six',
+        'icon' => 'ph ph-gear-six',
         'route' => 'admin.settings.manage',
         'routes' => ['admin.settings.sync', 'admin.settings.create', 'admin.settings.store_new', 'admin.settings.edit', 'admin.settings.update', 'admin.settings.destroy', 'admin.settings.export', 'admin.settings.import_form'],
         'permissions' => ['Developer Setting'],

@@ -5,7 +5,7 @@
         <div class="navbar-group">
             <button type="button" class="navbar-toggler sidebar-mobile-main-toggle lg:hidden"
                 aria-label="{{ __('foundation::foundation.sidebar.navigation') }}">
-                <i class="ph-list"></i>
+                <i class="ph ph-list"></i>
             </button>
         </div>
 
@@ -22,7 +22,7 @@
                 'open' => __('foundation::foundation.search.open'),
                 'dismiss' => __('foundation::foundation.search.dismiss'),
             ], JSON_UNESCAPED_UNICODE) }}">
-            <i class="ph-magnifying-glass"></i>
+            <i class="ph ph-magnifying-glass"></i>
             <span>{{ __('foundation::foundation.navbar.search_placeholder') }}</span>
             <span class="fd-kbd" data-kbd-mod>Ctrl</span><span class="fd-kbd">K</span>
         </button>
@@ -35,7 +35,7 @@
                 <a href="{{ Route::has('admin.settings.index') ? route('admin.settings.index') : '#' }}"
                     class="badge badge-warning text-strong no-underline"
                     title="{{ __('foundation::foundation.navbar.maintenance_on_help') }}">
-                    <i class="ph-wrench"></i> {{ __('foundation::foundation.navbar.maintenance_on') }}
+                    <i class="ph ph-wrench"></i> {{ __('foundation::foundation.navbar.maintenance_on') }}
                 </a>
             </li>
             @endif
@@ -50,7 +50,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end py-2" id="online-users-dropdown">
                     <h6 class="dropdown-header">
-                        <i class="ph-users-three me-2"></i>{{ __('foundation::foundation.navbar.online_now') }}
+                        <i class="ph ph-users-three me-2"></i>{{ __('foundation::foundation.navbar.online_now') }}
                     </h6>
                     <div class="dropdown-divider my-1"></div>
                     <div id="online-users-list" class="px-4 py-2 text-muted text-sm fd-scroll-y">
@@ -66,7 +66,7 @@
             <li class="nav-item">
                 <a href="#" class="navbar-nav-link navbar-nav-link-icon" data-fd-toggle="offcanvas"
                     data-fd-target="#notifications" aria-label="{{ __('foundation::foundation.navbar.notifications') }}">
-                    <i class="ph-bell"></i>
+                    <i class="ph ph-bell"></i>
                     <span id="notification-count" class="fd-notify-dot" data-count="0"></span>
                 </a>
             </li>
@@ -86,7 +86,7 @@
                     <div class="dropdown-header truncate">{{ Auth::user()?->email }}</div>
                     @if (Route::has('admin.profile.edit'))
                     <a href="{{ route('admin.profile.edit') }}" class="dropdown-item">
-                        <i class="ph-user-circle"></i>
+                        <i class="ph ph-user-circle"></i>
                         {{ __('foundation::foundation.navbar.my_profile') }}
                     </a>
                     @endif
@@ -96,7 +96,7 @@
                         <x-dropdown-link :url="route('admin.impersonation.leave')"
                             data-text="{{ __('foundation::foundation.layout.return_to_own_account_confirm') }}"
                             class="swal-post">
-                            <i class="ph-user-switch"></i>{{ __('foundation::foundation.layout.return_to_my_account') }}
+                            <i class="ph ph-user-switch"></i>{{ __('foundation::foundation.layout.return_to_my_account') }}
                         </x-dropdown-link>
                     @endif
                     @if (Route::has('logout'))
@@ -104,7 +104,7 @@
                     <x-dropdown-link :url="route('logout')"
                         data-text="{{ __('foundation::foundation.layout.logout_confirm') }}"
                         class="swal-post">
-                        <i class="ph-sign-out"></i>{{ __('foundation::foundation.layout.logout') }}
+                        <i class="ph ph-sign-out"></i>{{ __('foundation::foundation.layout.logout') }}
                     </x-dropdown-link>
                     @endif
                 </div>

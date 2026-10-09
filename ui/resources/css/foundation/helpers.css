@@ -11,7 +11,8 @@
 .ph-3x { font-size: 3em; }
 .ph-spin, .spinner { animation: fd-spin 1s linear infinite; }
 @keyframes fd-spin { to { transform: rotate(360deg); } }
-[class^="ph-"], [class*=" ph-"] { vertical-align: -.125em; line-height: 1; }
+/* Phosphor 2: every icon carries a weight class (`ph ph-house`, `ph-fill ph-star`). */
+:is(.ph, .ph-thin, .ph-light, .ph-bold, .ph-fill, .ph-duotone) { vertical-align: -.125em; line-height: 1; }
 
 /* Overline: small muted label above a group */
 .fd-overline { font-size: var(--fd-text-xs); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--fd-muted); }

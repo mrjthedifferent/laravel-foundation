@@ -37,7 +37,7 @@ abstract class DashboardWidget
 
     public function icon(): string
     {
-        return 'ph-squares-four';
+        return 'ph ph-squares-four';
     }
 
     /**

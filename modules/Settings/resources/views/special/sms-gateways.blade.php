@@ -5,13 +5,13 @@
 @endsection
 
 @section('content')
-    <x-page-header title="{{ __('settings::settings.special_sms_gateways.title') }}" subtitle="{{ __('settings::settings.special_sms_gateways.subtitle') }}" icon="ph-chat-text">
+    <x-page-header title="{{ __('settings::settings.special_sms_gateways.title') }}" subtitle="{{ __('settings::settings.special_sms_gateways.subtitle') }}" icon="ph ph-chat-text">
         <x-slot name="actions">
             <div class="flex items-center gap-2">
                 <input type="text" id="test_mobile_no" class="form-control form-control-sm"
                     aria-label="{{ __('settings::settings.special_sms_gateways.send_test') }}" placeholder="+880123456789">
                 <button type="button" id="sendSmsBtn" class="btn btn-sm btn-light">
-                    <i class="ph-paper-plane-tilt"></i>{{ __('settings::settings.special_sms_gateways.send_test') }}
+                    <i class="ph ph-paper-plane-tilt"></i>{{ __('settings::settings.special_sms_gateways.send_test') }}
                 </button>
             </div>
         </x-slot>
@@ -24,7 +24,7 @@
             {{-- Quick-ref --}}
             <details class="mb-6">
                 <summary class="flex items-center gap-2 p-4 rounded-md border bg-subtle font-semibold text-sm cursor-pointer">
-                    <i class="ph-question"></i> {{ __('settings::settings.special_sms_gateways.quickref_summary') }}
+                    <i class="ph ph-question"></i> {{ __('settings::settings.special_sms_gateways.quickref_summary') }}
                 </summary>
                 <div class="border border-t-0 rounded-b-md p-4 text-sm">
                     <p class="mb-1">{{ __('settings::settings.special_sms_gateways.quickref_intro') }}</p>
@@ -42,7 +42,7 @@
                 {{-- Active gateway selector --}}
                 <div class="card mb-6">
                     <div class="card-header">
-                        <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-check-circle"></i></span>
+                        <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph ph-check-circle"></i></span>
                         <span class="fd-overline">{{ __('settings::settings.special_sms_gateways.active_gateway_header') }}</span>
                     </div>
                     <div class="card-body">
@@ -68,10 +68,10 @@
                         @foreach ($smsGateways->value as $index => $gateway)
                             <div class="card mb-4">
                                 <div class="card-header">
-                                    <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-chat-text"></i></span>
+                                    <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph ph-chat-text"></i></span>
                                     <span class="card-title">{{ $gateway['TYPE'] }}</span>
                                     <button type="button" class="btn btn-sm btn-outline-danger remove-gw-btn ms-auto">
-                                        <i class="ph-trash"></i>{{ __('settings::settings.common.remove') }}
+                                        <i class="ph ph-trash"></i>{{ __('settings::settings.common.remove') }}
                                     </button>
                                 </div>
                                 <div class="card-body">
@@ -101,7 +101,7 @@
                                     {{-- Headers --}}
                                     <div class="mb-4">
                                         <div class="flex items-center gap-1 mb-2 fd-overline">
-                                            <i class="ph-list-bullets"></i> {{ __('settings::settings.special_sms_gateways.headers_label') }}
+                                            <i class="ph ph-list-bullets"></i> {{ __('settings::settings.special_sms_gateways.headers_label') }}
                                         </div>
                                         <div class="grid grid-cols-12 gap-0 mb-1 px-1">
                                             <div class="col-span-5"><span
@@ -117,21 +117,21 @@
                                                         <div class="col-span-5"><x-form.input name="sms_gateways[{{ $index }}][VALUE][headers][values][]" value="" :placeholder="! empty($hVal) ? __('settings::settings.special_sms_gateways.value_unchanged_placeholder') : __('settings::settings.special_sms_gateways.header_value_placeholder')" /></div>
                                                         <div class="col-span-12 md:col-span-2"><button type="button"
                                                                 class="btn btn-sm btn-outline-danger btn-icon remove-kv-btn"><i
-                                                                    class="ph-trash"></i></button></div>
+                                                                    class="ph ph-trash"></i></button></div>
                                                     </div>
                                                 @endforeach
                                             @endif
                                         </div>
                                         <button type="button" class="btn btn-sm btn-light add-header-btn mt-1"
                                             data-index="{{ $index }}">
-                                            <i class="ph-plus"></i>{{ __('settings::settings.common.add_header') }}
+                                            <i class="ph ph-plus"></i>{{ __('settings::settings.common.add_header') }}
                                         </button>
                                     </div>
 
                                     {{-- Params --}}
                                     <div>
                                         <div class="flex items-center gap-1 mb-2 fd-overline">
-                                            <i class="ph-sliders"></i> {{ __('settings::settings.special_sms_gateways.params_label') }}
+                                            <i class="ph ph-sliders"></i> {{ __('settings::settings.special_sms_gateways.params_label') }}
                                         </div>
                                         <div class="grid grid-cols-12 gap-0 mb-1 px-1">
                                             <div class="col-span-5"><span
@@ -147,14 +147,14 @@
                                                         <div class="col-span-5"><x-form.input name="sms_gateways[{{ $index }}][VALUE][params][values][]" value="" :placeholder="! empty($pVal) ? __('settings::settings.special_sms_gateways.value_unchanged_placeholder') : 'value'" /></div>
                                                         <div class="col-span-12 md:col-span-2"><button type="button"
                                                                 class="btn btn-sm btn-outline-danger btn-icon remove-kv-btn"><i
-                                                                    class="ph-trash"></i></button></div>
+                                                                    class="ph ph-trash"></i></button></div>
                                                     </div>
                                                 @endforeach
                                             @endif
                                         </div>
                                         <button type="button" class="btn btn-sm btn-light add-param-btn mt-1"
                                             data-index="{{ $index }}">
-                                            <i class="ph-plus"></i>{{ __('settings::settings.common.add_parameter') }}
+                                            <i class="ph ph-plus"></i>{{ __('settings::settings.common.add_parameter') }}
                                         </button>
                                     </div>
 
@@ -166,10 +166,10 @@
 
                 <div class="flex items-center justify-between mt-2">
                     <button type="button" class="btn btn-sm btn-light" id="addGatewayBtn">
-                        <i class="ph-plus"></i>{{ __('settings::settings.special_sms_gateways.add_gateway') }}
+                        <i class="ph ph-plus"></i>{{ __('settings::settings.special_sms_gateways.add_gateway') }}
                     </button>
                     <button type="submit" class="btn btn-primary px-6">
-                        <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_sms_gateways.save_gateways') }}
+                        <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.special_sms_gateways.save_gateways') }}
                     </button>
                 </div>
             </form>
@@ -207,7 +207,7 @@
                 let row = `<div class="grid grid-cols-12 gap-1 mb-1 items-center header-row">
             <div class="col-span-5"><input type="text" class="form-control form-control-sm" name="sms_gateways[${idx}][VALUE][headers][keys][]" placeholder="Authorization"></div>
             <div class="col-span-5"><input type="text" class="form-control form-control-sm" name="sms_gateways[${idx}][VALUE][headers][values][]" placeholder="{{ __('settings::settings.special_sms_gateways.header_value_placeholder') }}"></div>
-            <div class="col-span-12 md:col-span-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-kv-btn"><i class="ph-trash"></i></button></div>
+            <div class="col-span-12 md:col-span-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-kv-btn"><i class="ph ph-trash"></i></button></div>
         </div>`;
                 hBtn.previousElementSibling.insertAdjacentHTML('beforeend', row);
                 return;
@@ -219,7 +219,7 @@
                 let row = `<div class="grid grid-cols-12 gap-1 mb-1 items-center param-row">
             <div class="col-span-5"><input type="text" class="form-control form-control-sm" name="sms_gateways[${idx}][VALUE][params][keys][]" placeholder="api_key"></div>
             <div class="col-span-5"><input type="text" class="form-control form-control-sm" name="sms_gateways[${idx}][VALUE][params][values][]" placeholder="value"></div>
-            <div class="col-span-12 md:col-span-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-kv-btn"><i class="ph-trash"></i></button></div>
+            <div class="col-span-12 md:col-span-2"><button type="button" class="btn btn-sm btn-outline-danger btn-icon remove-kv-btn"><i class="ph ph-trash"></i></button></div>
         </div>`;
                 pBtn.previousElementSibling.insertAdjacentHTML('beforeend', row);
             }
@@ -232,9 +232,9 @@
             var html = `
     <div class="card mb-4">
         <div class="card-header">
-            <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-chat-text"></i></span>
+            <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph ph-chat-text"></i></span>
             <span class="card-title">{{ __('settings::settings.special_sms_gateways.new_gateway') }}</span>
-            <button type="button" class="btn btn-sm btn-outline-danger remove-gw-btn ms-auto"><i class="ph-trash"></i>{{ __('settings::settings.common.remove') }}</button>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-gw-btn ms-auto"><i class="ph ph-trash"></i>{{ __('settings::settings.common.remove') }}</button>
         </div>
         <div class="card-body">
             <div class="grid grid-cols-12 gap-4 mb-4">
@@ -266,16 +266,16 @@
                 </div>
             </div>
             <div class="mb-4">
-                <div class="flex items-center gap-1 mb-2 fd-overline"><i class="ph-list-bullets"></i> {{ __('settings::settings.special_sms_gateways.headers_label') }}</div>
+                <div class="flex items-center gap-1 mb-2 fd-overline"><i class="ph ph-list-bullets"></i> {{ __('settings::settings.special_sms_gateways.headers_label') }}</div>
                 <div class="grid grid-cols-12 gap-0 mb-1 px-1"><div class="col-span-5"><span class="fd-overline">{{ __('settings::settings.common.key_col') }}</span></div><div class="col-span-5"><span class="fd-overline">{{ __('settings::settings.common.value_col') }}</span></div></div>
                 <div class="headers-container"></div>
-                <button type="button" class="btn btn-sm btn-light add-header-btn mt-1" data-index="${idx}"><i class="ph-plus"></i>{{ __('settings::settings.common.add_header') }}</button>
+                <button type="button" class="btn btn-sm btn-light add-header-btn mt-1" data-index="${idx}"><i class="ph ph-plus"></i>{{ __('settings::settings.common.add_header') }}</button>
             </div>
             <div>
-                <div class="flex items-center gap-1 mb-2 fd-overline"><i class="ph-sliders"></i> {{ __('settings::settings.special_sms_gateways.params_label') }}</div>
+                <div class="flex items-center gap-1 mb-2 fd-overline"><i class="ph ph-sliders"></i> {{ __('settings::settings.special_sms_gateways.params_label') }}</div>
                 <div class="grid grid-cols-12 gap-0 mb-1 px-1"><div class="col-span-5"><span class="fd-overline">{{ __('settings::settings.common.key_col') }}</span></div><div class="col-span-5"><span class="fd-overline">{{ __('settings::settings.common.value_col') }}</span></div></div>
                 <div class="params-container"></div>
-                <button type="button" class="btn btn-sm btn-light add-param-btn mt-1" data-index="${idx}"><i class="ph-plus"></i>{{ __('settings::settings.common.add_parameter') }}</button>
+                <button type="button" class="btn btn-sm btn-light add-param-btn mt-1" data-index="${idx}"><i class="ph ph-plus"></i>{{ __('settings::settings.common.add_parameter') }}</button>
             </div>
         </div>
     </div>`;
@@ -299,7 +299,7 @@
             var btn = this,
                 orig = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = '<i class="ph-circle-notch ph-spin"></i>{{ __('settings::settings.common.sending') }}';
+            btn.innerHTML = '<i class="ph ph-circle-notch ph-spin"></i>{{ __('settings::settings.common.sending') }}';
             $.post('{{ route('admin.settings.special.send_test_sms') }}', {
                     mobile_no: mobile,
                     _token: '{{ csrf_token() }}'

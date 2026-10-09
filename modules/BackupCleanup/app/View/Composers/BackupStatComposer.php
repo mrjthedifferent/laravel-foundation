@@ -61,7 +61,7 @@ final class BackupStatComposer extends StatComposer
                 ? __('backupcleanup::backupcleanup.stat.never')
                 : Carbon::createFromTimestamp($latest['date'])
                     ->diffForHumans(['syntax' => CarbonInterface::DIFF_ABSOLUTE, 'short' => true]),
-            'icon' => 'ph-database',
+            'icon' => 'ph ph-database',
             'color' => $latest === null ? 'warning' : 'success',
             'href' => route('admin.backups.index'),
             'caption' => $latest === null

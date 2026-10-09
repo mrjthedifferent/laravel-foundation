@@ -31,7 +31,7 @@ final class TrendWidget extends DashboardWidget
     #[Override]
     public function icon(): string
     {
-        return 'ph-chart-line-up';
+        return 'ph ph-chart-line-up';
     }
 
     #[Override]

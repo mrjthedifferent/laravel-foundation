@@ -10,16 +10,16 @@
 
     <x-page-header title="{{ __('settings::settings.special_notifications.title') }}"
         subtitle="{{ __('settings::settings.special_notifications.subtitle') }}"
-        icon="ph-bell-ringing">
+        icon="ph ph-bell-ringing">
         <x-slot name="actions">
             <button type="submit" class="btn btn-primary px-6">
-                <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_notifications.save_changes') }}
+                <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.special_notifications.save_changes') }}
             </button>
         </x-slot>
     </x-page-header>
 
     @foreach ($groups as $groupLabel => $rows)
-        <x-form-section :title="display_label($groupLabel)" icon="ph-bell-simple">
+        <x-form-section :title="display_label($groupLabel)" icon="ph ph-bell-simple">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead>
@@ -29,7 +29,7 @@
                                 <th class="text-center whitespace-nowrap">
                                     {{ $channelLabel }}
                                     @if ($channel === 'database')
-                                        <i class="ph-info text-sm text-muted" data-fd-toggle="tooltip"
+                                        <i class="ph ph-info text-sm text-muted" data-fd-toggle="tooltip"
                                             title="{{ __('settings::settings.special_notifications.database_tooltip') }}"></i>
                                     @endif
                                 </th>
@@ -70,7 +70,7 @@
 
     <div class="flex justify-end">
         <button type="submit" class="btn btn-primary px-12">
-            <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_notifications.save_changes') }}
+            <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.special_notifications.save_changes') }}
         </button>
     </div>
 

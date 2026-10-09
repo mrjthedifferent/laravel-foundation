@@ -2,7 +2,7 @@
     <div class="col-span-12 xl:col-span-4 lg:col-span-6">
         <div class="card h-full">
             <div class="card-header">
-                <span class="fd-icon-tile fd-icon-tile-sm is-neutral"><i class="ph-gear"></i></span>
+                <span class="fd-icon-tile fd-icon-tile-sm is-neutral"><i class="ph ph-gear"></i></span>
                 <h2 class="card-title">{{ __('settings::settings.widget.title') }}</h2>
                 @if (auth()->user()->can('Edit System Setting'))
                     <a href="{{ route('admin.settings.index') }}" class="ms-auto text-sm">

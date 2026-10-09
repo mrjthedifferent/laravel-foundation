@@ -6,10 +6,10 @@
 @endsection
 
 @section('content')
-<x-page-header title="{{ __('settings::settings.special_firebase.title') }}" subtitle="{{ __('settings::settings.special_firebase.subtitle') }}" icon="ph-flame">
+<x-page-header title="{{ __('settings::settings.special_firebase.title') }}" subtitle="{{ __('settings::settings.special_firebase.subtitle') }}" icon="ph ph-flame">
     <x-slot name="actions">
         <button type="button" id="testFirebaseBtn" class="btn btn-sm btn-light">
-            <i class="ph-plug"></i>{{ __('settings::settings.special_firebase.test_connection') }}
+            <i class="ph ph-plug"></i>{{ __('settings::settings.special_firebase.test_connection') }}
         </button>
     </x-slot>
 </x-page-header>
@@ -19,7 +19,7 @@
     <div class="card-body p-6">
 
         {{-- Info tip --}}
-        <x-alert type="primary" icon="ph-info" class="mb-6">
+        <x-alert type="primary" icon="ph ph-info" class="mb-6">
             <span class="text-sm">
                 {!! __('settings::settings.special_firebase.info_tip') !!}
             </span>
@@ -31,7 +31,7 @@
             {{-- Credentials JSON --}}
             <div class="card mb-4">
                 <div class="card-header">
-                    <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-key"></i></span>
+                    <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph ph-key"></i></span>
                     <span class="fd-overline">{{ __('settings::settings.special_firebase.credentials_header') }}</span>
                 </div>
                 <div class="card-body">
@@ -51,7 +51,7 @@
             {{-- Project IDs --}}
             <div class="card mb-4">
                 <div class="card-header">
-                    <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph-identification-badge"></i></span>
+                    <span class="fd-icon-tile fd-icon-tile-sm"><i class="ph ph-identification-badge"></i></span>
                     <span class="fd-overline">{{ __('settings::settings.special_firebase.project_ids_header') }}</span>
                 </div>
                 <div class="card-body">
@@ -66,7 +66,7 @@
 
             <div class="flex justify-end">
                 <button type="submit" class="btn btn-primary px-6">
-                    <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_firebase.submit') }}
+                    <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.special_firebase.submit') }}
                 </button>
             </div>
         </form>
@@ -80,7 +80,7 @@ document.getElementById('testFirebaseBtn').addEventListener('click', function ()
     const btn = this;
     const originalHtml = btn.innerHTML;
     btn.disabled = true;
-    btn.innerHTML = '<i class="ph-circle-notch ph-spin"></i>{{ __('settings::settings.common.testing') }}';
+    btn.innerHTML = '<i class="ph ph-circle-notch ph-spin"></i>{{ __('settings::settings.common.testing') }}';
 
     fetch('{{ route('admin.settings.special.test_firebase') }}', {
         method: 'POST',

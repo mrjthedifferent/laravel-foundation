@@ -30,7 +30,7 @@ final class StatsWidget extends DashboardWidget
     #[Override]
     public function icon(): string
     {
-        return 'ph-gauge';
+        return 'ph ph-gauge';
     }
 
     #[Override]

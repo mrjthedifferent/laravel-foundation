@@ -1,6 +1,6 @@
 @props([
     'title' => '',
-    'icon'  => 'ph-note',
+    'icon'  => 'ph ph-note',
     'open'  => true,
 ])
 

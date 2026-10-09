@@ -224,7 +224,7 @@ const dashboard = `
       ${['stats', 'trend', 'health'].map((key, i) => `
         <section data-fd-widget data-key="${key}" data-width="${[12, 8, 4][i]}" data-hidden="false" class="fd-widget fd-w-${[12, 8, 4][i]}">
             <div class="fd-widget-bar"><span class="fd-widget-handle" draggable="true"></span>
-                ${['earlier', 'later', 'narrower', 'wider', 'toggle'].map((a) => `<button data-fd-widget-act="${a}"><i class="ph-eye"></i></button>`).join('')}
+                ${['earlier', 'later', 'narrower', 'wider', 'toggle'].map((a) => `<button data-fd-widget-act="${a}"><i class="ph ph-eye"></i></button>`).join('')}
             </div><div class="fd-widget-body">${key}</div></section>`).join('')}
     </div>`;
 

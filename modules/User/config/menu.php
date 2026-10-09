@@ -10,7 +10,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'Users',
-        'icon' => 'ph-users-four',
+        'icon' => 'ph ph-users-four',
         'route' => 'admin.users.index',
         'routes' => ['admin.users.create', 'admin.users.show', 'admin.users.edit'],
         'permissions' => ['View User'],

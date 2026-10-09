@@ -31,7 +31,7 @@ final class SignInHeatmapWidget extends DashboardWidget
     #[Override]
     public function icon(): string
     {
-        return 'ph-grid-four';
+        return 'ph ph-grid-four';
     }
 
     #[Override]

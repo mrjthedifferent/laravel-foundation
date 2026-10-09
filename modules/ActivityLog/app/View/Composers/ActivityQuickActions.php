@@ -23,7 +23,7 @@ final class ActivityQuickActions extends QuickActionComposer
     {
         return [[
             'label' => __('activitylog::activitylog.quick.activity_logs'),
-            'icon' => 'ph-activity',
+            'icon' => 'ph ph-activity',
             'href' => route('admin.activity-logs.index'),
             'permission' => 'View Activity Log',
         ]];

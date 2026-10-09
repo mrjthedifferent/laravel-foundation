@@ -21,21 +21,21 @@
 
         <div class="fd-filterbar-row">
             <div class="fd-filterbar-search" data-fd-filter-search hidden>
-                <i class="ph-magnifying-glass" aria-hidden="true"></i>
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
             </div>
 
             <button type="button" class="btn btn-light fd-filterbar-toggle" data-fd-filter-toggle
                 aria-expanded="true" aria-controls="{{ $panelId }}">
-                <i class="ph-funnel"></i>{{ __('foundation::foundation.common.filters') }}
+                <i class="ph ph-funnel"></i>{{ __('foundation::foundation.common.filters') }}
                 <span class="badge badge-count" data-fd-filter-count hidden></span>
             </button>
 
             <div class="fd-filterbar-actions">
                 <a href="{{ $reset }}" class="btn btn-ghost">
-                    <i class="ph-arrow-counter-clockwise"></i>{{ __('foundation::foundation.common.reset') }}
+                    <i class="ph ph-arrow-counter-clockwise"></i>{{ __('foundation::foundation.common.reset') }}
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    <i class="ph-check"></i>{{ __('foundation::foundation.common.filter') }}
+                    <i class="ph ph-check"></i>{{ __('foundation::foundation.common.filter') }}
                 </button>
             </div>
         </div>

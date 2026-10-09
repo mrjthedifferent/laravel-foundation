@@ -15,10 +15,10 @@
                         @php
                             // Each label is its own __() call: the key must be findable in the source.
                             $tone = match ($entry['event']) {
-                                'created' => ['is-success', 'ph-plus-circle', __('activitylog::activitylog.feed.event_created')],
-                                'deleted' => ['is-danger', 'ph-trash', __('activitylog::activitylog.feed.event_deleted')],
-                                'restored' => ['is-info', 'ph-arrow-counter-clockwise', __('activitylog::activitylog.feed.event_restored')],
-                                default => ['', 'ph-pencil-simple', __('activitylog::activitylog.feed.event_updated')],
+                                'created' => ['is-success', 'ph ph-plus-circle', __('activitylog::activitylog.feed.event_created')],
+                                'deleted' => ['is-danger', 'ph ph-trash', __('activitylog::activitylog.feed.event_deleted')],
+                                'restored' => ['is-info', 'ph ph-arrow-counter-clockwise', __('activitylog::activitylog.feed.event_restored')],
+                                default => ['', 'ph ph-pencil-simple', __('activitylog::activitylog.feed.event_updated')],
                             };
                         @endphp
                         <li>
@@ -45,7 +45,7 @@
                 </ul>
             @else
                 <div class="fd-empty">
-                    <span class="fd-empty-icon"><i class="ph-clock-counter-clockwise"></i></span>
+                    <span class="fd-empty-icon"><i class="ph ph-clock-counter-clockwise"></i></span>
                     <p class="fd-empty-title">{{ __('activitylog::activitylog.feed.empty') }}</p>
                 </div>
             @endif

@@ -10,7 +10,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'OTP Whitelist',
-        'icon' => 'ph-password',
+        'icon' => 'ph ph-password',
         'route' => 'admin.otp-whitelist.index',
         'routes' => ['admin.otp-whitelist.create', 'admin.otp-whitelist.show', 'admin.otp-whitelist.edit'],
         'permissions' => ['View OTP Whitelist', 'Create OTP Whitelist', 'Edit OTP Whitelist', 'Delete OTP Whitelist'],
@@ -19,7 +19,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'Verification Code History',
-        'icon' => 'ph-clock-clockwise',
+        'icon' => 'ph ph-clock-clockwise',
         'route' => 'admin.otp.history.index',
         'permissions' => ['View Verification Code History'],
         'order' => 60,

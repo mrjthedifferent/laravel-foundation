@@ -6,12 +6,12 @@
 
 @php
     $icons = [
-        'info'    => 'ph-info',
-        'success' => 'ph-check-circle',
-        'warning' => 'ph-warning',
-        'danger'  => 'ph-warning-circle',
+        'info'    => 'ph ph-info',
+        'success' => 'ph ph-check-circle',
+        'warning' => 'ph ph-warning',
+        'danger'  => 'ph ph-warning-circle',
     ];
-    $resolvedIcon = $icon ?? ($icons[$type] ?? 'ph-info');
+    $resolvedIcon = $icon ?? ($icons[$type] ?? 'ph ph-info');
 @endphp
 
 <div {{ $attributes->merge([

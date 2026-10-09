@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<x-page-header title="{{ __('settings::settings.special_terms_conditions.title') }}" subtitle="{{ __('settings::settings.special_terms_conditions.subtitle') }}" icon="ph-scroll">
+<x-page-header title="{{ __('settings::settings.special_terms_conditions.title') }}" subtitle="{{ __('settings::settings.special_terms_conditions.subtitle') }}" icon="ph ph-scroll">
 </x-page-header>
 
 <div class="card">
@@ -17,7 +17,7 @@
             </div>
             <div class="flex justify-end">
                 <button type="submit" class="btn btn-primary px-6">
-                    <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_terms_conditions.submit') }}
+                    <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.special_terms_conditions.submit') }}
                 </button>
             </div>
         </form>

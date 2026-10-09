@@ -14,11 +14,11 @@
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('rolepermission::rolepermission.manage_permissions.title') }}" :data="$permissions" empty-icon="ph-shield-slash" empty-message="{{ __('rolepermission::rolepermission.manage_permissions.empty') }}">
+<x-table-view-pagination title="{{ __('rolepermission::rolepermission.manage_permissions.title') }}" :data="$permissions" empty-icon="ph ph-shield-slash" empty-message="{{ __('rolepermission::rolepermission.manage_permissions.empty') }}">
     <x-slot name="actions">
-        <x-table-action id="bulk-delete-btn" class="btn-danger btn-sm hidden" icon="ph-trash" title="{{ __('rolepermission::rolepermission.manage_permissions.delete_selected') }}" />
-        <x-table-action class="btn-primary btn-sm" icon="ph-plus" title="{{ __('rolepermission::rolepermission.manage_permissions.create_permission') }}" data-fd-toggle="modal" data-fd-target="#createPermissionModal" />
-        <x-table-action :href="route('admin.permission.sync')" class="btn-success btn-sm swal-post" icon="ph-eject" title="{{ __('rolepermission::rolepermission.manage_permissions.sync_permissions') }}" :data-text="__('rolepermission::rolepermission.manage_permissions.sync_permissions_confirm')" />
+        <x-table-action id="bulk-delete-btn" class="btn-danger btn-sm hidden" icon="ph ph-trash" title="{{ __('rolepermission::rolepermission.manage_permissions.delete_selected') }}" />
+        <x-table-action class="btn-primary btn-sm" icon="ph ph-plus" title="{{ __('rolepermission::rolepermission.manage_permissions.create_permission') }}" data-fd-toggle="modal" data-fd-target="#createPermissionModal" />
+        <x-table-action :href="route('admin.permission.sync')" class="btn-success btn-sm swal-post" icon="ph ph-eject" title="{{ __('rolepermission::rolepermission.manage_permissions.sync_permissions') }}" :data-text="__('rolepermission::rolepermission.manage_permissions.sync_permissions_confirm')" />
     </x-slot>
 
     <thead>
@@ -44,7 +44,7 @@
                     <span class="badge badge-info">{{ __('rolepermission::rolepermission.manage_permissions.roles_count', ['count' => $permission->roles_count]) }}</span>
                     @if ($permission->roles_count > 0)
                     <a href="#" class="show-roles ms-1" data-permission-id="{{ $permission->id }}" title="{{ __('rolepermission::rolepermission.manage_permissions.view_roles_title') }}">
-                        <i class="ph-info text-muted"></i>
+                        <i class="ph ph-info text-muted"></i>
                     </a>
                     @endif
                 </td>
@@ -53,7 +53,7 @@
                         <button type="button" class="dropdown-item text-danger swal-delete"
                             data-url="{{ route('admin.permission.delete', $permission->id) }}"
                             data-text="{{ __('rolepermission::rolepermission.manage_permissions.delete_permission_confirm') }}">
-                            <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
+                            <i class="ph ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
                         </button>
                     </x-dropdown-menu>
                 </td>

@@ -23,7 +23,7 @@ final class SettingsQuickActions extends QuickActionComposer
     {
         return [[
             'label' => __('settings::settings.quick.general'),
-            'icon' => 'ph-gear',
+            'icon' => 'ph ph-gear',
             'href' => route('admin.settings.index'),
             'permission' => 'Edit System Setting',
         ]];

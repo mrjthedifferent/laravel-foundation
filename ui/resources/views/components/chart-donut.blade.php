@@ -29,7 +29,7 @@
     </div>
 @else
     <div class="fd-empty">
-        <span class="fd-empty-icon"><i class="ph-chart-pie-slice"></i></span>
+        <span class="fd-empty-icon"><i class="ph ph-chart-pie-slice"></i></span>
         <p class="fd-empty-title">{{ __('foundation::foundation.dashboard.chart_empty') }}</p>
     </div>
 @endif

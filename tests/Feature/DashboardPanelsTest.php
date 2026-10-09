@@ -134,7 +134,7 @@ final class EarlyActions extends QuickActionComposer
 
     public function actions(): array
     {
-        return [['label' => 'early', 'icon' => 'ph-x', 'href' => '/a']];
+        return [['label' => 'early', 'icon' => 'ph ph-x', 'href' => '/a']];
     }
 }
 
@@ -148,7 +148,7 @@ final class LateActions extends QuickActionComposer
 
     public function actions(): array
     {
-        return [['label' => 'late', 'icon' => 'ph-x', 'href' => '/b']];
+        return [['label' => 'late', 'icon' => 'ph ph-x', 'href' => '/b']];
     }
 }
 

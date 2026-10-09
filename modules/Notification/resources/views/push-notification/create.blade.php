@@ -12,11 +12,11 @@
 <x-page-header
     title="{{ __('notification::notification.push_notification_create.title') }}"
     subtitle="{{ __('notification::notification.push_notification_create.subtitle') }}"
-    icon="ph-paper-plane-tilt"
+    icon="ph ph-paper-plane-tilt"
     :back-url="route('admin.push.notification.index')"
     back-label="{{ __('notification::notification.push_notification_create.back_to_list') }}" />
 
-<x-form-section title="{{ __('notification::notification.push_notification_create.recipient_section') }}" icon="ph-user">
+<x-form-section title="{{ __('notification::notification.push_notification_create.recipient_section') }}" icon="ph ph-user">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-12">
             <x-form.select
@@ -33,7 +33,7 @@
     </div>
 </x-form-section>
 
-<x-form-section title="{{ __('notification::notification.push_notification_create.content_section') }}" icon="ph-article">
+<x-form-section title="{{ __('notification::notification.push_notification_create.content_section') }}" icon="ph ph-article">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-6">
             <x-form.input name="title" label="{{ __('notification::notification.push_notification_create.title_label') }}" required :value="old('title')" placeholder="{{ __('notification::notification.push_notification_create.title_placeholder') }}" />
@@ -55,10 +55,10 @@
 
 <div class="fd-form-actions">
     <a href="{{ route('admin.push.notification.index') }}" class="btn btn-light">
-        <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
+        <i class="ph ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
     </a>
     <x-primary-button id="submit-button" class="px-12">
-        <i class="ph-paper-plane-tilt"></i>{{ __('notification::notification.push_notification_create.send_notification') }}
+        <i class="ph ph-paper-plane-tilt"></i>{{ __('notification::notification.push_notification_create.send_notification') }}
     </x-primary-button>
 </div>
 

@@ -5,11 +5,11 @@
 @endsection
 
 @section('content')
-    <x-table-view-pagination title="{{ __('notification::notification.push_notification_index.title') }}" :data="$notifications" empty-icon="ph-paper-plane-tilt" empty-message="{{ __('notification::notification.push_notification_index.empty') }}">
+    <x-table-view-pagination title="{{ __('notification::notification.push_notification_index.title') }}" :data="$notifications" empty-icon="ph ph-paper-plane-tilt" empty-message="{{ __('notification::notification.push_notification_index.empty') }}">
         <x-slot name="actions">
             <x-table-actions>
                 @can('Create Push Notification')
-                    <x-table-action :href="route('admin.push.notification.create')" icon="ph-paper-plane-tilt" title="{{ __('notification::notification.push_notification_index.send_notification') }}" />
+                    <x-table-action :href="route('admin.push.notification.create')" icon="ph ph-paper-plane-tilt" title="{{ __('notification::notification.push_notification_index.send_notification') }}" />
                 @endcan
             </x-table-actions>
         </x-slot>

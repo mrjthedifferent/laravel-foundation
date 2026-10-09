@@ -2,7 +2,7 @@
     'id',
     'title' => '',
     'description' => null,
-    'icon' => 'ph-note',
+    'icon' => 'ph ph-note',
     'tone' => null,   {{-- null | danger --}}
 ])
 

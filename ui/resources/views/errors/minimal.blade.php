@@ -35,7 +35,7 @@
         @yield('actions')
     @else
         <a href="/" class="btn btn-primary">
-            <i class="ph-house"></i>{{ __('foundation::foundation.errors.return_home') }}
+            <i class="ph ph-house"></i>{{ __('foundation::foundation.errors.return_home') }}
         </a>
     @endif
 </div>

@@ -56,7 +56,7 @@
 
     <button type="button" class="btn btn-light btn-icon btn-floating-settings" data-fd-toggle="offcanvas"
         data-fd-target="#demo_config" aria-label="{{ __('foundation::foundation.theme_config.title') }}">
-        <i class="ph-gear"></i>
+        <i class="ph ph-gear"></i>
     </button>
 
 </body>

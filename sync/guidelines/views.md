@@ -97,7 +97,7 @@ Every component's props and slots: [`components-reference.md`](components-refere
 
 `<x-page-header>`'s `$actions` slot holds the page's context — badges, status, an avatar, a secondary action — placed on the trailing edge before the back button. The submit button of a create/edit form does **not** go here; it goes in the form's bottom row (see the templates below).
 ```blade
-<x-page-header :title="$thing->name" icon="ph-pencil-simple" :back-url="route('admin.things.index')" back-label="Back to List">
+<x-page-header :title="$thing->name" icon="ph ph-pencil-simple" :back-url="route('admin.things.index')" back-label="Back to List">
     <x-slot name="actions">
         <span class="badge badge-primary">{{ display_label($thing->type) }}</span>
         <x-status-badge :active="$thing->is_active" class="text-xs" />
@@ -132,7 +132,7 @@ Every component's props and slots: [`components-reference.md`](components-refere
         <x-slot name="actions">
             @can('Create Thing')
                 <a href="{{ route('admin.things.create') }}" class="btn btn-sm btn-primary">
-                    <i class="ph-plus"></i>{{ __('thing::thing.index.add') }}
+                    <i class="ph ph-plus"></i>{{ __('thing::thing.index.add') }}
                 </a>
             @endcan
         </x-slot>
@@ -153,12 +153,12 @@ Every component's props and slots: [`components-reference.md`](components-refere
                         <x-dropdown-menu>
                             @can('View Thing')
                                 <x-dropdown-link :url="route('admin.things.show', $thing->id)">
-                                    <i class="ph-eye"></i>{{ __('foundation::foundation.common.view') }}
+                                    <i class="ph ph-eye"></i>{{ __('foundation::foundation.common.view') }}
                                 </x-dropdown-link>
                             @endcan
                             @can('Edit Thing')
                                 <x-dropdown-link :url="route('admin.things.edit', $thing->id)">
-                                    <i class="ph-pencil-simple"></i>{{ __('foundation::foundation.common.edit') }}
+                                    <i class="ph ph-pencil-simple"></i>{{ __('foundation::foundation.common.edit') }}
                                 </x-dropdown-link>
                             @endcan
                             @can('Delete Thing')
@@ -167,7 +167,7 @@ Every component's props and slots: [`components-reference.md`](components-refere
                                     :url="route('admin.things.destroy', $thing->id)"
                                     class="text-danger swal-delete"
                                     data-text="{{ __('thing::thing.index.delete_confirm', ['name' => $thing->name]) }}">
-                                    <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
+                                    <i class="ph ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
                                 </x-dropdown-link>
                             @endcan
                         </x-dropdown-menu>
@@ -197,11 +197,11 @@ Every component's props and slots: [`components-reference.md`](components-refere
 
     <x-page-header
         :title="__('thing::thing.create.title')"
-        icon="ph-plus"
+        icon="ph ph-plus"
         :back-url="route('admin.things.index')"
         :back-label="__('thing::thing.form.back')" />
 
-    <x-form-section :title="__('thing::thing.form.basic_information')" icon="ph-info">
+    <x-form-section :title="__('thing::thing.form.basic_information')" icon="ph ph-info">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-6">
                 <x-form.input name="name" :label="__('foundation::foundation.common.name')" required />
@@ -214,10 +214,10 @@ Every component's props and slots: [`components-reference.md`](components-refere
 
     <div class="fd-form-actions">
         <a href="{{ route('admin.things.index') }}" class="btn btn-light">
-            <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
+            <i class="ph ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
         <x-primary-button class="px-12">
-            <i class="ph-floppy-disk"></i>{{ __('thing::thing.create.submit') }}
+            <i class="ph ph-floppy-disk"></i>{{ __('thing::thing.create.submit') }}
         </x-primary-button>
     </div>
 
@@ -244,7 +244,7 @@ Every component's props and slots: [`components-reference.md`](components-refere
 
     <x-page-header
         :title="__('thing::thing.edit.title', ['name' => $thing->name])"
-        icon="ph-pencil-simple"
+        icon="ph ph-pencil-simple"
         :back-url="route('admin.things.index')"
         :back-label="__('thing::thing.form.back')">
         <x-slot name="actions">
@@ -252,7 +252,7 @@ Every component's props and slots: [`components-reference.md`](components-refere
         </x-slot>
     </x-page-header>
 
-    <x-form-section :title="__('thing::thing.form.basic_information')" icon="ph-info">
+    <x-form-section :title="__('thing::thing.form.basic_information')" icon="ph ph-info">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-6">
                 <x-form.input name="name" :label="__('foundation::foundation.common.name')" required :value="$thing->name" />
@@ -267,10 +267,10 @@ Every component's props and slots: [`components-reference.md`](components-refere
 
     <div class="fd-form-actions">
         <a href="{{ route('admin.things.index') }}" class="btn btn-light">
-            <i class="ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
+            <i class="ph ph-x"></i>{{ __('foundation::foundation.common.cancel') }}
         </a>
         <x-primary-button class="px-12">
-            <i class="ph-floppy-disk"></i>{{ __('thing::thing.edit.submit') }}
+            <i class="ph ph-floppy-disk"></i>{{ __('thing::thing.edit.submit') }}
         </x-primary-button>
     </div>
 
@@ -292,7 +292,7 @@ Every component's props and slots: [`components-reference.md`](components-refere
 - Create/edit forms must use `<x-page-header>` for the top heading and `<x-form-section>` for each card section — never write raw `<div class="card">` header markup manually.
 - The `$actions` slot carries context (badges, status, an avatar, a secondary action). The submit button goes in the bottom row below the last section: `btn-light` Cancel on the leading edge, `<x-primary-button>` on the trailing edge.
 
-**Icons:** Phosphor (`ph-*`) is the only icon set — Font Awesome is not loaded, so an `fa-*` class renders nothing. Common ones: `ph-plus`, `ph-pencil-simple`, `ph-eye`, `ph-trash`, `ph-floppy-disk`, `ph-arrow-left`, `ph-x`, `ph-check-circle`, `ph-warning-circle`. An icon inside a `.btn`, a `.dropdown-item` or a `.navbar-nav-link` takes **no** `me-1`/`me-2` — those containers set their own gap.
+**Icons:** Phosphor 2 is the only icon set. Write a weight class plus the icon, `ph ph-gear`: a bare `ph-gear` renders nothing, and Font Awesome isn't loaded, so an `fa-*` class renders nothing either. Common ones: `ph ph-plus`, `ph ph-pencil-simple`, `ph ph-eye`, `ph ph-trash`, `ph ph-floppy-disk`, `ph ph-arrow-left`, `ph ph-x`, `ph ph-check-circle`, `ph ph-warning-circle`. An icon inside a `.btn`, a `.dropdown-item` or a `.navbar-nav-link` takes **no** `me-1`/`me-2` — those containers set their own gap.
 
 **Buttons:** `btn-primary` for the one primary action, `btn-light` for Cancel/Back/Reset and other secondary buttons, `btn-ghost` when it should be borderless, `btn-icon` for a square icon-only button. Don't write `btn-outline-secondary` in a new view. Anything in a card header or a table row also takes `btn-sm`.
 
@@ -317,7 +317,7 @@ return [
     [
         'group' => 'administration',          // parent key from config/sidebar.php
         'label' => 'Things',
-        'icon' => 'ph-cube',
+        'icon' => 'ph ph-cube',
         'route' => 'admin.things.index',
         // Other routes that keep this item highlighted and its parent open.
         'routes' => ['admin.things.show', 'admin.things.create', 'admin.things.edit'],

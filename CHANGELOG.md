@@ -4,6 +4,35 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.0.0
+
+The bundled libraries move to their latest releases, pinned exactly in `bin/build-assets.sh`.
+
+**Changed (breaking)**
+- **Phosphor Icons 1.4.2 → 2.1.2.**
+  - Every icon now needs a weight class next to it: `ph-gear` is `ph ph-gear`, and the 1.x suffix `ph-star-fill` is `ph-fill ph-star`. A bare `ph-gear` renders nothing.
+  - Every 1.4.2 icon name still exists, and about 480 icons are new (`ph-seal`, `ph-stethoscope`, `ph-plus-square`…).
+  - The layout loads regular, bold and fill (`phosphor.css`, 212 KB instead of 236 KB). `phosphor-light.css`, `phosphor-thin.css` and `phosphor-duotone.css` ship separately for pages that use those weights.
+  - Each weight's font downloads only once an icon in that weight is shown.
+  - All of the package's own views, components, menus, sidebar groups, dashboard widgets and guidelines use the new form.
+- **jQuery 3.7.1 → 4.0.0.** It drops long-deprecated helpers (`$.trim`, `$.isArray`, `$.isFunction`, `$.parseJSON`, `$.type`, `$.now`…). The package used none of them.
+
+**Changed**
+- Select2 4.0.13 → 4.1.0; SweetAlert2 11.26.25, Quill 2.0.3, Ace 1.44.0 and Inter 4.1.1 are now pinned exactly (they were already the newest within their old ranges).
+
+**Added**
+- `bin/migrate-phosphor-2.mjs` rewrites a project's icons to Phosphor 2. It covers class attributes, `icon` props, `'icon' => …` values and JavaScript strings, and leaves helpers such as `ph-lg`, CSS selectors and already-migrated icons alone, so it is safe to run again.
+- Tests:
+  - every icon the package uses exists in the shipped stylesheet;
+  - the migration script works, and the package has nothing left to migrate;
+  - `foundation.js` works with the bundled jQuery 4 and Select2 4.1 (the jQuery shims and Select2 setup).
+
+**Upgrading**
+1. `composer require mrjthedifferent/laravel-foundation:^3.0 --with-dependencies`
+2. `node vendor/mrjthedifferent/laravel-foundation/bin/migrate-phosphor-2.mjs Modules resources config app --write`, then review the diff. Add any other folder that names icons; your published `config/sidebar.php` is covered by `config`.
+3. In your own scripts, replace any jQuery helper that 4.0 removed (see above) with plain JavaScript.
+4. `php artisan foundation:publish --force` and `php artisan foundation:sync`.
+
 ## 2.1.2
 
 **Fixed**

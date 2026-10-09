@@ -2,16 +2,16 @@
  * Toast, modal, swal-confirm/delete/post, formPost, and flash messages.
  * Requires: jQuery, SweetAlert (loaded in layout before this).
  */
-const LOADING_HTML = '<i class="ph-spinner spinner"></i>';
+const LOADING_HTML = '<i class="ph ph-spinner spinner"></i>';
 
 function initSwalHelpers() {
     if (typeof window.Swal === 'undefined') return;
     // The toast's look comes from .fd-toast-* in foundation.css, not from inline styles.
     const toastIcons = {
-        success: 'ph-check-circle',
-        error: 'ph-x-circle',
-        warning: 'ph-warning-circle',
-        info: 'ph-info',
+        success: 'ph ph-check-circle',
+        error: 'ph ph-x-circle',
+        warning: 'ph ph-warning-circle',
+        info: 'ph ph-info',
     };
 
     window.toast = (icon, title, text) => {

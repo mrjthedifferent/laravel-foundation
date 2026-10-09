@@ -10,7 +10,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'Activity Logs',
-        'icon' => 'ph-activity',
+        'icon' => 'ph ph-activity',
         'route' => 'admin.activity-logs.index',
         'routes' => ['admin.activity-logs.show', 'admin.track-ip'],
         'permissions' => ['View Activity Log', 'Delete Activity Log'],
@@ -19,7 +19,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'SMS Logs',
-        'icon' => 'ph-chat-text',
+        'icon' => 'ph ph-chat-text',
         'route' => 'admin.sms-logs.index',
         'permissions' => ['View SMS Log', 'Delete SMS Log'],
         'order' => 120,
@@ -27,7 +27,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'Email Logs',
-        'icon' => 'ph-envelope',
+        'icon' => 'ph ph-envelope',
         'route' => 'admin.email-logs.index',
         'routes' => ['admin.email-logs.show'],
         'permissions' => ['View Email Log', 'Delete Email Log'],
@@ -36,7 +36,7 @@ return [
     [
         'group' => 'administration',
         'label' => 'System Logs',
-        'icon' => 'ph-terminal',
+        'icon' => 'ph ph-terminal',
         'url' => '/log-viewer',
         'target' => '_blank',
         'permissions' => ['View Logs'],

@@ -28,7 +28,7 @@
                     const $dropdown = $(`
                         <div class="dropdown inline-block">
                             <button class="btn btn-sm btn-light border dropdown-toggle px-1" type="button" data-fd-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="ph-dots-three-vertical"></i>
+                                <i class="ph ph-dots-three-vertical"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end"></div>
                         </div>

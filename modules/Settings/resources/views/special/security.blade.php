@@ -10,16 +10,16 @@
 
     <x-page-header title="{{ __('settings::settings.special_security.title') }}"
         subtitle="{{ __('settings::settings.special_security.subtitle') }}"
-        icon="ph-shield-check">
+        icon="ph ph-shield-check">
         <x-slot name="actions">
             <button type="submit" class="btn btn-primary px-6">
-                <i class="ph-floppy-disk"></i>{{ __('settings::settings.special_security.save_changes') }}
+                <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.special_security.save_changes') }}
             </button>
         </x-slot>
     </x-page-header>
 
     {{-- Two-factor authentication --}}
-    <x-form-section :title="__('settings::settings.special_security.two_factor_header')" icon="ph-device-mobile">
+    <x-form-section :title="__('settings::settings.special_security.two_factor_header')" icon="ph ph-device-mobile">
         <p class="text-muted text-sm">{{ __('settings::settings.special_security.two_factor_info') }}</p>
 
         @include('settings::special.partials.switch', [
@@ -65,7 +65,7 @@
     </x-form-section>
 
     {{-- Passwords --}}
-    <x-form-section :title="__('settings::settings.special_security.passwords_header')" icon="ph-password">
+    <x-form-section :title="__('settings::settings.special_security.passwords_header')" icon="ph ph-password">
         <div class="grid grid-cols-12 gap-x-6">
             <div class="col-span-12 mb-4 md:col-span-6 lg:col-span-4">
                 <x-form.input type="number" name="password_min_length" id="password_min_length" min="8" max="128" required
@@ -90,7 +90,7 @@
     </x-form-section>
 
     {{-- Sign-in --}}
-    <x-form-section :title="__('settings::settings.special_security.sign_in_header')" icon="ph-sign-in">
+    <x-form-section :title="__('settings::settings.special_security.sign_in_header')" icon="ph ph-sign-in">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-4">
                 <x-form.input type="number" name="login_max_attempts" id="login_max_attempts" min="1" max="100" required

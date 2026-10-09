@@ -24,13 +24,13 @@ final class UserQuickActions extends QuickActionComposer
         return [
             [
                 'label' => __('user::user.quick.add_user'),
-                'icon' => 'ph-user-plus',
+                'icon' => 'ph ph-user-plus',
                 'href' => route('admin.users.create'),
                 'permission' => 'Create User',
             ],
             [
                 'label' => __('user::user.quick.import_users'),
-                'icon' => 'ph-upload-simple',
+                'icon' => 'ph ph-upload-simple',
                 'href' => route('admin.users.bulk.create'),
                 'permission' => 'Import User',
             ],

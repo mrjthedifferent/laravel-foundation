@@ -31,7 +31,7 @@ final class UserStatusWidget extends DashboardWidget
     #[Override]
     public function icon(): string
     {
-        return 'ph-chart-pie-slice';
+        return 'ph ph-chart-pie-slice';
     }
 
     #[Override]

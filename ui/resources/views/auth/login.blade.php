@@ -26,7 +26,7 @@
                     name="password" required autocomplete="current-password">
                 <button type="button" class="btn btn-ghost btn-icon pw-toggle absolute top-1/2 end-0 -translate-y-1/2 me-1"
                     data-target="password" tabindex="-1" aria-label="{{ __('foundation::foundation.auth.show_password') }}">
-                    <i class="ph-eye"></i>
+                    <i class="ph ph-eye"></i>
                 </button>
                 @error('password')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -43,9 +43,9 @@
 
         @php
             $socialProviders = collect([
-                'google' => ['icon' => 'ph-google-logo', 'label' => 'Google'],
-                'github' => ['icon' => 'ph-github-logo', 'label' => 'GitHub'],
-                'apple' => ['icon' => 'ph-apple-logo', 'label' => 'Apple'],
+                'google' => ['icon' => 'ph ph-google-logo', 'label' => 'Google'],
+                'github' => ['icon' => 'ph ph-github-logo', 'label' => 'GitHub'],
+                'apple' => ['icon' => 'ph ph-apple-logo', 'label' => 'Apple'],
             ])->filter(fn ($meta, $provider) => filled(config("services.$provider.client_id"))
                 && filled(config("services.$provider.client_secret")));
         @endphp
@@ -71,10 +71,10 @@
                 var icon = $(this).find('i');
                 if (input.type === 'password') {
                     input.type = 'text';
-                    icon.removeClass('ph-eye').addClass('ph-eye-slash');
+                    icon.removeClass('ph ph-eye').addClass('ph ph-eye-slash');
                 } else {
                     input.type = 'password';
-                    icon.removeClass('ph-eye-slash').addClass('ph-eye');
+                    icon.removeClass('ph ph-eye-slash').addClass('ph ph-eye');
                 }
             });
         });

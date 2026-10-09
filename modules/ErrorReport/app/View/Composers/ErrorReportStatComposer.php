@@ -50,7 +50,7 @@ final class ErrorReportStatComposer extends StatComposer
         return [[
             'label' => __('errorreport::errorreport.stat.open'),
             'value' => number_format($open),
-            'icon' => 'ph-bug',
+            'icon' => 'ph ph-bug',
             'color' => $open > 0 ? 'danger' : 'success',
             'href' => route('admin.error-reports.index'),
             'caption' => __('errorreport::errorreport.stat.new_this_week', ['count' => number_format($thisWeek)]),

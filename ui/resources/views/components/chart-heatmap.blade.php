@@ -18,7 +18,7 @@
     </div>
 @else
     <div class="fd-empty">
-        <span class="fd-empty-icon"><i class="ph-grid-four"></i></span>
+        <span class="fd-empty-icon"><i class="ph ph-grid-four"></i></span>
         <p class="fd-empty-title">{{ __('foundation::foundation.dashboard.chart_empty') }}</p>
         <p class="fd-empty-text">{{ __('foundation::foundation.dashboard.chart_empty_text') }}</p>
     </div>

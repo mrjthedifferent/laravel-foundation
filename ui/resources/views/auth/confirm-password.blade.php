@@ -2,7 +2,7 @@
     <form method="POST" action="{{ route('password.confirm') }}">
         @csrf
 
-        <span class="fd-icon-tile fd-icon-tile-lg mb-4"><i class="ph-lock-key"></i></span>
+        <span class="fd-icon-tile fd-icon-tile-lg mb-4"><i class="ph ph-lock-key"></i></span>
 
         <h1 class="fd-auth-title">{{ __('foundation::foundation.auth.confirm_password') }}</h1>
         <p class="fd-auth-lead">{{ __('foundation::foundation.auth.confirm_password_notice') }}</p>

@@ -59,7 +59,7 @@
                 <x-dropdown-menu>
                     @can('View Error Report')
                     <x-dropdown-link :url="route('admin.error-reports.show', $report)">
-                        <i class="ph-eye"></i> {{ __('errorreport::errorreport.index.view') }}
+                        <i class="ph ph-eye"></i> {{ __('errorreport::errorreport.index.view') }}
                     </x-dropdown-link>
                     @endcan
                     @can('Resolve Error Report')
@@ -67,7 +67,7 @@
                     <form action="{{ route('admin.error-reports.resolve', $report) }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="dropdown-item">
-                            <i class="ph-check-circle"></i> {{ __('errorreport::errorreport.index.mark_resolved') }}
+                            <i class="ph ph-check-circle"></i> {{ __('errorreport::errorreport.index.mark_resolved') }}
                         </button>
                     </form>
                     @endif
@@ -76,7 +76,7 @@
                     <button type="button" class="dropdown-item text-danger swal-delete"
                         data-url="{{ route('admin.error-reports.destroy', $report) }}"
                         data-text="{{ __('errorreport::errorreport.index.delete_confirm') }}">
-                        <i class="ph-trash"></i> {{ __('errorreport::errorreport.index.delete') }}
+                        <i class="ph ph-trash"></i> {{ __('errorreport::errorreport.index.delete') }}
                     </button>
                     @endcan
                 </x-dropdown-menu>

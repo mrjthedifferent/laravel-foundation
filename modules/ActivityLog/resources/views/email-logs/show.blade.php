@@ -10,7 +10,7 @@
 @endphp
 
 @section('content')
-<x-page-header title="{{ __('activitylog::activitylog.email_logs_show.title', ['id' => $emailLog->id]) }}" icon="ph-envelope"
+<x-page-header title="{{ __('activitylog::activitylog.email_logs_show.title', ['id' => $emailLog->id]) }}" icon="ph ph-envelope"
     :back-url="route('admin.email-logs.index')" back-label="{{ __('activitylog::activitylog.email_logs_show.back_label') }}">
     <x-slot name="actions">
         <span class="badge badge-{{ $statusBadge[$emailLog->status] ?? 'secondary' }} text-sm">
@@ -19,7 +19,7 @@
     </x-slot>
 </x-page-header>
 
-<x-form-section title="{{ __('activitylog::activitylog.email_logs_show.details') }}" icon="ph-info">
+<x-form-section title="{{ __('activitylog::activitylog.email_logs_show.details') }}" icon="ph ph-info">
     <dl class="fd-dl">
         <dt>{{ __('activitylog::activitylog.email_logs_show.to') }}</dt>
         <dd>{{ $emailLog->to_email }}@if ($emailLog->to_name) <span class="text-muted">({{ $emailLog->to_name }})</span>@endif</dd>
@@ -61,7 +61,7 @@
     </dl>
 </x-form-section>
 
-<x-form-section title="{{ __('activitylog::activitylog.email_logs_show.body') }}" icon="ph-file-text">
+<x-form-section title="{{ __('activitylog::activitylog.email_logs_show.body') }}" icon="ph ph-file-text">
     @if ($emailLog->body)
     <iframe sandbox srcdoc="{{ $emailLog->body }}" height="480" class="w-full border rounded-md" title="{{ __('activitylog::activitylog.email_logs_show.email_body_title') }}"></iframe>
     @else

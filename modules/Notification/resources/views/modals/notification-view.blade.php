@@ -5,9 +5,9 @@
 <div class="modal-body">
     @php
         $typeConfig = match($notification->type) {
-            'export' => ['bg' => 'success', 'icon' => 'ph-download-simple'],
-            'error' => ['bg' => 'danger', 'icon' => 'ph-x-circle'],
-            default => ['bg' => 'primary', 'icon' => 'ph-info'],
+            'export' => ['bg' => 'success', 'icon' => 'ph ph-download-simple'],
+            'error' => ['bg' => 'danger', 'icon' => 'ph ph-x-circle'],
+            default => ['bg' => 'primary', 'icon' => 'ph ph-info'],
         };
     @endphp
 
@@ -43,7 +43,7 @@
         @endif
         @if($notification->download_url)
             <a href="{{ $notification->download_url }}" class="btn btn-light btn-sm" target="_blank" rel="noopener">
-                <i class="ph-download-simple"></i>{{ __('notification::notification.modal.download_file') }}
+                <i class="ph ph-download-simple"></i>{{ __('notification::notification.modal.download_file') }}
             </a>
         @endif
     </div>
@@ -64,7 +64,7 @@
                     @csrf
                     @method('PATCH')
                     <button type="submit" class="btn btn-light btn-sm">
-                        <i class="ph-envelope-simple"></i>{{ __('notification::notification.modal.mark_as_unread') }}
+                        <i class="ph ph-envelope-simple"></i>{{ __('notification::notification.modal.mark_as_unread') }}
                     </button>
                 </form>
             @else
@@ -73,7 +73,7 @@
                     @csrf
                     @method('PATCH')
                     <button type="submit" class="btn btn-light btn-sm">
-                        <i class="ph-envelope-open"></i>{{ __('notification::notification.modal.mark_as_read') }}
+                        <i class="ph ph-envelope-open"></i>{{ __('notification::notification.modal.mark_as_read') }}
                     </button>
                 </form>
             @endif
@@ -82,7 +82,7 @@
             <a href="{{ route('admin.notification.destroy', $notification->id) }}"
                class="btn btn-outline-danger btn-sm swal-delete"
                data-text="{{ __('notification::notification.modal.delete_confirm') }}">
-                <i class="ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
+                <i class="ph ph-trash"></i>{{ __('foundation::foundation.common.delete') }}
             </a>
             <button type="button" class="btn btn-light btn-sm" data-fd-dismiss="modal">{{ __('foundation::foundation.common.close') }}</button>
         </div>

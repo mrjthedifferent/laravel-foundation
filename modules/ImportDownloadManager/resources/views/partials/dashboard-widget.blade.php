@@ -2,7 +2,7 @@
     <div class="col-span-12 xl:col-span-4 lg:col-span-6">
         <div class="card h-full">
             <div class="card-header">
-                <span class="fd-icon-tile fd-icon-tile-sm is-neutral"><i class="ph-download-simple"></i></span>
+                <span class="fd-icon-tile fd-icon-tile-sm is-neutral"><i class="ph ph-download-simple"></i></span>
                 <h2 class="card-title">{{ __('importdownloadmanager::importdownloadmanager.widget.title') }}</h2>
                 <a href="{{ route('admin.download.import.manager.index') }}" class="ms-auto text-sm">
                     {{ __('importdownloadmanager::importdownloadmanager.widget.view_all') }}

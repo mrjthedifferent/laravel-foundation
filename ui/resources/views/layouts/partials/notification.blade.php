@@ -43,7 +43,7 @@
                     console.error('Error loading notifications:', error);
                     $('#notification-list').html(`
                         <div class="fd-empty">
-                            <span class="fd-empty-icon"><i class="ph-warning-circle"></i></span>
+                            <span class="fd-empty-icon"><i class="ph ph-warning-circle"></i></span>
                             <p class="fd-empty-title">{{ __('foundation::foundation.notification.failed_to_load') }}</p>
                         </div>
                     `);
@@ -58,7 +58,7 @@
             if (list.length === 0) {
                 notificationList.html(`
                     <div class="fd-empty">
-                        <span class="fd-empty-icon"><i class="ph-bell-slash"></i></span>
+                        <span class="fd-empty-icon"><i class="ph ph-bell-slash"></i></span>
                         <p class="fd-empty-title">{{ __('foundation::foundation.notification.empty') }}</p>
                     </div>
                 `);

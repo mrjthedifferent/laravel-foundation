@@ -90,7 +90,7 @@ final class EarlyStat extends StatComposer
     #[Override]
     protected function build(): array
     {
-        return [['label' => 'early', 'value' => '1', 'icon' => 'ph-users']];
+        return [['label' => 'early', 'value' => '1', 'icon' => 'ph ph-users']];
     }
 }
 
@@ -118,6 +118,6 @@ final class LateStat extends StatComposer
     #[Override]
     protected function build(): array
     {
-        return [['label' => 'late', 'value' => '2', 'icon' => 'ph-users']];
+        return [['label' => 'late', 'value' => '2', 'icon' => 'ph ph-users']];
     }
 }

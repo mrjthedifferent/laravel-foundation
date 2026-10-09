@@ -17,7 +17,7 @@
             @endif
             <li class="nav-item">
                 <a href="mailto:{{ config('app.email') }}" class="navbar-nav-link" target="_blank">
-                    <i class="ph-lifebuoy"></i>
+                    <i class="ph ph-lifebuoy"></i>
                     <span class="hidden md:inline-block">{{ __('foundation::foundation.footer.support') }}</span>
                 </a>
             </li>
