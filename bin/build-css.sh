@@ -27,7 +27,7 @@ cat > "$B/tailwind.entry.css" <<'CSS'
 @source "../modules/*/resources/assets/js";
 @source "../modules/*/app";
 @source "../ui/resources/js";
-@source "../ui/public/assets/js/foundation.js";
+@source "../ui/resources/js/foundation.src.js";
 @source "../src";
 @source "../lang";
 @source "../modules/*/lang";
