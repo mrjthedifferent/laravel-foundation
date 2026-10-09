@@ -4,6 +4,11 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 1.13.2
+
+**Changed**
+- Requires `bacon/bacon-qr-code` ^3.1 and `pragmarx/google2fa` ^9.1.
+
 ## 1.13.1
 
 **Changed**
