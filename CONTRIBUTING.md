@@ -52,6 +52,21 @@ vendor/bin/rector process --dry-run --no-progress-bar
 - **Rector** (`rector.php`) is a narrow set of type and strict-types rules. If the
   dry-run reports a diff, apply it with `vendor/bin/rector process` and review it.
 
+## The UI: stylesheet and JavaScript
+
+The admin UI's stylesheet is compiled with Tailwind **inside this repository** and committed, so projects need no build step.
+Change `ui/resources/css/**` or any Blade view, JavaScript string or PHP class that carries class names, then rebuild:
+
+```bash
+bash bin/build-css.sh           # writes ui/public/assets/css/foundation.css
+bash bin/build-css.sh --check   # what CI runs: fails if the committed file is stale
+bash bin/test-js.sh             # behaviour tests for ui/public/assets/js/foundation.js (Node + jsdom)
+```
+
+A utility class a project may use without building Tailwind itself belongs in `ui/resources/css/safelist.css`. The guidelines in
+`sync/guidelines/` are what AI assistants read in every project; a test fails if a Blade component or dashboard extension point
+is added without being documented in them.
+
 ## Working against a real project
 
 To try a change in an application, point the application at your checkout with a

@@ -58,8 +58,10 @@
         @enderror
         <div class="form-text mb-4">{{ __('settings::settings.special_security.roles_help') }}</div>
 
-        <x-form.input name="two_factor_issuer" id="two_factor_issuer" :label="__('settings::settings.special_security.issuer_label')"
-            :value="$twoFactor['issuer']" :placeholder="appName()" :help="__('settings::settings.special_security.issuer_help')" />
+        <div class="max-w-xl">
+            <x-form.input name="two_factor_issuer" id="two_factor_issuer" :label="__('settings::settings.special_security.issuer_label')"
+                :value="$twoFactor['issuer']" :placeholder="appName()" :help="__('settings::settings.special_security.issuer_help')" />
+        </div>
     </x-form-section>
 
     {{-- Passwords --}}

@@ -48,6 +48,11 @@ document.addEventListener('fd:modal-shown', e => e.target.querySelector('input')
 document.querySelector('#settingsTabs').addEventListener('fd:tab-shown', e => localStorage.setItem('tab', e.target.getAttribute('href')));
 ```
 
+### Keyboard and focus
+
+Modals and drawers keep Tab inside while open and return focus to the trigger when they close; Escape closes them (unless a modal is `static`). In an open dropdown,
+ArrowUp/ArrowDown/Home/End move between items (disabled ones are skipped) and Escape closes it; ArrowDown on a closed toggle opens it and focuses the first item.
+
 ### Programmatic API
 
 ```javascript

@@ -45,13 +45,9 @@
 
     <x-form-section title="{{ __('settings::settings.import.section_import_file') }}" icon="ph-brackets-curly">
         <div class="mb-4">
-            <label class="form-label font-semibold text-sm required">{{ __('settings::settings.import.json_file_label') }}</label>
-            <input type="file"
-                   class="form-control form-control-sm @error('settings_file') is-invalid @enderror"
-                   name="settings_file" id="settings_file"
-                   accept=".json" required>
-            <div class="form-text">{!! __('settings::settings.import.json_file_help', ['ext' => '<code>.json</code>']) !!}</div>
-            @error('settings_file')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            <x-form.file name="settings_file" id="settings_file" accept=".json" required
+                :label="__('settings::settings.import.json_file_label')"
+                :help="__('settings::settings.import.json_file_help', ['ext' => '.json'])" />
         </div>
         <div>
             <label class="form-label font-semibold text-sm required">{{ __('settings::settings.import.import_mode_label') }}</label>

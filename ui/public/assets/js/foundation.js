@@ -576,17 +576,53 @@
             var oc = document.querySelector('.offcanvas.show');
             if (oc) { components.offcanvas(oc).hide(); }
         }
-        // Keep Tab inside the open modal
-        if (event.key === 'Tab' && openModals.length) {
-            var modal = openModals[openModals.length - 1].el;
-            var items = modal.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
-            var visible = Array.prototype.filter.call(items, function (n) { return n.offsetParent !== null; });
-            if (!visible.length) { event.preventDefault(); return; }
-            var first = visible[0], last = visible[visible.length - 1];
-            if (event.shiftKey && (document.activeElement === first || document.activeElement === modal)) { event.preventDefault(); last.focus(); }
-            else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+        // Keep Tab inside the open modal or drawer
+        if (event.key === 'Tab') {
+            var layer = openModals.length ? openModals[openModals.length - 1].el : document.querySelector('.offcanvas.show');
+            if (layer) {
+                var visible = focusables(layer);
+                if (!visible.length) { event.preventDefault(); return; }
+                var first = visible[0], last = visible[visible.length - 1];
+                if (event.shiftKey && (document.activeElement === first || document.activeElement === layer)) { event.preventDefault(); last.focus(); }
+                else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+            }
+        }
+
+        // Arrow keys move through an open dropdown menu; ArrowDown on a closed toggle opens it
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp' || event.key === 'Home' || event.key === 'End') {
+            var target = event.target instanceof Element ? event.target : null;
+            var toggleEl = target ? target.closest('[data-fd-toggle="dropdown"]') : null;
+
+            if (toggleEl && !components.dropdown(toggleEl).isOpen() && event.key === 'ArrowDown') {
+                event.preventDefault();
+                components.dropdown(toggleEl).show();
+                var firstItem = menuItems(components.dropdown(toggleEl).menu())[0];
+                if (firstItem) { firstItem.focus(); }
+                return;
+            }
+
+            if (openDropdown) {
+                var items = menuItems(openDropdown.menu());
+                if (!items.length) { return; }
+                event.preventDefault();
+                var at = items.indexOf(document.activeElement);
+                var next = event.key === 'Home' ? 0
+                    : event.key === 'End' ? items.length - 1
+                    : event.key === 'ArrowDown' ? (at + 1) % items.length
+                    : (at <= 0 ? items.length - 1 : at - 1);
+                items[next].focus();
+            }
         }
     });
+
+    function focusables(root) {
+        var found = root.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+        return Array.prototype.filter.call(found, function (n) { return n.offsetParent !== null || n === document.activeElement; });
+    }
+
+    function menuItems(menu) {
+        return menu ? Array.prototype.slice.call(menu.querySelectorAll('.dropdown-item:not(.disabled):not(:disabled)')) : [];
+    }
 
     function tooltipTarget(event) {
         return event.target instanceof Element ? event.target.closest('[data-fd-toggle="tooltip"]') : null;

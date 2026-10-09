@@ -1,0 +1,55 @@
+/* The utility vocabulary a project may use in its own views without building Tailwind itself.
+ *
+ * The stylesheet is compiled once, inside the package, so a class exists only if the package's
+ * own views use it or it is listed here. This list is the documented contract (theming.md):
+ * layout, spacing, sizing, typography, colour, borders and shadows, with the responsive
+ * prefixes (sm: md: lg: xl: 2xl:) on the ones a layout needs. Add to it when a project asks
+ * for a class the package does not need itself. */
+
+/* Spacing: margin and padding, every side, the common scale; auto margins; gaps */
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{m,p}{,t,b,s,e,x,y}-{0,1,2,3,4,5,6,8,10,12,16,20,24}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}m{,t,b,s,e,x,y}-auto");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}gap{,-x,-y}-{0,1,2,3,4,5,6,8,10,12}");
+
+/* Display, flex and grid */
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{flex,inline-flex,grid,inline-grid,block,inline-block,inline,hidden,contents,table,table-cell}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{flex-col,flex-row,flex-col-reverse,flex-row-reverse,flex-wrap,flex-nowrap,flex-1,flex-auto,flex-none,grow,grow-0,shrink,shrink-0}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{items,justify,content,self}-{start,center,end,between,around,evenly,stretch,baseline}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}grid-cols-{1,2,3,4,5,6,12}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}col-span-{1,2,3,4,5,6,7,8,9,10,11,12,full}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}col-start-{1,2,3,4,5,6,7,8,9,10,11,12}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}row-span-{1,2,3,4}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}order-{first,last,1,2,3,4}");
+
+/* Sizing */
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{w,h}-{full,auto,screen,1/2,1/3,2/3,1/4,3/4,0,1,2,3,4,5,6,8,10,12,16,20,24,32,40,48,56,64}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{min-w-0,min-h-0,min-w-full,max-w-full,max-h-full,max-w-xs,max-w-sm,max-w-md,max-w-lg,max-w-xl,max-w-2xl,max-w-3xl,max-w-4xl,max-w-5xl,max-w-6xl,max-w-7xl}");
+@source inline("aspect-{square,video}");
+
+/* Position, stacking and overflow */
+@source inline("{,sm:,md:,lg:,xl:,2xl:}{static,relative,absolute,fixed,sticky}");
+@source inline("{inset-0,inset-x-0,inset-y-0,top-0,bottom-0,start-0,end-0,top-1/2,start-1/2,-translate-x-1/2,-translate-y-1/2,z-0,z-10,z-20,z-30,z-40,z-50}");
+@source inline("overflow-{auto,hidden,visible,scroll,x-auto,x-hidden,y-auto,y-hidden,y-scroll}");
+
+/* Typography */
+@source inline("{,sm:,md:,lg:,xl:,2xl:}text-{start,end,center}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}text-{xs,sm,base,md,lg,xl,2xl}");
+@source inline("font-{light,normal,medium,semibold,bold,mono,sans}");
+@source inline("leading-{none,tight,snug,normal,relaxed}");
+@source inline("tracking-{tight,normal,wide}");
+@source inline("{truncate,whitespace-nowrap,whitespace-normal,whitespace-pre-wrap,break-words,uppercase,lowercase,capitalize,italic,not-italic,underline,no-underline,line-through,tabular-nums,align-middle,align-top,align-baseline}");
+
+/* Colour: surfaces, text, borders — all read the theme tokens, so they follow dark mode and the accent */
+@source inline("text-{body,strong,muted,faint,primary,primary-text,success,success-text,warning,warning-text,danger,danger-text,info,info-text}");
+@source inline("bg-{surface,subtle,canvas,hover,primary,primary-subtle,primary-muted,success,success-subtle,warning,warning-subtle,danger,danger-subtle,info,info-subtle,transparent}");
+@source inline("border-{line,line-strong,primary,success,warning,danger,info,transparent}");
+
+/* Borders, corners, shadows, opacity, interaction */
+@source inline("{border,border-0,border-2,border-t,border-b,border-s,border-e,border-t-0,border-b-0,border-dashed,border-solid}");
+@source inline("rounded{,-t,-b,-s,-e}-{none,sm,md,lg,xl,full}");
+@source inline("shadow-{none,xs,sm,md,lg}");
+@source inline("opacity-{0,25,50,75,100}");
+@source inline("{cursor-pointer,cursor-default,cursor-not-allowed,pointer-events-none,pointer-events-auto,select-none,select-all,sr-only,not-sr-only,object-cover,object-contain,transition}");
+@source inline("hover:{bg-hover,bg-subtle,text-strong,text-primary,underline,border-line-strong,shadow-md}");
+@source inline("focus-visible:{outline-none}");
+@source inline("print:hidden");

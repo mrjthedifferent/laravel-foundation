@@ -67,6 +67,10 @@ jobs:
         if: matrix.php == '8.4' && matrix.dependencies == 'highest'
         run: bash bin/build-css.sh --check
 
+      - name: JavaScript tests
+        if: matrix.php == '8.4' && matrix.dependencies == 'highest'
+        run: bash bin/test-js.sh
+
       - name: Tests
         run: vendor/bin/phpunit
 
