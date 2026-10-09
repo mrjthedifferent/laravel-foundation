@@ -131,12 +131,10 @@ return [
     /*
     | Default length for string columns created by migrations. 191 keeps indexed
     | utf8mb4 columns within the key-length limit of older MariaDB/MySQL; set to
-    | null to keep Laravel's own default (255) on a modern database.
+    | 0 to keep Laravel's own default (255) on a modern database.
     */
     'schema' => [
-        'string_length' => env('FOUNDATION_SCHEMA_STRING_LENGTH', 191) === null
-            ? null
-            : (int) env('FOUNDATION_SCHEMA_STRING_LENGTH', 191),
+        'string_length' => (int) env('FOUNDATION_SCHEMA_STRING_LENGTH', 191),
     ],
 
     /*

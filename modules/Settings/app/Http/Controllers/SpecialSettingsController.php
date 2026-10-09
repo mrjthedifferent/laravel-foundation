@@ -399,18 +399,6 @@ class SpecialSettingsController extends Controller
     ];
 
     /**
-     * Social Auth setting keys and their config targets (for syncing before test).
-     */
-    private static function socialAuthKeys(): array
-    {
-        return [
-            'google' => ['google_client_id', 'google_client_secret', 'google_redirect_uri'],
-            'github' => ['github_client_id', 'github_client_secret', 'github_redirect_uri'],
-            'apple' => ['apple_client_id', 'apple_client_secret', 'apple_redirect_uri', 'apple_team_id', 'apple_key_id', 'apple_key_file'],
-        ];
-    }
-
-    /**
      * Display the Social Auth settings form
      */
     public function socialAuth(): Renderable
@@ -438,9 +426,7 @@ class SpecialSettingsController extends Controller
 
         foreach ($keys as $key) {
             $value = $request->validated($key, '');
-            if (isset($configMap[$key])) {
-                config([$configMap[$key] => $value]);
-            }
+            config([$configMap[$key] => $value]);
             // 'type' must be filled before 'value': Setting::setValueAttribute()
             // reads the sibling 'type' attribute to decide whether to encrypt.
             SaveSettingAction::hidden($key, $value, in_array($key, $secretKeys, true) ? 'encrypted' : 'text', 'Social Auth');

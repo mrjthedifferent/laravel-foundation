@@ -10,7 +10,7 @@ what that covers.
 - `foundation.rate_limits.*` (`auth_ip`, `api_user`, `api_guest`) set the requests per
   minute of the `auth` and `api` limiters. The defaults match the previous fixed values.
 - `foundation.schema.string_length` sets the default string column length (191 by default,
-  as before). Set `FOUNDATION_SCHEMA_STRING_LENGTH=null` to keep Laravel's 255 on a modern
+  as before). Set `FOUNDATION_SCHEMA_STRING_LENGTH=0` to keep Laravel's 255 on a modern
   database.
 - `QueryBuilder::applyLike()` runs the escaped, PostgreSQL-aware LIKE search on a plain
   Eloquent builder.

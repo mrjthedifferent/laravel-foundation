@@ -189,9 +189,9 @@ final class FoundationServiceProvider extends ServiceProvider
     private function configureRuntime(): void
     {
         // Default string length (191 keeps indexed utf8mb4 columns valid on older MariaDB/MySQL).
-        $stringLength = config('foundation.schema.string_length', 191);
-        if ($stringLength !== null) {
-            Schema::defaultStringLength((int) $stringLength);
+        $stringLength = (int) config('foundation.schema.string_length', 191);
+        if ($stringLength > 0) {
+            Schema::defaultStringLength($stringLength);
         }
 
         // Throw on lazy loading everywhere except production, so an N+1 surfaces
