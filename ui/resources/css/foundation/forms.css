@@ -35,7 +35,15 @@
 .fd-form-sections { display: grid; gap: 1.25rem; min-width: 0; }
 .fd-form-sections > section { scroll-margin-top: 1rem; }
 .fd-form-sections .card { margin-bottom: 0; }
-.fd-section-body { display: grid; gap: 1rem; max-width: 40rem; }
+.fd-section-body { display: grid; gap: 1rem; }
+
+/* Fields stack on phones, pair up from tablet width, and take three across on wide screens
+   (add `fd-fields-3`); anything marked `fd-fields-wide` spans the whole row. */
+.fd-fields { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem 1.25rem; align-items: start; }
+@media (min-width: 48rem) { .fd-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 75rem) { .fd-fields.fd-fields-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.fd-fields > .fd-fields-wide { grid-column: 1 / -1; }
+.fd-fields > input[type="hidden"] { display: none; }
 
 /* Identity strip at the top of the profile */
 .fd-identity { display: flex; align-items: center; gap: 1rem; padding: 1rem var(--fd-card-pad); }

@@ -4,7 +4,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('admin.profile.update') }}" class="grid gap-4" enctype="multipart/form-data">
+    <form method="post" action="{{ route('admin.profile.update') }}" class="fd-fields fd-fields-3" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
@@ -54,7 +54,7 @@
                 :label="__('foundation::foundation.profile.image')" :current="$user->image" />
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="fd-fields-wide flex items-center gap-4">
             <x-primary-button>{{ __('foundation::foundation.common.save') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')
