@@ -169,3 +169,15 @@ Admins write both texts under Settings → Privacy Policy / Terms & Conditions (
 - **The HTML is cleaned before it's shown** (`Modules\Settings\Support\LegalHtml`): formatting tags only, no scripts, styles or event handlers, and only http(s), mailto, tel or relative links.
 - **No text yet:** a page that has none is a 404.
 - **To serve your own pages instead,** set `foundation.routing.legal_pages` to `false` (`FOUNDATION_LEGAL_PAGES=false`).
+
+### Account deletion page (public)
+
+`/delete-account` (route `account.delete`) lets anyone delete their own account without the app. App stores (Google Play) require this web link next to in-app deletion.
+- **Who it lets in:** the person signs in on the page with email or phone and password, plus their two-factor code if they use one. It's throttled like sign-in.
+- **What it deletes:** the same as the API's `POST v1/manage-account {action: delete, password}`, which is what an app calls for in-app deletion. Database foreign keys decide what goes with the user, so declare `cascadeOnDelete()` on tables a user owns.
+- **Super Admin accounts are refused.**
+- **Describe your own data:** override `account_deletion.items` (one item per line, plus any other line) in `lang/vendor/user/{locale}/user.php`.
+- **Mobile apps** get the URL from `GET /api/v1/settings/app` (`account_deletion_url`).
+- **To serve your own page,** set `foundation.routing.account_deletion_page` to `false` (`FOUNDATION_ACCOUNT_DELETION_PAGE=false`).
+
+Public pages (legal, account deletion) extend `layouts.public`: the app name, one card, a footer, themed, with no login and no Vite. Use `@section('title')` and `@section('content')`, and the `fd-prose` class for long text.

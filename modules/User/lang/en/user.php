@@ -266,6 +266,27 @@ return [
         'document_uploaded' => 'Document Uploaded',
     ],
 
+    // The public /delete-account page. A project describes its own data by overriding
+    // `items` (one item per line) and any other line in lang/vendor/user/{locale}/user.php.
+    'account_deletion' => [
+        'title' => 'Delete your account',
+        'intro' => 'You can delete your account here without the app. Sign in below to confirm it is yours.',
+        'what' => 'What will be deleted',
+        // One item per line.
+        'items' => "Your account and profile.\nEverything stored under your account.",
+        'permanent' => 'This cannot be undone.',
+        'in_app' => 'You can also delete your account from the app.',
+        'login' => 'Email or phone',
+        'password' => 'Password',
+        'two_factor' => 'Two-factor code (only if you use one)',
+        'confirm' => 'I understand my account and its data will be deleted permanently',
+        'submit' => 'Delete my account',
+        'done' => 'Your account has been deleted.',
+        'wrong_credentials' => 'These details do not match an account.',
+        'two_factor_needed' => 'Enter the code from your authenticator app.',
+        'super_admin' => 'A Super Admin account cannot be deleted here.',
+    ],
+
     'errors' => [
         'delete_failed' => 'Failed to delete user',
         'account_management_unavailable' => 'Account management unavailable in production',

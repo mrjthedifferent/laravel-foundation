@@ -4,6 +4,23 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.3.0
+
+**Added**
+- **A public account deletion page: `/delete-account`** (route `account.delete`). Anyone can delete their own account without the app; Google Play requires this web link next to in-app deletion.
+  - The person signs in on the page with email or phone and password, plus their two-factor code if they use one. It's throttled like sign-in.
+  - It deletes like `POST v1/manage-account {action: delete}` and revokes the account's API tokens.
+  - Super Admin accounts are refused.
+- **Projects describe their own data** by overriding `user::user.account_deletion.items` (one item per line) in `lang/vendor/user/{locale}/user.php`.
+- `GET /api/v1/settings/app` also returns `account_deletion_url`.
+- **`layouts.public`:** the shared shell for public pages, now used by the privacy, terms and deletion pages. The `fd-prose` class styles long text.
+- `foundation.routing.account_deletion_page` (`FOUNDATION_ACCOUNT_DELETION_PAGE`, default on) turns the page off.
+
+**Upgrading**
+- `composer update mrjthedifferent/laravel-foundation`.
+- If your project already routes `/delete-account`, set `FOUNDATION_ACCOUNT_DELETION_PAGE=false`, or remove your route.
+- Check what your database deletes with a user: tables a user owns should `cascadeOnDelete()`.
+
 ## 3.2.0
 
 **Added**

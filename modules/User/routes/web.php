@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Modules\User\Http\Controllers\AccountDeletionController;
 use Modules\User\Http\Controllers\DocumentController;
 use Modules\User\Http\Controllers\GlobalSearchController;
 use Modules\User\Http\Controllers\ImpersonationController;
@@ -21,6 +22,14 @@ use Modules\User\Http\Middleware\RequireRecentPasswordConfirmation;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Public: anyone deletes their own account without the app (app stores require this link).
+if (config('foundation.routing.account_deletion_page', true)) {
+    Route::get('delete-account', [AccountDeletionController::class, 'show'])->name('account.delete');
+    Route::post('delete-account', [AccountDeletionController::class, 'destroy'])
+        ->middleware('throttle:auth')
+        ->name('account.delete.destroy');
+}
 
 Route::middleware(config('foundation.routing.middleware'))
     ->domain(config('foundation.routing.domain'))

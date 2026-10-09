@@ -166,6 +166,9 @@ return [
         // Public /privacy-policy and /terms-conditions pages (no login), showing what admins write
         // under Settings → Privacy Policy / Terms & Conditions. Set false to serve your own.
         'legal_pages' => (bool) env('FOUNDATION_LEGAL_PAGES', true),
+        // Public /delete-account page where anyone deletes their own account with their sign-in
+        // (app stores require this web link next to in-app deletion). Set false to serve your own.
+        'account_deletion_page' => (bool) env('FOUNDATION_ACCOUNT_DELETION_PAGE', true),
     ],
 
     /*
