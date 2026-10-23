@@ -8,6 +8,7 @@
     'changeUp' => true,
     'caption' => null,      # {{-- what the change is measured against --}}
     'series'  => null,      # {{-- list<int>, oldest first: draws a sparkline --}}
+    'hero'    => false,     # {{-- the headline figure, on the brand gradient --}}
 ])
 
 @php
@@ -21,7 +22,7 @@
     };
 @endphp
 
-<div class="card h-full">
+<div @class(['card h-full', 'fd-stat-hero' => $hero])>
     <div class="fd-stat">
         <div class="fd-stat-head">
             <span class="fd-stat-label">{{ $label }}</span>

@@ -80,6 +80,7 @@ final class FoundationServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(Foundation::path('config/foundation.php'), 'foundation');
         $this->mergeConfigFrom(Foundation::path('config/sidebar.php'), 'sidebar');
+        $this->mergeConfigFrom(Foundation::path('config/foundation-login.php'), 'foundation-login');
 
         $this->app->singletonIf(ImpersonationContext::class, NullImpersonationContext::class);
         $this->app->singletonIf(ErrorReporter::class, NullErrorReporter::class);
@@ -213,6 +214,10 @@ final class FoundationServiceProvider extends ServiceProvider
         $this->publishes([
             Foundation::path('config/sidebar.php') => config_path('sidebar.php'),
         ], 'foundation-sidebar');
+
+        $this->publishes([
+            Foundation::path('config/foundation-login.php') => config_path('foundation-login.php'),
+        ], 'foundation-login');
 
         if ($this->app->runningInConsole()) {
             $this->commands([InstallCommand::class, MakeModuleCommand::class, PublishCommand::class, SuperAdminCommand::class, SyncCommand::class]);

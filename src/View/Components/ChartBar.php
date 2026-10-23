@@ -23,8 +23,9 @@ final class ChartBar extends Component
 
     /**
      * @param  array<string, int>  $series  label => count
+     * @param  bool  $labels  write each value at the end of its bar, rather than in a column of its own
      */
-    public function __construct(array $series, public string $label = '')
+    public function __construct(array $series, public string $label = '', public bool $labels = true)
     {
         $peak = $series === [] ? 0 : max($series);
         $this->hasData = $peak > 0;

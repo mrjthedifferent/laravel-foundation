@@ -735,12 +735,19 @@ return [
         'description' => 'Brand colour used when the palette is set to custom (hex, e.g. #4f46e5)',
         'is_visible' => false,
     ],
+    'theme_custom_color_2' => [
+        'group' => 'Theme',
+        'value' => '',
+        'type' => 'text',
+        'description' => 'Second brand colour, the far end of the gradient, used when the palette is custom (hex; blank mixes it from the first)',
+        'is_visible' => false,
+    ],
     'theme_sidebar_color' => [
         'group' => 'Theme',
-        'value' => 'light',
+        'value' => 'brand',
         'type' => 'select',
-        'options' => json_encode(['light' => 'Light', 'dark' => 'Dark']),
-        'description' => 'Sidebar background: the light surface, or a dark panel',
+        'options' => json_encode(['brand' => 'Brand', 'light' => 'Light', 'dark' => 'Dark']),
+        'description' => 'Sidebar background: the brand gradient, the light surface, or a dark panel',
         'is_visible' => false,
     ],
     'theme_sidebar_type' => [
@@ -773,6 +780,66 @@ return [
         'type' => 'select',
         'options' => json_encode(['sharp' => 'Sharp', 'rounded' => 'Rounded', 'soft' => 'Soft']),
         'description' => 'Corner radius of controls and cards',
+        'is_visible' => false,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Login Page Settings
+    | Managed by LoginPageSettingsController. Each one drives a key of
+    | config/foundation-login.php, so the sign-in panel keeps reading config():
+    | a saved value wins, a missing one leaves the config file's default, and a
+    | null text in the config falls back to the translation. Not seeded: the
+    | page creates them on its first save, and deletes the text ones again when
+    | the admin goes back to the default.
+    |--------------------------------------------------------------------------
+    */
+    'login_panel_headline' => [
+        'group' => 'Login page',
+        'config' => 'foundation-login.headline',
+        'seed' => false,
+        'type' => 'text',
+        'description' => 'Headline on the sign-in page',
+        'is_visible' => false,
+    ],
+    'login_panel_subheadline' => [
+        'group' => 'Login page',
+        'config' => 'foundation-login.subheadline',
+        'seed' => false,
+        'type' => 'text',
+        'description' => 'Line under the headline on the sign-in page',
+        'is_visible' => false,
+    ],
+    'login_panel_highlights' => [
+        'group' => 'Login page',
+        'config' => 'foundation-login.highlights',
+        'seed' => false,
+        'type' => 'json',
+        'description' => 'Feature bullets on the sign-in page (icon and text)',
+        'is_visible' => false,
+    ],
+    'login_panel_mark' => [
+        'group' => 'Login page',
+        'config' => 'foundation-login.mark',
+        'seed' => false,
+        'type' => 'select',
+        'description' => 'Mark beside the name on the sign-in page: auto, monogram or none',
+        'is_visible' => false,
+    ],
+    'login_panel_show_name' => [
+        'group' => 'Login page',
+        'config' => 'foundation-login.show_name',
+        'seed' => false,
+        'type' => 'boolean',
+        'description' => 'Show the application name on the sign-in page',
+        'is_visible' => false,
+    ],
+    'login_panel_graphic' => [
+        'group' => 'Login page',
+        'config' => 'foundation-login.graphic',
+        'seed' => false,
+        'type' => 'select',
+        'description' => 'Decorative graphic on the sign-in page: bars, glow or none',
         'is_visible' => false,
     ],
 ];

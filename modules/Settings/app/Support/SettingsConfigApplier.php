@@ -78,9 +78,52 @@ final class SettingsConfigApplier
     }
 
     /**
+     * The mappings declared by modules that boot after this one. Each module
+     * merges its config/settings.php in its own boot(), so the map apply()
+     * builds during the Settings module's boot misses theirs; the Settings
+     * provider calls this once every provider has booted. Only the new
+     * mappings are applied: re-running apply() here would put back config
+     * that other providers changed in their own boot().
+     */
+    public function applyLateMappings(): void
+    {
+        if ($this->snapshot === null) {
+            $this->apply();
+
+            return;
+        }
+
+        $known = $this->map ?? [];
+        $this->map = null;
+        $late = array_diff_key($this->map(), $known);
+
+        if ($late === []) {
+            return;
+        }
+
+        foreach ($late as $target) {
+            if (! array_key_exists($target, $this->snapshot)) {
+                $this->snapshot[$target] = config($target);
+            }
+        }
+
+        try {
+            foreach ($this->settings->all() as $setting) {
+                $target = $late[$setting['key']] ?? null;
+
+                if ($target !== null && $setting['value'] !== null) {
+                    config([$target => $setting['value']]);
+                }
+            }
+        } catch (Exception $e) {
+            Log::error('Error updating configs from settings: '.$e->getMessage());
+        }
+    }
+
+    /**
      * Setting key => config key, from every enabled module's settings
-     * definitions (merged into config as `{alias}.settings`). Read once: the
-     * definitions do not change while the process runs.
+     * definitions (merged into config as `{alias}.settings`). Read once, and
+     * read again by applyLateMappings() after every module has booted.
      *
      * @return array<string, string>
      */

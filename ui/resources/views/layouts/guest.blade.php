@@ -27,26 +27,13 @@
 <body class="auth-backdrop">
 
     <div class="fd-auth">
-        {{-- The brand panel: hidden on phones, where the form is all that matters. --}}
-        <aside class="fd-auth-aside">
-            <a href="{{ url('/') }}" class="fd-brand">
-                @if (mailLogoUrl())
-                    <img src="{{ mailLogoUrl() }}" alt="">
-                @endif
-                <span class="fd-brand-name">{{ mailAppName() }}</span>
-            </a>
-
-            <div>
-                <p class="fd-auth-quote">{{ __('foundation::foundation.auth.tagline') }}</p>
-                <p class="fd-auth-quote-meta">{{ __('foundation::foundation.auth.tagline_meta', ['app' => mailAppName()]) }}</p>
-            </div>
-
-            <div class="text-xs fd-auth-copyright">
-                &copy; @if(date('Y') == config('app.copyright_year', date('Y'))) {{ date('Y') }} @else {{ config('app.copyright_year') }} - {{ date('Y') }} @endif {{ appName() }}
-            </div>
-        </aside>
+        {{-- The brand panel, drawn from config/foundation-login.php (Settings → Login page) --}}
+        @include('layouts.partials.auth-aside')
 
         <main class="fd-auth-main">
+            {{-- On phones the brand panel is hidden, so the brand sits above the form --}}
+            <div class="fd-auth-mobile-brand">@include('layouts.partials.auth-brand')</div>
+
             <div class="login-form">
                 {{ $slot }}
 

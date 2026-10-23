@@ -43,6 +43,7 @@ final class InvoiceStatComposer extends StatComposer
             'change' => '12%', 'changeUp' => true,               // optional trend pill
             'caption' => __('invoice::invoice.stat.this_month'),
             'series' => array_values(app(DailySeries::class)->count(Invoice::query()->toBase(), 'created_at', 14)),  // optional sparkline
+            // 'hero' => true,  // optional: on the brand gradient (by default the first stat is the hero)
         ]];
     }
 }

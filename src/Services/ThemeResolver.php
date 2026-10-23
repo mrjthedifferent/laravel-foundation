@@ -27,12 +27,14 @@ final readonly class ThemeResolver
         $colorMode = $this->sanitizeOne(config('settings.theme_color_mode.value', 'light'), ['light', 'dark', 'auto'], 'light');
         $direction = $this->sanitizeOne(config('settings.theme_direction.value', 'ltr'), ['ltr', 'rtl'], 'ltr');
         $palette = $this->sanitizePalette(config('settings.theme_color_palette.value', 'indigo'));
-        $sidebarColor = $this->sanitizeOne(config('settings.theme_sidebar_color.value', 'light'), ['light', 'dark'], 'light');
+        $sidebarColor = $this->sanitizeOne(config('settings.theme_sidebar_color.value', 'brand'), ['light', 'dark', 'brand'], 'brand');
         $sidebarType = $this->sanitizeOne(config('settings.theme_sidebar_type.value', 'default'), ['default', 'mini'], 'default');
         $contentWidth = $this->sanitizeOne(config('settings.theme_content_width.value', 'fluid'), ['fluid', 'boxed'], 'fluid');
         $density = $this->sanitizeOne(config('settings.theme_density.value', 'comfortable'), ['comfortable', 'compact'], 'comfortable');
         $radius = $this->sanitizeOne(config('settings.theme_radius.value', 'rounded'), ['sharp', 'rounded', 'soft'], 'rounded');
         $customColor = $this->sanitizeHex(config('settings.theme_custom_color.value', '#4f46e5'), '#4f46e5');
+        // Optional: the gradient's second colour for 'custom'. Blank mixes it from the first.
+        $customColor2 = $this->sanitizeHex(config('settings.theme_custom_color_2.value'));
 
         [$ccR, $ccG, $ccB] = $this->hexToRgb($customColor);
 
@@ -47,6 +49,7 @@ final readonly class ThemeResolver
             'radius' => $radius,
             'customColor' => $customColor,
             'customColorDark' => $this->darkenHex($customColor, 0.88),
+            'customColor2' => $customColor2,
             'ccR' => $ccR,
             'ccG' => $ccG,
             'ccB' => $ccB,

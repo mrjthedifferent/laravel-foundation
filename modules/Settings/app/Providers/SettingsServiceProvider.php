@@ -68,7 +68,11 @@ class SettingsServiceProvider extends ModuleServiceProvider
 
         $this->registerMicrosoftOAuthMailer();
         $this->registerMicrosoftGraphMailer();
-        $this->app->make(SettingsConfigApplier::class)->apply();
+        $applier = $this->app->make(SettingsConfigApplier::class);
+        $applier->apply();
+        // Modules booting after this one (a higher priority number) register their
+        // settings definitions later: their 'config' mappings are applied once all have booted.
+        $this->app->booted(fn () => $applier->applyLateMappings());
     }
 
     /**

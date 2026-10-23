@@ -52,11 +52,20 @@ final class ChartArea extends Component
     public string $summary;
 
     /**
+     * Direct labels: each line's last value, written at its end so no legend lookup is needed.
+     * Positions are percentages of the plot, as the SVG stretches to its box.
+     *
+     * @var list<array{class: string, value: string, left: float, top: float, above: bool}>
+     */
+    public array $endLabels = [];
+
+    /**
      * @param  array<string, int>  $series  ['2026-09-10' => 4, …] oldest day first
      * @param  string  $label  what the series counts, for the accessible summary
      * @param  array<string, int>  $previous  the period before, drawn as a dashed line on the same scale
+     * @param  bool  $labels  write each line's last value at its end
      */
-    public function __construct(array $series, public string $label = '', array $previous = [])
+    public function __construct(array $series, public string $label = '', array $previous = [], public bool $labels = true)
     {
         $this->series = $series;
         $this->gradientId = 'fd-chart-'.(++self::$sequence);
@@ -71,8 +80,49 @@ final class ChartArea extends Component
 
         $this->ticks = $this->ticks($top, $step);
         [$this->areaPath, $this->linePath, $this->lastX, $this->lastY] = $this->paths($values, $top);
-        $this->previousPath = $before === [] ? '' : $this->paths($before, $top)[1];
+        $previousPaths = $before === [] ? null : $this->paths($before, $top);
+        $this->previousPath = $previousPaths[1] ?? '';
         $this->summary = $this->summary($series);
+
+        if ($labels && $this->hasData) {
+            $this->endLabels = $this->endLabels(
+                (int) end($values),
+                $previousPaths === null ? null : [(int) end($before), $previousPaths[2], $previousPaths[3]],
+            );
+        }
+    }
+
+    /**
+     * The higher of the two ends writes its label above its point (below when it is near the
+     * top of the plot), the lower one below its own, so the two never sit on each other.
+     *
+     * @param  array{0: int, 1: float, 2: float}|null  $previous  last value, x and y of the comparison line
+     * @return list<array{class: string, value: string, left: float, top: float, above: bool}>
+     */
+    private function endLabels(int $last, ?array $previous): array
+    {
+        $labels = [['class' => 'is-current', 'value' => $last, 'x' => $this->lastX, 'y' => $this->lastY]];
+
+        if ($previous !== null) {
+            $labels[] = ['class' => 'is-previous', 'value' => $previous[0], 'x' => $previous[1], 'y' => $previous[2]];
+        }
+
+        $highest = min(array_column($labels, 'y'));
+        $placed = [];
+
+        foreach ($labels as $index => $label) {
+            $isHigher = $label['y'] === $highest && ($index === 0 || $labels[0]['y'] !== $highest);
+
+            $placed[] = [
+                'class' => $label['class'],
+                'value' => number_format($label['value']),
+                'left' => round($label['x'] / 640 * 100, 2),
+                'top' => round($label['y'] / 200 * 100, 2),
+                'above' => $isHigher && $label['y'] >= self::TOP + 25,
+            ];
+        }
+
+        return $placed;
     }
 
     public function render(): View

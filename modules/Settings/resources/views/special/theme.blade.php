@@ -22,6 +22,10 @@
         $customColor = preg_match('/^#[0-9a-fA-F]{6}$/', (string) ($theme['theme_custom_color'] ?? ''))
             ? $theme['theme_custom_color']
             : '#4f46e5';
+        $customColor2 = preg_match('/^#[0-9a-fA-F]{6}$/', (string) ($theme['theme_custom_color_2'] ?? ''))
+            ? $theme['theme_custom_color_2']
+            : '';
+        $sidebarColor = $theme['theme_sidebar_color'] ?? 'brand';
     @endphp
 
     <form method="POST" action="{{ route('admin.settings.special.update_theme') }}" id="theme-form">
@@ -91,6 +95,16 @@
                                 name="theme_custom_color" value="{{ $customColor }}" pattern="^#[0-9a-fA-F]{6}$">
                         </div>
                         <div class="form-text">{{ __('settings::settings.special_theme.custom_color_hint') }}</div>
+
+                        <label for="theme_custom_color_2" class="form-label mt-4">{{ __('settings::settings.special_theme.custom_secondary_color_label') }}</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" class="form-control form-control-color" id="theme_custom_color_2_picker"
+                                value="{{ $customColor2 ?: $customColor }}" aria-label="{{ __('settings::settings.special_theme.custom_secondary_color_label') }}">
+                            <input type="text" class="form-control w-50 font-mono" id="theme_custom_color_2"
+                                name="theme_custom_color_2" value="{{ $customColor2 }}" pattern="^#[0-9a-fA-F]{6}$"
+                                placeholder="{{ __('settings::settings.special_theme.custom_secondary_placeholder') }}">
+                        </div>
+                        <div class="form-text">{{ __('settings::settings.special_theme.custom_secondary_hint') }}</div>
                     </div>
                 </div>
 
@@ -106,8 +120,9 @@
                             <div class="col-span-12 sm:col-span-6">
                                 <label for="theme_sidebar_color" class="form-label">{{ __('settings::settings.special_theme.color_scheme_label') }}</label>
                                 <select name="theme_sidebar_color" id="theme_sidebar_color" class="form-select">
-                                    <option value="light" @selected(($theme['theme_sidebar_color'] ?? 'light') === 'light')>{{ __('settings::settings.special_theme.scheme_light') }}</option>
-                                    <option value="dark" @selected(($theme['theme_sidebar_color'] ?? 'light') === 'dark')>{{ __('settings::settings.special_theme.scheme_dark') }}</option>
+                                    <option value="brand" @selected($sidebarColor === 'brand')>{{ __('settings::settings.special_theme.scheme_brand') }}</option>
+                                    <option value="light" @selected($sidebarColor === 'light')>{{ __('settings::settings.special_theme.scheme_light') }}</option>
+                                    <option value="dark" @selected($sidebarColor === 'dark')>{{ __('settings::settings.special_theme.scheme_dark') }}</option>
                                 </select>
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -246,6 +261,8 @@
                 const hex = document.getElementById('theme_custom_color');
                 const picker = document.getElementById('theme_custom_color_picker');
                 const customDot = document.getElementById('custom-swatch-dot');
+                const hex2 = document.getElementById('theme_custom_color_2');
+                const picker2 = document.getElementById('theme_custom_color_2_picker');
                 if (!form || !preview) return;
 
                 function value(name) {
@@ -263,8 +280,15 @@
                     preview.dataset.density = value('theme_density');
                     preview.dataset.radius = value('theme_radius');
                     preview.classList.toggle('is-dark-sidebar', value('theme_sidebar_color') === 'dark');
+                    preview.classList.toggle('is-brand-sidebar', value('theme_sidebar_color') === 'brand');
                     preview.classList.toggle('is-mini', value('theme_sidebar_type') === 'mini');
                     preview.style.setProperty('--custom-primary', hex.value);
+                    // Blank: the gradient's far end is mixed from the brand colour, as on the real page
+                    if (/^#[0-9a-fA-F]{6}$/.test(hex2.value)) {
+                        preview.style.setProperty('--custom-primary-2', hex2.value);
+                    } else {
+                        preview.style.removeProperty('--custom-primary-2');
+                    }
                     if (customDot) customDot.style.setProperty('--fd-swatch', hex.value);
 
                     // The custom palette reads these, exactly as the real page does
@@ -292,6 +316,16 @@
                         picker.value = hex.value;
                         paint();
                     }
+                });
+                picker2?.addEventListener('input', () => {
+                    hex2.value = picker2.value;
+                    paint();
+                });
+                hex2?.addEventListener('input', () => {
+                    if (/^#[0-9a-fA-F]{6}$/.test(hex2.value)) {
+                        picker2.value = hex2.value;
+                    }
+                    paint();
                 });
 
                 paint();

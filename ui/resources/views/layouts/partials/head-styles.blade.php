@@ -14,5 +14,8 @@
         --custom-primary: {{ $theme['customColor'] }};
         --custom-primary-rgb: {{ $theme['ccR'] }}, {{ $theme['ccG'] }}, {{ $theme['ccB'] }};
         --custom-primary-dark: {{ $theme['customColorDark'] }};
+        @if (! empty($theme['customColor2']))
+        --custom-primary-2: {{ $theme['customColor2'] }};
+        @endif
     }
 </style>

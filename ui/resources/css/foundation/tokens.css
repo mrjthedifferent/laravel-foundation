@@ -1,23 +1,45 @@
-/* Design tokens: neutrals, accent palettes, status colours, type, shape, motion, shell. */
+/* Design tokens: brand, neutrals, accent palettes, status colours, chart palette, type, shape, motion, shell. */
+
+/* Brand: the one place a project sets its colours. Override these five in the project's
+   resources/css/app.css (it loads after this file); everything else derives from them: the
+   sidebar, the active item, buttons, the hero card, chart lines, links, focus rings and tints.
+   Keep each -rgb triplet in step with its hex. They apply while Settings → Theme → Accent is
+   the default ("indigo"); any other accent, or "custom" + a hex, overrides them at run time. */
+:root {
+    --fd-brand: #5b4bd6;      --fd-brand-rgb: 91, 75, 214;       /* primary: buttons, active items, links */
+    --fd-brand-2: #8b5cf6;                                       /* secondary: the gradient's far end */
+    --fd-brand-dark: #a197f5; --fd-brand-dark-rgb: 161, 151, 245; /* text and icons on dark surfaces */
+    --fd-on-brand: #ffffff;                                      /* type and icons on the brand gradient */
+}
+
 :root,
 [data-theme="light"] {
-    /* Neutrals: zinc, cool and quiet */
-    --fd-canvas: #fafafa;
+    /* Neutrals: cool, with a hint of the brand */
+    --fd-canvas: #f6f6fb;
     --fd-surface: #ffffff;
-    --fd-subtle: #f4f4f5;
-    --fd-hover: #f4f4f5;
-    --fd-border: #e4e4e7;
-    --fd-border-strong: #d4d4d8;
-    --fd-text: #18181b;
-    --fd-text-strong: #09090b;
-    --fd-muted: #68686f;
-    --fd-faint: #a1a1aa;
+    --fd-subtle: #f1f1f7;
+    --fd-hover: #efeff6;
+    --fd-border: #ececf3;
+    --fd-border-strong: #dcdbe7;
+    --fd-text: #161427;
+    --fd-text-strong: #0f0d1f;
+    --fd-muted: #5b5870;
+    --fd-faint: #908da6;
 
-    /* Semantic */
-    --fd-success: #16a34a; --fd-success-rgb: 22, 163, 74;
+    /* Semantic: good / warn / critical / info */
+    --fd-success: #0ca30c; --fd-success-rgb: 12, 163, 12;
     --fd-warning: #d97706; --fd-warning-rgb: 217, 119, 6;
-    --fd-danger: #dc2626;  --fd-danger-rgb: 220, 38, 38;
-    --fd-info: #0284c7;    --fd-info-rgb: 2, 132, 199;
+    --fd-danger: #d03b3b;  --fd-danger-rgb: 208, 59, 59;
+    --fd-info: #2a78d6;    --fd-info-rgb: 42, 120, 214;
+
+    /* Categorical chart palette (colourblind-safe), in series order */
+    --fd-chart-1: #2a78d6; --fd-chart-1-rgb: 42, 120, 214;
+    --fd-chart-2: #eb6834; --fd-chart-2-rgb: 235, 104, 52;
+    --fd-chart-3: #1baf7a; --fd-chart-3-rgb: 27, 175, 122;
+    --fd-chart-4: #eda100; --fd-chart-4-rgb: 237, 161, 0;
+    /* Type on a solid series colour: white on 1–3, dark on the light amber */
+    --fd-on-chart: #ffffff;
+    --fd-on-chart-4: #1f1500;
 
     /* Type */
     --fd-font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -30,14 +52,17 @@
     --fd-text-xl: 1.5rem;      /* 24 */
     --fd-text-2xl: 1.875rem;   /* 30 */
 
-    /* Shape and depth */
-    --fd-radius-sm: .375rem;
-    --fd-radius: .5rem;
-    --fd-radius-lg: .75rem;
+    /* Shape and depth: 8px / 10px controls, 16px cards (the "rounded" preset) */
+    --fd-radius-sm: .5rem;
+    --fd-radius: .625rem;
+    --fd-radius-lg: 1rem;
+    --fd-radius-chip: .625rem;   /* icon chips, avatars in lists */
+    --fd-radius-pill: 999px;
     --fd-shadow-xs: 0 1px 2px rgba(9, 9, 11, .04);
     --fd-shadow-sm: 0 1px 2px rgba(9, 9, 11, .04), 0 1px 3px rgba(9, 9, 11, .06);
     --fd-shadow-md: 0 2px 4px -1px rgba(9, 9, 11, .05), 0 6px 16px -4px rgba(9, 9, 11, .1);
     --fd-shadow-lg: 0 4px 8px -2px rgba(9, 9, 11, .06), 0 16px 40px -8px rgba(9, 9, 11, .18);
+    --fd-shadow-card: 0 1px 2px rgba(20, 18, 40, .04), 0 8px 24px rgba(20, 18, 40, .06);
 
     /* Motion */
     --fd-ease: cubic-bezier(.2, 0, 0, 1);
@@ -46,8 +71,9 @@
     /* Shell */
     --fd-sidebar-width: 16rem;
     --fd-sidebar-mini-width: 4rem;
-    --fd-navbar-height: 3.5rem;
+    --fd-navbar-height: 4.25rem;
     --fd-footer-height: 3.25rem;
+    --fd-topbar-control: 2.5rem; /* search pill and icon buttons in the topbar */
     /* One gutter for the navbar, the page and the footer, so their edges line up */
     --fd-gutter: 1.5rem;
     --fd-card-pad: 1.25rem;
@@ -59,9 +85,9 @@
     --fd-field-y: .4375rem;
     --fd-cell-y: .75rem;
 
-    /* Accent (indigo unless a palette says otherwise) */
-    --fd-accent-l: #4f46e5; --fd-accent-l-rgb: 79, 70, 229;
-    --fd-accent-d: #818cf8; --fd-accent-d-rgb: 129, 140, 248;
+    /* Accent (the brand unless a palette says otherwise) */
+    --fd-accent-l: var(--fd-brand); --fd-accent-l-rgb: var(--fd-brand-rgb);
+    --fd-accent-d: var(--fd-brand-dark); --fd-accent-d-rgb: var(--fd-brand-dark-rgb);
     --fd-accent: var(--fd-accent-l);
     --fd-accent-rgb: var(--fd-accent-l-rgb);
     /* Filled buttons keep the brand hue in both themes; only text and icons lighten in dark. */
@@ -74,29 +100,44 @@
     --fd-accent-muted: rgba(var(--fd-accent-rgb), .22);
     --fd-accent-text: color-mix(in oklab, var(--fd-accent) 82%, #000);
     --fd-ring: 0 0 0 2px var(--fd-surface), 0 0 0 4px rgba(var(--fd-accent-rgb), .45);
+
+    /* Brand sidebar: a deep shade of the brand, darker than the active item so it stands out */
+    --fd-sidebar-from: color-mix(in oklab, var(--fd-accent-l) 30%, #0b0920);
+    --fd-sidebar-to: color-mix(in oklab, var(--fd-accent-2) 42%, #120c33);
+
+    /* Sign-in panel: the brand gradient itself, deepened a little at its start */
+    --fd-auth-from: color-mix(in oklab, var(--fd-accent-l) 78%, #0b0920);
+    --fd-auth-to: var(--fd-accent-2);
 }
 
 [data-theme="dark"] {
-    --fd-canvas: #09090b;
-    --fd-surface: #111113;
-    --fd-subtle: #18181b;
-    --fd-hover: #1c1c20;
-    --fd-border: #27272a;
-    --fd-border-strong: #3f3f46;
-    --fd-text: #e4e4e7;
-    --fd-text-strong: #fafafa;
-    --fd-muted: #a1a1aa;
-    --fd-faint: #71717a;
+    --fd-canvas: #0e0d16;
+    --fd-surface: #181626;
+    --fd-subtle: #1e1c2e;
+    --fd-hover: #232136;
+    --fd-border: #272536;
+    --fd-border-strong: #363349;
+    --fd-text: #e6e4f0;
+    --fd-text-strong: #f6f5fb;
+    --fd-muted: #b7b4c6;
+    --fd-faint: #7d7a90;
 
     --fd-success: #4ade80; --fd-success-rgb: 74, 222, 128;
     --fd-warning: #fbbf24; --fd-warning-rgb: 251, 191, 36;
     --fd-danger: #f87171;  --fd-danger-rgb: 248, 113, 113;
-    --fd-info: #38bdf8;    --fd-info-rgb: 56, 189, 248;
+    --fd-info: #3987e5;    --fd-info-rgb: 57, 135, 229;
+
+    /* Dark steps of the same chart palette */
+    --fd-chart-1: #3987e5; --fd-chart-1-rgb: 57, 135, 229;
+    --fd-chart-2: #d95926; --fd-chart-2-rgb: 217, 89, 38;
+    --fd-chart-3: #199e70; --fd-chart-3-rgb: 25, 158, 112;
+    --fd-chart-4: #c98500; --fd-chart-4-rgb: 201, 133, 0;
 
     --fd-shadow-xs: 0 1px 2px rgba(0, 0, 0, .4);
     --fd-shadow-sm: 0 1px 2px rgba(0, 0, 0, .4), 0 1px 3px rgba(0, 0, 0, .3);
     --fd-shadow-md: 0 2px 4px -1px rgba(0, 0, 0, .4), 0 8px 20px -4px rgba(0, 0, 0, .5);
     --fd-shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, .5), 0 20px 48px -8px rgba(0, 0, 0, .7);
+    --fd-shadow-card: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 30px rgba(0, 0, 0, .35);
 
     --fd-accent: var(--fd-accent-d);
     --fd-accent-rgb: var(--fd-accent-d-rgb);
@@ -109,11 +150,18 @@
     --fd-accent-muted: rgba(var(--fd-accent-rgb), .3);
     --fd-accent-text: color-mix(in oklab, var(--fd-accent) 88%, #fff);
 
+    --fd-sidebar-from: color-mix(in oklab, var(--fd-accent-l) 16%, #07061a);
+    --fd-sidebar-to: color-mix(in oklab, var(--fd-accent-2) 26%, #0c0826);
+
+    --fd-auth-from: color-mix(in oklab, var(--fd-accent-l) 45%, #07061a);
+    --fd-auth-to: color-mix(in oklab, var(--fd-accent-2) 62%, #0c0826);
+
     color-scheme: dark;
 }
 
-/* Accent palettes: <html data-color-palette="…">. Old names map to the nearest new one. */
-[data-color-palette="indigo"] { --fd-accent-l: #4f46e5; --fd-accent-l-rgb: 79, 70, 229;   --fd-accent-d: #818cf8; --fd-accent-d-rgb: 129, 140, 248; }
+/* Accent palettes: <html data-color-palette="…">. Old names map to the nearest new one.
+   The default, indigo, is the project's brand (above). */
+[data-color-palette="indigo"] { --fd-accent-l: var(--fd-brand); --fd-accent-l-rgb: var(--fd-brand-rgb); --fd-accent-d: var(--fd-brand-dark); --fd-accent-d-rgb: var(--fd-brand-dark-rgb); }
 [data-color-palette="blue"]   { --fd-accent-l: #2563eb; --fd-accent-l-rgb: 37, 99, 235;   --fd-accent-d: #60a5fa; --fd-accent-d-rgb: 96, 165, 250; }
 [data-color-palette="violet"],
 [data-color-palette="purple"] { --fd-accent-l: #7c3aed; --fd-accent-l-rgb: 124, 58, 237;  --fd-accent-d: #a78bfa; --fd-accent-d-rgb: 167, 139, 250; }
@@ -133,6 +181,30 @@
     --fd-accent-d: var(--custom-primary, #818cf8);
     --fd-accent-d-rgb: var(--custom-primary-rgb, 129, 140, 248);
 }
+
+/* Derived from the accent, so one brand change reaches all of them. After the palettes:
+   each value must see the palette's accent. */
+:root,
+[data-color-palette] {
+    --fd-accent-2: color-mix(in oklab, var(--fd-accent-l) 55%, #c084fc);
+    --fd-gradient: linear-gradient(135deg, var(--fd-accent-l), var(--fd-accent-2));
+    --fd-gradient-x: linear-gradient(90deg, var(--fd-accent-l), var(--fd-accent-2));
+    --fd-glow: rgba(var(--fd-accent-l-rgb), .4);
+    /* Overlays on the gradient (hero card, sign-in panel) */
+    --fd-on-brand-muted: color-mix(in srgb, var(--fd-on-brand) 72%, transparent);
+    --fd-on-brand-faint: color-mix(in srgb, var(--fd-on-brand) 60%, transparent);
+    --fd-on-brand-tint: color-mix(in srgb, var(--fd-on-brand) 20%, transparent);
+    --fd-on-brand-sheen: color-mix(in srgb, var(--fd-on-brand) 22%, transparent);
+    --fd-on-brand-hairline: color-mix(in srgb, var(--fd-on-brand) 14%, transparent);
+    --fd-auth-bar: color-mix(in srgb, var(--fd-on-brand) 14%, transparent);
+    --fd-auth-bar-peak: color-mix(in srgb, var(--fd-on-brand) 34%, transparent);
+    --fd-auth-orb: color-mix(in srgb, var(--fd-accent-2) 70%, transparent);
+}
+/* The gradient's far end: the brand's second colour for the default palette, and the optional
+   second custom colour (Settings → Theme) for "custom"; other palettes mix it from the accent. */
+:root:not([data-color-palette]),
+[data-color-palette="indigo"] { --fd-accent-2: var(--fd-brand-2); }
+[data-color-palette="custom"] { --fd-accent-2: var(--custom-primary-2, color-mix(in oklab, var(--fd-accent-l) 55%, #c084fc)); }
 
 /* Tinted pairs for each status colour. Declared here, after both themes, because a
    var() inside a custom property resolves where it is declared: they must see the
@@ -183,3 +255,18 @@
 
 [data-radius="sharp"] { --fd-radius-sm: .125rem; --fd-radius: .25rem; --fd-radius-lg: .375rem; }
 [data-radius="soft"] { --fd-radius-sm: .625rem; --fd-radius: .875rem; --fd-radius-lg: 1.25rem; }
+
+/* The brand sidebar's own palette (Settings → Theme → Sidebar: Brand), the same in both colour modes */
+.sidebar.sidebar-brand {
+    --fd-sidebar-bg: transparent;
+    --fd-sidebar-color: color-mix(in oklab, #ffffff 74%, var(--fd-accent-2));
+    --fd-sidebar-color-strong: var(--fd-on-brand);
+    --fd-sidebar-hover-bg: color-mix(in srgb, #ffffff 8%, transparent);
+    --fd-sidebar-active-bg: var(--fd-gradient);
+    --fd-sidebar-active-color: var(--fd-on-brand);
+    --fd-sidebar-icon-active: var(--fd-on-brand);
+    --fd-sidebar-border: color-mix(in srgb, #ffffff 8%, transparent);
+    --fd-sidebar-header: color-mix(in oklab, #ffffff 52%, var(--fd-accent-2));
+    --fd-sidebar-panel: color-mix(in srgb, #ffffff 6%, transparent);
+    --fd-sidebar-panel-hover: color-mix(in srgb, #ffffff 10%, transparent);
+}

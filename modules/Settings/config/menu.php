@@ -83,6 +83,15 @@ return [
     ],
     [
         'group' => 'settings',
+        'label' => 'Login Page',
+        'icon' => 'ph ph-sign-in',
+        'route' => 'admin.settings.special.login_page',
+        'routes' => ['admin.settings.special.update_login_page'],
+        'permissions' => ['Edit Special Setting'],
+        'order' => 88,
+    ],
+    [
+        'group' => 'settings',
         'label' => 'Theme',
         'icon' => 'ph ph-paint-brush',
         'route' => 'admin.settings.special.theme',

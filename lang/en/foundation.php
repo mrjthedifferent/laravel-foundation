@@ -269,8 +269,12 @@ return [
     |--------------------------------------------------------------------------
     */
     'auth' => [
-        'tagline' => 'Everything your team runs on, in one quiet place.',
-        'tagline_meta' => 'Users, roles, settings and logs for :app.',
+        'tagline' => 'Your whole operation, in one secure place.',
+        'tagline_meta' => 'Sign in to :app to pick up where your team left off.',
+        // The sign-in panel's feature bullets (config/foundation-login.php)
+        'highlight_access' => 'Roles and permissions down to every action',
+        'highlight_audit' => 'Every change logged, every sign-in traceable',
+        'highlight_insight' => 'A live dashboard of what matters today',
         'show_password' => 'Show password',
         'confirm_password' => 'Confirm Password',
         'confirm_password_notice' => 'Please confirm your password before continuing.',
@@ -281,11 +285,11 @@ return [
         'email' => 'Email',
         'send_reset_link' => 'Send Password Reset Link',
         'back_to_sign_in' => 'Back to sign in',
-        'login_heading' => 'Login to your account',
-        'login_subheading' => 'Enter your credentials below',
+        'login_heading' => 'Welcome back',
+        'login_subheading' => 'Sign in with your email or phone and password.',
         'email_or_phone' => 'Email or Phone',
         'remember_me' => 'Remember Me',
-        'login_button' => 'Login',
+        'login_button' => 'Sign in',
         'or_login_with' => 'Or login with',
         'set_new_password' => 'Set new password',
         'enter_account_details' => 'Enter your account details below',

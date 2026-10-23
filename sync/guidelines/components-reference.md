@@ -144,14 +144,14 @@ pattern. Its body is a grid; put fields in `.fd-fields`.
 | Tag | Props / notes |
 |---|---|
 | `<x-status-badge :active="$m->is_active" active-label="…" inactive-label="…" />` | `.fd-status` dot + translated label |
-| `<x-stat-card label value icon color href change :change-up caption :series>` | KPI tile. `color`: `primary success warning danger info secondary`. `series`: list of ints, draws a sparkline |
+| `<x-stat-card label value icon color href change :change-up caption :series hero>` | KPI tile. `color`: `primary success warning danger info secondary`. `series`: list of ints, draws a sparkline. `hero`: the headline figure, on the brand gradient |
 | `<x-empty-state icon="ph ph-users" title="No users" text="Add the first one">` + slot | The one empty state; the slot is the next step (a button) |
 | `<x-skeleton :rows="3" :avatar="true" />` | Shimmering placeholder while a list loads |
 | `<x-truncated-text :text="…" :limit="50" />` | Truncates with a tooltip holding the full text |
 | `<x-image src="…" alt="…" :max-width="40" />` | A bounded image |
 | `<x-sparkline :series="[1,4,2]" />` | Tiny trend line (decorative) |
-| `<x-chart-area :series="$day=>count" :previous="[…]" label="…" />` | Area chart; `previous` draws the comparison line on the same scale |
-| `<x-chart-bar :series="['Label' => 12]" label="…" />` | Ranked horizontal bars |
+| `<x-chart-area :series="$day=>count" :previous="[…]" label="…" />` | Area chart; `previous` draws the comparison line on the same scale. Each line's last value is written at its end; `:labels="false"` drops those labels |
+| `<x-chart-bar :series="['Label' => 12]" label="…" />` | Ranked horizontal bars, one series hue per row, each value at the end of its bar; `:labels="false"` puts the values in a column instead |
 | `<x-chart-donut :parts="[['label'=>'Paid','value'=>8,'tone'=>'success']]" label="…" />` | Donut; tones `accent success warning danger info muted` |
 | `<x-chart-heatmap :matrix="$weekdayByHour" label="…" />` | 7×24 grid, Monday first; build the matrix with `HourlySeries` |
 

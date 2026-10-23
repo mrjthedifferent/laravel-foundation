@@ -29,6 +29,38 @@ class ConfigMappedSettingsTest extends TestCase
         $this->assertArrayNotHasKey('app_name', $map);
     }
 
+    public function test_the_map_includes_modules_that_boot_after_settings(): void
+    {
+        // ErrorReport (priority 6) registers its definitions after Settings (priority 2) has booted.
+        $map = app(SettingsConfigApplier::class)->map();
+
+        $this->assertSame('logging.channels.slack.url', $map['error_report_slack_webhook']);
+        $this->assertSame('foundation-login.graphic', $map['login_panel_graphic']);
+    }
+
+    public function test_a_late_modules_stored_value_is_applied_once_every_module_has_booted(): void
+    {
+        Setting::create(['key' => 'error_report_slack_webhook', 'group' => 'Error Report', 'type' => 'text', 'value' => 'https://hooks.example.test/late']);
+        Setting::create(['key' => 'date_format', 'group' => 'General', 'type' => 'text', 'value' => 'd M Y']);
+        app(SettingsRepository::class)->forget();
+
+        // As at boot: the Settings module applies before ErrorReport's definitions exist.
+        $definitions = config('errorreport.settings');
+        config(['errorreport.settings' => [], 'logging.channels.slack.url' => null]);
+        $applier = new SettingsConfigApplier(app(SettingsRepository::class));
+        $applier->apply();
+        $this->assertNull(config('logging.channels.slack.url'));
+
+        // Something another provider sets in its own boot() must survive.
+        config(['foundation.formats.date' => 'Y/m/d']);
+
+        config(['errorreport.settings' => $definitions]);
+        $applier->applyLateMappings();
+
+        $this->assertSame('https://hooks.example.test/late', config('logging.channels.slack.url'));
+        $this->assertSame('Y/m/d', config('foundation.formats.date'));
+    }
+
     public function test_the_seeder_takes_unset_values_from_config_and_skips_page_owned_settings(): void
     {
         config(['foundation.formats.date' => 'd/m/Y', 'foundation.pagination.default' => 25]);

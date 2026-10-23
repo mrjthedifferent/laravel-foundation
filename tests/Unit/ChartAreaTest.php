@@ -87,6 +87,24 @@ class ChartAreaTest extends TestCase
         $this->assertStringContainsString('40', $chart->summary);
     }
 
+    public function test_the_end_labels_sit_on_opposite_sides_so_they_never_overlap(): void
+    {
+        $alone = new ChartArea($this->series([10, 20]));
+        $this->assertCount(1, $alone->endLabels);
+        $this->assertSame(['class' => 'is-current', 'value' => '20'], array_intersect_key($alone->endLabels[0], ['class' => 1, 'value' => 1]));
+        // The top of the plot: the label drops below its point rather than leave the chart.
+        $this->assertFalse($alone->endLabels[0]['above']);
+        $this->assertSame(98.44, $alone->endLabels[0]['left']);
+
+        $falling = new ChartArea($this->series([100, 40]), '', $this->series([20, 80]));
+        [$current, $previous] = $falling->endLabels;
+        $this->assertFalse($current['above'], 'the lower end writes below');
+        $this->assertTrue($previous['above'], 'the higher end writes above');
+
+        $this->assertSame([], (new ChartArea($this->series([10, 20]), '', [], false))->endLabels);
+        $this->assertSame([], (new ChartArea($this->series([0, 0])))->endLabels);
+    }
+
     public function test_the_comparison_line_shares_the_scale_of_the_current_period(): void
     {
         $alone = new ChartArea($this->series([10, 20]));

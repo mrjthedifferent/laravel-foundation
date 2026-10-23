@@ -10,14 +10,30 @@ page at once. Write against the tokens and your code follows the theme for free;
 |---|---|---|
 | Colour mode | `light` · `dark` · `auto` | `<html data-theme>` |
 | Direction | `ltr` · `rtl` | `<html dir>` |
-| Accent | `indigo` `blue` `violet` `teal` `green` `amber` `rose` `slate`, or `custom` + a hex | `<html data-color-palette>` (+ `--custom-primary*`) |
-| Sidebar colour / type | `light` `dark` / `default` `mini` | sidebar classes |
+| Accent | `indigo` (shown as "Brand": the project's brand colours) `blue` `violet` `teal` `green` `amber` `rose` `slate`, or `custom` + a hex and an optional second hex (the gradient's far end) | `<html data-color-palette>` (+ `--custom-primary*`, `--custom-primary-2`) |
+| Sidebar colour / type | `brand` (default: a deep brand gradient in both modes) `light` `dark` / `default` `mini` | `sidebar-brand` / `-light` / `-dark` classes |
 | Page width | `fluid` (default) · `boxed` (max 1600px) | `<html data-width>` → `--fd-content-max` |
 | Density | `comfortable` · `compact` | `<html data-density>` → control height, field and cell padding, card padding |
 | Corners | `sharp` · `rounded` · `soft` | `<html data-radius>` → `--fd-radius-sm/-/-lg` |
 
 Stored as `theme_*` settings, resolved by `Mrj\Foundation\Services\ThemeResolver` (invalid values fall back to the defaults). Do not build settings or UI
 that assume a layout picker, navbar colours or a font picker — they do not exist; the type is Inter everywhere.
+
+### The project's brand
+
+A project sets its brand in one place, its `resources/css/app.css` (after the package import), then `npm run build`:
+
+```css
+:root {
+    --fd-brand: #0f766e;      --fd-brand-rgb: 15, 118, 110;      /* primary */
+    --fd-brand-2: #06b6d4;                                       /* the gradient's second colour */
+    --fd-brand-dark: #2dd4bf; --fd-brand-dark-rgb: 45, 212, 191; /* primary on dark surfaces */
+}
+```
+
+The sidebar, the active item, buttons, the hero stat card, chart lines, links, focus rings and tints all derive from these. Keep each `-rgb` triplet in
+step with its hex. They apply while Settings → Theme → Accent is the default (`indigo`, shown as "Brand"); another accent, or `custom`, overrides them at
+run time without a build. Never restyle components to change the brand.
 
 ### Tokens you may use (`var(--fd-…)`)
 
@@ -26,13 +42,15 @@ that assume a layout picker, navbar colours or a font picker — they do not exi
 | Surfaces | `canvas` (page) · `surface` (cards) · `subtle` · `hover` |
 | Lines | `border` · `border-strong` |
 | Text | `text` · `text-strong` · `muted` · `faint` |
+| Brand | `brand` `brand-2` `brand-dark` (+ `-rgb`) · `on-brand` · `accent-2` · `gradient` (135°) · `gradient-x` (90°) · `glow` · `on-brand-muted/-faint/-tint/-sheen/-hairline` (overlays on the gradient) |
 | Accent | `accent` · `accent-hover` · `accent-subtle` · `accent-muted` · `accent-text` · `accent-solid` · `on-accent` · `accent-rgb` (for `rgba(var(--fd-accent-rgb), .2)`) |
 | Status | `success` `warning` `danger` `info`, each with `-rgb`, `-subtle`, `-border`, `-text` |
+| Charts | `chart-1` … `chart-4` (+ `-rgb`; categorical, colourblind-safe, in series order) · `on-chart` · `on-chart-4` (type on a solid series colour) |
 | Type | `font` · `mono` · `text-xs` (12px) `text-sm` `text-base` (14px) `text-md` `text-lg` `text-xl` `text-2xl` |
-| Shape | `radius-sm` · `radius` · `radius-lg` · `shadow-xs/-sm/-md/-lg` |
+| Shape | `radius-sm` · `radius` · `radius-lg` · `radius-chip` · `radius-pill` · `shadow-xs/-sm/-md/-lg` · `shadow-card` |
 | Rhythm | `control-h` · `control-h-sm` · `field-y` · `cell-y` · `card-pad` · `gutter` · `content-max` |
 | Motion | `ease` · `duration` |
-| Shell | `sidebar-width` · `sidebar-mini-width` · `navbar-height` · `footer-height` |
+| Shell | `sidebar-width` · `sidebar-mini-width` · `navbar-height` · `footer-height` · `topbar-control` · `sidebar-from/-to` · `auth-from/-to` |
 
 Never hard-code a colour, a radius or a control height. Use `color-mix(in srgb, var(--fd-accent) 20%, transparent)` rather than a literal tint.
 
@@ -73,6 +91,17 @@ These are written once in the package; use the class, do not restyle it: `.btn` 
 `.form-check`, `.form-switch`, `.input-group`, `.dropdown-menu`/`-item`, `.modal`/`.offcanvas`, `.nav-tabs`/`.nav-pills`, `.pagination`, `.breadcrumb`,
 `.list-group`, `.progress`, `.spinner-border`, and the `.fd-*` vocabulary (`fd-icon-tile`, `fd-avatar`, `fd-status`, `fd-empty`, `fd-dl`, `fd-feed`, `fd-overline`,
 `fd-stat*`, `fd-segmented`, `fd-chip`, `fd-drop`, `fd-fields`, `fd-form-actions`, …) listed in `ui-components.md`.
+
+### The sign-in page
+
+Every guest page (sign-in, password reset, 2FA, email verification) has a brand panel beside the form. Do not override `layouts/guest.blade.php`
+to change it; three layers decide it, first match wins:
+
+1. **Settings → Login page** in the admin (`admin.settings.special.login_page`, permission `Edit Special Setting`): headline, subheadline, feature
+   bullets (icon + text), mark (`auto` / `monogram` / `none`), app name on/off, graphic (`bars` / `glow` / `none`). Stored as `login_panel_*` settings.
+2. **`config/foundation-login.php`** (`php artisan vendor:publish --tag=foundation-login`): the project's defaults for the same keys. Text values go
+   through `__()`, so they are translation keys or plain text, with `:app` as the app name.
+3. **Translations** (`foundation::foundation.auth.tagline`, `tagline_meta`, `highlight_*`): what a `null` text falls back to, in every locale.
 
 ### Dark mode and RTL
 

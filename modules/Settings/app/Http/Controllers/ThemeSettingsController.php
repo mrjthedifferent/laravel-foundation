@@ -20,6 +20,7 @@ class ThemeSettingsController extends Controller
         'theme_direction',
         'theme_color_palette',
         'theme_custom_color',
+        'theme_custom_color_2',
         'theme_sidebar_color',
         'theme_sidebar_type',
         'theme_content_width',
@@ -42,7 +43,7 @@ class ThemeSettingsController extends Controller
         'theme_color_mode' => ['light', 'dark', 'auto'],
         'theme_direction' => ['ltr', 'rtl'],
         'theme_color_palette' => ['indigo', 'blue', 'violet', 'teal', 'green', 'amber', 'rose', 'slate', 'custom'],
-        'theme_sidebar_color' => ['light', 'dark'],
+        'theme_sidebar_color' => ['light', 'dark', 'brand'],
         'theme_sidebar_type' => ['default', 'mini'],
         'theme_content_width' => ['fluid', 'boxed'],
         'theme_density' => ['comfortable', 'compact'],
@@ -98,7 +99,9 @@ class ThemeSettingsController extends Controller
             'theme_direction' => 'ltr',
             'theme_color_palette' => 'indigo',
             'theme_custom_color' => '#4f46e5',
-            'theme_sidebar_color' => 'light',
+            // Blank: the gradient's second colour is mixed from the first
+            'theme_custom_color_2' => '',
+            'theme_sidebar_color' => 'brand',
             'theme_sidebar_type' => 'default',
             'theme_content_width' => 'fluid',
             'theme_density' => 'comfortable',
@@ -118,7 +121,7 @@ class ThemeSettingsController extends Controller
             return $default;
         }
 
-        if ($key === 'theme_custom_color') {
+        if ($key === 'theme_custom_color' || $key === 'theme_custom_color_2') {
             return preg_match('/^#[0-9a-fA-F]{6}$/', $value) ? $value : $default;
         }
 
@@ -138,6 +141,6 @@ class ThemeSettingsController extends Controller
      */
     private function keyType(string $key): string
     {
-        return $key === 'theme_custom_color' ? 'text' : 'select';
+        return in_array($key, ['theme_custom_color', 'theme_custom_color_2'], true) ? 'text' : 'select';
     }
 }

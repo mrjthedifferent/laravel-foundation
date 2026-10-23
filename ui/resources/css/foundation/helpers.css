@@ -30,10 +30,11 @@
 [data-theme="dark"] .fd-icon-tile { background: rgba(var(--fd-tile), .16); }
 .fd-icon-tile-sm { width: 1.75rem; height: 1.75rem; font-size: .9375rem; border-radius: var(--fd-radius-sm); }
 .fd-icon-tile-lg { width: 2.75rem; height: 2.75rem; font-size: 1.375rem; border-radius: var(--fd-radius-lg); }
-.fd-icon-tile.is-success { --fd-tile: var(--fd-success-rgb); }
-.fd-icon-tile.is-warning { --fd-tile: var(--fd-warning-rgb); }
+/* Tones take the chart palette's hues (danger keeps the status red) */
+.fd-icon-tile.is-success { --fd-tile: var(--fd-chart-3-rgb); }
+.fd-icon-tile.is-warning { --fd-tile: var(--fd-chart-4-rgb); }
 .fd-icon-tile.is-danger  { --fd-tile: var(--fd-danger-rgb); }
-.fd-icon-tile.is-info    { --fd-tile: var(--fd-info-rgb); }
+.fd-icon-tile.is-info    { --fd-tile: var(--fd-chart-1-rgb); }
 .fd-icon-tile.is-neutral { --fd-tile: 113, 113, 122; }
 
 /* Avatar */
@@ -47,9 +48,21 @@
 .fd-avatar-lg { width: 3.5rem; height: 3.5rem; font-size: var(--fd-text-md); }
 
 /* Area chart: hand-drawn SVG, themed through the tokens (see <x-chart-area>) */
-.chart-area { width: 100%; height: 12rem; display: block; direction: ltr; }
+.chart-area { width: 100%; height: 13rem; display: block; direction: ltr; }
+.chart-area path[stroke="var(--fd-accent)"] { stroke-width: 2.5; }
 .chart-grid line { stroke: var(--fd-border); stroke-width: 1; }
 .chart-axis text { fill: var(--fd-muted); font: 500 11px var(--fd-font); }
+/* Direct labels: each line's last value at its end, as HTML over the plot (the SVG stretches) */
+.fd-chart-plot { position: relative; direction: ltr; }
+.fd-chart-end {
+    position: absolute; transform: translate(calc(-100% + .5rem), calc(-100% - .625rem));
+    padding: .0625rem .4375rem; border-radius: var(--fd-radius-pill);
+    font-size: var(--fd-text-xs); font-weight: 600; line-height: 1.5; white-space: nowrap; font-variant-numeric: tabular-nums;
+    pointer-events: none;
+}
+.fd-chart-end.is-below { transform: translate(calc(-100% + .5rem), .625rem); }
+.fd-chart-end.is-current { background: var(--fd-accent-solid); color: var(--fd-on-accent); box-shadow: 0 4px 10px -4px var(--fd-glow); }
+.fd-chart-end.is-previous { background: var(--fd-surface); color: var(--fd-muted); box-shadow: inset 0 0 0 1px var(--fd-border); }
 
 /* Keyboard hint */
 .fd-kbd {
@@ -67,6 +80,24 @@
 .fd-status.is-warning::before { background: var(--fd-warning); box-shadow: 0 0 0 3px rgba(var(--fd-warning-rgb), .16); }
 .fd-status.is-danger::before  { background: var(--fd-danger);  box-shadow: 0 0 0 3px rgba(var(--fd-danger-rgb), .16); }
 .fd-status.is-info::before    { background: var(--fd-info);    box-shadow: 0 0 0 3px rgba(var(--fd-info-rgb), .16); }
+/* With a label, a toned status is a chip: an icon and the label on a tint (good / warn / critical / info).
+   The glyph is a mask, so it takes the chip's text colour. */
+.fd-status:not(:empty):is(.is-success, .is-warning, .is-danger, .is-info) {
+    padding: .1875rem .5625rem .1875rem .4375rem; border-radius: var(--fd-radius-pill);
+    font-size: .71875rem; font-weight: 600; line-height: 1.35;
+    --fd-status-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 8v5M12 16h.01'/%3E%3C/svg%3E");
+}
+.fd-status:not(:empty).is-success {
+    --fd-status-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E");
+}
+.fd-status:not(:empty):is(.is-success, .is-warning, .is-danger, .is-info)::before {
+    width: .75rem; height: .75rem; border-radius: 0; box-shadow: none; background: currentColor;
+    mask: var(--fd-status-icon) center / contain no-repeat;
+}
+.fd-status:not(:empty).is-success { background: var(--fd-success-subtle); color: var(--fd-success-text); }
+.fd-status:not(:empty).is-warning { background: var(--fd-warning-subtle); color: var(--fd-warning-text); }
+.fd-status:not(:empty).is-danger { background: var(--fd-danger-subtle); color: var(--fd-danger-text); }
+.fd-status:not(:empty).is-info { background: var(--fd-info-subtle); color: var(--fd-info-text); }
 
 
 /* Empty state */
@@ -81,11 +112,31 @@
 .fd-empty-text { font-size: var(--fd-text-sm); color: var(--fd-muted); max-width: 22rem; }
 .fd-empty .btn { margin-top: .75rem; }
 
-/* Stat card */
-.fd-stat { display: flex; flex-direction: column; gap: .75rem; padding: 1.25rem; }
-.fd-stat-head { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
-.fd-stat-label { font-size: var(--fd-text-sm); font-weight: 500; color: var(--fd-muted); }
-.fd-stat-value { font-size: var(--fd-text-2xl); font-weight: 600; letter-spacing: -.025em; line-height: 1; color: var(--fd-text-strong); font-variant-numeric: tabular-nums; }
+/* Stat card: the icon chip first, then the label; a solid colour with a white glyph */
+.fd-stat { display: flex; flex-direction: column; gap: .75rem; padding: 1rem 1.0625rem 1.0625rem; }
+.fd-stat-head { display: flex; flex-direction: row-reverse; align-items: center; justify-content: flex-end; gap: .5625rem; }
+.fd-stat-label { font-size: .78125rem; font-weight: 500; color: var(--fd-muted); }
+.fd-stat-value { font-size: 1.6875rem; font-weight: 700; letter-spacing: -.03em; line-height: 1; color: var(--fd-text-strong); font-variant-numeric: tabular-nums; }
+.fd-stat .fd-icon-tile { width: 2.125rem; height: 2.125rem; border-radius: var(--fd-radius-chip); font-size: 1.0625rem; background: rgb(var(--fd-tile)); color: var(--fd-on-chart); }
+.fd-stat .fd-icon-tile:not(.is-success, .is-warning, .is-danger, .is-info, .is-neutral) { background: var(--fd-gradient); color: var(--fd-on-brand); }
+.fd-stat .fd-icon-tile.is-warning { color: var(--fd-on-chart-4); }
+
+/* The hero: the headline stat on the brand gradient (<x-stat-card hero>; the dashboard's first) */
+.fd-stat-hero {
+    overflow: hidden; border-color: transparent; color: var(--fd-on-brand);
+    background: var(--fd-gradient);
+    box-shadow: 0 12px 28px -10px var(--fd-glow), var(--fd-shadow-xs);
+}
+.fd-stat-hero::before {
+    content: ""; position: absolute; width: 11rem; height: 11rem; inset-inline-end: -3.5rem; top: -4.5rem;
+    border-radius: 50%; background: radial-gradient(circle, var(--fd-on-brand-sheen), transparent 70%); pointer-events: none;
+}
+.fd-stat-hero :is(.fd-stat-label, .fd-stat-value, .fd-stat-foot) { color: var(--fd-on-brand); }
+.fd-stat-hero .fd-stat-foot { opacity: .9; }
+.fd-stat-hero .fd-stat .fd-icon-tile { background: var(--fd-on-brand-tint); color: var(--fd-on-brand); }
+.fd-stat-hero .fd-spark-wrap { color: var(--fd-on-brand); }
+.fd-stat-hero .fd-stat-foot .fd-delta,
+[data-theme="dark"] .fd-stat-hero .fd-stat-foot .fd-delta { background: var(--fd-on-brand-tint); color: var(--fd-on-brand); }
 .fd-stat-foot { display: flex; align-items: center; gap: .5rem; font-size: var(--fd-text-sm); color: var(--fd-muted); }
 .fd-delta { display: inline-flex; align-items: center; gap: .125rem; font-weight: 600; font-size: var(--fd-text-xs); padding: .0625rem .375rem; border-radius: 999px; font-variant-numeric: tabular-nums; }
 /* A shade darker than the status text colours, which land just under 4.5:1 at this size */

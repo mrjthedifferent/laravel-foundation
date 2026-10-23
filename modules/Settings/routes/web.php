@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use Modules\Settings\Http\Controllers\LegalPageController;
+use Modules\Settings\Http\Controllers\LoginPageSettingsController;
 use Modules\Settings\Http\Controllers\NotificationSettingsController;
 use Modules\Settings\Http\Controllers\SecuritySettingsController;
 use Modules\Settings\Http\Controllers\SettingsController;
@@ -97,6 +98,10 @@ Route::middleware(config('foundation.routing.middleware'))
             // The 1.6 names, kept so links to them still work.
             Route::get('two-factor', [SecuritySettingsController::class, 'show'])->name('two_factor');
             Route::post('two-factor', [SecuritySettingsController::class, 'update'])->name('update_two_factor');
+
+            // Login page: the brand panel beside the sign-in form
+            Route::get('login-page', [LoginPageSettingsController::class, 'show'])->name('login_page');
+            Route::post('login-page', [LoginPageSettingsController::class, 'update'])->name('update_login_page');
 
             // Theme settings routes
             Route::get('theme', [ThemeSettingsController::class, 'show'])->name('theme');

@@ -6,10 +6,14 @@ use Illuminate\Support\Str;
 $current_route = Route::currentRouteName();
 
 $theme = $theme ?? [];
-$themeSidebarColor = $theme['sidebarColor'] ?? config('settings.theme_sidebar_color.value', 'light');
+$themeSidebarColor = $theme['sidebarColor'] ?? config('settings.theme_sidebar_color.value', 'brand');
 $themeSidebarType = $theme['sidebarType'] ?? config('settings.theme_sidebar_type.value', 'default');
 
-$sidebarColorClass = $themeSidebarColor === 'dark' ? 'sidebar-dark' : 'sidebar-light';
+$sidebarColorClass = match ($themeSidebarColor) {
+    'dark' => 'sidebar-dark',
+    'light' => 'sidebar-light',
+    default => 'sidebar-brand',
+};
 $sidebarTypeClass = $themeSidebarType === 'mini' ? 'sidebar-main-resized' : '';
 
 $user = Auth::user();

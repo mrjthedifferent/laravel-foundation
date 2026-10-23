@@ -1,10 +1,17 @@
 @if ($hasData)
-    <ul class="fd-bars" role="img" aria-label="{{ $summary }}">
+    <ul @class(['fd-bars', 'is-labelled' => $labels]) role="img" aria-label="{{ $summary }}">
         @foreach ($bars as $bar)
             <li>
                 <span class="fd-bars-label">{{ $bar['label'] }}</span>
-                <span class="fd-bars-track"><span class="fd-bars-fill" style="width: {{ $bar['percent'] }}%"></span></span>
-                <span class="fd-bars-value">{{ number_format($bar['value']) }}</span>
+                @if ($labels)
+                    {{-- Direct label: the value sits at the end of its bar --}}
+                    <span class="fd-bars-track" style="--fd-bar: {{ $bar['percent'] / 100 }}">
+                        <span class="fd-bars-fill"></span><span class="fd-bars-value">{{ number_format($bar['value']) }}</span>
+                    </span>
+                @else
+                    <span class="fd-bars-track"><span class="fd-bars-fill" style="width: {{ $bar['percent'] }}%"></span></span>
+                    <span class="fd-bars-value">{{ number_format($bar['value']) }}</span>
+                @endif
             </li>
         @endforeach
     </ul>

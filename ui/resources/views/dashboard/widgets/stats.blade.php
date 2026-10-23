@@ -1,4 +1,5 @@
-{{-- The headline stats: every enabled module contributes its own. --}}
+{{-- The headline stats: every enabled module contributes its own. The first is the hero, on the brand
+     gradient, unless a stat says otherwise ('hero' => true / false). --}}
 <div class="grid grid-cols-12 gap-4" data-fd-stats>
     @foreach ($stats as $stat)
         <div class="col-span-12 sm:col-span-6 xl:col-span-3">
@@ -11,7 +12,8 @@
                 :change="$stat['change'] ?? null"
                 :change-up="$stat['changeUp'] ?? true"
                 :caption="$stat['caption'] ?? null"
-                :series="$stat['series'] ?? null" />
+                :series="$stat['series'] ?? null"
+                :hero="(bool) ($stat['hero'] ?? $loop->first)" />
         </div>
     @endforeach
 </div>

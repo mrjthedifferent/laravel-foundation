@@ -3,7 +3,7 @@
     $rsColorMode   = $theme['colorMode'] ?? config('settings.theme_color_mode.value', 'light');
     $rsDirection   = $theme['direction'] ?? config('settings.theme_direction.value', 'ltr');
     $rsPalette     = $theme['palette'] ?? config('settings.theme_color_palette.value', 'indigo');
-    $rsSidebarClr  = $theme['sidebarColor'] ?? config('settings.theme_sidebar_color.value', 'light');
+    $rsSidebarClr  = $theme['sidebarColor'] ?? config('settings.theme_sidebar_color.value', 'brand');
     $rsSidebarType = $theme['sidebarType'] ?? config('settings.theme_sidebar_type.value', 'default');
 @endphp
 <!-- Appearance -->

@@ -48,9 +48,13 @@
     --btn-border: var(--fd-accent-solid);
     --btn-hover-color: var(--fd-on-accent);
     --btn-hover-bg: var(--fd-accent-solid-hover);
-    --btn-hover-border: var(--fd-accent-solid-hover);
-    --btn-shadow: var(--fd-shadow-xs), inset 0 1px 0 rgba(255, 255, 255, .12);
+    --btn-hover-border: transparent;
+    --btn-border: transparent;
+    --btn-shadow: 0 4px 12px -2px var(--fd-glow), inset 0 1px 0 var(--fd-on-brand-tint);
+    /* The brand gradient over the solid colour, which stays as the fallback */
+    background-image: var(--fd-gradient);
 }
+.btn-primary:hover { filter: brightness(1.07); }
 .btn-ghost, .btn-link {
     --btn-color: var(--fd-muted);
     --btn-bg: transparent;
@@ -214,7 +218,7 @@ label.required::after, .form-label.required::after {
     background-clip: border-box;
     border: 1px solid var(--fd-border);
     border-radius: var(--fd-radius-lg);
-    box-shadow: var(--fd-shadow-xs);
+    box-shadow: var(--fd-shadow-card);
     word-wrap: break-word;
 }
 .card-body { flex: 1 1 auto; padding: var(--fd-card-pad); }
@@ -226,7 +230,7 @@ label.required::after, .form-label.required::after {
 }
 .card-header:first-child { border-radius: var(--fd-card-inner-radius) var(--fd-card-inner-radius) 0 0; }
 .card-header > h5, .card-header > h6, .card-header > .card-title, .card-title {
-    margin: 0; font-size: var(--fd-text-base); font-weight: 600; color: var(--fd-text-strong); letter-spacing: -.006em;
+    margin: 0; font-size: .9375rem; font-weight: 600; color: var(--fd-text-strong); letter-spacing: -.006em;
 }
 .card-footer { padding: .75rem var(--fd-card-pad); border-top: 1px solid var(--fd-border); }
 .card-footer:last-child { border-radius: 0 0 var(--fd-card-inner-radius) var(--fd-card-inner-radius); }
@@ -241,8 +245,9 @@ label.required::after, .form-label.required::after {
 .table > :not(caption) > * > * { padding: var(--fd-cell-y) var(--fd-card-pad); background-color: transparent; }
 .table > thead > tr > th {
     position: sticky; top: 0; z-index: 1;
-    font-size: var(--fd-text-xs); font-weight: 500; text-align: inherit; white-space: nowrap;
-    color: var(--fd-muted); background: var(--fd-subtle);
+    font-size: .71875rem; font-weight: 600; text-align: inherit; white-space: nowrap;
+    text-transform: uppercase; letter-spacing: .05em;
+    color: var(--fd-muted); background: var(--fd-surface);
     border-bottom: 1px solid var(--fd-border);
 }
 .table > tbody > tr > * { border-bottom: 1px solid var(--fd-border); vertical-align: middle; font-variant-numeric: tabular-nums; }
@@ -252,12 +257,18 @@ label.required::after, .form-label.required::after {
 .table-xs > :not(caption) > * > * { padding: .625rem var(--fd-card-pad); }
 .table-nowrap th, .table-nowrap td { white-space: nowrap; }
 .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: inherit; }
+/* Initials avatars in a list: coloured squares, one series hue per row in turn */
+.table .fd-avatar { border-radius: var(--fd-radius-chip); box-shadow: none; }
+.table span.fd-avatar { color: var(--fd-on-chart); font-weight: 700; background: var(--fd-chart-1); }
+.table tbody > tr:nth-child(4n+2) span.fd-avatar { background: var(--fd-chart-2); }
+.table tbody > tr:nth-child(4n+3) span.fd-avatar { background: var(--fd-chart-3); }
+.table tbody > tr:nth-child(4n+4) span.fd-avatar { background: var(--fd-chart-4); color: var(--fd-on-chart-4); }
 
 /* Badges ------------------------------------------------------------------- */
 .badge {
     display: inline-flex; align-items: center; gap: .25rem;
-    padding: .1875rem .5rem;
-    font-size: var(--fd-text-xs); font-weight: 500; line-height: 1.35; white-space: nowrap; vertical-align: baseline;
+    padding: .1875rem .5625rem;
+    font-size: var(--fd-text-xs); font-weight: 600; line-height: 1.35; white-space: nowrap; vertical-align: baseline;
     border-radius: 999px;
     background: var(--fd-subtle); color: var(--fd-muted);
 }
@@ -440,7 +451,8 @@ a.breadcrumb-item:hover { color: var(--fd-text-strong); }
 .list-group-flush { border-radius: 0; }
 .list-group-flush > .list-group-item { border-width: 0 0 1px; border-radius: 0; }
 
-.progress { display: flex; height: .5rem; overflow: hidden; font-size: .75rem; background-color: var(--fd-subtle); border-radius: 999px; }
+.progress-bar:not([class*="bg-"]) { background-image: var(--fd-gradient-x); }
+.progress { display: flex; height: .4375rem; overflow: hidden; font-size: .75rem; background-color: var(--fd-subtle); border-radius: 999px; }
 .progress-bar { display: flex; flex-direction: column; justify-content: center; overflow: hidden; color: #fff; text-align: center; white-space: nowrap; background-color: var(--fd-accent); transition: width .6s ease; }
 
 .spinner-border {

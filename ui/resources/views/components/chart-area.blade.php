@@ -1,5 +1,6 @@
 @if ($hasData)
     {{-- The plot keeps its own left-to-right coordinates, whatever the page direction. --}}
+    <div class="fd-chart-plot">
     <svg class="chart-area" viewBox="0 0 640 200" preserveAspectRatio="none" role="img"
         aria-label="{{ $summary }}">
         <defs>
@@ -31,6 +32,13 @@
         <circle cx="{{ $lastX }}" cy="{{ $lastY }}" r="4" fill="var(--fd-surface)"
             stroke="var(--fd-accent)" stroke-width="2" vector-effect="non-scaling-stroke"></circle>
     </svg>
+    {{-- Direct labels: HTML over the plot, so the text is not stretched with the SVG. The summary
+         above already carries the figures for a screen reader. --}}
+    @foreach ($endLabels as $endLabel)
+        <span class="fd-chart-end {{ $endLabel['class'] }} {{ $endLabel['above'] ? 'is-above' : 'is-below' }}"
+            style="left: {{ $endLabel['left'] }}%; top: {{ $endLabel['top'] }}%" aria-hidden="true">{{ $endLabel['value'] }}</span>
+    @endforeach
+    </div>
 @else
     <div class="fd-empty">
         <span class="fd-empty-icon"><i class="ph ph-chart-line"></i></span>

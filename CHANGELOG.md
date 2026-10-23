@@ -4,6 +4,34 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.6.0
+
+**Added: the brand admin theme.** The admin and the sign-in pages have a new look, built entirely on `--fd-*` tokens so a project's brand reaches every part of it:
+- **The brand in one place.** New tokens `--fd-brand`, `--fd-brand-2` (the gradient's far end), `--fd-brand-dark` (each with `-rgb`) and `--fd-on-brand`. Set them in the project's `resources/css/app.css` and the sidebar, the active item, buttons, the hero card, chart lines, links, focus rings and tints all follow. They apply while Settings → Theme → Accent is the default (`indigo`, now labelled "Brand"); another accent, or `custom`, still overrides them at run time.
+- **New tokens:** `--fd-gradient`, `--fd-gradient-x`, `--fd-accent-2`, `--fd-glow`, `--fd-on-brand-*` overlays, a colourblind-safe chart palette `--fd-chart-1…4` (+ `-rgb`, light and dark steps) with `--fd-on-chart` / `--fd-on-chart-4`, `--fd-shadow-card`, `--fd-radius-chip`, `--fd-radius-pill`, `--fd-topbar-control`, `--fd-sidebar-from/-to`, `--fd-auth-from/-to`. Neutrals, status colours, `--fd-navbar-height` (4.25rem) and the `rounded` corners (8 / 10 / 16px) have new values. See `theming.md`.
+- **Restyled:** cards (soft shadow), the topbar (no hairline, search and icon buttons on cards), primary buttons (the brand gradient), stat cards (solid icon chip first), status chips (`.fd-status` with a label becomes an icon + label chip), table headers and initials avatars, segmented controls, progress bars, donut and bar colours (the chart palette). Light and dark mode both.
+- **Brand sidebar:** Settings → Theme → Sidebar has a new choice, `brand` (a deep gradient of the brand in both colour modes, class `.sidebar-brand`), and it is the default for new installs. `light` and `dark` keep their look.
+- **A second custom colour:** with Accent `custom`, Settings → Theme takes an optional second hex (`theme_custom_color_2`), the gradient's far end. Blank mixes it from the first.
+- **`<x-stat-card hero>`** puts the card on the brand gradient. The dashboard's stats widget makes its first stat the hero; a stat can set `'hero' => true|false`.
+- **Direct labels on charts:** `<x-chart-area>` writes each line's last value at its end; `<x-chart-bar>` writes each value at the end of its bar and gives each row a series hue. `:labels="false"` restores the previous markup.
+
+**Added: the sign-in page redesign and Settings → Login page.**
+- Every guest page (sign-in, password reset, 2FA, email verification) has a two-column layout: an inset brand panel (gradient, headline, feature bullets, an optional graphic) and the form on a card. On phones the panel is hidden and the brand sits above the form. New wording: "Welcome back", "Sign in", a new tagline, and three bullets (`auth.highlight_access/_audit/_insight`).
+- The panel comes from the new **`config/foundation-login.php`** (`headline`, `subheadline`, `highlights`, `mark`, `show_name`, `graphic`), merged by the package and publishable with `php artisan vendor:publish --tag=foundation-login`.
+- **Settings → Login page** (`/admin/settings/special/login-page`, routes `admin.settings.special.login_page` / `update_login_page`, permission `Edit Special Setting`) edits the same values with a live preview. They are stored as `login_panel_*` settings and applied over the config at boot, so a change shows on the next request. A blank text or "default bullets" deletes the row, so the config file (then the translation) applies again.
+- `layouts/guest.blade.php` now includes `layouts.partials.auth-aside` and `layouts.partials.auth-brand` (new, with `auth-highlights`).
+
+**Fixed**
+- **A module's config-mapped settings are applied even when it boots after the Settings module.** `SettingsConfigApplier` built its setting → config map during the Settings module's boot, before later modules (a higher priority number) had registered their `config/settings.php`, so their `'config' =>` mappings were silently ignored. The package's own ErrorReport module hit it: a saved Slack webhook never reached `logging.channels.slack.url`. The mappings those modules add are now applied once every provider has booted (only those: config other providers set in their own `boot()` is left alone). A project module no longer needs a low `priority` to make `'config' =>` work.
+
+**Upgrading**
+- `composer update mrjthedifferent/laravel-foundation`, then `php artisan foundation:publish --force` (the stylesheet) and `npm run build`. No migration.
+- **To use your brand:** put the five `--fd-brand*` tokens in `resources/css/app.css` (after the package import), or pick an accent in Settings → Theme.
+- **Existing installs keep their saved sidebar colour.** To get the brand sidebar, choose Settings → Theme → Sidebar → Brand (gradient).
+- **If you previewed this theme in a project** (the skeleton's `resources/css/theme/` and `Modules/LoginPage`): delete `tokens.css`, `skin.css` and their imports (keep your brand tokens), delete `resources/views/layouts/guest.blade.php` and `resources/views/layouts/partials/auth-*.blade.php`, delete `Modules/LoginPage` and its line in `modules_statuses.json`, then `composer dump-autoload`. Saved Login page settings keep working: the keys are the same. Keep your `config/foundation-login.php` if it differs from the package's.
+- **If you override the guest layout** (`resources/views/layouts/guest.blade.php`), compare it with the package's: the panel is now `@include('layouts.partials.auth-aside')`.
+- **Wording:** the sign-in heading and button changed ("Welcome back", "Sign in"). To keep the old ones, override `auth.login_heading` / `auth.login_button` in `lang/vendor/foundation/{locale}/foundation.php`.
+
 ## 3.5.2
 
 **Fixed**

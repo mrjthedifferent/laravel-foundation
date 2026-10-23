@@ -460,6 +460,7 @@ Props:
 | `changeUp` | `true` | `true` = green ↗ / `false` = red ↘ |
 | `caption` | `null` | What the change is measured against, e.g. "vs last month" |
 | `series` | `null` | A list of integers (oldest first): draws a sparkline beside the number |
+| `hero` | `false` | The headline figure: the card on the brand gradient. The dashboard sets it on its first stat |
 
 ```blade
 <div class="grid grid-cols-12 gap-4 mb-4">
