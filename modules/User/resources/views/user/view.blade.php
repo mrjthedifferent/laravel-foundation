@@ -252,7 +252,7 @@
                                 @forelse ($user->documents as $document)
                                     <tr>
                                         <td class="text-muted">{{ $loop->iteration }}</td>
-                                        <td>{{ $document->document_type->label() }}</td>
+                                        <td>{{ $document->typeLabel() }}</td>
                                         <td>{{ $document->document_number ?? 'N/A' }}</td>
                                         <td>
                                             <div class="flex flex-wrap gap-1">

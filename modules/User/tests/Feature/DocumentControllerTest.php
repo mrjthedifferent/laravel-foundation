@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Modules\User\Enum\DocumentType;
 use Modules\User\Models\UserDocument;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -30,6 +31,39 @@ class DocumentControllerTest extends TestCase
             )
         );
         $this->admin->assignRole($role);
+    }
+
+    /**
+     * A stored type DocumentType doesn't list (legacy data, or one a project
+     * added) used to throw a ValueError from the enum cast and crash the page.
+     */
+    public function test_user_page_renders_a_document_type_the_enum_does_not_list(): void
+    {
+        $this->admin->givePermissionTo(
+            Permission::firstOrCreate(['name' => 'View User'], ['module_name' => 'User', 'guard_name' => 'web'])
+        );
+
+        $targetUser = User::factory()->create();
+        $documentId = UserDocument::factory()->create(['user_id' => $targetUser->id, 'document_type' => 'nid'])->getKey();
+        UserDocument::whereKey($documentId)->update(['document_type' => 'trade_license']);
+
+        $this->actingAs($this->admin)
+            ->get(route('admin.users.show', $targetUser))
+            ->assertOk()
+            ->assertSee('Trade License');
+
+        $document = UserDocument::findOrFail($documentId);
+        $this->assertSame('trade_license', $document->document_type);
+        $this->assertSame('trade_license', $document->toArray()['document_type']);
+    }
+
+    public function test_a_listed_document_type_still_reads_as_the_enum(): void
+    {
+        $document = UserDocument::findOrFail(UserDocument::factory()->create(['document_type' => 'passport'])->getKey());
+
+        $this->assertSame(DocumentType::Passport, $document->document_type);
+        $this->assertSame('passport', $document->toArray()['document_type']);
+        $this->assertSame('Passport', $document->typeLabel());
     }
 
     public function test_authorized_user_can_upload_document(): void

@@ -133,6 +133,55 @@ class SettingsCrudTest extends TestCase
         $response->assertSessionHasErrors(['type']);
     }
 
+    // --- system settings form (index/store) ---
+
+    /**
+     * PHP turns dots in a top-level input name into underscores, so a field
+     * named "lead.default_status" arrived as "lead_default_status" and the
+     * setting never saved. The form names fields settings[{key}], where dots
+     * survive.
+     */
+    public function test_settings_form_saves_keys_that_contain_dots(): void
+    {
+        $this->actingAs($this->developer);
+
+        Setting::create(['key' => 'lead.default_status', 'group' => 'Lead', 'type' => 'text', 'value' => 'new']);
+        Setting::create(['key' => 'lead.auto_assign', 'group' => 'Lead', 'type' => 'boolean', 'value' => '0']);
+        Setting::create([
+            'key' => 'lead.sources', 'group' => 'Lead', 'type' => 'multi-select',
+            'options' => json_encode(['web' => 'Web', 'call' => 'Call']), 'value' => '',
+        ]);
+
+        $this->get(route('admin.settings.index'))
+            ->assertOk()
+            ->assertSee('name="settings[lead.default_status]"', false)
+            ->assertSee('name="settings[lead.sources][]"', false);
+
+        $this->post(route('admin.settings.store'), [
+            'settings' => [
+                'lead.default_status' => 'contacted',
+                'lead.auto_assign' => '1',
+                'lead.sources' => ['web', 'call'],
+            ],
+        ])->assertRedirect();
+
+        $this->assertSame('contacted', Setting::where('key', 'lead.default_status')->first()->value);
+        $this->assertTrue((bool) Setting::where('key', 'lead.auto_assign')->first()->value);
+        $this->assertSame(['web', 'call'], Setting::where('key', 'lead.sources')->first()->value);
+    }
+
+    /** A project's own copy of the form with flat field names still saves. */
+    public function test_settings_form_still_accepts_flat_field_names(): void
+    {
+        $this->actingAs($this->developer);
+
+        Setting::create(['key' => 'app_tagline', 'group' => 'General', 'type' => 'text', 'value' => 'old']);
+
+        $this->post(route('admin.settings.store'), ['app_tagline' => 'new'])->assertRedirect();
+
+        $this->assertSame('new', Setting::where('key', 'app_tagline')->first()->value);
+    }
+
     // --- edit/update ---
 
     public function test_can_view_edit_setting_page(): void

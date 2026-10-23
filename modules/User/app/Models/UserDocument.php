@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
+use Modules\User\Casts\DocumentTypeCast;
 use Modules\User\Database\Factories\UserDocumentFactory;
 use Modules\User\Enum\DocumentType;
 use Mrj\Foundation\Traits\HasImageAttribute;
@@ -22,7 +24,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @property int $id
  * @property int $user_id
- * @property string $document_type Type of document (e.g., 'nid', 'passport', 'driving_license')
+ * @property DocumentType|string $document_type Type of document (e.g., 'nid', 'passport'); a type DocumentType doesn't list stays a string
  * @property string|null $document_number Document identification number
  * @property string $file_path Path to the main document file
  * @property string|null $back_file_path Path to the back side of document (if applicable)
@@ -86,8 +88,23 @@ class UserDocument extends Model implements Auditable
     {
         return [
             'expiry_date' => 'date',
-            'document_type' => DocumentType::class,
+            'document_type' => DocumentTypeCast::class,
         ];
+    }
+
+    /**
+     * The document type's label. A type DocumentType doesn't list is shown by
+     * its stored value made readable ("trade_license" → "Trade License").
+     */
+    public function typeLabel(): string
+    {
+        $type = $this->document_type;
+
+        if ($type instanceof DocumentType) {
+            return $type->label();
+        }
+
+        return display_label(Str::headline((string) $type));
     }
 
     /**

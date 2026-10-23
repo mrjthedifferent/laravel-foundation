@@ -137,10 +137,10 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                                     {{ $setting->value ? __('settings::settings.index.currently_enabled') : __('settings::settings.index.currently_disabled') }}
                                                 </span>
                                                 <div class="form-check form-switch mb-0">
-                                                    <input type="hidden" name="{{ $setting->key }}" value="0">
+                                                    <input type="hidden" name="settings[{{ $setting->key }}]" value="0">
                                                     <input type="checkbox"
                                                         class="form-check-input settings-input"
-                                                        name="{{ $setting->key }}"
+                                                        name="settings[{{ $setting->key }}]"
                                                         id="{{ $setting->key }}"
                                                         value="1"
                                                         {{ $setting->value ? 'checked' : '' }}>
@@ -163,7 +163,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                                 <div class="text-muted text-xs">{{ __('settings::settings.index.click_to_upload_image') }}</div>
                                                 @endif
                                                 <input type="file"
-                                                    name="{{ $setting->key }}"
+                                                    name="settings[{{ $setting->key }}]"
                                                     id="{{ $setting->key }}"
                                                     class="settings-input image-preview-input absolute top-0 start-0 w-full h-full opacity-0"
                                                     accept="image/*"
@@ -180,7 +180,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                                     <i class="ph ph-file-arrow-down"></i>{{ __('settings::settings.index.view_current_file') }}
                                                 </a>
                                                 @endif
-                                                <input type="file" name="{{ $setting->key }}" id="{{ $setting->key }}"
+                                                <input type="file" name="settings[{{ $setting->key }}]" id="{{ $setting->key }}"
                                                     class="form-control form-control-sm settings-input">
                                                 <div class="form-text">{{ __('settings::settings.index.leave_empty_file') }}</div>
                                             </div>
@@ -189,7 +189,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                             @elseif ($setting->type === 'integer' || $setting->type === 'float')
                                             <input type="number"
                                                 step="{{ $setting->type === 'float' ? '0.01' : '1' }}"
-                                                name="{{ $setting->key }}"
+                                                name="settings[{{ $setting->key }}]"
                                                 id="{{ $setting->key }}"
                                                 class="form-control form-control-sm settings-input"
                                                 {{ $setting->required ? 'data-required' : '' }}
@@ -197,7 +197,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
 
                                             {{-- ── Textarea ── --}}
                                             @elseif ($setting->type === 'textarea')
-                                            <textarea name="{{ $setting->key }}"
+                                            <textarea name="settings[{{ $setting->key }}]"
                                                 id="{{ $setting->key }}"
                                                 class="form-control form-control-sm settings-input"
                                                 rows="3"
@@ -205,7 +205,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
 
                                             {{-- ── Select ── --}}
                                             @elseif ($setting->type === 'select')
-                                            <select name="{{ $setting->key }}"
+                                            <select name="settings[{{ $setting->key }}]"
                                                 id="{{ $setting->key }}"
                                                 class="form-control form-control-sm select settings-input"
                                                 data-placeholder="{{ __('settings::settings.index.select_option_placeholder') }}"
@@ -221,7 +221,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
 
                                             {{-- ── Multi-select ── --}}
                                             @elseif ($setting->type === 'multi-select')
-                                            <select name="{{ $setting->key }}[]"
+                                            <select name="settings[{{ $setting->key }}][]"
                                                 id="{{ $setting->key }}"
                                                 class="form-control form-control-sm select settings-input"
                                                 data-placeholder="{{ __('settings::settings.index.select_options_placeholder') }}"
@@ -237,7 +237,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
 
                                             {{-- ── JSON ── --}}
                                             @elseif ($setting->type === 'json')
-                                            <textarea name="{{ $setting->key }}"
+                                            <textarea name="settings[{{ $setting->key }}]"
                                                 id="{{ $setting->key }}"
                                                 class="form-control form-control-sm settings-input font-mono text-xs"
                                                 rows="5">{{ is_array($setting->value) ? json_encode($setting->value, JSON_PRETTY_PRINT) : $setting->value }}</textarea>
@@ -245,7 +245,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                             {{-- ── Encrypted ── --}}
                                             @elseif ($setting->type === 'encrypted')
                                             <input type="password"
-                                                name="{{ $setting->key }}"
+                                                name="settings[{{ $setting->key }}]"
                                                 id="{{ $setting->key }}"
                                                 class="form-control form-control-sm settings-input"
                                                 autocomplete="new-password"
@@ -255,7 +255,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
                                             {{-- ── Text (default) ── --}}
                                             @else
                                             <input type="text"
-                                                name="{{ $setting->key }}"
+                                                name="settings[{{ $setting->key }}]"
                                                 id="{{ $setting->key }}"
                                                 class="form-control form-control-sm settings-input"
                                                 {{ $setting->required ? 'data-required' : '' }}
@@ -368,7 +368,8 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
             if (file && file.type.startsWith('image/')) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    var $img = $('#' + previewId);
+                    // By element id, not a '#' selector: a key like "lead.logo" would read as a class.
+                    var $img = $(document.getElementById(previewId));
                     $img.attr('src', e.target.result).removeClass('hidden');
                     $img.closest('.border').find('.text-muted').html('<i class="ph ph-pencil me-1"></i>{{ __('settings::settings.index.click_to_change_image') }}');
                     $img.closest('.border').find('.ph-image-square').hide();

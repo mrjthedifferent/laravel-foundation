@@ -4,6 +4,12 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.5.2
+
+**Fixed**
+- **Settings whose key contains a dot save now.** PHP turns dots in a form field's name into underscores, so a key like `lead.default_status` arrived as `lead_default_status` and never saved. The Settings page now names its fields `settings[{key}]`, where dots survive. A project's own copy of the page with fields named by the key still works for keys without dots; to save dotted keys from it, rename its fields to `settings[{key}]` (`settings[{key}][]` for a multi-select).
+- **The admin user page no longer crashes on a document type `DocumentType` doesn't list** (old data, or a type a project added). `UserDocument::document_type` is still a `DocumentType` for the listed types; any other stored value now comes back as its string instead of throwing, and the page shows it readable ("trade_license" → "Trade License"). The new `UserDocument::typeLabel()` gives the label for both.
+
 ## 3.5.1
 
 **Fixed**

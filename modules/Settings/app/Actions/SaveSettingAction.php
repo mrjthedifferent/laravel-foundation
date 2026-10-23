@@ -3,6 +3,7 @@
 namespace Modules\Settings\Actions;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Modules\Settings\Models\Setting;
 use Mrj\Foundation\Services\FileManagerService;
 
@@ -74,8 +75,8 @@ final readonly class SaveSettingAction
     }
 
     /**
-     * Persist a single setting value from the system settings index form.
-     * Uses the setting key directly as the request input name.
+     * Persist a single setting value from the system settings index form,
+     * whose fields are named settings[{key}] (see submitted()).
      */
     private function saveSingleFromRequest(Setting $setting, Request $request): void
     {
@@ -130,17 +131,50 @@ final readonly class SaveSettingAction
         };
     }
 
-    // ── Helpers for saveAll (key = setting->key) ──────────────────────────────
+    // ── Helpers for saveAll (field = settings[{setting->key}]) ────────────────
+
+    /**
+     * Whether the form sent a value for this key, and the value.
+     *
+     * The form names its fields settings[{key}]: PHP turns dots in a top-level
+     * input name into underscores, and $request->input() reads dots as nesting,
+     * so a key like "lead.default_status" only survives inside the array. A flat
+     * field named by the key itself (the form before 3.5.2, or a project's own
+     * copy of it) is still read for keys without dots.
+     *
+     * @return array{0: bool, 1: mixed}
+     */
+    private function submitted(Request $request, string $key): array
+    {
+        $settings = $request->input('settings');
+
+        if (is_array($settings) && array_key_exists($key, $settings)) {
+            return [true, $settings[$key]];
+        }
+
+        return [$request->has($key), $request->input($key)];
+    }
+
+    /** The uploaded file for this key, from settings[{key}] or a flat field. */
+    private function submittedFile(Request $request, string $key): ?UploadedFile
+    {
+        $files = $request->file('settings');
+        $file = is_array($files) && array_key_exists($key, $files) ? $files[$key] : $request->file($key);
+
+        return $file instanceof UploadedFile && $file->isValid() ? $file : null;
+    }
 
     /** Upload a new file/image; skip if nothing submitted. */
     private function saveFileByKey(Setting $setting, Request $request): void
     {
-        if (! $request->hasFile($setting->key)) {
+        $file = $this->submittedFile($request, $setting->key);
+
+        if (! $file) {
             return;
         }
 
         $path = FileManagerService::uploadFile(
-            $request->file($setting->key),
+            $file,
             $setting->value ?? null,
             'settings'
         );
@@ -152,7 +186,8 @@ final readonly class SaveSettingAction
     /** Save boolean from hidden-0 + optional checkbox-1 pattern. */
     private function saveBooleanByKey(Setting $setting, Request $request): void
     {
-        $newValue = (bool) $request->input($setting->key, 0);
+        [, $submitted] = $this->submitted($request, $setting->key);
+        $newValue = (bool) ($submitted ?? 0);
 
         if ($setting->value !== $newValue) {
             $setting->value = $newValue;
@@ -163,7 +198,7 @@ final readonly class SaveSettingAction
     /** Save multi-select array; always persist so deselecting all clears the value. */
     private function saveMultiSelectByKey(Setting $setting, Request $request): void
     {
-        $newValue = $request->input($setting->key, []);
+        [, $newValue] = $this->submitted($request, $setting->key);
         $setting->value = is_array($newValue) ? $newValue : [];
         $setting->save();
     }
@@ -171,17 +206,19 @@ final readonly class SaveSettingAction
     /** Save any scalar type; skip entirely if key absent from request or value is null. */
     private function saveScalarByKey(Setting $setting, Request $request): void
     {
-        if (! $request->has($setting->key) || is_null($request->input($setting->key))) {
+        [$has, $submitted] = $this->submitted($request, $setting->key);
+
+        if (! $has || is_null($submitted)) {
             return;
         }
 
         // A blank password field means "keep the current secret", not "erase it";
         // browsers never prefill password inputs, so blank is the common case.
-        if ($setting->type === 'encrypted' && $request->input($setting->key) === '') {
+        if ($setting->type === 'encrypted' && $submitted === '') {
             return;
         }
 
-        $setting->value = $request->input($setting->key);
+        $setting->value = $submitted;
         $setting->save();
     }
 
@@ -192,11 +229,11 @@ final readonly class SaveSettingAction
      */
     private function saveJsonOrArrayByKey(Setting $setting, Request $request): void
     {
-        if (! $request->has($setting->key)) {
+        [$has, $submitted] = $this->submitted($request, $setting->key);
+
+        if (! $has) {
             return;
         }
-
-        $submitted = $request->input($setting->key);
 
         // Treat null or blank submission as "no change" — keep existing value
         if (is_null($submitted) || trim((string) $submitted) === '') {
