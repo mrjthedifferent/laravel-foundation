@@ -120,6 +120,78 @@ class RolePermissionTest extends TestCase
         $this->assertFalse($role->fresh()->hasPermissionTo('View Role'));
     }
 
+    public function test_cannot_grant_a_permission_the_actor_lacks(): void
+    {
+        Permission::create(['name' => 'Delete User', 'guard_name' => 'web', 'module_name' => 'User']);
+        $role = Role::create(['name' => 'Writer', 'guard_name' => 'web']);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.role.assign.permission', $role), ['permissions' => ['View Role', 'Delete User']])
+            ->assertSessionHasErrors('permissions');
+
+        $this->assertSame([], $role->fresh()->permissions->pluck('name')->all());
+    }
+
+    public function test_cannot_escalate_own_role(): void
+    {
+        Permission::create(['name' => 'Delete User', 'guard_name' => 'web', 'module_name' => 'User']);
+        $own = Role::create(['name' => 'Role Manager', 'guard_name' => 'web']);
+        $own->givePermissionTo(['View Role', 'Assign Permission']);
+        $manager = User::factory()->create(['is_active' => true]);
+        $manager->assignRole($own);
+
+        $this->actingAs($manager)
+            ->post(route('admin.role.assign.permission', $own), ['permissions' => ['View Role', 'Assign Permission', 'Delete User']])
+            ->assertSessionHasErrors('permissions');
+
+        $this->assertFalse($manager->fresh()->hasPermissionTo('Delete User'));
+    }
+
+    public function test_saving_keeps_the_role_permissions_the_actor_lacks(): void
+    {
+        Permission::create(['name' => 'Delete User', 'guard_name' => 'web', 'module_name' => 'User']);
+        $role = Role::create(['name' => 'Writer', 'guard_name' => 'web']);
+        $role->givePermissionTo(['View Role', 'Delete User']);
+
+        // The form doesn't submit the disabled 'Delete User' box.
+        $this->actingAs($this->admin)
+            ->post(route('admin.role.assign.permission', $role), ['permissions' => ['Edit Role']])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect();
+
+        $this->assertEqualsCanonicalizing(['Edit Role', 'Delete User'], $role->fresh()->permissions->pluck('name')->all());
+    }
+
+    public function test_super_admin_can_grant_any_permission(): void
+    {
+        Permission::create(['name' => 'Delete User', 'guard_name' => 'web', 'module_name' => 'User']);
+        $role = Role::create(['name' => 'Writer', 'guard_name' => 'web']);
+        $superAdmin = User::factory()->create(['is_active' => true]);
+        $superAdmin->forceFill(['is_super_admin' => true])->save();
+
+        $this->actingAs($superAdmin)
+            ->post(route('admin.role.assign.permission', $role), ['permissions' => ['Delete User']])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect();
+
+        $this->assertTrue($role->fresh()->hasPermissionTo('Delete User'));
+    }
+
+    public function test_assign_page_disables_permissions_the_actor_lacks(): void
+    {
+        $missing = Permission::create(['name' => 'Delete User', 'guard_name' => 'web', 'module_name' => 'User']);
+        $held = Permission::where('name', 'View Role')->firstOrFail();
+        $role = Role::create(['name' => 'Writer', 'guard_name' => 'web']);
+
+        $html = $this->actingAs($this->admin)
+            ->get(route('admin.role.assign.permission.get', $role))
+            ->assertOk()
+            ->getContent();
+
+        $this->assertMatchesRegularExpression('/value="Delete User"[^>]*disabled[^>]*id="checkBox'.$missing->id.'"/s', $html);
+        $this->assertDoesNotMatchRegularExpression('/value="View Role"[^>]*disabled[^>]*id="checkBox'.$held->id.'"/s', $html);
+    }
+
     // ── Permission management ─────────────────────────────────────────────────
 
     public function test_admin_can_view_manage_permissions_page(): void

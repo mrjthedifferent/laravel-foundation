@@ -4,6 +4,7 @@ namespace Modules\RolePermission\Tests\Unit;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Validation\ValidationException;
 use Modules\RolePermission\Actions\AssignPermissionAction;
 use Modules\RolePermission\Actions\CloneRoleAction;
 use Modules\RolePermission\Actions\DeletePermissionAction;
@@ -81,6 +82,39 @@ class RolePermissionActionsTest extends TestCase
         app(AssignPermissionAction::class)->execute($role, ['Edit Post']);
 
         $this->assertSame(['Edit Post'], $role->fresh()->permissions->pluck('name')->all());
+    }
+
+    public function test_assign_with_an_actor_refuses_permissions_the_actor_lacks(): void
+    {
+        $this->permission('View Post');
+        $this->permission('Delete Post');
+        $actor = User::factory()->create();
+        $actor->givePermissionTo('View Post');
+        $role = Role::query()->create(['name' => 'Editor', 'guard_name' => 'web']);
+
+        try {
+            app(AssignPermissionAction::class)->execute($role, ['View Post', 'Delete Post'], $actor);
+            $this->fail('Expected ValidationException.');
+        } catch (ValidationException $e) {
+            $this->assertStringContainsString('Delete Post', $e->errors()['permissions'][0]);
+        }
+
+        $this->assertSame([], $role->fresh()->permissions->pluck('name')->all());
+    }
+
+    public function test_assign_with_an_actor_only_changes_permissions_the_actor_holds(): void
+    {
+        $this->permission('View Post');
+        $this->permission('Edit Post');
+        $this->permission('Delete Post');
+        $actor = User::factory()->create();
+        $actor->givePermissionTo(['View Post', 'Edit Post']);
+        $role = Role::query()->create(['name' => 'Editor', 'guard_name' => 'web']);
+        $role->givePermissionTo(['View Post', 'Delete Post']);
+
+        app(AssignPermissionAction::class)->execute($role, ['Edit Post'], $actor);
+
+        $this->assertEqualsCanonicalizing(['Edit Post', 'Delete Post'], $role->fresh()->permissions->pluck('name')->all());
     }
 
     public function test_assigning_an_unknown_permission_throws_and_keeps_the_existing_ones(): void

@@ -78,7 +78,7 @@ class RolePermissionController extends Controller
 
     // ── Permission assignment ─────────────────────────────────────────────────
 
-    public function assignPermissionPage(Role $role): View
+    public function assignPermissionPage(Request $request, Role $role): View
     {
         $this->authorize('assignPermission', $role);
 
@@ -88,14 +88,19 @@ class RolePermissionController extends Controller
             ->get()
             ->groupBy('module_name');
 
-        return view('rolepermission::assign_permission', compact('role', 'all_permissions'));
+        // Null = every permission (Super Admin); otherwise only those the user holds.
+        $grantable = $request->user()->isSuperAdmin()
+            ? null
+            : $request->user()->getAllPermissions()->pluck('name')->all();
+
+        return view('rolepermission::assign_permission', compact('role', 'all_permissions', 'grantable'));
     }
 
     public function assignPermission(AssignPermissionRequest $request, Role $role, AssignPermissionAction $action): RedirectResponse
     {
         $this->authorize('assignPermission', $role);
 
-        $action->execute($role, $request->validated()['permissions'] ?? []);
+        $action->execute($role, $request->validated()['permissions'] ?? [], $request->user());
 
         return redirect()->back()->with('success', __('rolepermission::rolepermission.flash.permissions_assigned'));
     }

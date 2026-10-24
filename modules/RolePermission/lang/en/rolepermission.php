@@ -56,6 +56,7 @@ return [
         'check_all' => 'Check All',
         'save_permissions' => 'Save Permissions',
         'toggle_module' => 'Toggle all in :module',
+        'not_held' => 'You do not have this permission, so you cannot grant or revoke it.',
     ],
 
     'layouts' => [
@@ -89,5 +90,6 @@ return [
         'new_module_name_required_if' => 'Please enter a name for the new module.',
         'role_name_required' => 'The role name is required.',
         'role_name_unique' => 'This role name is already taken.',
+        'permission_not_held' => 'You can only grant permissions you have yourself. Not granted: :permissions.',
     ],
 ];

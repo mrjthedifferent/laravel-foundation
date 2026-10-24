@@ -45,6 +45,9 @@
                                        name="permissions[]"
                                        value="{{ $item->name }}"
                                        {{ $role->hasPermissionTo($item->name) ? 'checked' : '' }}
+                                       @if($grantable !== null && ! in_array($item->name, $grantable, true))
+                                           disabled title="{{ __('rolepermission::rolepermission.assign_permission.not_held') }}"
+                                       @endif
                                        id="checkBox{{ $item->id }}">
                                 <label class="form-check-label text-sm" for="checkBox{{ $item->id }}">
                                     {{ display_label($item->name) }}
@@ -69,11 +72,11 @@
 @push('scripts')
     <script>
         $(document).on('change', '#checkAll', function () {
-            $('.inputCheckbox').prop('checked', this.checked);
+            $('.inputCheckbox:not(:disabled)').prop('checked', this.checked);
         });
         $(document).on('change', '.checkByModule', function () {
             var cls = $(this).data('id');
-            $('.' + cls).prop('checked', this.checked);
+            $('.' + cls + ':not(:disabled)').prop('checked', this.checked);
         });
     </script>
 @endpush
