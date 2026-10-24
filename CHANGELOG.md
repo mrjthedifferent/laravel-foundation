@@ -4,6 +4,16 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.6.1
+
+**Security**
+- **Assign Permission can no longer grant permissions the user doesn't hold.** Anyone with *Assign Permission* could put any permission on any role, their own included, and so give themselves every permission. Now a user can only grant or revoke permissions they hold themselves (a Super Admin holds them all): asking for another is refused with a validation error on `permissions`, and the role's permissions the user lacks are kept as they were. The assign page shows those boxes disabled, and "Check all" skips them.
+
+**Upgrading**
+- `composer update mrjthedifferent/laravel-foundation`. No migration.
+- `AssignPermissionAction::execute()` takes an optional third argument, the acting user. Without it (seeders, console commands) the list is applied as given, as before. Pass `$request->user()` from your own controllers that let users edit roles.
+- If you override `rolepermission::assign_permission`, pass the new `$grantable` (null for a Super Admin, else the user's permission names) through to disable boxes, or keep yours: the server refuses either way.
+
 ## 3.6.0
 
 **Added: the brand admin theme.** The admin and the sign-in pages have a new look, built entirely on `--fd-*` tokens so a project's brand reaches every part of it:
