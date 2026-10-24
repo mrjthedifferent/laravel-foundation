@@ -27,6 +27,7 @@ use Modules\User\Models\AccountDeletionRequest;
 use Modules\User\Queries\UserQuery;
 use Modules\User\Services\AccountDeletion;
 use Modules\User\Services\UserRoleService;
+use Mrj\Foundation\Foundation;
 use Mrj\Foundation\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -110,8 +111,11 @@ class UserController extends Controller
 
         $user->load(['roles', 'documents', 'latestLogin']);
         $loginHistory = $user->loginHistory()->latest('logged_in_at')->paginate(perPage());
+        /** @var User $viewer */
+        $viewer = Auth::user();
+        $sections = Foundation::resolveUserPageSections($user, $viewer);
 
-        return view('user::user.view', compact('user', 'loginHistory'));
+        return view('user::user.view', compact('user', 'loginHistory', 'sections'));
     }
 
     /**

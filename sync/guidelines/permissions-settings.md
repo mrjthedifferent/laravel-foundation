@@ -170,6 +170,14 @@ Admins write both texts under Settings → Privacy Policy / Terms & Conditions (
 - **No text yet:** a page that has none is a 404.
 - **To serve your own pages instead,** set `foundation.routing.legal_pages` to `false` (`FOUNDATION_LEGAL_PAGES=false`).
 
+### The admin user page: project sections
+
+A project adds its own sections to the admin user page (`user::user.view`), below the main details:
+`Foundation::userPageSection('orders', fn (User $user, User $viewer) => $viewer->can('View Order') ? view('order::user-orders', ['user' => $user]) : null, order: 100)` in a service provider's `boot()`.
+- The resolver gets the user being viewed and the viewer. It returns a View, Htmlable or HTML string, or null to show nothing (check the viewer's permissions here).
+- Sections render by `order` (default 100), then by registration. Registering a key again replaces it. Each is wrapped in `<div class="mt-4" data-user-section="{key}">`; bring your own card.
+- With nothing registered the page is unchanged. If you override `user::user.view`, render `$sections` (key => HTML) yourself.
+
 ### Account deletion
 
 Deleting an account never erases other people's records. `Modules\User\Services\AccountDeletion` runs every path (app, web page, admin):

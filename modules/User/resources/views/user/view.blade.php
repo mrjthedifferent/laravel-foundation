@@ -409,6 +409,11 @@
         </div>
     </div>
 
+    {{-- Sections registered with Foundation::userPageSection() --}}
+    @foreach ($sections ?? [] as $key => $html)
+        <div class="mt-4" data-user-section="{{ $key }}">{!! $html !!}</div>
+    @endforeach
+
     {{-- Manage Account (non-production only) --}}
     @if (!app()->environment('production'))
         @can('Delete User')

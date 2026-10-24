@@ -6,6 +6,8 @@ use App\Models\User as AppUser;
 use Closure;
 use Composer\InstalledVersions;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Mrj\Foundation\Contracts\ErrorReporter;
@@ -36,6 +38,9 @@ final class Foundation
 
     /** @var list<Closure(AppUser): ?string> */
     private static array $accountDeletionBlockers = [];
+
+    /** @var array<string, array{resolver: Closure(AppUser, AppUser): (View|Htmlable|string|null), order: int}> */
+    private static array $userPageSections = [];
 
     /**
      * For ->withMiddleware(). Foundation defaults and the project's additions
@@ -165,6 +170,53 @@ final class Foundation
     public static function flushAccountDeletionBlockers(): void
     {
         self::$accountDeletionBlockers = [];
+    }
+
+    /**
+     * A section on the admin user page, below the main details. The resolver gets the user
+     * being viewed and the viewer, and returns HTML (a View, Htmlable or string) or null to
+     * show nothing. Sections render by order, then by registration; registering a key again
+     * replaces it. Register in a service provider's boot().
+     *
+     * @param  callable(AppUser, AppUser): (View|Htmlable|string|null)  $resolver
+     */
+    public static function userPageSection(string $key, callable $resolver, int $order = 100): void
+    {
+        self::$userPageSections[$key] = ['resolver' => $resolver(...), 'order' => $order];
+    }
+
+    /**
+     * The HTML of every registered section that renders for this viewer, in order, keyed by section key.
+     *
+     * @return array<string, string>
+     */
+    public static function resolveUserPageSections(AppUser $user, AppUser $viewer): array
+    {
+        $sections = self::$userPageSections;
+        uasort($sections, fn (array $a, array $b): int => $a['order'] <=> $b['order']);
+
+        $html = [];
+        foreach ($sections as $key => $section) {
+            $result = ($section['resolver'])($user, $viewer);
+            $result = match (true) {
+                $result instanceof View => $result->render(),
+                $result instanceof Htmlable => $result->toHtml(),
+                default => (string) $result,
+            };
+            if (trim($result) !== '') {
+                $html[$key] = $result;
+            }
+        }
+
+        return $html;
+    }
+
+    /**
+     * Drops every registered user page section (tests).
+     */
+    public static function flushUserPageSections(): void
+    {
+        self::$userPageSections = [];
     }
 
     public static function path(string $path = ''): string
