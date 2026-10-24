@@ -4,6 +4,17 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.6.2
+
+**Security**
+- **Users can only be given roles whose permissions the person assigning them holds.** Creating or editing a user could give any role: with *Edit User* and *Assign Permission* an admin could give themselves (editing your own record is always allowed) or anyone a role with permissions they lack, and bulk upload, which needs only *Create User*, took any role name from the spreadsheet. Now adding or removing a role is refused (a validation error on `roles`, or a row error in bulk upload) unless the actor holds every permission the role carries; roles a user keeps are not checked. A Super Admin can still assign any role. The create and edit pages list only the roles the actor can grant, plus the user's current ones.
+
+**Upgrading**
+- `composer update mrjthedifferent/laravel-foundation`. No migration.
+- `CreateUserAction::execute()` and `UpdateUserAction::execute()` take an optional last argument, the acting user; `BulkUserRowProcessor::process()` and `UserBulkUploadJob` take an optional actor too. Without one (seeders, console commands) any role is applied, as before. Pass `$request->user()` from your own controllers that let users set roles.
+- New `UserRoleService` methods: `grantableRoleIds()`, `assignableRoleOptions()` and `assertActorCanAssign()`.
+- A bulk upload already queued before the update runs without the limit; let the queue drain before deploying if that matters.
+
 ## 3.6.1
 
 **Security**
