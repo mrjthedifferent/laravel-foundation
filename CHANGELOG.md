@@ -4,6 +4,16 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
+## 3.7.0
+
+**Added: project sections on the admin user page.**
+- `Foundation::userPageSection(string $key, callable $resolver, int $order = 100)` adds a section to the admin user page (`user::user.view`), below the main details. The resolver gets the user being viewed and the viewer, and returns a View, Htmlable or HTML string, or null to render nothing. Sections render by order, then by registration; registering a key again replaces it. Each is wrapped in `<div class="mt-4" data-user-section="{key}">`.
+- `Foundation::resolveUserPageSections($user, $viewer)` returns the rendered sections (key => HTML); `Foundation::flushUserPageSections()` clears them (tests).
+
+**Upgrading**
+- `composer update mrjthedifferent/laravel-foundation`. No migration. With nothing registered the page is unchanged.
+- If you override `user::user.view`, render the new `$sections` variable where you want the sections.
+
 ## 3.6.2
 
 **Security**
