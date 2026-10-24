@@ -380,6 +380,8 @@ return [
         'row_phone_exists' => 'Phone: :phone already exists at row: :row',
         'row_role_required' => 'Role is required at row: :row',
         'row_role_invalid' => 'Role is invalid at row: :row',
+        'role_not_grantable' => 'You can only assign roles whose permissions you all have yourself. Not allowed: :roles.',
+        'uploader_missing' => 'The user who uploaded this file no longer exists, so no rows were imported.',
         'row_generic' => ':message at row: :row',
         'email_unique' => 'The email has already been taken',
         'roles_required' => 'At least one role must be assigned',

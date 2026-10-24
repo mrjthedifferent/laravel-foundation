@@ -4,6 +4,8 @@ namespace Modules\User\Services;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as BaseCollection;
+use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Role;
 
 /**
@@ -36,6 +38,72 @@ final readonly class UserRoleService
     public function getRoleModels(array $roleIds): Collection
     {
         return Role::whereIn('id', $roleIds)->get();
+    }
+
+    /**
+     * IDs of the roles an actor may assign: those whose permissions the actor
+     * all holds. Null means every role (a Super Admin, or no actor: seeders and
+     * console).
+     *
+     * @return array<int, int>|null
+     */
+    public function grantableRoleIds(?User $actor): ?array
+    {
+        if ($actor === null || $actor->isSuperAdmin()) {
+            return null;
+        }
+
+        $held = $actor->getAllPermissions()->pluck('name')->all();
+
+        return Role::whereDoesntHave('permissions', fn ($q) => $q->whereNotIn('name', $held))
+            ->pluck('id')
+            ->all();
+    }
+
+    /**
+     * Roles for a role picker, as name by ID: those the actor may assign, plus
+     * any listed in $keepIds (the roles a user already has).
+     *
+     * @param  array<int, int>  $keepIds
+     * @return BaseCollection<int, string>
+     */
+    public function assignableRoleOptions(?User $actor, array $keepIds = []): BaseCollection
+    {
+        $grantable = $this->grantableRoleIds($actor);
+
+        return Role::query()
+            ->when($grantable !== null, fn ($q) => $q->whereIn('id', [...$grantable, ...$keepIds]))
+            ->pluck('name', 'id');
+    }
+
+    /**
+     * Refuse a role change that adds or removes a role whose permissions the
+     * actor doesn't all hold, so no one can hand out (to themselves or anyone)
+     * more than they have. Roles the user keeps are not checked.
+     *
+     * @param  array<int, int>  $roleIds  The roles the user will have
+     * @param  array<int, int>  $currentRoleIds  The roles the user has now
+     *
+     * @throws ValidationException
+     */
+    public function assertActorCanAssign(?User $actor, array $roleIds, array $currentRoleIds = []): void
+    {
+        $grantable = $this->grantableRoleIds($actor);
+
+        if ($grantable === null) {
+            return;
+        }
+
+        $changed = array_merge(array_diff($roleIds, $currentRoleIds), array_diff($currentRoleIds, $roleIds));
+        $refused = array_diff(array_map('intval', $changed), $grantable);
+
+        if ($refused !== []) {
+            throw ValidationException::withMessages([
+                'roles' => __('user::user.errors.role_not_grantable', [
+                    'roles' => Role::whereIn('id', $refused)->pluck('name')->implode(', '),
+                ]),
+            ]);
+        }
     }
 
     /**

@@ -26,6 +26,7 @@ final readonly class BulkUploadUsersAction
             directory: 'uploads/users',
         );
 
-        UserBulkUploadJob::dispatch($importManagerId);
+        // The uploader's ID goes with the job: each row may only give roles the uploader could grant.
+        UserBulkUploadJob::dispatch($importManagerId, $user->id);
     }
 }

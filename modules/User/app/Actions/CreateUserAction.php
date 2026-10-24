@@ -15,8 +15,15 @@ final readonly class CreateUserAction
         private UserRoleService $roleService,
     ) {}
 
-    public function execute(UserData $data): User
+    /**
+     * With an actor, only roles whose permissions the actor all holds may be
+     * given (UserRoleService::assertActorCanAssign); without one (seeders,
+     * console) any role.
+     */
+    public function execute(UserData $data, ?User $actor = null): User
     {
+        $this->roleService->assertActorCanAssign($actor, $data->roles ?? []);
+
         return DB::transaction(function () use ($data) {
             // Create user
             // The OwenIt Auditable observer automatically records the 'created' event

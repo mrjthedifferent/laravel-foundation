@@ -17,10 +17,19 @@ final readonly class UpdateUserAction
         private UserRoleService $roleService,
     ) {}
 
-    public function execute(int $userId, UserData $data): User
+    /**
+     * With an actor, a role change may only add or remove roles whose
+     * permissions the actor all holds (UserRoleService::assertActorCanAssign);
+     * without one (seeders, console) any role.
+     */
+    public function execute(int $userId, UserData $data, ?User $actor = null): User
     {
-        return DB::transaction(function () use ($userId, $data) {
+        return DB::transaction(function () use ($userId, $data, $actor) {
             $user = User::with(['roles'])->findOrFail($userId);
+
+            if ($data->roles !== null) {
+                $this->roleService->assertActorCanAssign($actor, $data->roles, $user->roles->pluck('id')->all());
+            }
 
             $wasActive = (bool) $user->is_active;
 

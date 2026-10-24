@@ -29,9 +29,10 @@ final readonly class BulkUserRowProcessor
      * @param  array<string, mixed>  $row
      * @param  array<int, string>  $existingEmails  Already-known emails (mutated in place on success)
      * @param  int  $rowNo  1-based row number for error messages
+     * @param  User|null  $actor  The uploader: a row may only give roles it could grant (null: any)
      * @return string|null Error message on failure, null on success
      */
-    public function process(array $row, array &$existingEmails, int $rowNo): ?string
+    public function process(array $row, array &$existingEmails, int $rowNo, ?User $actor = null): ?string
     {
         $email = trim((string) ($row['email'] ?? ''));
 
@@ -73,7 +74,7 @@ final readonly class BulkUserRowProcessor
                 'is_active' => $row['is_active'] ?? true,
                 'gender' => $row['gender'] ?? 'male',
                 'roles' => $roleIds,
-            ]));
+            ]), $actor);
 
             $existingEmails[] = $email;
 

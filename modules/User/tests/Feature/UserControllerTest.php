@@ -17,6 +17,7 @@ use Modules\Notification\Models\FirebaseToken;
 use Modules\Notification\Notifications\AppNotification;
 use Modules\User\Jobs\UserBulkUploadJob;
 use Modules\User\Jobs\UserExportJob;
+use Modules\User\Services\BulkUserRowProcessor;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -186,6 +187,161 @@ class UserControllerTest extends TestCase
             ->assertForbidden();
 
         $this->assertSame('Untouched', $user->fresh()->name);
+    }
+
+    // ── role escalation ───────────────────────────────────────────────────────
+
+    /**
+     * A role carrying a permission the admin doesn't hold.
+     */
+    private function bossRole(): Role
+    {
+        Permission::updateOrCreate(['name' => 'Manage Payroll', 'guard_name' => 'web'], ['module_name' => 'Payroll']);
+        $boss = Role::firstOrCreate(['name' => 'Boss', 'guard_name' => 'web']);
+        $boss->givePermissionTo(['View User', 'Manage Payroll']);
+
+        return $boss;
+    }
+
+    public function test_store_refuses_a_role_with_permissions_the_actor_lacks(): void
+    {
+        $boss = $this->bossRole();
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.users.store'), [
+                'name' => 'Sock Puppet',
+                'email' => 'puppet@example.com',
+                'password' => 'secret-123',
+                'password_confirmation' => 'secret-123',
+                'roles' => [$this->role->id, $boss->id],
+            ])
+            ->assertSessionHasErrors('roles');
+
+        $this->assertDatabaseMissing('users', ['email' => 'puppet@example.com']);
+    }
+
+    public function test_an_admin_cannot_give_themselves_a_role_with_permissions_they_lack(): void
+    {
+        $boss = $this->bossRole();
+
+        $this->actingAs($this->admin)
+            ->put(route('admin.users.update', $this->admin), [
+                'name' => $this->admin->name,
+                'email' => $this->admin->email,
+                'roles' => [$boss->id],
+            ])
+            ->assertSessionHasErrors('roles');
+
+        $this->assertFalse($this->admin->fresh()->hasRole('Boss'));
+        $this->assertFalse($this->admin->fresh()->hasPermissionTo('Manage Payroll'));
+    }
+
+    public function test_update_keeps_a_role_the_actor_cannot_grant_when_it_is_unchanged(): void
+    {
+        $boss = $this->bossRole();
+        $user = User::factory()->create(['name' => 'Old Name']);
+        $user->assignRole($boss);
+
+        $this->actingAs($this->admin)
+            ->put(route('admin.users.update', $user), [
+                'name' => 'New Name',
+                'email' => $user->email,
+                'roles' => [$boss->id, $this->role->id],
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame('New Name', $user->fresh()->name);
+        $this->assertEqualsCanonicalizing(['Boss', 'Member'], $user->fresh()->getRoleNames()->all());
+    }
+
+    public function test_update_refuses_removing_a_role_the_actor_cannot_grant(): void
+    {
+        $boss = $this->bossRole();
+        $user = User::factory()->create();
+        $user->assignRole($boss);
+
+        $this->actingAs($this->admin)
+            ->put(route('admin.users.update', $user), [
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => [$this->role->id],
+            ])
+            ->assertSessionHasErrors('roles');
+
+        $this->assertSame(['Boss'], $user->fresh()->getRoleNames()->all());
+    }
+
+    public function test_a_super_admin_can_assign_any_role(): void
+    {
+        $boss = $this->bossRole();
+        $superAdmin = User::factory()->create(['is_active' => true]);
+        $superAdmin->forceFill(['is_super_admin' => true])->save();
+        $user = User::factory()->create();
+
+        $this->actingAs($superAdmin)
+            ->put(route('admin.users.update', $user), [
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => [$boss->id],
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertTrue($user->fresh()->hasRole('Boss'));
+    }
+
+    public function test_role_pickers_offer_only_grantable_roles_plus_the_users_own(): void
+    {
+        $boss = $this->bossRole();
+        $plain = User::factory()->create();
+        $bossUser = User::factory()->create();
+        $bossUser->assignRole($boss);
+
+        $this->actingAs($this->admin)->get(route('admin.users.create'))
+            ->assertOk()
+            ->assertViewHas('roles', fn ($roles): bool => $roles->has($this->role->id) && ! $roles->has($boss->id));
+
+        $this->actingAs($this->admin)->get(route('admin.users.edit', $plain))
+            ->assertOk()
+            ->assertViewHas('roles', fn ($roles): bool => ! $roles->has($boss->id));
+
+        $this->actingAs($this->admin)->get(route('admin.users.edit', $bossUser))
+            ->assertOk()
+            ->assertViewHas('roles', fn ($roles): bool => $roles->has($boss->id));
+    }
+
+    public function test_bulk_rows_may_only_give_roles_the_uploader_could_grant(): void
+    {
+        $this->bossRole();
+        $processor = app(BulkUserRowProcessor::class);
+        $emails = [];
+        $row = fn (string $email, string $role): array => [
+            'name' => 'Row Person', 'email' => $email, 'password' => 'secret-123', 'role' => $role,
+        ];
+
+        $error = $processor->process($row('boss.row@example.com', 'Boss'), $emails, 2, $this->admin);
+        $this->assertNotNull($error);
+        $this->assertStringContainsString('Boss', $error);
+        $this->assertDatabaseMissing('users', ['email' => 'boss.row@example.com']);
+
+        $this->assertNull($processor->process($row('member.row@example.com', 'Member'), $emails, 3, $this->admin));
+        $this->assertTrue(User::where('email', 'member.row@example.com')->sole()->hasRole('Member'));
+
+        // No uploader (console): any role, as before.
+        $this->assertNull($processor->process($row('console.row@example.com', 'Boss'), $emails, 4));
+    }
+
+    public function test_bulk_upload_queues_the_import_with_the_uploader(): void
+    {
+        Queue::fake();
+        Storage::fake('public');
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.users.bulk'), [
+                'users' => UploadedFile::fake()->create('users.xlsx', 8, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+            ])
+            ->assertSessionHasNoErrors();
+
+        Queue::assertPushed(UserBulkUploadJob::class, fn (UserBulkUploadJob $job): bool => (fn () => $this->actorId)->call($job) === $this->admin->id);
     }
 
     // ── destroy ───────────────────────────────────────────────────────────────

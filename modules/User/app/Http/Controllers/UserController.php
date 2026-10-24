@@ -26,6 +26,7 @@ use Modules\User\Http\Requests\UpdateUserRequest;
 use Modules\User\Models\AccountDeletionRequest;
 use Modules\User\Queries\UserQuery;
 use Modules\User\Services\AccountDeletion;
+use Modules\User\Services\UserRoleService;
 use Mrj\Foundation\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -78,11 +79,11 @@ class UserController extends Controller
     /**
      * Show create user form
      */
-    public function create(): Renderable
+    public function create(Request $request, UserRoleService $roleService): Renderable
     {
         $this->authorize('create', User::class);
 
-        $roles = Role::pluck('name', 'id');
+        $roles = $roleService->assignableRoleOptions($request->user());
 
         return view('user::user.create', compact('roles'));
     }
@@ -94,7 +95,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        $action->execute(UserData::from($request->validated()));
+        $action->execute(UserData::from($request->validated()), $request->user());
 
         return redirect()->route('admin.users.index')
             ->with('success', __('user::user.flash.user_created'));
@@ -116,12 +117,12 @@ class UserController extends Controller
     /**
      * Show edit user form
      */
-    public function edit(User $user): View
+    public function edit(Request $request, User $user, UserRoleService $roleService): View
     {
         $this->authorize('update', $user);
 
         $user->load(['roles']);
-        $roles = Role::pluck('name', 'id');
+        $roles = $roleService->assignableRoleOptions($request->user(), $user->roles->pluck('id')->all());
 
         return view('user::user.edit', compact('user', 'roles'));
     }
@@ -140,7 +141,7 @@ class UserController extends Controller
         $data = $request->validated();
         $data['is_active'] ??= $user->is_active;
 
-        $action->execute($user->id, UserData::from($data));
+        $action->execute($user->id, UserData::from($data), $request->user());
 
         return back()->with('success', __('user::user.flash.user_updated'));
     }

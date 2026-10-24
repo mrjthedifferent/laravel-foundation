@@ -20,9 +20,18 @@ class UserBulkUploadJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * The uploader; rows may only give roles it could grant. Null (a job queued
+     * before this existed, or dispatched by the console) applies no limit.
+     */
+    protected ?int $actorId = null;
+
     public function __construct(
         protected int $importDownloadManagerId,
-    ) {}
+        ?int $actorId = null,
+    ) {
+        $this->actorId = $actorId;
+    }
 
     public function handle(BulkUserRowProcessor $processor): void
     {
@@ -48,12 +57,19 @@ class UserBulkUploadJob implements ShouldQueue
 
             // User accounts are keyed by email; dedupe uploaded rows against existing emails.
             $existingEmails = User::whereNotNull('email')->pluck('email')->toArray();
+            $actor = $this->actorId !== null ? User::find($this->actorId) : null;
             $errors = [];
             $rowNo = 1;
 
+            if ($this->actorId !== null && $actor === null) {
+                app(ImportTracker::class)->fail($this->importDownloadManagerId, __('user::user.errors.uploader_missing'));
+
+                return;
+            }
+
             foreach ($collection as $row) {
                 $rowNo++;
-                $error = $processor->process($row, $existingEmails, $rowNo);
+                $error = $processor->process($row, $existingEmails, $rowNo, $actor);
 
                 if ($error !== null) {
                     $errors[] = count($errors) + 1 .'. '.$error;
