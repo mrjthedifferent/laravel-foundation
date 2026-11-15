@@ -50,6 +50,7 @@
                             class="select"
                             name="sms_gateway"
                             id="sms_gateway"
+                            required
                             :label="__('settings::settings.special_sms_gateways.selected_gateway_label')"
                             :options="is_array($smsGateways->value)
                                 ? array_combine(array_column($smsGateways->value, 'TYPE'), array_column($smsGateways->value, 'TYPE'))

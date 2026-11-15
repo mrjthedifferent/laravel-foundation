@@ -8,10 +8,13 @@ what that covers.
 
 **Fixed**
 - **Page titles, subtitles and labels no longer show `&amp;` or `&#039;`.** Many admin pages passed translated text to components as `title="{{ __('…') }}"`, which Blade escapes once and the component escapes again, so "Terms & Conditions" showed as "Terms &amp; Conditions" and "application's" as "application&#039;s". Every package view now binds the text (`:title="__('…')"`) on `<x-page-header>` (`title`, `subtitle`, `back-label`), `<x-form.input|select|textarea|file>` (`label`), `<x-form-section>`, `<x-modal>`, `<x-input-label>`, `<x-table-view-pagination>` (`title`, `empty-message`) and `<x-table-export-item>`. A test fails if a package view passes `{{ }}` to one of these props again.
+- **Filter selects no longer show a filter nobody applied.** A single `<x-form.select>` with a `data-placeholder` had no empty option, so the browser selected its first one: unfiltered lists (Import/Download Manager, OTP history) showed chips such as "Type: Import" or "Status: Pending", and pressing Apply filtered by them; forms such as a new user's gender or a push notification's user started on the first choice. Such a select now starts on an empty option, showing its placeholder, unless its options already have a `''` key. The active mailer (Settings → Email mailers) and SMS gateway (Settings → SMS gateways) are now marked required, as the server already required them.
+- **A single `<x-form.select>` named like a list (`type[]`) no longer fails with "Array to string conversion"** when the form comes back with old input after a validation error; it selects the first submitted value.
 
 **Upgrading**
 - `composer update mrjthedifferent/laravel-foundation`. No migration.
 - In your own views, pass translated text to these components bound, `:title="__('…')"`, never `title="{{ __('…') }}"`: the same double escaping happens there. A copy of a package view you have overridden keeps the old markup until you change it. Plain HTML attributes and attributes a component passes through to its tag (`placeholder`, `data-text`, `data-placeholder`, `<x-table-action title>`) keep `{{ }}`.
+- A non-multiple `<x-form.select>` with `data-placeholder` now has an empty first option. If one of your forms relied on the first option being preselected, pass `selected` (or drop `data-placeholder`); if the field must be filled, add `required`.
 
 ## 3.7.0
 

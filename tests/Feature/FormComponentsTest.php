@@ -2,6 +2,7 @@
 
 namespace Mrj\Foundation\Tests\Feature;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\MessageBag;
@@ -133,6 +134,69 @@ class FormComponentsTest extends TestCase
         $this->assertMatchesRegularExpression('/<option value="3"\s+selected\s*>/', $html);
         $this->assertDoesNotMatchRegularExpression('/<option value="2"\s+selected\s*>/', $html);
         $this->assertStringContainsString('multiple', $html);
+    }
+
+    /**
+     * Without an empty option a browser selects the first one, so an unfiltered list showed
+     * a filter chip (and submitted a filter) nobody chose.
+     */
+    public function test_single_select_with_a_placeholder_starts_on_an_empty_option(): void
+    {
+        $html = Blade::render('<x-form.select name="type" :options="$options" data-placeholder="All types" />', [
+            'options' => ['import' => 'Import', 'export' => 'Export'],
+        ]);
+
+        $this->assertMatchesRegularExpression('/<select[^>]*>\s*<option value=""><\/option>\s*<option value="import"\s*>/', $html);
+        $this->assertDoesNotMatchRegularExpression('/\sselected\b/', $html);
+    }
+
+    public function test_placeholder_select_with_a_collection_of_options_gets_an_empty_option(): void
+    {
+        $html = Blade::render('<x-form.select name="user_id" :options="$options" data-placeholder="Pick one" required />', [
+            'options' => collect([5 => 'Jane', 6 => 'John']),
+        ]);
+
+        $this->assertMatchesRegularExpression('/<select[^>]*required[^>]*>\s*<option value=""><\/option>\s*<option value="5"/', $html);
+    }
+
+    public function test_placeholder_select_keeps_the_chosen_value_selected(): void
+    {
+        $html = Blade::render('<x-form.select name="type" :options="$options" selected="export" data-placeholder="All types" />', [
+            'options' => ['import' => 'Import', 'export' => 'Export'],
+        ]);
+
+        $this->assertStringContainsString('<option value=""></option>', $html);
+        $this->assertMatchesRegularExpression('/<option value="export"\s+selected\s*>/', $html);
+    }
+
+    public function test_no_extra_empty_option_when_the_options_have_one_or_there_is_no_placeholder(): void
+    {
+        $withBlank = Blade::render('<x-form.select name="status" :options="$options" data-placeholder="All" />', [
+            'options' => ['' => 'All', '1' => 'Active'],
+        ]);
+        $noPlaceholder = Blade::render('<x-form.select name="status" :options="$options" />', [
+            'options' => ['1' => 'Active', '0' => 'Inactive'],
+        ]);
+        $multiple = Blade::render('<x-form.select name="roles" :options="$options" multiple data-placeholder="Roles" />', [
+            'options' => ['1' => 'Admin'],
+        ]);
+
+        $this->assertSame(1, substr_count($withBlank, '<option value=""'));
+        $this->assertStringNotContainsString('<option value=""', $noPlaceholder);
+        $this->assertStringNotContainsString('<option value=""', $multiple);
+    }
+
+    public function test_single_select_takes_the_first_item_of_array_old_input(): void
+    {
+        Session::flash('_old_input', ['type' => ['export', 'import']]);
+
+        $html = view('components.form.select', [
+            'name' => 'type[]',
+            'options' => ['import' => 'Import', 'export' => 'Export'],
+        ])->render();
+
+        $this->assertMatchesRegularExpression('/<option value="export"\s+selected\s*>/', $html);
+        $this->assertDoesNotMatchRegularExpression('/<option value="import"\s+selected\s*>/', $html);
     }
 
     public function test_textarea_renders_value_inside_the_tag(): void

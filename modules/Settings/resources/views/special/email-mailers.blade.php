@@ -84,6 +84,7 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
                         class="select"
                         name="email_mailer"
                         id="email_mailer"
+                        required
                         :label="__('settings::settings.special_email_mailers.selected_mailer_label')"
                         :options="is_array($emailMailers->value) ? array_combine(array_column($emailMailers->value, 'TYPE'), array_column($emailMailers->value, 'TYPE')) : []"
                         :selected="isset($emailMailer) ? $emailMailer->value : null"
