@@ -32,6 +32,20 @@ class CompiledStylesheetTest extends TestCase
         }
     }
 
+    /**
+     * An open dropdown is moved to <body> and fixed in place; it must stack above the sticky
+     * navbar (1030) and the sidebar (1035), or the profile menu's top is hidden under the bar,
+     * and below offcanvas (1040) and modals.
+     */
+    public function test_a_placed_dropdown_menu_stacks_above_the_navbar_and_sidebar(): void
+    {
+        $this->assertMatchesRegularExpression('/\.dropdown-menu\[data-placed\]\{[^}]*z-index:(\d+)/', $this->css());
+        preg_match('/\.dropdown-menu\[data-placed\]\{[^}]*z-index:(\d+)/', $this->css(), $placed);
+
+        $this->assertGreaterThan(1035, (int) $placed[1]);
+        $this->assertLessThan(1040, (int) $placed[1]);
+    }
+
     public function test_the_stylesheet_carries_no_bootstrap(): void
     {
         $css = $this->css();

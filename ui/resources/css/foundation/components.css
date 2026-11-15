@@ -306,8 +306,10 @@ label.required::after, .form-label.required::after {
 .dropdown-menu.show { display: block; }
 .dropdown-menu-end { inset-inline-start: auto; inset-inline-end: 0; }
 .dropup > .dropdown-menu { top: auto; bottom: 100%; margin-top: 0; margin-bottom: .25rem; }
-/* Placed by script from the toggle's position, so a menu is never clipped by a scrolling parent */
-.dropdown-menu[data-placed] { position: fixed; inset: auto; margin: 0; }
+/* Placed by script from the toggle's position, so a menu is never clipped by a scrolling parent.
+   It sits on <body> then, so it stacks above the sticky navbar (1030) and sidebar (1035), below
+   offcanvas (1040/1045) and modals (1050/1055). */
+.dropdown-menu[data-placed] { position: fixed; inset: auto; margin: 0; z-index: 1036; }
 .dropdown-item {
     display: flex; align-items: center; gap: .5rem; width: 100%;
     padding: .4375rem .625rem; clear: both;
