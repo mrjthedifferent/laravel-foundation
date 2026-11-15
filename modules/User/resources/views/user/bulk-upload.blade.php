@@ -10,11 +10,11 @@
     @csrf
 
     <x-page-header
-        title="{{ __('user::user.bulk_upload.breadcrumb') }}"
-        subtitle="{{ __('user::user.bulk_upload.subtitle') }}"
+        :title="__('user::user.bulk_upload.breadcrumb')"
+        :subtitle="__('user::user.bulk_upload.subtitle')"
         icon="ph ph-upload-simple"
         :back-url="route('admin.users.index')"
-        back-label="{{ __('user::user.bulk_upload.back_label') }}" />
+        :back-label="__('user::user.bulk_upload.back_label')" />
 
     <x-alert type="info" icon="ph ph-info">
         <span class="text-sm">
@@ -22,10 +22,10 @@
         </span>
     </x-alert>
 
-    <x-form-section title="{{ __('user::user.bulk_upload.section_file_upload') }}" icon="ph ph-file-xls">
+    <x-form-section :title="__('user::user.bulk_upload.section_file_upload')" icon="ph ph-file-xls">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-6">
-                <x-form.file name="users" label="{{ __('user::user.bulk_upload.upload_label') }}" required accept=".xlsx,.xls" />
+                <x-form.file name="users" :label="__('user::user.bulk_upload.upload_label')" required accept=".xlsx,.xls" />
                 <div class="form-text">{{ __('user::user.bulk_upload.accepted_formats') }}</div>
             </div>
             <div class="col-span-12 md:col-span-6">

@@ -8,8 +8,8 @@
     <form action="{{ route('admin.settings.special.update_security') }}" method="POST">
         @csrf
 
-    <x-page-header title="{{ __('settings::settings.special_security.title') }}"
-        subtitle="{{ __('settings::settings.special_security.subtitle') }}"
+    <x-page-header :title="__('settings::settings.special_security.title')"
+        :subtitle="__('settings::settings.special_security.subtitle')"
         icon="ph ph-shield-check">
         <x-slot name="actions">
             <button type="submit" class="btn btn-primary px-6">

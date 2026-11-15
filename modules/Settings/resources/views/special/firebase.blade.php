@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-<x-page-header title="{{ __('settings::settings.special_firebase.title') }}" subtitle="{{ __('settings::settings.special_firebase.subtitle') }}" icon="ph ph-flame">
+<x-page-header :title="__('settings::settings.special_firebase.title')" :subtitle="__('settings::settings.special_firebase.subtitle')" icon="ph ph-flame">
     <x-slot name="actions">
         <button type="button" id="testFirebaseBtn" class="btn btn-sm btn-light">
             <i class="ph ph-plug"></i>{{ __('settings::settings.special_firebase.test_connection') }}
@@ -38,7 +38,7 @@
                     <x-form.textarea
                         name="firebase_credentials_json"
                         id="firebase_credentials_json"
-                        label="{{ __('settings::settings.special_firebase.credentials_label') }}"
+                        :label="__('settings::settings.special_firebase.credentials_label')"
                         :value="optional($firebaseCredentialsJson)->value ?? ''"
                         class="font-mono text-xs"
                         :rows="10"
@@ -57,7 +57,7 @@
                 <div class="card-body">
                     <div class="grid grid-cols-12 gap-4">
                         <div class="col-span-12 md:col-span-12">
-                            <x-form.input name="firebase_project_id" id="firebase_project_id" label="{{ __('settings::settings.special_firebase.project_id_label') }}" :value="optional($firebaseProjectId)->value ?? ''" placeholder="{{ __('settings::settings.special_firebase.project_id_placeholder') }}" />
+                            <x-form.input name="firebase_project_id" id="firebase_project_id" :label="__('settings::settings.special_firebase.project_id_label')" :value="optional($firebaseProjectId)->value ?? ''" placeholder="{{ __('settings::settings.special_firebase.project_id_placeholder') }}" />
                             <div class="form-text">{{ __('settings::settings.special_firebase.project_id_help') }}</div>
                         </div>
                     </div>

@@ -10,11 +10,11 @@
     @csrf
 
     <x-page-header
-        title="{{ __('rolepermission::rolepermission.index.assign_permissions') }}"
-        subtitle="{{ __('rolepermission::rolepermission.assign_permission.subtitle', ['role' => $role->name]) }}"
+        :title="__('rolepermission::rolepermission.index.assign_permissions')"
+        :subtitle="__('rolepermission::rolepermission.assign_permission.subtitle', ['role' => $role->name])"
         icon="ph ph-shield-check"
         :back-url="route('admin.role.index')"
-        back-label="{{ __('rolepermission::rolepermission.assign_permission.back_to_roles') }}">
+        :back-label="__('rolepermission::rolepermission.assign_permission.back_to_roles')">
         <x-slot name="actions">
             <label class="flex items-center gap-2 mb-0 cursor-pointer">
                 <input type="checkbox" class="form-check-input mt-0" id="checkAll">

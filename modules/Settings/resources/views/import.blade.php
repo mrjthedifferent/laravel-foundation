@@ -10,13 +10,13 @@
     @csrf
 
     <x-page-header
-        title="{{ __('settings::settings.import.title') }}"
-        subtitle="{{ __('settings::settings.import.subtitle') }}"
+        :title="__('settings::settings.import.title')"
+        :subtitle="__('settings::settings.import.subtitle')"
         icon="ph ph-upload"
         :back-url="route('admin.settings.manage')"
-        back-label="{{ __('settings::settings.import.back') }}" />
+        :back-label="__('settings::settings.import.back')" />
 
-    <x-form-section title="{{ __('settings::settings.import.section_how_it_works') }}" icon="ph ph-info">
+    <x-form-section :title="__('settings::settings.import.section_how_it_works')" icon="ph ph-info">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 sm:col-span-6">
                 <div class="flex gap-2">
@@ -43,7 +43,7 @@
         </div>
     </x-form-section>
 
-    <x-form-section title="{{ __('settings::settings.import.section_import_file') }}" icon="ph ph-brackets-curly">
+    <x-form-section :title="__('settings::settings.import.section_import_file')" icon="ph ph-brackets-curly">
         <div class="mb-4">
             <x-form.file name="settings_file" id="settings_file" accept=".json" required
                 :label="__('settings::settings.import.json_file_label')"

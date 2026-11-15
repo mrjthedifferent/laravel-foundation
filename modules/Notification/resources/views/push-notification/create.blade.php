@@ -10,19 +10,19 @@
     @csrf
 
 <x-page-header
-    title="{{ __('notification::notification.push_notification_create.title') }}"
-    subtitle="{{ __('notification::notification.push_notification_create.subtitle') }}"
+    :title="__('notification::notification.push_notification_create.title')"
+    :subtitle="__('notification::notification.push_notification_create.subtitle')"
     icon="ph ph-paper-plane-tilt"
     :back-url="route('admin.push.notification.index')"
-    back-label="{{ __('notification::notification.push_notification_create.back_to_list') }}" />
+    :back-label="__('notification::notification.push_notification_create.back_to_list')" />
 
-<x-form-section title="{{ __('notification::notification.push_notification_create.recipient_section') }}" icon="ph ph-user">
+<x-form-section :title="__('notification::notification.push_notification_create.recipient_section')" icon="ph ph-user">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-4">
             <x-form.select
                 name="recipient_type"
                 id="recipient_type"
-                label="{{ __('notification::notification.push_notification_create.recipient_type_label') }}"
+                :label="__('notification::notification.push_notification_create.recipient_type_label')"
                 required
                 :options="[
                     'specific' => __('notification::notification.push_notification_create.recipient_specific'),
@@ -37,7 +37,7 @@
                 class="select"
                 name="user_id"
                 id="user_id"
-                label="{{ __('notification::notification.push_notification_create.select_user_label') }}"
+                :label="__('notification::notification.push_notification_create.select_user_label')"
                 :options="$users->mapWithKeys(fn($u) => [$u->id => $u->name.' ('.($u->email ?? $u->phone).')'])"
                 :selected="old('user_id')"
                 data-placeholder="{{ __('notification::notification.push_notification_create.search_user_placeholder') }}"
@@ -47,7 +47,7 @@
             <x-form.select
                 name="recipient_role"
                 id="recipient_role"
-                label="{{ __('notification::notification.push_notification_create.role_label') }}"
+                :label="__('notification::notification.push_notification_create.role_label')"
                 :options="array_combine($roles, $roles) ?: []"
                 :selected="old('recipient_role')"
             />
@@ -55,22 +55,22 @@
     </div>
 </x-form-section>
 
-<x-form-section title="{{ __('notification::notification.push_notification_create.content_section') }}" icon="ph ph-article">
+<x-form-section :title="__('notification::notification.push_notification_create.content_section')" icon="ph ph-article">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-6">
-            <x-form.input name="title" label="{{ __('notification::notification.push_notification_create.title_label') }}" required :value="old('title')" placeholder="{{ __('notification::notification.push_notification_create.title_placeholder') }}" />
+            <x-form.input name="title" :label="__('notification::notification.push_notification_create.title_label')" required :value="old('title')" placeholder="{{ __('notification::notification.push_notification_create.title_placeholder') }}" />
         </div>
         <div class="col-span-12 md:col-span-6">
-            <x-form.input name="url" label="{{ __('notification::notification.push_notification_create.url_label') }}" :value="old('url')" placeholder="{{ __('notification::notification.push_notification_create.url_placeholder') }}" :help="__('notification::notification.push_notification_create.url_help')" />
+            <x-form.input name="url" :label="__('notification::notification.push_notification_create.url_label')" :value="old('url')" placeholder="{{ __('notification::notification.push_notification_create.url_placeholder') }}" :help="__('notification::notification.push_notification_create.url_help')" />
         </div>
         <div class="col-span-12 md:col-span-12">
-            <x-form.textarea name="body" label="{{ __('notification::notification.push_notification_create.body_label') }}" required :value="old('body')" :rows="3" placeholder="{{ __('notification::notification.push_notification_create.body_placeholder') }}" />
+            <x-form.textarea name="body" :label="__('notification::notification.push_notification_create.body_label')" required :value="old('body')" :rows="3" placeholder="{{ __('notification::notification.push_notification_create.body_placeholder') }}" />
         </div>
         <div class="col-span-12 md:col-span-12">
-            <x-form.textarea name="description" label="{{ __('notification::notification.push_notification_create.description_label') }}" :value="old('description')" :rows="2" placeholder="{{ __('notification::notification.push_notification_create.description_placeholder') }}" />
+            <x-form.textarea name="description" :label="__('notification::notification.push_notification_create.description_label')" :value="old('description')" :rows="2" placeholder="{{ __('notification::notification.push_notification_create.description_placeholder') }}" />
         </div>
         <div class="col-span-12 md:col-span-12">
-            <x-form.file name="image" label="{{ __('notification::notification.push_notification_create.image_label') }}" accept="image/*" :help="__('notification::notification.push_notification_create.image_help')" />
+            <x-form.file name="image" :label="__('notification::notification.push_notification_create.image_label')" accept="image/*" :help="__('notification::notification.push_notification_create.image_help')" />
         </div>
     </div>
 </x-form-section>

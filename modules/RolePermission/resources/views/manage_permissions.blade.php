@@ -7,14 +7,14 @@
 @section('content')
 <x-search-card>
     <div class="col-span-12 mb-2 md:col-span-6">
-        <x-form.input name="name" label="{{ __('rolepermission::rolepermission.manage_permissions.permission_name_label') }}" :value="request('name')" placeholder="{{ __('rolepermission::rolepermission.manage_permissions.search_placeholder') }}" />
+        <x-form.input name="name" :label="__('rolepermission::rolepermission.manage_permissions.permission_name_label')" :value="request('name')" placeholder="{{ __('rolepermission::rolepermission.manage_permissions.search_placeholder') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-6">
-        <x-form.select class="select" name="module" label="{{ __('rolepermission::rolepermission.manage_permissions.module_label') }}" :options="['' => __('rolepermission::rolepermission.manage_permissions.all_modules')] + $modules->mapWithKeys(fn ($m) => [$m => display_label($m)])->all()" :selected="request('module')" data-placeholder="{{ __('rolepermission::rolepermission.manage_permissions.all_modules') }}" />
+        <x-form.select class="select" name="module" :label="__('rolepermission::rolepermission.manage_permissions.module_label')" :options="['' => __('rolepermission::rolepermission.manage_permissions.all_modules')] + $modules->mapWithKeys(fn ($m) => [$m => display_label($m)])->all()" :selected="request('module')" data-placeholder="{{ __('rolepermission::rolepermission.manage_permissions.all_modules') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('rolepermission::rolepermission.manage_permissions.title') }}" :data="$permissions" empty-icon="ph ph-shield-slash" empty-message="{{ __('rolepermission::rolepermission.manage_permissions.empty') }}">
+<x-table-view-pagination :title="__('rolepermission::rolepermission.manage_permissions.title')" :data="$permissions" empty-icon="ph ph-shield-slash" :empty-message="__('rolepermission::rolepermission.manage_permissions.empty')">
     <x-slot name="actions">
         <x-table-action id="bulk-delete-btn" class="btn-danger btn-sm hidden" icon="ph ph-trash" title="{{ __('rolepermission::rolepermission.manage_permissions.delete_selected') }}" />
         <x-table-action class="btn-primary btn-sm" icon="ph ph-plus" title="{{ __('rolepermission::rolepermission.manage_permissions.create_permission') }}" data-fd-toggle="modal" data-fd-target="#createPermissionModal" />
@@ -64,20 +64,20 @@
 </x-table-view-pagination>
 
 {{-- Create Permission Modal --}}
-<x-modal id="createPermissionModal" title="{{ __('rolepermission::rolepermission.manage_permissions.create_permission') }}">
+<x-modal id="createPermissionModal" :title="__('rolepermission::rolepermission.manage_permissions.create_permission')">
     <form id="createPermissionForm" action="{{ route('admin.permission.store') }}" method="POST">
         @csrf
         <div class="mb-4">
-            <x-form.select class="select" name="module_name" id="module_name" label="{{ __('rolepermission::rolepermission.manage_permissions.module_name_label') }}" required :options="['' => __('rolepermission::rolepermission.manage_permissions.select_module')] + $modules->mapWithKeys(fn ($m) => [$m => display_label($m)])->all() + ['new' => __('rolepermission::rolepermission.manage_permissions.create_new_module')]" :selected="null" />
+            <x-form.select class="select" name="module_name" id="module_name" :label="__('rolepermission::rolepermission.manage_permissions.module_name_label')" required :options="['' => __('rolepermission::rolepermission.manage_permissions.select_module')] + $modules->mapWithKeys(fn ($m) => [$m => display_label($m)])->all() + ['new' => __('rolepermission::rolepermission.manage_permissions.create_new_module')]" :selected="null" />
         </div>
         <div class="mb-4 hidden" id="new-module-container">
-            <x-form.input name="new_module_name" id="new_module_name" label="{{ __('rolepermission::rolepermission.manage_permissions.new_module_name_label') }}" />
+            <x-form.input name="new_module_name" id="new_module_name" :label="__('rolepermission::rolepermission.manage_permissions.new_module_name_label')" />
         </div>
         <div class="mb-4">
-            <x-form.input name="permission_name" id="permission_name" label="{{ __('rolepermission::rolepermission.manage_permissions.permission_name_label') }}" required />
+            <x-form.input name="permission_name" id="permission_name" :label="__('rolepermission::rolepermission.manage_permissions.permission_name_label')" required />
         </div>
         <div class="mb-4">
-            <x-form.textarea name="description" label="{{ __('rolepermission::rolepermission.manage_permissions.description_optional_label') }}" :rows="2" />
+            <x-form.textarea name="description" :label="__('rolepermission::rolepermission.manage_permissions.description_optional_label')" :rows="2" />
         </div>
         <x-slot name="footer">
             <button type="button" class="btn btn-light" data-fd-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
@@ -87,7 +87,7 @@
 </x-modal>
 
 {{-- Permission Roles Modal --}}
-<x-modal id="permissionRolesModal" title="{{ __('rolepermission::rolepermission.manage_permissions.roles_using_permission_title') }}" size="sm">
+<x-modal id="permissionRolesModal" :title="__('rolepermission::rolepermission.manage_permissions.roles_using_permission_title')" size="sm">
     <div class="permission-roles-list">
         <div class="text-center py-4">
             <div class="spinner-border spinner-border-sm"></div>

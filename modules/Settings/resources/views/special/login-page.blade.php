@@ -14,8 +14,8 @@
     <form action="{{ route('admin.settings.special.update_login_page') }}" method="POST" data-fd-login-settings>
         @csrf
 
-    <x-page-header title="{{ __('settings::settings.special_login_page.title') }}"
-        subtitle="{{ __('settings::settings.special_login_page.subtitle') }}"
+    <x-page-header :title="__('settings::settings.special_login_page.title')"
+        :subtitle="__('settings::settings.special_login_page.subtitle')"
         icon="ph ph-sign-in">
         <x-slot name="actions">
             <button type="submit" class="btn btn-primary px-6">

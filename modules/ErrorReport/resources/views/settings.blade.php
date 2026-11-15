@@ -79,7 +79,7 @@
                             <x-form.input
                                 type="number"
                                 name="error_report_throttle_minutes"
-                                label="{{ __('errorreport::errorreport.settings.throttle_label') }}"
+                                :label="__('errorreport::errorreport.settings.throttle_label')"
                                 :value="optional($settings['error_report_throttle_minutes'] ?? null)->value ?? 60"
                                 min="1"
                                 max="10080"
@@ -97,7 +97,7 @@
                     <div>
                         <x-form.input
                             name="error_report_email_recipients"
-                            label="{{ __('errorreport::errorreport.settings.email_recipients_label') }}"
+                            :label="__('errorreport::errorreport.settings.email_recipients_label')"
                             :value="optional($settings['error_report_email_recipients'] ?? null)->value ?? ''"
                             placeholder="admin@example.com, dev@example.com"
                         />
@@ -124,7 +124,7 @@
                         <x-form.input
                             type="url"
                             name="error_report_slack_webhook"
-                            label="{{ __('errorreport::errorreport.settings.slack_webhook_label') }}"
+                            :label="__('errorreport::errorreport.settings.slack_webhook_label')"
                             :value="optional($settings['error_report_slack_webhook'] ?? null)->value ?? ''"
                             placeholder="https://hooks.slack.com/..."
                         />
@@ -152,7 +152,7 @@
                             <div class="col-span-12 md:col-span-6">
                                 <x-form.input
                                     name="error_report_telegram_bot_token"
-                                    label="{{ __('errorreport::errorreport.settings.telegram_bot_token_label') }}"
+                                    :label="__('errorreport::errorreport.settings.telegram_bot_token_label')"
                                     :value="optional($settings['error_report_telegram_bot_token'] ?? null)->value ?? ''"
                                     placeholder="{{ __('errorreport::errorreport.settings.telegram_bot_token_placeholder') }}"
                                 />
@@ -160,7 +160,7 @@
                             <div class="col-span-12 md:col-span-6">
                                 <x-form.input
                                     name="error_report_telegram_chat_id"
-                                    label="{{ __('errorreport::errorreport.settings.telegram_chat_id_label') }}"
+                                    :label="__('errorreport::errorreport.settings.telegram_chat_id_label')"
                                     :value="optional($settings['error_report_telegram_chat_id'] ?? null)->value ?? ''"
                                     placeholder="{{ __('errorreport::errorreport.settings.telegram_chat_id_placeholder') }}"
                                 />
@@ -180,7 +180,7 @@
                         @php $dontReportStr = is_array($dontReport) ? implode("\n", $dontReport) : (is_string($dontReport) ? $dontReport : ''); @endphp
                         <x-form.textarea
                             name="error_report_dont_report"
-                            label="{{ __('errorreport::errorreport.settings.ignore_label') }}"
+                            :label="__('errorreport::errorreport.settings.ignore_label')"
                             :value="$dontReportStr"
                             class="font-mono"
                             :rows="5"

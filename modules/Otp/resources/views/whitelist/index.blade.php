@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <x-table-view-pagination title="{{ __('otp::otp.whitelist_index.breadcrumb') }}" :data="$whitelists" empty-message="{{ __('otp::otp.whitelist_index.empty') }}" empty-icon="ph ph-list-checks">
+    <x-table-view-pagination :title="__('otp::otp.whitelist_index.breadcrumb')" :data="$whitelists" :empty-message="__('otp::otp.whitelist_index.empty')" empty-icon="ph ph-list-checks">
         <x-slot name="actions">
             <x-table-actions>
                 @can('Create OTP Whitelist')

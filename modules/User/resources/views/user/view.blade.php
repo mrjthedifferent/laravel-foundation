@@ -310,16 +310,16 @@
                                 @csrf
                                 <div class="grid grid-cols-12 gap-4">
                                     <div class="col-span-12 md:col-span-4">
-                                        <x-form.select name="document_type" label="{{ __('user::user.view.document_type_label') }}" required :options="['' => __('user::user.view.select_document_type')] + collect(\Modules\User\Enum\DocumentType::cases())->mapWithKeys(fn($t) => [$t->value => $t->label()])->toArray()" :selected="null" />
+                                        <x-form.select name="document_type" :label="__('user::user.view.document_type_label')" required :options="['' => __('user::user.view.select_document_type')] + collect(\Modules\User\Enum\DocumentType::cases())->mapWithKeys(fn($t) => [$t->value => $t->label()])->toArray()" :selected="null" />
                                     </div>
                                     <div class="col-span-12 md:col-span-4">
-                                        <x-form.input name="document_number" label="{{ __('user::user.view.document_number_label') }}" placeholder="{{ __('user::user.view.document_number_placeholder') }}" />
+                                        <x-form.input name="document_number" :label="__('user::user.view.document_number_label')" placeholder="{{ __('user::user.view.document_number_placeholder') }}" />
                                     </div>
                                     <div class="col-span-12 md:col-span-4">
-                                        <x-form.input type="date" name="expiry_date" label="{{ __('user::user.view.col_expiry_date') }}" />
+                                        <x-form.input type="date" name="expiry_date" :label="__('user::user.view.col_expiry_date')" />
                                     </div>
                                     <div class="col-span-12 md:col-span-6">
-                                        <x-form.file name="file" label="{{ __('user::user.view.front_side_file_label') }}" required accept="image/*,.pdf" />
+                                        <x-form.file name="file" :label="__('user::user.view.front_side_file_label')" required accept="image/*,.pdf" />
                                         <div class="form-text">{{ __('user::user.view.accepted_files_hint') }}</div>
                                     </div>
                                     <div class="col-span-12 md:col-span-6">

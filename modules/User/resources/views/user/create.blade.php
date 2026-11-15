@@ -36,22 +36,22 @@
 }">
 
 <x-page-header
-    title="{{ __('user::user.create.title') }}"
-    subtitle="{{ __('user::user.create.subtitle') }}"
+    :title="__('user::user.create.title')"
+    :subtitle="__('user::user.create.subtitle')"
     icon="ph ph-user-plus"
     :back-url="route('admin.users.index')"
-    back-label="{{ __('user::user.create.back_label') }}" />
+    :back-label="__('user::user.create.back_label')" />
 
-<x-form-section title="{{ __('user::user.create.section_personal') }}" icon="ph ph-identification-card">
+<x-form-section :title="__('user::user.create.section_personal')" icon="ph ph-identification-card">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-6">
-            <x-form.input name="name" label="{{ __('user::user.create.full_name_label') }}" required placeholder="{{ __('user::user.create.full_name_placeholder') }}" />
+            <x-form.input name="name" :label="__('user::user.create.full_name_label')" required placeholder="{{ __('user::user.create.full_name_placeholder') }}" />
         </div>
         <div class="col-span-12 md:col-span-3">
-            <x-form.select class="select" name="gender" label="{{ __('user::user.create.gender_label') }}" required :options="['male' => __('user::user.common.male'), 'female' => __('user::user.common.female'), 'other' => __('user::user.common.other')]" :selected="null" data-placeholder="{{ __('user::user.create.select_gender_placeholder') }}" />
+            <x-form.select class="select" name="gender" :label="__('user::user.create.gender_label')" required :options="['male' => __('user::user.common.male'), 'female' => __('user::user.common.female'), 'other' => __('user::user.common.other')]" :selected="null" data-placeholder="{{ __('user::user.create.select_gender_placeholder') }}" />
         </div>
         <div class="col-span-12 md:col-span-3">
-            <x-form.file name="image" id="image-upload" label="{{ __('user::user.create.profile_image_label') }}" accept="image/jpeg,image/png" @change="onImageChange($event)" />
+            <x-form.file name="image" id="image-upload" :label="__('user::user.create.profile_image_label')" accept="image/jpeg,image/png" @change="onImageChange($event)" />
             <div class="form-text">{{ __('user::user.create.image_hint') }}</div>
         </div>
         <div class="col-span-12 flex items-center md:col-span-3">
@@ -64,10 +64,10 @@
 <x-form-section :title="__('user::user.create.section_contact')" icon="ph ph-envelope">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-3">
-            <x-form.input type="email" name="email" label="{{ __('user::user.create.email_label') }}" required placeholder="{{ __('user::user.create.email_placeholder') }}" />
+            <x-form.input type="email" name="email" :label="__('user::user.create.email_label')" required placeholder="{{ __('user::user.create.email_placeholder') }}" />
         </div>
         <div class="col-span-12 md:col-span-3">
-            <x-form.input name="phone" label="{{ __('user::user.create.phone_label') }}" placeholder="{{ __('user::user.create.phone_placeholder') }}" inputmode="tel" />
+            <x-form.input name="phone" :label="__('user::user.create.phone_label')" placeholder="{{ __('user::user.create.phone_placeholder') }}" inputmode="tel" />
             <div class="form-text">{{ __('user::user.create.phone_hint') }}</div>
         </div>
         <div class="col-span-12 md:col-span-3">
@@ -104,10 +104,10 @@
 <x-form-section :title="__('user::user.create.section_access')" icon="ph ph-shield-check">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-6">
-            <x-form.select class="select" name="roles[]" id="roles" label="{{ __('user::user.create.roles_label') }}" required multiple :options="$roles" :selected="null" data-placeholder="{{ __('user::user.create.select_roles_placeholder') }}" />
+            <x-form.select class="select" name="roles[]" id="roles" :label="__('user::user.create.roles_label')" required multiple :options="$roles" :selected="null" data-placeholder="{{ __('user::user.create.select_roles_placeholder') }}" />
         </div>
         <div class="col-span-12 md:col-span-6">
-            <x-form.select class="select" name="is_active" label="{{ __('foundation::foundation.common.status') }}" required :options="integerStatus()" selected="1" data-placeholder="{{ __('user::user.create.select_status_placeholder') }}" />
+            <x-form.select class="select" name="is_active" :label="__('foundation::foundation.common.status')" required :options="integerStatus()" selected="1" data-placeholder="{{ __('user::user.create.select_status_placeholder') }}" />
         </div>
     </div>
 </x-form-section>

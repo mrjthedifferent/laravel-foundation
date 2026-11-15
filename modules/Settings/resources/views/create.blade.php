@@ -9,10 +9,10 @@
     <form action="{{ route('admin.settings.store_new') }}" method="POST" enctype="multipart/form-data" id="create-form">
         @csrf
 
-        <x-page-header title="{{ __('settings::settings.create.title') }}" subtitle="{{ __('settings::settings.create.subtitle') }}" icon="ph ph-plus"
-            :back-url="route('admin.settings.manage')" back-label="{{ __('settings::settings.create.back') }}" />
+        <x-page-header :title="__('settings::settings.create.title')" :subtitle="__('settings::settings.create.subtitle')" icon="ph ph-plus"
+            :back-url="route('admin.settings.manage')" :back-label="__('settings::settings.create.back')" />
 
-        <x-form-section title="{{ __('settings::settings.create.section_identity') }}" icon="ph ph-identification-card">
+        <x-form-section :title="__('settings::settings.create.section_identity')" icon="ph ph-identification-card">
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6">
                     <label class="form-label font-semibold text-sm required">{{ __('settings::settings.create.key_label') }}</label>
@@ -28,7 +28,7 @@
                         class="select"
                         name="existing_group"
                         id="existing_group"
-                        label="{{ __('settings::settings.create.group_label') }}"
+                        :label="__('settings::settings.create.group_label')"
                         :options="collect($groups)->mapWithKeys(fn($g) => [$g => $g])->put('__new__', __('settings::settings.create.group_new_option'))->prepend('', '')->toArray()"
                         :selected="null"
                         data-placeholder="{{ __('settings::settings.create.group_select_placeholder') }}"
@@ -40,7 +40,7 @@
                         class="select"
                         name="type"
                         id="type"
-                        label="{{ __('settings::settings.create.type_label') }}"
+                        :label="__('settings::settings.create.type_label')"
                         required
                         :options="collect($types)->mapWithKeys(fn($t) => [$t => ucfirst($t)])->prepend('', '')->toArray()"
                         :selected="old('type')"
@@ -48,12 +48,12 @@
                     />
                 </div>
                 <div class="col-span-12 md:col-span-6">
-                    <x-form.input name="description" id="description" label="{{ __('foundation::foundation.common.description') }}" :value="old('description')" placeholder="{{ __('settings::settings.create.description_placeholder') }}" />
+                    <x-form.input name="description" id="description" :label="__('foundation::foundation.common.description')" :value="old('description')" placeholder="{{ __('settings::settings.create.description_placeholder') }}" />
                 </div>
             </div>
         </x-form-section>
 
-        <x-form-section title="{{ __('settings::settings.create.section_flags') }}" icon="ph ph-toggle-right">
+        <x-form-section :title="__('settings::settings.create.section_flags')" icon="ph ph-toggle-right">
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6">
                     <div class="flex items-center justify-between p-4 rounded-md border">
@@ -153,7 +153,7 @@
         </div>
 
         <div id="options_container" class="hidden">
-            <x-form-section title="{{ __('settings::settings.create.section_options') }}" icon="ph ph-list-bullets">
+            <x-form-section :title="__('settings::settings.create.section_options')" icon="ph ph-list-bullets">
                 <x-slot name="badge">
                     <span class="text-muted text-xs ms-auto">{{ __('settings::settings.create.options_badge') }}</span>
                 </x-slot>

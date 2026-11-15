@@ -14,9 +14,9 @@
 </div>
 
 <x-table-view-pagination
-    title="{{ __('user::user.deletion.page_title') }}"
+    :title="__('user::user.deletion.page_title')"
     :data="$requests"
-    empty-message="{{ __('user::user.deletion.empty') }}"
+    :empty-message="__('user::user.deletion.empty')"
     empty-icon="ph ph-user-minus">
     <x-slot name="tabs">
         @foreach (['pending_review', 'scheduled', 'history'] as $name)

@@ -11,30 +11,30 @@
     @method('PUT')
 
     <x-page-header
-        title="{{ __('otp::otp.whitelist_edit.title', ['id' => $whitelist->id]) }}"
-        subtitle="{{ __('otp::otp.whitelist_edit.subtitle') }}"
+        :title="__('otp::otp.whitelist_edit.title', ['id' => $whitelist->id])"
+        :subtitle="__('otp::otp.whitelist_edit.subtitle')"
         icon="ph ph-pencil-simple"
         :back-url="route('admin.otp-whitelist.index')"
-        back-label="{{ __('otp::otp.whitelist_edit.back_label') }}" />
+        :back-label="__('otp::otp.whitelist_edit.back_label')" />
 
-    <x-form-section title="{{ __('otp::otp.whitelist_edit.section_title') }}" icon="ph ph-lock-key">
+    <x-form-section :title="__('otp::otp.whitelist_edit.section_title')" icon="ph ph-lock-key">
         @php $otpDigits = (int) config('settings.otp_digit_length.value', 6); @endphp
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-6">
-                <x-form.select class="select" name="recipient_type" label="{{ __('otp::otp.whitelist_edit.recipient_type_label') }}" required :options="['email' => __('otp::otp.whitelist_edit.option_email'), 'phone' => __('otp::otp.whitelist_edit.option_phone')]" :selected="$whitelist->recipient_type" data-placeholder="{{ __('otp::otp.whitelist_edit.select_type_placeholder') }}" />
+                <x-form.select class="select" name="recipient_type" :label="__('otp::otp.whitelist_edit.recipient_type_label')" required :options="['email' => __('otp::otp.whitelist_edit.option_email'), 'phone' => __('otp::otp.whitelist_edit.option_phone')]" :selected="$whitelist->recipient_type" data-placeholder="{{ __('otp::otp.whitelist_edit.select_type_placeholder') }}" />
             </div>
             <div class="col-span-12 md:col-span-6">
-                <x-form.input name="recipient" label="{{ __('otp::otp.whitelist_edit.recipient_label') }}" required :value="$whitelist->recipient" placeholder="{{ __('otp::otp.whitelist_edit.recipient_placeholder') }}" />
+                <x-form.input name="recipient" :label="__('otp::otp.whitelist_edit.recipient_label')" required :value="$whitelist->recipient" placeholder="{{ __('otp::otp.whitelist_edit.recipient_placeholder') }}" />
             </div>
             <div class="col-span-12 md:col-span-6">
-                <x-form.input name="fixed_otp" id="fixed_otp" label="{{ __('otp::otp.whitelist_edit.fixed_otp_label') }}" required :value="$whitelist->fixed_otp" placeholder="{{ __('otp::otp.whitelist_edit.fixed_otp_placeholder', ['digits' => $otpDigits]) }}" maxlength="{{ $otpDigits }}" data-otp-digits="{{ $otpDigits }}" />
+                <x-form.input name="fixed_otp" id="fixed_otp" :label="__('otp::otp.whitelist_edit.fixed_otp_label')" required :value="$whitelist->fixed_otp" placeholder="{{ __('otp::otp.whitelist_edit.fixed_otp_placeholder', ['digits' => $otpDigits]) }}" maxlength="{{ $otpDigits }}" data-otp-digits="{{ $otpDigits }}" />
                 <div class="form-text">{{ __('otp::otp.whitelist_edit.fixed_otp_help', ['digits' => $otpDigits]) }}</div>
             </div>
             <div class="col-span-12 md:col-span-6">
-                <x-form.select class="select" name="is_active" label="{{ __('foundation::foundation.common.status') }}" required :options="integerStatus()" :selected="(int) $whitelist->is_active" data-placeholder="{{ __('otp::otp.whitelist_edit.select_status_placeholder') }}" />
+                <x-form.select class="select" name="is_active" :label="__('foundation::foundation.common.status')" required :options="integerStatus()" :selected="(int) $whitelist->is_active" data-placeholder="{{ __('otp::otp.whitelist_edit.select_status_placeholder') }}" />
             </div>
             <div class="col-span-12 md:col-span-12">
-                <x-form.textarea name="description" label="{{ __('foundation::foundation.common.description') }}" :value="$whitelist->description" placeholder="{{ __('otp::otp.whitelist_edit.description_placeholder') }}" :rows="2" />
+                <x-form.textarea name="description" :label="__('foundation::foundation.common.description')" :value="$whitelist->description" placeholder="{{ __('otp::otp.whitelist_edit.description_placeholder') }}" :rows="2" />
             </div>
         </div>
     </x-form-section>

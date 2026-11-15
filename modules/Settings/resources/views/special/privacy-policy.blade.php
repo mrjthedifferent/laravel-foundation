@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<x-page-header title="{{ __('settings::settings.special_privacy_policy.title') }}" subtitle="{{ __('settings::settings.special_privacy_policy.subtitle') }}" icon="ph ph-file-text">
+<x-page-header :title="__('settings::settings.special_privacy_policy.title')" :subtitle="__('settings::settings.special_privacy_policy.subtitle')" icon="ph ph-file-text">
     @if (Route::has('legal.privacy_policy'))
         <x-slot name="actions">
             <a href="{{ route('legal.privacy_policy') }}" target="_blank" rel="noopener" class="btn btn-light">
@@ -20,7 +20,7 @@
         <form action="{{ route('admin.settings.special.update_privacy_policy') }}" method="POST">
             @csrf
             <div class="mb-6">
-                <x-form.textarea name="privacy_policy" id="privacy_policy" label="{{ __('settings::settings.special_privacy_policy.content_label') }}" required :value="$setting->value ?? ''" :rows="20" />
+                <x-form.textarea name="privacy_policy" id="privacy_policy" :label="__('settings::settings.special_privacy_policy.content_label')" required :value="$setting->value ?? ''" :rows="20" />
             </div>
             <div class="flex justify-end">
                 <button type="submit" class="btn btn-primary px-6">

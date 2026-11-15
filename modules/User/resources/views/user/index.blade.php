@@ -7,35 +7,35 @@
 @section('content')
 <x-search-card>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('user::user.index.search_placeholder') }}" />
+        <x-form.input name="search" :label="__('foundation::foundation.common.search')" :value="request('search')" placeholder="{{ __('user::user.index.search_placeholder') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.select class="select" name="role_id[]" label="{{ __('user::user.index.role_label') }}" :options="$roles" :selected="request('role_id')" multiple data-placeholder="{{ __('user::user.index.all_roles') }}" />
+        <x-form.select class="select" name="role_id[]" :label="__('user::user.index.role_label')" :options="$roles" :selected="request('role_id')" multiple data-placeholder="{{ __('user::user.index.all_roles') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.select class="select" name="gender" label="{{ __('user::user.index.gender_label') }}" :options="['' => __('user::user.common.all'), 'male' => __('user::user.common.male'), 'female' => __('user::user.common.female'), 'other' => __('user::user.common.other')]" :selected="request('gender')" data-placeholder="{{ __('user::user.index.all_genders') }}" />
+        <x-form.select class="select" name="gender" :label="__('user::user.index.gender_label')" :options="['' => __('user::user.common.all'), 'male' => __('user::user.common.male'), 'female' => __('user::user.common.female'), 'other' => __('user::user.common.other')]" :selected="request('gender')" data-placeholder="{{ __('user::user.index.all_genders') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.select class="select" name="is_active" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('user::user.common.all'), '1' => __('foundation::foundation.common.active'), '0' => __('foundation::foundation.common.inactive')]" :selected="request('is_active')" data-placeholder="{{ __('user::user.common.all') }}" />
+        <x-form.select class="select" name="is_active" :label="__('foundation::foundation.common.status')" :options="['' => __('user::user.common.all'), '1' => __('foundation::foundation.common.active'), '0' => __('foundation::foundation.common.inactive')]" :selected="request('is_active')" data-placeholder="{{ __('user::user.common.all') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.select class="select" name="email_verified" label="{{ __('user::user.index.email_verified_label') }}" :options="['' => __('user::user.common.all'), '1' => __('user::user.common.verified'), '0' => __('user::user.index.unverified')]" :selected="request('email_verified')" data-placeholder="{{ __('user::user.common.all') }}" />
+        <x-form.select class="select" name="email_verified" :label="__('user::user.index.email_verified_label')" :options="['' => __('user::user.common.all'), '1' => __('user::user.common.verified'), '0' => __('user::user.index.unverified')]" :selected="request('email_verified')" data-placeholder="{{ __('user::user.common.all') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.select class="select" name="phone_verified" label="{{ __('user::user.index.phone_verified_label') }}" :options="['' => __('user::user.common.all'), '1' => __('user::user.common.verified'), '0' => __('user::user.index.unverified')]" :selected="request('phone_verified')" data-placeholder="{{ __('user::user.common.all') }}" />
+        <x-form.select class="select" name="phone_verified" :label="__('user::user.index.phone_verified_label')" :options="['' => __('user::user.common.all'), '1' => __('user::user.common.verified'), '0' => __('user::user.index.unverified')]" :selected="request('phone_verified')" data-placeholder="{{ __('user::user.common.all') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.input name="date_from" label="{{ __('user::user.index.registered_from') }}" type="date" :value="request('date_from')" />
+        <x-form.input name="date_from" :label="__('user::user.index.registered_from')" type="date" :value="request('date_from')" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.input name="date_to" label="{{ __('user::user.index.registered_to') }}" type="date" :value="request('date_to')" />
+        <x-form.input name="date_to" :label="__('user::user.index.registered_to')" type="date" :value="request('date_to')" />
     </div>
 </x-search-card>
 
 <x-table-view-pagination
-    title="{{ __('user::user.index.title') }}"
+    :title="__('user::user.index.title')"
     :data="$users"
-    empty-message="{{ __('user::user.index.empty') }}"
+    :empty-message="__('user::user.index.empty')"
     empty-icon="ph ph-users">
     <x-slot name="actions">
         <x-table-actions>

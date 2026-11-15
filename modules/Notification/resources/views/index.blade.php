@@ -21,14 +21,14 @@
 @section('content')
 <x-search-card>
     <div class="col-span-12 mb-2 md:col-span-6">
-        <x-form.select class="select" name="type" label="{{ __('notification::notification.index.filter_type_label') }}" :options="$typeOptions" :selected="request('type')" data-placeholder="{{ __('notification::notification.index.type_all') }}" />
+        <x-form.select class="select" name="type" :label="__('notification::notification.index.filter_type_label')" :options="$typeOptions" :selected="request('type')" data-placeholder="{{ __('notification::notification.index.type_all') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-6">
-        <x-form.select class="select" name="read" label="{{ __('notification::notification.index.filter_status_label') }}" :options="$statusOptions" :selected="request('read')" data-placeholder="{{ __('notification::notification.index.status_filter_all') }}" />
+        <x-form.select class="select" name="read" :label="__('notification::notification.index.filter_status_label')" :options="$statusOptions" :selected="request('read')" data-placeholder="{{ __('notification::notification.index.status_filter_all') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('notification::notification.index.breadcrumb') }}" :data="$notifications" empty-icon="ph ph-bell-slash" empty-message="{{ __('notification::notification.index.empty') }}">
+<x-table-view-pagination :title="__('notification::notification.index.breadcrumb')" :data="$notifications" empty-icon="ph ph-bell-slash" :empty-message="__('notification::notification.index.empty')">
     <x-slot name="actions">
         <x-table-actions>
             <form action="{{ route('admin.notification.mark-all-as-read') }}" method="POST" class="inline">

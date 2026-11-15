@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<x-page-header title="{{ __('settings::settings.special_social_auth.title') }}" subtitle="{{ __('settings::settings.special_social_auth.subtitle') }}" icon="ph ph-users-three">
+<x-page-header :title="__('settings::settings.special_social_auth.title')" :subtitle="__('settings::settings.special_social_auth.subtitle')" icon="ph ph-users-three">
 </x-page-header>
 
 <div class="card">
@@ -32,7 +32,7 @@
                 <div class="card-body">
                     <div class="grid grid-cols-12 gap-4">
                         <div class="col-span-12 md:col-span-4">
-                            <x-form.input name="google_client_id" label="{{ __('settings::settings.special_social_auth.client_id_label') }}" :value="optional($settings->get('google_client_id'))->value ?? ''" placeholder="*.apps.googleusercontent.com" />
+                            <x-form.input name="google_client_id" :label="__('settings::settings.special_social_auth.client_id_label')" :value="optional($settings->get('google_client_id'))->value ?? ''" placeholder="*.apps.googleusercontent.com" />
                         </div>
                         <div class="col-span-12 md:col-span-4">
                             <x-form.label for="google_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
@@ -42,7 +42,7 @@
                             </div>
                         </div>
                         <div class="col-span-12 md:col-span-4">
-                            <x-form.input name="google_redirect_uri" label="{{ __('settings::settings.special_social_auth.redirect_uri_label') }}" :value="optional($settings->get('google_redirect_uri'))->value ?? '/auth/google/callback'" placeholder="/auth/google/callback" />
+                            <x-form.input name="google_redirect_uri" :label="__('settings::settings.special_social_auth.redirect_uri_label')" :value="optional($settings->get('google_redirect_uri'))->value ?? '/auth/google/callback'" placeholder="/auth/google/callback" />
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                 <div class="card-body">
                     <div class="grid grid-cols-12 gap-4">
                         <div class="col-span-12 md:col-span-4">
-                            <x-form.input name="github_client_id" label="{{ __('settings::settings.special_social_auth.client_id_label') }}" :value="optional($settings->get('github_client_id'))->value ?? ''" />
+                            <x-form.input name="github_client_id" :label="__('settings::settings.special_social_auth.client_id_label')" :value="optional($settings->get('github_client_id'))->value ?? ''" />
                         </div>
                         <div class="col-span-12 md:col-span-4">
                             <x-form.label for="github_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         <div class="col-span-12 md:col-span-4">
-                            <x-form.input name="github_redirect_uri" label="{{ __('settings::settings.special_social_auth.redirect_uri_label') }}" :value="optional($settings->get('github_redirect_uri'))->value ?? '/auth/github/callback'" placeholder="/auth/github/callback" />
+                            <x-form.input name="github_redirect_uri" :label="__('settings::settings.special_social_auth.redirect_uri_label')" :value="optional($settings->get('github_redirect_uri'))->value ?? '/auth/github/callback'" placeholder="/auth/github/callback" />
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                 <div class="card-body">
                     <div class="grid grid-cols-12 gap-4">
                         <div class="col-span-12 md:col-span-4">
-                            <x-form.input name="apple_client_id" label="{{ __('settings::settings.special_social_auth.client_id_label') }}" :value="optional($settings->get('apple_client_id'))->value ?? ''" />
+                            <x-form.input name="apple_client_id" :label="__('settings::settings.special_social_auth.client_id_label')" :value="optional($settings->get('apple_client_id'))->value ?? ''" />
                         </div>
                         <div class="col-span-12 md:col-span-4">
                             <x-form.label for="apple_client_secret">{{ __('settings::settings.special_social_auth.client_secret_label') }}</x-form.label>
@@ -98,16 +98,16 @@
                             </div>
                         </div>
                         <div class="col-span-12 md:col-span-4">
-                            <x-form.input name="apple_redirect_uri" label="{{ __('settings::settings.special_social_auth.redirect_uri_label') }}" :value="optional($settings->get('apple_redirect_uri'))->value ?? '/auth/apple/callback'" placeholder="/auth/apple/callback" />
+                            <x-form.input name="apple_redirect_uri" :label="__('settings::settings.special_social_auth.redirect_uri_label')" :value="optional($settings->get('apple_redirect_uri'))->value ?? '/auth/apple/callback'" placeholder="/auth/apple/callback" />
                         </div>
                         <div class="col-span-12 md:col-span-4">
-                            <x-form.input name="apple_team_id" label="{{ __('settings::settings.special_social_auth.team_id_label') }}" :value="optional($settings->get('apple_team_id'))->value ?? ''" />
+                            <x-form.input name="apple_team_id" :label="__('settings::settings.special_social_auth.team_id_label')" :value="optional($settings->get('apple_team_id'))->value ?? ''" />
                         </div>
                         <div class="col-span-12 md:col-span-4">
-                            <x-form.input name="apple_key_id" label="{{ __('settings::settings.special_social_auth.key_id_label') }}" :value="optional($settings->get('apple_key_id'))->value ?? ''" />
+                            <x-form.input name="apple_key_id" :label="__('settings::settings.special_social_auth.key_id_label')" :value="optional($settings->get('apple_key_id'))->value ?? ''" />
                         </div>
                         <div class="col-span-12 md:col-span-4">
-                            <x-form.input name="apple_key_file" label="{{ __('settings::settings.special_social_auth.key_file_label') }}" :value="optional($settings->get('apple_key_file'))->value ?? ''" placeholder="{{ __('settings::settings.special_social_auth.key_file_placeholder') }}" />
+                            <x-form.input name="apple_key_file" :label="__('settings::settings.special_social_auth.key_file_label')" :value="optional($settings->get('apple_key_file'))->value ?? ''" placeholder="{{ __('settings::settings.special_social_auth.key_file_placeholder') }}" />
                         </div>
                     </div>
                 </div>

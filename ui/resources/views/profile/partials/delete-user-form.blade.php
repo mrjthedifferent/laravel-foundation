@@ -3,7 +3,7 @@
         {{ __('foundation::foundation.profile.delete_account') }}
     </x-danger-button>
 
-    <x-modal id="confirm-user-deletion" title="{{ __('foundation::foundation.profile.delete_account') }}" button-text="{{ __('foundation::foundation.profile.delete_account') }}">
+    <x-modal id="confirm-user-deletion" :title="__('foundation::foundation.profile.delete_account')" button-text="{{ __('foundation::foundation.profile.delete_account') }}">
         <form method="post" action="{{ route('admin.profile.destroy') }}">
             @csrf
             @method('delete')
@@ -17,7 +17,7 @@
                 </p>
 
                 <div class="mt-6">
-                    <x-input-label for="password" value="{{ __('foundation::foundation.profile.password') }}" class="sr-only"/>
+                    <x-input-label for="password" :value="__('foundation::foundation.profile.password')" class="sr-only"/>
 
                     <x-text-input
                         id="password"

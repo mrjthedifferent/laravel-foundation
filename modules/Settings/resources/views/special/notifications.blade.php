@@ -8,8 +8,8 @@
     <form action="{{ route('admin.settings.special.update_notifications') }}" method="POST">
         @csrf
 
-    <x-page-header title="{{ __('settings::settings.special_notifications.title') }}"
-        subtitle="{{ __('settings::settings.special_notifications.subtitle') }}"
+    <x-page-header :title="__('settings::settings.special_notifications.title')"
+        :subtitle="__('settings::settings.special_notifications.subtitle')"
         icon="ph ph-bell-ringing">
         <x-slot name="actions">
             <button type="submit" class="btn btn-primary px-6">

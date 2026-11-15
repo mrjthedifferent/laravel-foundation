@@ -8,10 +8,10 @@
 @section('content')
 
     <x-page-header
-        title="{{ __('notification::notification.show.title') }}"
+        :title="__('notification::notification.show.title')"
         icon="ph ph-bell"
         :back-url="route('admin.notification.index')"
-        back-label="{{ __('notification::notification.show.back_to_list') }}">
+        :back-label="__('notification::notification.show.back_to_list')">
         <x-slot name="actions">
             @if ($notification->read_at)
                 <form action="{{ route('admin.notification.mark-as-unread', $notification->id) }}" method="POST" class="inline">
@@ -38,7 +38,7 @@
 
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-6">
-            <x-form-section title="{{ __('notification::notification.show.meta_title') }}" icon="ph ph-info">
+            <x-form-section :title="__('notification::notification.show.meta_title')" icon="ph ph-info">
                 @php
                     $typeConfig = match($notification->type) {
                         'export' => ['bg' => 'success', 'icon' => 'ph ph-download-simple'],
@@ -85,7 +85,7 @@
             </x-form-section>
         </div>
         <div class="col-span-12 md:col-span-6">
-            <x-form-section title="{{ __('notification::notification.show.message_title') }}" icon="ph ph-chat-text">
+            <x-form-section :title="__('notification::notification.show.message_title')" icon="ph ph-chat-text">
                 <div class="mb-4">
                     <h5 class="font-semibold mb-2">{{ $notification->title }}</h5>
                     @if($notification->body)

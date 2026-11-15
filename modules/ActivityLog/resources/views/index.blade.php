@@ -7,26 +7,26 @@
 @section('content')
 <x-search-card>
     <div class="col-span-12 mb-2 md:col-span-2">
-        <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('activitylog::activitylog.index.search_placeholder') }}" />
+        <x-form.input name="search" :label="__('foundation::foundation.common.search')" :value="request('search')" placeholder="{{ __('activitylog::activitylog.index.search_placeholder') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-2">
-        <x-form.input name="date_from" label="{{ __('activitylog::activitylog.index.date_from') }}" type="date" :value="request('date_from')" />
+        <x-form.input name="date_from" :label="__('activitylog::activitylog.index.date_from')" type="date" :value="request('date_from')" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-2">
-        <x-form.input name="date_to" label="{{ __('activitylog::activitylog.index.date_to') }}" type="date" :value="request('date_to')" />
+        <x-form.input name="date_to" :label="__('activitylog::activitylog.index.date_to')" type="date" :value="request('date_to')" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-2">
-        <x-form.select class="select" name="event" label="{{ __('activitylog::activitylog.index.event') }}" :options="['' => __('activitylog::activitylog.index.all_events')] + array_combine($eventTypes, array_map('ucfirst', $eventTypes))" :selected="request('event')" data-placeholder="{{ __('activitylog::activitylog.index.all_events') }}" />
+        <x-form.select class="select" name="event" :label="__('activitylog::activitylog.index.event')" :options="['' => __('activitylog::activitylog.index.all_events')] + array_combine($eventTypes, array_map('ucfirst', $eventTypes))" :selected="request('event')" data-placeholder="{{ __('activitylog::activitylog.index.all_events') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-2">
-        <x-form.select class="select" name="auditable_type" label="{{ __('activitylog::activitylog.index.entity') }}" :options="['' => __('activitylog::activitylog.index.all_entities')] + array_combine($auditableTypes, array_map(fn($t) => ActivityLogHelper::getModelName($t), $auditableTypes))" :selected="request('auditable_type')" data-placeholder="{{ __('activitylog::activitylog.index.all_entities') }}" />
+        <x-form.select class="select" name="auditable_type" :label="__('activitylog::activitylog.index.entity')" :options="['' => __('activitylog::activitylog.index.all_entities')] + array_combine($auditableTypes, array_map(fn($t) => ActivityLogHelper::getModelName($t), $auditableTypes))" :selected="request('auditable_type')" data-placeholder="{{ __('activitylog::activitylog.index.all_entities') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-2">
-        <x-form.select class="select" name="user_id" label="{{ __('activitylog::activitylog.index.action_by') }}" :options="['' => __('activitylog::activitylog.index.all_users')] + $users->mapWithKeys(fn($u) => [$u->id => $u->name])->toArray()" :selected="request('user_id')" data-placeholder="{{ __('activitylog::activitylog.index.all_users') }}" />
+        <x-form.select class="select" name="user_id" :label="__('activitylog::activitylog.index.action_by')" :options="['' => __('activitylog::activitylog.index.all_users')] + $users->mapWithKeys(fn($u) => [$u->id => $u->name])->toArray()" :selected="request('user_id')" data-placeholder="{{ __('activitylog::activitylog.index.all_users') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('activitylog::activitylog.index.breadcrumb') }}" :data="$audits">
+<x-table-view-pagination :title="__('activitylog::activitylog.index.breadcrumb')" :data="$audits">
     <x-slot name="actions">
         <x-table-actions>
         </x-table-actions>
@@ -38,17 +38,17 @@
             <x-table-export-item :href="route('admin.activity-logs.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'csv']))"
                 class="swal-confirm"
                 icon="ph ph-file-csv"
-                title="{{ __('activitylog::activitylog.index.export_csv') }}"
+                :title="__('activitylog::activitylog.index.export_csv')"
                 data-text="{{ __('activitylog::activitylog.index.export_csv_confirm') }}" />
             <x-table-export-item :href="route('admin.activity-logs.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'xlsx']))"
                 class="swal-confirm"
                 icon="ph ph-file-xls"
-                title="{{ __('activitylog::activitylog.index.export_excel') }}"
+                :title="__('activitylog::activitylog.index.export_excel')"
                 data-text="{{ __('activitylog::activitylog.index.export_excel_confirm') }}" />
             <x-table-export-item :href="route('admin.activity-logs.export').'?'.http_build_query(array_merge(request()->query(), ['format' => 'pdf']))"
                 class="swal-confirm"
                 icon="ph ph-file-pdf"
-                title="{{ __('activitylog::activitylog.index.export_pdf') }}"
+                :title="__('activitylog::activitylog.index.export_pdf')"
                 data-text="{{ __('activitylog::activitylog.index.export_pdf_confirm') }}" />
         </x-table-export-dropdown>
         @endcan
@@ -253,7 +253,7 @@
     </tbody>
 </x-table-view-pagination>
 
-<x-modal id="track-ip-modal" title="{{ __('activitylog::activitylog.index.ip_information') }}">
+<x-modal id="track-ip-modal" :title="__('activitylog::activitylog.index.ip_information')">
     <div class="grid grid-cols-12 gap-x-6">
         <div class="col-span-12 md:col-span-12" id="ip-details"></div>
     </div>

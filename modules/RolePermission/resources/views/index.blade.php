@@ -7,11 +7,11 @@
 @section('content')
 <x-search-card>
     <div class="col-span-12 mb-2 md:col-span-12">
-        <x-form.input name="name" label="{{ __('foundation::foundation.common.search') }}" :value="request('name')" placeholder="{{ __('rolepermission::rolepermission.index.search_placeholder') }}" />
+        <x-form.input name="name" :label="__('foundation::foundation.common.search')" :value="request('name')" placeholder="{{ __('rolepermission::rolepermission.index.search_placeholder') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('rolepermission::rolepermission.index.breadcrumb') }}" :data="$roles" empty-icon="ph ph-shield" empty-message="{{ __('rolepermission::rolepermission.index.empty') }}">
+<x-table-view-pagination :title="__('rolepermission::rolepermission.index.breadcrumb')" :data="$roles" empty-icon="ph ph-shield" :empty-message="__('rolepermission::rolepermission.index.empty')">
     <x-slot name="actions">
         <x-table-actions>
             @can('Assign Permission')
@@ -84,11 +84,11 @@
 </x-table-view-pagination>
 
 {{-- Create Role Modal --}}
-<x-modal id="createRoleModal" title="{{ __('rolepermission::rolepermission.index.create_role') }}" size="sm">
+<x-modal id="createRoleModal" :title="__('rolepermission::rolepermission.index.create_role')" size="sm">
     <form action="{{ route('admin.role.store') }}" method="POST" id="createForm">
         @csrf
         <div class="mb-4">
-            <x-form.input name="role_name" label="{{ __('rolepermission::rolepermission.index.role_name_label') }}" required placeholder="{{ __('rolepermission::rolepermission.index.role_name_placeholder') }}" />
+            <x-form.input name="role_name" :label="__('rolepermission::rolepermission.index.role_name_label')" required placeholder="{{ __('rolepermission::rolepermission.index.role_name_placeholder') }}" />
         </div>
         <x-slot name="footer">
             <button type="button" class="btn btn-light" data-fd-dismiss="modal">{{ __('foundation::foundation.common.cancel') }}</button>
@@ -98,11 +98,11 @@
 </x-modal>
 
 {{-- Edit Role Modal --}}
-<x-modal id="updateRoleModal" title="{{ __('rolepermission::rolepermission.index.edit_role') }}" size="sm">
+<x-modal id="updateRoleModal" :title="__('rolepermission::rolepermission.index.edit_role')" size="sm">
     <form id="updateForm" method="POST">
         @csrf @method('PUT')
         <div class="mb-4">
-            <x-form.input name="role_name" id="edit_role_name" label="{{ __('rolepermission::rolepermission.index.role_name_label') }}" required placeholder="{{ __('rolepermission::rolepermission.index.role_name_placeholder') }}" />
+            <x-form.input name="role_name" id="edit_role_name" :label="__('rolepermission::rolepermission.index.role_name_label')" required placeholder="{{ __('rolepermission::rolepermission.index.role_name_placeholder') }}" />
         </div>
     </form>
     <x-slot name="footer">

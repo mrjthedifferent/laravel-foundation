@@ -10,20 +10,20 @@
 @section('content')
 <x-search-card>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('activitylog::activitylog.email_logs_index.search_placeholder') }}" />
+        <x-form.input name="search" :label="__('foundation::foundation.common.search')" :value="request('search')" placeholder="{{ __('activitylog::activitylog.email_logs_index.search_placeholder') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.input name="date_from" label="{{ __('activitylog::activitylog.email_logs_index.date_from') }}" type="date" :value="request('date_from')" />
+        <x-form.input name="date_from" :label="__('activitylog::activitylog.email_logs_index.date_from')" type="date" :value="request('date_from')" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.input name="date_to" label="{{ __('activitylog::activitylog.email_logs_index.date_to') }}" type="date" :value="request('date_to')" />
+        <x-form.input name="date_to" :label="__('activitylog::activitylog.email_logs_index.date_to')" type="date" :value="request('date_to')" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.select class="select" name="status" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('activitylog::activitylog.email_logs_index.all_statuses'), 'sent' => __('activitylog::activitylog.email_logs_index.sent'), 'pending' => __('activitylog::activitylog.email_logs_index.pending'), 'failed' => __('activitylog::activitylog.email_logs_index.failed')]" :selected="request('status')" data-placeholder="{{ __('activitylog::activitylog.email_logs_index.all') }}" />
+        <x-form.select class="select" name="status" :label="__('foundation::foundation.common.status')" :options="['' => __('activitylog::activitylog.email_logs_index.all_statuses'), 'sent' => __('activitylog::activitylog.email_logs_index.sent'), 'pending' => __('activitylog::activitylog.email_logs_index.pending'), 'failed' => __('activitylog::activitylog.email_logs_index.failed')]" :selected="request('status')" data-placeholder="{{ __('activitylog::activitylog.email_logs_index.all') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('activitylog::activitylog.email_logs_index.breadcrumb') }}" :data="$emailLogs">
+<x-table-view-pagination :title="__('activitylog::activitylog.email_logs_index.breadcrumb')" :data="$emailLogs">
     <thead>
         <tr>
             <th>{{ __('activitylog::activitylog.email_logs_index.col_id') }}</th>

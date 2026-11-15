@@ -26,7 +26,7 @@
             $tc = $typeColors[$setting->type] ?? 'secondary';
         @endphp
 
-        <x-page-header title="{{ __('settings::settings.edit.title') }}" icon="ph ph-pencil-simple-line" :back-url="route('admin.settings.manage')" back-label="{{ __('settings::settings.edit.back') }}">
+        <x-page-header :title="__('settings::settings.edit.title')" icon="ph ph-pencil-simple-line" :back-url="route('admin.settings.manage')" :back-label="__('settings::settings.edit.back')">
             <x-slot name="actions">
                 <code class="bg-subtle rounded-md px-2 py-1 text-xs font-semibold">{{ $setting->key }}</code>
                 <span class="badge badge-{{ $tc }} uppercase">{{ $setting->type }}</span>
@@ -34,7 +34,7 @@
         </x-page-header>
 
         {{-- Section 1: Identity --}}
-        <x-form-section title="{{ __('settings::settings.edit.section_identity') }}" icon="ph ph-identification-card">
+        <x-form-section :title="__('settings::settings.edit.section_identity')" icon="ph ph-identification-card">
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6">
                     <label class="form-label font-semibold text-sm">{{ __('settings::settings.edit.key_label') }}</label>
@@ -46,7 +46,7 @@
                         class="select"
                         name="existing_group"
                         id="existing_group"
-                        label="{{ __('settings::settings.edit.group_label') }}"
+                        :label="__('settings::settings.edit.group_label')"
                         required
                         :options="collect($groups)->mapWithKeys(fn($g) => [$g => $g])->put('__new__', __('settings::settings.edit.group_new_option'))->prepend('', '')->toArray()"
                         :selected="null"
@@ -59,7 +59,7 @@
                         class="select"
                         name="type"
                         id="type"
-                        label="{{ __('settings::settings.edit.type_label') }}"
+                        :label="__('settings::settings.edit.type_label')"
                         required
                         :options="collect($types)->mapWithKeys(fn($t) => [$t => ucfirst($t)])->prepend('', '')->toArray()"
                         :selected="$setting->type"
@@ -67,13 +67,13 @@
                     />
                 </div>
                 <div class="col-span-12 md:col-span-6">
-                    <x-form.input name="description" label="{{ __('foundation::foundation.common.description') }}" :value="old('description', $setting->description)" placeholder="{{ __('settings::settings.edit.description_placeholder') }}" />
+                    <x-form.input name="description" :label="__('foundation::foundation.common.description')" :value="old('description', $setting->description)" placeholder="{{ __('settings::settings.edit.description_placeholder') }}" />
                 </div>
             </div>
         </x-form-section>
 
         {{-- Section 2: Flags --}}
-        <x-form-section title="{{ __('settings::settings.edit.section_flags') }}" icon="ph ph-toggle-right">
+        <x-form-section :title="__('settings::settings.edit.section_flags')" icon="ph ph-toggle-right">
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6">
                     <div class="flex items-center justify-between p-4 rounded-md border">

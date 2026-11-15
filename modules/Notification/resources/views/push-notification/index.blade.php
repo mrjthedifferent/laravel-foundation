@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <x-table-view-pagination title="{{ __('notification::notification.push_notification_index.title') }}" :data="$notifications" empty-icon="ph ph-paper-plane-tilt" empty-message="{{ __('notification::notification.push_notification_index.empty') }}">
+    <x-table-view-pagination :title="__('notification::notification.push_notification_index.title')" :data="$notifications" empty-icon="ph ph-paper-plane-tilt" :empty-message="__('notification::notification.push_notification_index.empty')">
         <x-slot name="actions">
             <x-table-actions>
                 @can('Create Push Notification')
@@ -44,7 +44,7 @@
                     </td>
                     <td>
                         @if ($notification->getRawOriginal('image'))
-                            <x-image :src="$notification->image" alt="{{ __('notification::notification.push_notification_index.col_image') }}" maxWidth="40" />
+                            <x-image :src="$notification->image" :alt="__('notification::notification.push_notification_index.col_image')" maxWidth="40" />
                         @else
                             <span class="text-muted">—</span>
                         @endif

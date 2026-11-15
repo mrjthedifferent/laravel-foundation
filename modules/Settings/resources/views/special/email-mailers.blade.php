@@ -16,7 +16,7 @@
 @endphp
 
 @section('content')
-<x-page-header title="{{ __('settings::settings.special_email_mailers.title') }}" subtitle="{{ __('settings::settings.special_email_mailers.subtitle') }}" icon="ph ph-envelope">
+<x-page-header :title="__('settings::settings.special_email_mailers.title')" :subtitle="__('settings::settings.special_email_mailers.subtitle')" icon="ph ph-envelope">
     <x-slot name="actions">
         <div class="flex items-center gap-2">
             <input type="email" id="test_email_address" class="form-control form-control-sm"
@@ -84,7 +84,7 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
                         class="select"
                         name="email_mailer"
                         id="email_mailer"
-                        label="{{ __('settings::settings.special_email_mailers.selected_mailer_label') }}"
+                        :label="__('settings::settings.special_email_mailers.selected_mailer_label')"
                         :options="is_array($emailMailers->value) ? array_combine(array_column($emailMailers->value, 'TYPE'), array_column($emailMailers->value, 'TYPE')) : []"
                         :selected="isset($emailMailer) ? $emailMailer->value : null"
                         data-placeholder="{{ __('settings::settings.special_email_mailers.select_mailer_placeholder') }}"
@@ -109,25 +109,25 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
                         <div class="card-body">
                             <div class="grid grid-cols-12 gap-4">
                                 <div class="col-span-12 md:col-span-4">
-                                    <x-form.input name="email_mailers[{{ $index }}][TYPE]" label="{{ __('settings::settings.special_email_mailers.field_type') }}" required :value="$mailer['TYPE']" class="mailer-type-input" placeholder="e.g. Gmail" />
+                                    <x-form.input name="email_mailers[{{ $index }}][TYPE]" :label="__('settings::settings.special_email_mailers.field_type')" required :value="$mailer['TYPE']" class="mailer-type-input" placeholder="e.g. Gmail" />
                                     <div class="form-text">{{ __('settings::settings.special_email_mailers.type_help') }}</div>
                                 </div>
                                 <div class="col-span-12 md:col-span-4">
-                                    <x-form.select name="email_mailers[{{ $index }}][VALUE][transport]" label="{{ __('settings::settings.special_email_mailers.field_transport') }}" required class="transport-select" :options="$transportOptions" :selected="$mailer['VALUE']['transport'] ?? 'smtp'" />
+                                    <x-form.select name="email_mailers[{{ $index }}][VALUE][transport]" :label="__('settings::settings.special_email_mailers.field_transport')" required class="transport-select" :options="$transportOptions" :selected="$mailer['VALUE']['transport'] ?? 'smtp'" />
                                 </div>
 
                                 {{-- SMTP (password) credentials --}}
                                 <div class="col-span-12 transport-fields-smtp md:col-span-4">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][host]" label="{{ __('settings::settings.special_email_mailers.field_host') }}" required :value="$mailer['VALUE']['host'] ?? ''" placeholder="smtp.gmail.com" />
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][host]" :label="__('settings::settings.special_email_mailers.field_host')" required :value="$mailer['VALUE']['host'] ?? ''" placeholder="smtp.gmail.com" />
                                 </div>
                                 <div class="col-span-12 transport-fields-smtp md:col-span-4">
-                                    <x-form.input type="number" name="email_mailers[{{ $index }}][VALUE][port]" label="{{ __('settings::settings.special_email_mailers.field_port') }}" required :value="$mailer['VALUE']['port'] ?? 587" placeholder="587" />
+                                    <x-form.input type="number" name="email_mailers[{{ $index }}][VALUE][port]" :label="__('settings::settings.special_email_mailers.field_port')" required :value="$mailer['VALUE']['port'] ?? 587" placeholder="587" />
                                 </div>
                                 <div class="col-span-12 transport-fields-smtp md:col-span-4">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][encryption]" label="{{ __('settings::settings.special_email_mailers.field_encryption') }}" :value="$mailer['VALUE']['encryption'] ?? 'tls'" placeholder="tls" />
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][encryption]" :label="__('settings::settings.special_email_mailers.field_encryption')" :value="$mailer['VALUE']['encryption'] ?? 'tls'" placeholder="tls" />
                                 </div>
                                 <div class="col-span-12 transport-fields-smtp md:col-span-4">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][username]" label="{{ __('settings::settings.special_email_mailers.field_username') }}" :value="$mailer['VALUE']['username'] ?? ''" placeholder="you@example.com" />
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][username]" :label="__('settings::settings.special_email_mailers.field_username')" :value="$mailer['VALUE']['username'] ?? ''" placeholder="you@example.com" />
                                 </div>
                                 <div class="col-span-12 transport-fields-smtp md:col-span-4">
                                     <x-form.label for="email_mailers_{{ $index }}_password">{{ __('settings::settings.special_email_mailers.field_password') }}</x-form.label>
@@ -140,11 +140,11 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
 
                                 {{-- Microsoft 365 OAuth2 credentials --}}
                                 <div class="col-span-12 transport-fields-oauth md:col-span-4">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][tenant_id]" label="{{ __('settings::settings.special_email_mailers.field_tenant_id') }}" required :value="$mailer['VALUE']['tenant_id'] ?? ''" placeholder="00000000-0000-0000-0000-000000000000" />
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][tenant_id]" :label="__('settings::settings.special_email_mailers.field_tenant_id')" required :value="$mailer['VALUE']['tenant_id'] ?? ''" placeholder="00000000-0000-0000-0000-000000000000" />
                                     <div class="form-text">{{ __('settings::settings.special_email_mailers.tenant_id_help') }}</div>
                                 </div>
                                 <div class="col-span-12 transport-fields-oauth md:col-span-4">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][client_id]" label="{{ __('settings::settings.special_email_mailers.field_client_id') }}" required :value="$mailer['VALUE']['client_id'] ?? ''" placeholder="{{ __('settings::settings.special_email_mailers.client_id_placeholder') }}" />
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][client_id]" :label="__('settings::settings.special_email_mailers.field_client_id')" required :value="$mailer['VALUE']['client_id'] ?? ''" placeholder="{{ __('settings::settings.special_email_mailers.client_id_placeholder') }}" />
                                 </div>
                                 <div class="col-span-12 transport-fields-oauth md:col-span-4">
                                     <x-form.label for="email_mailers_{{ $index }}_client_secret" required>{{ __('settings::settings.special_email_mailers.field_client_secret') }}</x-form.label>
@@ -155,16 +155,16 @@ Add-MailboxPermission -Identity &lt;MAILBOX&gt; -User &lt;SERVICE_PRINCIPAL_ID&g
                                     <div class="form-text">{!! __('settings::settings.special_email_mailers.client_secret_help') !!}</div>
                                 </div>
                                 <div class="col-span-12 transport-fields-oauth md:col-span-4">
-                                    <x-form.input type="email" name="email_mailers[{{ $index }}][VALUE][mailbox]" label="{{ __('settings::settings.special_email_mailers.field_mailbox') }}" required :value="$mailer['VALUE']['mailbox'] ?? ''" placeholder="noreply@yourcompany.com" />
+                                    <x-form.input type="email" name="email_mailers[{{ $index }}][VALUE][mailbox]" :label="__('settings::settings.special_email_mailers.field_mailbox')" required :value="$mailer['VALUE']['mailbox'] ?? ''" placeholder="noreply@yourcompany.com" />
                                     <div class="form-text">{{ __('settings::settings.special_email_mailers.mailbox_help') }}</div>
                                 </div>
 
                                 {{-- Shared --}}
                                 <div class="col-span-12 md:col-span-4">
-                                    <x-form.input type="email" name="email_mailers[{{ $index }}][VALUE][from][address]" label="{{ __('settings::settings.special_email_mailers.field_from_address') }}" required :value="$mailer['VALUE']['from']['address'] ?? ''" placeholder="noreply@yourcompany.com" />
+                                    <x-form.input type="email" name="email_mailers[{{ $index }}][VALUE][from][address]" :label="__('settings::settings.special_email_mailers.field_from_address')" required :value="$mailer['VALUE']['from']['address'] ?? ''" placeholder="noreply@yourcompany.com" />
                                 </div>
                                 <div class="col-span-12 md:col-span-4">
-                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][from][name]" label="{{ __('settings::settings.special_email_mailers.field_from_name') }}" required :value="$mailer['VALUE']['from']['name'] ?? ''" placeholder="{{ __('settings::settings.special_email_mailers.from_name_placeholder') }}" />
+                                    <x-form.input name="email_mailers[{{ $index }}][VALUE][from][name]" :label="__('settings::settings.special_email_mailers.field_from_name')" required :value="$mailer['VALUE']['from']['name'] ?? ''" placeholder="{{ __('settings::settings.special_email_mailers.from_name_placeholder') }}" />
                                 </div>
                             </div>
                         </div>

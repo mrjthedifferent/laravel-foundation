@@ -54,6 +54,20 @@ class TermsConditionsTest extends TestCase
         $response->assertViewHas('setting');
     }
 
+    public function test_page_title_and_subtitle_are_escaped_once(): void
+    {
+        $this->actingAs($this->admin);
+
+        // "Terms & Conditions" / "Manage your application's terms…": an & and an apostrophe.
+        $response = $this->get(route('admin.settings.special.terms_conditions'));
+
+        $response->assertOk();
+        $response->assertSee('<h1 class="fd-page-title">Terms &amp; Conditions</h1>', false);
+        $response->assertSee('application&#039;s terms', false);
+        $response->assertDontSee('&amp;amp;', false);
+        $response->assertDontSee('&amp;#039;', false);
+    }
+
     public function test_can_update_terms_conditions_when_setting_exists(): void
     {
         $this->actingAs($this->admin);

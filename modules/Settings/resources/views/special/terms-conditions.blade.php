@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<x-page-header title="{{ __('settings::settings.special_terms_conditions.title') }}" subtitle="{{ __('settings::settings.special_terms_conditions.subtitle') }}" icon="ph ph-scroll">
+<x-page-header :title="__('settings::settings.special_terms_conditions.title')" :subtitle="__('settings::settings.special_terms_conditions.subtitle')" icon="ph ph-scroll">
     @if (Route::has('legal.terms_conditions'))
         <x-slot name="actions">
             <a href="{{ route('legal.terms_conditions') }}" target="_blank" rel="noopener" class="btn btn-light">
@@ -20,7 +20,7 @@
         <form action="{{ route('admin.settings.special.update_terms_conditions') }}" method="POST">
             @csrf
             <div class="mb-6">
-                <x-form.textarea name="terms_conditions" id="terms_conditions" label="{{ __('settings::settings.special_terms_conditions.content_label') }}" required :value="$setting->value ?? ''" :rows="20" />
+                <x-form.textarea name="terms_conditions" id="terms_conditions" :label="__('settings::settings.special_terms_conditions.content_label')" required :value="$setting->value ?? ''" :rows="20" />
             </div>
             <div class="flex justify-end">
                 <button type="submit" class="btn btn-primary px-6">

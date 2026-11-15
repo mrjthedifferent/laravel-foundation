@@ -6,20 +6,20 @@
 @section('content')
 <x-search-card>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('activitylog::activitylog.sms_logs_index.search_placeholder') }}" />
+        <x-form.input name="search" :label="__('foundation::foundation.common.search')" :value="request('search')" placeholder="{{ __('activitylog::activitylog.sms_logs_index.search_placeholder') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.input name="date_from" label="{{ __('activitylog::activitylog.sms_logs_index.date_from') }}" type="date" :value="request('date_from')" />
+        <x-form.input name="date_from" :label="__('activitylog::activitylog.sms_logs_index.date_from')" type="date" :value="request('date_from')" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.input name="date_to" label="{{ __('activitylog::activitylog.sms_logs_index.date_to') }}" type="date" :value="request('date_to')" />
+        <x-form.input name="date_to" :label="__('activitylog::activitylog.sms_logs_index.date_to')" type="date" :value="request('date_to')" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.select class="select" name="status" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('activitylog::activitylog.sms_logs_index.all_statuses'), 'success' => __('activitylog::activitylog.sms_logs_index.success'), 'failed' => __('activitylog::activitylog.sms_logs_index.failed')]" :selected="request('status')" data-placeholder="{{ __('activitylog::activitylog.sms_logs_index.all') }}" />
+        <x-form.select class="select" name="status" :label="__('foundation::foundation.common.status')" :options="['' => __('activitylog::activitylog.sms_logs_index.all_statuses'), 'success' => __('activitylog::activitylog.sms_logs_index.success'), 'failed' => __('activitylog::activitylog.sms_logs_index.failed')]" :selected="request('status')" data-placeholder="{{ __('activitylog::activitylog.sms_logs_index.all') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('activitylog::activitylog.sms_logs_index.breadcrumb') }}" :data="$smsLogs">
+<x-table-view-pagination :title="__('activitylog::activitylog.sms_logs_index.breadcrumb')" :data="$smsLogs">
     <thead>
         <tr>
             <th>{{ __('activitylog::activitylog.sms_logs_index.col_id') }}</th>
@@ -72,7 +72,7 @@
     </tbody>
 </x-table-view-pagination>
 
-<x-modal id="response-modal" title="{{ __('activitylog::activitylog.sms_logs_index.gateway_response') }}">
+<x-modal id="response-modal" :title="__('activitylog::activitylog.sms_logs_index.gateway_response')">
     <pre id="response-content" class="mb-0 fd-scroll-y overflow-auto"></pre>
 </x-modal>
 @endsection

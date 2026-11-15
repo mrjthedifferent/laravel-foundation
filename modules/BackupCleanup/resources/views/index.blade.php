@@ -5,8 +5,8 @@
 @endsection
 
 @section('content')
-    <x-table-view-pagination title="{{ __('backupcleanup::backupcleanup.index.breadcrumb') }}" :data="$files" empty-icon="ph ph-archive"
-        empty-message="{{ __('backupcleanup::backupcleanup.index.empty') }}">
+    <x-table-view-pagination :title="__('backupcleanup::backupcleanup.index.breadcrumb')" :data="$files" empty-icon="ph ph-archive"
+        :empty-message="__('backupcleanup::backupcleanup.index.empty')">
         <x-slot name="actions">
             <x-table-actions>
                 @can('Cleanup Backup')

@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <x-page-header title="{{ __('settings::settings.special_sms_gateways.title') }}" subtitle="{{ __('settings::settings.special_sms_gateways.subtitle') }}" icon="ph ph-chat-text">
+    <x-page-header :title="__('settings::settings.special_sms_gateways.title')" :subtitle="__('settings::settings.special_sms_gateways.subtitle')" icon="ph ph-chat-text">
         <x-slot name="actions">
             <div class="flex items-center gap-2">
                 <input type="text" id="test_mobile_no" class="form-control form-control-sm"
@@ -50,7 +50,7 @@
                             class="select"
                             name="sms_gateway"
                             id="sms_gateway"
-                            label="{{ __('settings::settings.special_sms_gateways.selected_gateway_label') }}"
+                            :label="__('settings::settings.special_sms_gateways.selected_gateway_label')"
                             :options="is_array($smsGateways->value)
                                 ? array_combine(array_column($smsGateways->value, 'TYPE'), array_column($smsGateways->value, 'TYPE'))
                                 : []"
@@ -79,22 +79,22 @@
                                     {{-- Core fields --}}
                                     <div class="grid grid-cols-12 gap-4 mb-4">
                                         <div class="col-span-12 md:col-span-4">
-                                            <x-form.input name="sms_gateways[{{ $index }}][TYPE]" label="{{ __('settings::settings.special_sms_gateways.field_type') }}" required :value="$gateway['TYPE']" class="gw-type-input" />
+                                            <x-form.input name="sms_gateways[{{ $index }}][TYPE]" :label="__('settings::settings.special_sms_gateways.field_type')" required :value="$gateway['TYPE']" class="gw-type-input" />
                                         </div>
                                         <div class="col-span-12 md:col-span-4">
-                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][endpoint]" label="{{ __('settings::settings.special_sms_gateways.field_endpoint') }}" required :value="$gateway['VALUE']['endpoint'] ?? ''" placeholder="https://api.provider.com/sms/send" />
+                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][endpoint]" :label="__('settings::settings.special_sms_gateways.field_endpoint')" required :value="$gateway['VALUE']['endpoint'] ?? ''" placeholder="https://api.provider.com/sms/send" />
                                         </div>
                                         <div class="col-span-12 md:col-span-4">
-                                            <x-form.select name="sms_gateways[{{ $index }}][VALUE][method]" label="{{ __('settings::settings.special_sms_gateways.field_method') }}" required :options="['GET' => 'GET', 'POST' => 'POST']" :selected="$gateway['VALUE']['method'] ?? 'POST'" />
+                                            <x-form.select name="sms_gateways[{{ $index }}][VALUE][method]" :label="__('settings::settings.special_sms_gateways.field_method')" required :options="['GET' => 'GET', 'POST' => 'POST']" :selected="$gateway['VALUE']['method'] ?? 'POST'" />
                                         </div>
                                         <div class="col-span-12 md:col-span-4">
-                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][mobile_prefix]" label="{{ __('settings::settings.special_sms_gateways.field_mobile_prefix') }}" :value="$gateway['VALUE']['mobile_prefix'] ?? ''" placeholder="e.g. +60" />
+                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][mobile_prefix]" :label="__('settings::settings.special_sms_gateways.field_mobile_prefix')" :value="$gateway['VALUE']['mobile_prefix'] ?? ''" placeholder="e.g. +60" />
                                         </div>
                                         <div class="col-span-12 md:col-span-4">
-                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][mobile_key]" label="{{ __('settings::settings.special_sms_gateways.field_mobile_key') }}" required :value="$gateway['VALUE']['mobile_key'] ?? ''" placeholder="mobile" />
+                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][mobile_key]" :label="__('settings::settings.special_sms_gateways.field_mobile_key')" required :value="$gateway['VALUE']['mobile_key'] ?? ''" placeholder="mobile" />
                                         </div>
                                         <div class="col-span-12 md:col-span-4">
-                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][message_key]" label="{{ __('settings::settings.special_sms_gateways.field_message_key') }}" required :value="$gateway['VALUE']['message_key'] ?? ''" placeholder="message" />
+                                            <x-form.input name="sms_gateways[{{ $index }}][VALUE][message_key]" :label="__('settings::settings.special_sms_gateways.field_message_key')" required :value="$gateway['VALUE']['message_key'] ?? ''" placeholder="message" />
                                         </div>
                                     </div>
 

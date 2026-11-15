@@ -6,17 +6,17 @@
 @section('content')
 <x-search-card>
     <div class="col-span-12 mb-2 md:col-span-4">
-        <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('errorreport::errorreport.index.search_placeholder') }}" />
+        <x-form.input name="search" :label="__('foundation::foundation.common.search')" :value="request('search')" placeholder="{{ __('errorreport::errorreport.index.search_placeholder') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-4">
-        <x-form.input name="exception_class" label="{{ __('errorreport::errorreport.index.exception_label') }}" :value="request('exception_class')" placeholder="{{ __('errorreport::errorreport.index.exception_placeholder') }}" />
+        <x-form.input name="exception_class" :label="__('errorreport::errorreport.index.exception_label')" :value="request('exception_class')" placeholder="{{ __('errorreport::errorreport.index.exception_placeholder') }}" />
     </div>
      <div class="col-span-12 mb-2 md:col-span-4">
-        <x-form.select name="resolved" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('errorreport::errorreport.index.status_all'), '0' => __('errorreport::errorreport.index.status_unresolved'), '1' => __('errorreport::errorreport.index.status_resolved')]" :selected="request('resolved')" />
+        <x-form.select name="resolved" :label="__('foundation::foundation.common.status')" :options="['' => __('errorreport::errorreport.index.status_all'), '0' => __('errorreport::errorreport.index.status_unresolved'), '1' => __('errorreport::errorreport.index.status_resolved')]" :selected="request('resolved')" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('errorreport::errorreport.index.title') }}" :data="$errorReports">
+<x-table-view-pagination :title="__('errorreport::errorreport.index.title')" :data="$errorReports">
     <thead>
         <tr>
             <th>#</th>

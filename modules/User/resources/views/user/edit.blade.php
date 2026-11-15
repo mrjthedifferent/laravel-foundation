@@ -12,10 +12,10 @@
 
 <div x-data="{ imagePreview: null, onImageChange(e) { const file = e.target.files[0]; if (file && file.type.startsWith('image/')) { const reader = new FileReader(); reader.onload = ev => { this.imagePreview = ev.target.result; }; reader.readAsDataURL(file); } else { this.imagePreview = null; } } }">
     <x-page-header
-        title="{{ $user->name }}"
+        :title="$user->name"
         icon="ph ph-pencil-simple"
         :back-url="route('admin.users.index')"
-        back-label="{{ __('user::user.edit.back_label') }}">
+        :back-label="__('user::user.edit.back_label')">
         <x-slot name="actions">
             @foreach($user->roles as $role)
                 <span class="badge badge-primary">{{ $role->name }}</span>
@@ -26,16 +26,16 @@
         </x-slot>
     </x-page-header>
 
-    <x-form-section title="{{ __('user::user.edit.section_personal') }}" icon="ph ph-identification-card">
+    <x-form-section :title="__('user::user.edit.section_personal')" icon="ph ph-identification-card">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-6">
-                <x-form.input name="name" label="{{ __('user::user.edit.full_name_label') }}" required :value="$user->name" placeholder="{{ __('user::user.edit.full_name_placeholder') }}" />
+                <x-form.input name="name" :label="__('user::user.edit.full_name_label')" required :value="$user->name" placeholder="{{ __('user::user.edit.full_name_placeholder') }}" />
             </div>
             <div class="col-span-12 md:col-span-3">
-                <x-form.select class="select" name="gender" label="{{ __('user::user.edit.gender_label') }}" required :options="['male' => __('user::user.common.male'), 'female' => __('user::user.common.female'), 'other' => __('user::user.common.other')]" :selected="$user->gender" data-placeholder="{{ __('user::user.edit.select_gender_placeholder') }}" />
+                <x-form.select class="select" name="gender" :label="__('user::user.edit.gender_label')" required :options="['male' => __('user::user.common.male'), 'female' => __('user::user.common.female'), 'other' => __('user::user.common.other')]" :selected="$user->gender" data-placeholder="{{ __('user::user.edit.select_gender_placeholder') }}" />
             </div>
             <div class="col-span-12 md:col-span-3">
-                <x-form.file name="image" id="image-upload" label="{{ __('user::user.edit.profile_image_label') }}" accept="image/jpeg,image/png" @change="onImageChange($event)" />
+                <x-form.file name="image" id="image-upload" :label="__('user::user.edit.profile_image_label')" accept="image/jpeg,image/png" @change="onImageChange($event)" />
                 <div class="form-text">{{ __('user::user.edit.image_hint') }}</div>
             </div>
         </div>
@@ -44,7 +44,7 @@
     <x-form-section :title="__('user::user.edit.section_contact')" icon="ph ph-envelope">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-6">
-                <x-form.input type="email" name="email" label="{{ __('user::user.edit.email_label') }}" required :value="$user->email" placeholder="{{ __('user::user.edit.email_placeholder') }}" />
+                <x-form.input type="email" name="email" :label="__('user::user.edit.email_label')" required :value="$user->email" placeholder="{{ __('user::user.edit.email_placeholder') }}" />
                 @if($user->email_verified_at)
                     <div class="form-text text-success"><i class="ph ph-check-circle me-1"></i>{{ __('user::user.edit.verified_on', ['date' => $user->email_verified_at->format('d M Y')]) }}</div>
                 @else
@@ -52,7 +52,7 @@
                 @endif
             </div>
             <div class="col-span-12 md:col-span-6">
-                <x-form.input name="phone" label="{{ __('user::user.edit.phone_label') }}" :value="$user->phone" placeholder="{{ __('user::user.edit.phone_placeholder') }}" inputmode="tel" />
+                <x-form.input name="phone" :label="__('user::user.edit.phone_label')" :value="$user->phone" placeholder="{{ __('user::user.edit.phone_placeholder') }}" inputmode="tel" />
                 @if($user->phone && $user->phone_verified_at)
                     <div class="form-text text-success"><i class="ph ph-check-circle me-1"></i>{{ __('user::user.edit.verified_on', ['date' => $user->phone_verified_at->format('d M Y')]) }}</div>
                 @elseif($user->phone)
@@ -67,10 +67,10 @@
     <x-form-section :title="__('user::user.edit.section_access')" icon="ph ph-shield-check">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-6">
-                <x-form.select class="select" name="roles[]" id="roles" label="{{ __('user::user.edit.roles_label') }}" required multiple :options="$roles" :selected="$user->roles->pluck('id')->toArray()" data-placeholder="{{ __('user::user.edit.select_roles_placeholder') }}" />
+                <x-form.select class="select" name="roles[]" id="roles" :label="__('user::user.edit.roles_label')" required multiple :options="$roles" :selected="$user->roles->pluck('id')->toArray()" data-placeholder="{{ __('user::user.edit.select_roles_placeholder') }}" />
             </div>
             <div class="col-span-12 md:col-span-6">
-                <x-form.select class="select" name="is_active" label="{{ __('foundation::foundation.common.status') }}" required :options="integerStatus()" :selected="(int) $user->is_active" data-placeholder="{{ __('user::user.edit.select_status_placeholder') }}" />
+                <x-form.select class="select" name="is_active" :label="__('foundation::foundation.common.status')" required :options="integerStatus()" :selected="(int) $user->is_active" data-placeholder="{{ __('user::user.edit.select_status_placeholder') }}" />
             </div>
         </div>
     </x-form-section>

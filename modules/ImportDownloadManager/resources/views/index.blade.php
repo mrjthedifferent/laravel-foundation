@@ -11,17 +11,17 @@ use Modules\ImportDownloadManager\Enum\ImportType;
 @section('content')
 <x-search-card>
     <div class="col-span-12 mb-2 md:col-span-4">
-        <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.search_placeholder') }}" />
+        <x-form.input name="search" :label="__('foundation::foundation.common.search')" :value="request('search')" placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.search_placeholder') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-4">
-        <x-form.select class="select" name="type" label="{{ __('importdownloadmanager::importdownloadmanager.index.type') }}" :options="$types" :selected="request('type')" data-placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.all_types') }}" />
+        <x-form.select class="select" name="type" :label="__('importdownloadmanager::importdownloadmanager.index.type')" :options="$types" :selected="request('type')" data-placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.all_types') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-4">
-        <x-form.select class="select" name="status" label="{{ __('foundation::foundation.common.status') }}" :options="$statuses" :selected="request('status')" data-placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.all_statuses') }}" />
+        <x-form.select class="select" name="status" :label="__('foundation::foundation.common.status')" :options="$statuses" :selected="request('status')" data-placeholder="{{ __('importdownloadmanager::importdownloadmanager.index.all_statuses') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('importdownloadmanager::importdownloadmanager.index.title') }}" :data="$downloadImports" empty-icon="ph ph-tray" empty-message="{{ __('importdownloadmanager::importdownloadmanager.index.empty') }}">
+<x-table-view-pagination :title="__('importdownloadmanager::importdownloadmanager.index.title')" :data="$downloadImports" empty-icon="ph ph-tray" :empty-message="__('importdownloadmanager::importdownloadmanager.index.empty')">
     <x-slot name="actions">
         <x-table-actions>
             <x-table-action :href="route('admin.download.import.manager.index')" class="btn-light" icon="ph ph-arrows-clockwise" title="{{ __('importdownloadmanager::importdownloadmanager.index.refresh') }}" />

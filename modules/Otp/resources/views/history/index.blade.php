@@ -7,23 +7,23 @@
 @section('content')
 <x-search-card>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.input name="search" label="{{ __('foundation::foundation.common.search') }}" :value="request('search')" placeholder="{{ __('otp::otp.history_index.search_placeholder') }}" />
+        <x-form.input name="search" :label="__('foundation::foundation.common.search')" :value="request('search')" placeholder="{{ __('otp::otp.history_index.search_placeholder') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-3">
-        <x-form.select class="select" name="contact_type" label="{{ __('otp::otp.history_index.contact_type_label') }}" :options="$contactTypes" :selected="request('contact_type')" data-placeholder="{{ __('otp::otp.history_index.all_types_placeholder') }}" />
+        <x-form.select class="select" name="contact_type" :label="__('otp::otp.history_index.contact_type_label')" :options="$contactTypes" :selected="request('contact_type')" data-placeholder="{{ __('otp::otp.history_index.all_types_placeholder') }}" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-2">
-        <x-form.input name="date_from" label="{{ __('otp::otp.history_index.date_from_label') }}" type="date" :value="request('date_from')" />
+        <x-form.input name="date_from" :label="__('otp::otp.history_index.date_from_label')" type="date" :value="request('date_from')" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-2">
-        <x-form.input name="date_to" label="{{ __('otp::otp.history_index.date_to_label') }}" type="date" :value="request('date_to')" />
+        <x-form.input name="date_to" :label="__('otp::otp.history_index.date_to_label')" type="date" :value="request('date_to')" />
     </div>
     <div class="col-span-12 mb-2 md:col-span-2">
-        <x-form.select class="select" name="is_verified" label="{{ __('foundation::foundation.common.status') }}" :options="['' => __('otp::otp.history_index.status_all'), 1 => __('otp::otp.history_index.status_verified'), 0 => __('otp::otp.history_index.status_not_verified')]" :selected="request('is_verified')" data-placeholder="{{ __('otp::otp.history_index.status_all') }}" />
+        <x-form.select class="select" name="is_verified" :label="__('foundation::foundation.common.status')" :options="['' => __('otp::otp.history_index.status_all'), 1 => __('otp::otp.history_index.status_verified'), 0 => __('otp::otp.history_index.status_not_verified')]" :selected="request('is_verified')" data-placeholder="{{ __('otp::otp.history_index.status_all') }}" />
     </div>
 </x-search-card>
 
-<x-table-view-pagination title="{{ __('otp::otp.history_index.breadcrumb') }}" :data="$codes" empty-icon="ph ph-lock-key" empty-message="{{ __('otp::otp.history_index.empty') }}">
+<x-table-view-pagination :title="__('otp::otp.history_index.breadcrumb')" :data="$codes" empty-icon="ph ph-lock-key" :empty-message="__('otp::otp.history_index.empty')">
     <thead>
         <tr>
             <th>{{ __('otp::otp.history_index.col_id') }}</th>

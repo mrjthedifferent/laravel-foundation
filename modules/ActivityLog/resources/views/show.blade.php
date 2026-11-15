@@ -208,7 +208,7 @@
         @endif
     </div>
 
-    <x-modal id="track-ip-modal" title="{{ __('activitylog::activitylog.show.ip_information') }}">
+    <x-modal id="track-ip-modal" :title="__('activitylog::activitylog.show.ip_information')">
         <div id="ip-details"></div>
     </x-modal>
 @endsection

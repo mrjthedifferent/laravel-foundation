@@ -24,7 +24,7 @@ return strtolower($tabKey) === 'general' ? '000_general' : strtolower($tabKey);
         </div>
     </div>
 
-    <x-page-header title="{{ __('settings::settings.index.title') }}" subtitle="{{ __('settings::settings.index.subtitle') }}" icon="ph ph-gear">
+    <x-page-header :title="__('settings::settings.index.title')" :subtitle="__('settings::settings.index.subtitle')" icon="ph ph-gear">
         <x-slot name="actions">
             <button type="submit" class="btn btn-primary">
                 <i class="ph ph-floppy-disk"></i>{{ __('settings::settings.index.save_changes') }}
