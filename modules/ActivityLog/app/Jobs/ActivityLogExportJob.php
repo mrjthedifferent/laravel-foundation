@@ -53,7 +53,7 @@ class ActivityLogExportJob extends ExportJob
                     'URL' => $metaData['audit_url'] ?? 'N/A',
                     'User Agent' => $metaData['audit_user_agent'] ?? 'N/A',
                     'User' => $audit->user
-                        ? "{$audit->user->name} (ID: {$audit->user->getKey()})"
+                        ? "{$audit->user->getAttribute('name')} (ID: {$audit->user->getKey()})"
                         : 'System',
                     'Date' => $audit->created_at->format(config('foundation.formats.datetime')),
                 ];
