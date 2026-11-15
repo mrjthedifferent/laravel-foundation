@@ -4,7 +4,7 @@ All notable changes to this package are recorded here. The package follows
 [semantic versioning](https://semver.org); see "Public API and versioning" in the README for
 what that covers.
 
-## Unreleased
+## 3.7.1
 
 **Fixed**
 - **Page titles, subtitles and labels no longer show `&amp;` or `&#039;`.** Many admin pages passed translated text to components as `title="{{ __('…') }}"`, which Blade escapes once and the component escapes again, so "Terms & Conditions" showed as "Terms &amp; Conditions" and "application's" as "application&#039;s". Every package view now binds the text (`:title="__('…')"`) on `<x-page-header>` (`title`, `subtitle`, `back-label`), `<x-form.input|select|textarea|file>` (`label`), `<x-form-section>`, `<x-modal>`, `<x-input-label>`, `<x-table-view-pagination>` (`title`, `empty-message`) and `<x-table-export-item>`. A test fails if a package view passes `{{ }}` to one of these props again.
